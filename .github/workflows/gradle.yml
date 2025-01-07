@@ -38,7 +38,7 @@ jobs:
           test
           jacocoTestReport
           sonar
-          -Dsonar.projectKey=entech281_Robot2024
+          -Dsonar.projectKey=entech281_Robot2025
           -Dsonar.organization=entech281
           -Dsonar.host.url=http://sonarcloud.io
 
