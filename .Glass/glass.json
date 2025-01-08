@@ -1,0 +1,26 @@
+{
+  "NetworkTables": {
+    "types": {
+      "/FMSInfo": "FMSInfo"
+    },
+    "windows": {
+      "/FMSInfo": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "visible": true
+  },
+  "NetworkTables Settings": {
+    "dsClient": false,
+    "listenAddress": "localhost",
+    "mode": "Client (NT4)",
+    "serverTeam": "localhost"
+  }
+}
