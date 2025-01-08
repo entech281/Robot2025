@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.entech.util.StoppingCounter;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -24,13 +25,15 @@ import frc.robot.processors.OdometryProcessor;
  * project.
  */
 public class Robot extends LoggedRobot {
+
+  public static final double SIMULATION_TIME_MILLIS=5000;
   private Command autonomousCommand;
   private SubsystemManager subsystemManager;
   private CommandFactory commandFactory;
   private OdometryProcessor odometry;
   private OperatorInterface operatorInterface;
   private PowerDistribution powerDistribution;
-
+  private long robotStartTime = 0;
   public void loggerInit() {
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
     Logger.recordMetadata("Version", BuildConstants.VERSION);
@@ -58,13 +61,29 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotInit() {
-    loggerInit();
+    robotStartTime = System.currentTimeMillis();
+    try{
+      loggerInit();
+    }
+    catch ( Exception e){
+      e.printStackTrace();
+    }
+
     subsystemManager = new SubsystemManager();
     odometry = new OdometryProcessor();
     commandFactory = new CommandFactory(subsystemManager, odometry);
     operatorInterface = new OperatorInterface(commandFactory, subsystemManager, odometry);
     operatorInterface.create();
     odometry.createEstimator();
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    long elapsedMilliSecondsSinceStart = System.currentTimeMillis() - robotStartTime;
+     if (elapsedMilliSecondsSinceStart > SIMULATION_TIME_MILLIS ){
+       System.out.println("Simulation Success : Ending");
+       System.exit(0);
+    }
   }
 
   @Override
