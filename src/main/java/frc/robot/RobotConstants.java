@@ -16,7 +16,7 @@ import edu.wpi.first.math.util.Units;
 
 public final class RobotConstants {
   public static final double TIME_PER_PERIODICAL_LOOP_SECONDS = 0.00;
-
+  public int test = 500;
   public static final class DrivetrainConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds

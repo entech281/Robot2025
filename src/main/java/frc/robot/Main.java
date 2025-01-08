@@ -2,6 +2,11 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+//TEST FOR BRANCH
+//This is pauls branch
+//hopefully this works 
+
+
 package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
@@ -12,6 +17,8 @@ import edu.wpi.first.wpilibj.RobotBase;
  * call.
  */
 public final class Main {
+  public static final String kRobotName = "Robot";
+  public static final int test = 0;
   private Main() {}
 
   /**
