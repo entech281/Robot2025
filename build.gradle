@@ -18,6 +18,12 @@ task(replayWatch, type: JavaExec) {
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
+sonar {
+    properties {
+        property "sonar.exclusions", "src/main/java/frc/robot/RobotConstants.java"
+    }
+}
+
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.
 deploy {
