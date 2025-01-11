@@ -1,4 +1,4 @@
-package frc.robot.commands.test;
+package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -6,8 +6,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.entech.commands.EntechCommand;
 import frc.entech.util.StoppingCounter;
 import frc.robot.RobotConstants;
-import frc.robot.subsystems.drive.DriveInput;
-import frc.robot.subsystems.drive.DriveSubsystem;
 
 public class TestDriveCommand extends EntechCommand {
   private final DriveSubsystem drive;

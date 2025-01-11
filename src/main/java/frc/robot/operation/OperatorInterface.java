@@ -32,8 +32,7 @@ public class OperatorInterface
     implements DriveInputSupplier, DebugInputSupplier, OperatorInputSupplier {
   private CommandJoystick joystickController;
   private CommandXboxController xboxController;
-  // private CommandXboxController tuningController;
-  private final edu.wpi.first.wpilibj2.command.button.CommandJoystick operatorPanel =
+  private final CommandJoystick operatorPanel =
       new CommandJoystick(RobotConstants.PORTS.CONTROLLER.PANEL);
 
   private final CommandFactory commandFactory;
@@ -56,12 +55,6 @@ public class OperatorInterface
     if (DriverControllerUtils.controllerIsPresent(RobotConstants.PORTS.CONTROLLER.TEST_JOYSTICK)) {
       joystickController = new CommandJoystick(RobotConstants.PORTS.CONTROLLER.TEST_JOYSTICK);
       enableJoystickBindings();
-    }
-
-    if (DriverControllerUtils
-        .controllerIsPresent(RobotConstants.PORTS.CONTROLLER.TUNING_CONTROLLER)) {
-      // tuningController =
-      //     new CommandXboxController(RobotConstants.PORTS.CONTROLLER.TUNING_CONTROLLER);
     }
 
     operatorBindings();
@@ -146,10 +139,14 @@ public class OperatorInterface
       di.setXSpeed(-this.xboxController.getLeftY());
       di.setYSpeed(-this.xboxController.getLeftX());
       di.setRotation(DriverControllerUtils.getXboxRotation(this.xboxController));
-    } else {
+    } else if (DriverControllerUtils.controllerIsPresent(RobotConstants.PORTS.CONTROLLER.TEST_JOYSTICK)) {
       di.setXSpeed(-this.joystickController.getY());
       di.setYSpeed(-this.joystickController.getX());
       di.setRotation(-this.joystickController.getZ());
+    } else {
+      di.setXSpeed(0);
+      di.setYSpeed(0);
+      di.setRotation(0);
     }
 
     RobotIO.processInput(di);
