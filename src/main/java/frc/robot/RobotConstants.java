@@ -17,7 +17,7 @@ import edu.wpi.first.math.util.Units;
 public final class RobotConstants {
   public static final double TIME_PER_PERIODICAL_LOOP_SECONDS = 0.00;
 
-  public static final class DrivetrainConstants {
+  public static interface DrivetrainConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
     public static final double MAX_SPEED_METERS_PER_SECOND = 6.0; // 4.42; //4.8;
@@ -51,7 +51,7 @@ public final class RobotConstants {
   }
 
 
-  public static final class SwerveModuleConstants {
+  public static interface SwerveModuleConstants {
     public static final double FREE_SPEED_RPM = 5676;
 
     // The MAXSwerve module can be configured with one of three pinion gears: 12T,
@@ -121,7 +121,7 @@ public final class RobotConstants {
 
   public static interface PORTS {
 
-    public static class ANALOG {
+    public static interface ANALOG {
       public static final int FRONT_LEFT_TURNING_ABSOLUTE_ENCODER = 3;
       public static final int REAR_LEFT_TURNING_ABSOLUTE_ENCODER = 0;
       public static final int FRONT_RIGHT_TURNING_ABSOLUTE_ENCODER = 2;
@@ -129,7 +129,7 @@ public final class RobotConstants {
     }
 
 
-    public static class CAN {
+    public static interface CAN {
       public static final int FRONT_LEFT_DRIVING = 12;
       public static final int FRONT_RIGHT_DRIVING = 22;
       public static final int REAR_LEFT_DRIVING = 32;
@@ -142,14 +142,14 @@ public final class RobotConstants {
     }
 
 
-    public static class CONTROLLER {
+    public static interface CONTROLLER {
       public static final double JOYSTICK_AXIS_THRESHOLD = 0.2;
       public static final int DRIVER_CONTROLLER = 0;
       public static final int PANEL = 1;
       public static final int TEST_JOYSTICK = 2;
       public static final int TUNING_CONTROLLER = 3;
 
-      public static class BUTTONS_JOYSTICK {
+      public static interface BUTTONS_JOYSTICK {
         public static final int TWIST = 1;
         public static final int RUN_TESTS = 7;
         public static final int GYRO_RESET = 11;
@@ -158,7 +158,7 @@ public final class RobotConstants {
         public static final int CLIMB_JOG_RIGHT = 10;
       }
 
-      public static class BUTTONS_XBOX {
+      public static interface BUTTONS_XBOX {
         public static final int GYRO_RESET = 7;
         public static final int NOTE_ALIGN = 2;
         public static final int FULL_PIVOT = 8;
@@ -171,18 +171,18 @@ public final class RobotConstants {
     }
 
 
-    public static class HAS_NOTE {
+    public static interface HAS_NOTE {
       public static final int INTERNAL_SENSOR_FORWARD = 0;
       public static final int INTERNAL_SENSOR_REAR = 1;
     }
   }
 
   public interface OPERATOR_PANEL {
-    public static class BUTTONS {
+    public static interface BUTTONS {
       public static final int RUN_TEST = 9;
     }
 
-    public static class SWITCHES {
+    public static interface SWITCHES {
     }
   }
 
@@ -243,8 +243,7 @@ public final class RobotConstants {
 
     public static final Translation2d INITIAL_TRANSLATION =
         new Translation2d(Units.inchesToMeters(FIELD_LENGTH_INCHES / 2),
-            Units.inchesToMeters(FIELD_WIDTH_INCHES / 2)); // mid
-                                                           // field
+            Units.inchesToMeters(FIELD_WIDTH_INCHES / 2));
     public static final Rotation2d INITIAL_ROTATION = Rotation2d.fromDegrees(0);
 
     public static final Pose2d INITIAL_POSE = new Pose2d(INITIAL_TRANSLATION, INITIAL_ROTATION);

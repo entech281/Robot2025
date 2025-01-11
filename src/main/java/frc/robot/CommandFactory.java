@@ -23,14 +23,12 @@ import frc.robot.operation.UserPolicy;
 import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
-// import frc.robot.subsystems.vision.VisionSubsystem;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 
 @SuppressWarnings("unused")
 public class CommandFactory {
   private final DriveSubsystem driveSubsystem;
-  // private final VisionSubsystem visionSubsystem;
   private final NavXSubsystem navXSubsystem;
   private final OdometryProcessor odometry;
   private final SubsystemManager subsystemManager;
@@ -39,7 +37,6 @@ public class CommandFactory {
 
   public CommandFactory(SubsystemManager subsystemManager, OdometryProcessor odometry) {
     this.driveSubsystem = subsystemManager.getDriveSubsystem();
-    // this.visionSubsystem = subsystemManager.getVisionSubsystem();
     this.navXSubsystem = subsystemManager.getNavXSubsystem();
     this.odometry = odometry;
     this.subsystemManager = subsystemManager;
@@ -54,7 +51,7 @@ public class CommandFactory {
     AutoBuilder.configure(odometry::getEstimatedPose,
         odometry::resetOdometry,
         driveSubsystem::getChassisSpeeds,
-        (speeds, feedforwards) -> { driveSubsystem.pathFollowDrive(speeds); },
+        (speeds, feedforwards) -> driveSubsystem.pathFollowDrive(speeds),
         new PPHolonomicDriveController(
             new PIDConstants(8.5, 3, 0.1),
             new PIDConstants(RobotConstants.AUTONOMOUS.ROTATION_CONTROLLER_P, 0.0, 0.0)

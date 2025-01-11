@@ -20,7 +20,6 @@ import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.DrivetrainConstants;
 import frc.robot.RobotConstants.SwerveModuleConstants;
-import frc.robot.commands.test.TestDriveCommand;
 
 /**
  * The {@code Drivetrain} class contains fields and methods pertaining to the function of the
@@ -88,11 +87,7 @@ public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
       setModuleStates(swerveModuleStates);
     }
   }
-
-  @Override
-  public void periodic() {
-  }
-
+  
   private double[] calculateSlewRateLimiting(double xSpeed, double ySpeed, double rotSpeed) {
     // Convert XY to polar for rate limiting
     double inputTranslationDir = Math.atan2(ySpeed, xSpeed);
