@@ -35,16 +35,6 @@ public class OdometryProcessor {
     estimator.update(Rotation2d.fromDegrees(RobotIO.getInstance().getNavXOutput().getYaw()),
         RobotIO.getInstance().getDriveOutput().getModulePositions());
 
-    // if (RobotIO.getInstance().getVisionOutput() != null && integrateVision) {
-    //   Optional<Pose2d> visionPose = RobotIO.getInstance().getVisionOutput().getEstimatedPose();
-    //   Optional<Double> visionTimeStamp = RobotIO.getInstance().getVisionOutput().getTimeStamp();
-
-    //   if (visionPose.isPresent() && visionTimeStamp.isPresent()) {
-    //     addVisionEstimatedPose(visionPose.get(), visionTimeStamp.get(),
-    //         getEstimatedPose().getRotation());
-    //   }
-    // }
-
     RobotIO.getInstance().updateOdometryPose(getEstimatedPose());
     field.setRobotPose(getEstimatedPose());
 

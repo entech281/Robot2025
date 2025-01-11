@@ -1,11 +1,9 @@
-package frc.robot.commands.test;
+package frc.robot.subsystems.led;
 
 import edu.wpi.first.wpilibj.util.Color;
 import frc.entech.commands.EntechCommand;
 import frc.entech.util.StoppingCounter;
 import frc.robot.RobotConstants;
-import frc.robot.subsystems.led.LEDInput;
-import frc.robot.subsystems.led.LEDSubsystem;
 
 public class TestLEDCommand extends EntechCommand {
   private final LEDSubsystem ledSubsystem;

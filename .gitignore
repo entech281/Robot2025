@@ -1,6 +1,9 @@
 # This gitignore has been specially created by the WPILib team.
 # If you remove items from this file, intellisense might break.
 
+# build
+src/main/java/frc/robot/BuildConstants.java
+
 ### C++ ###
 # Prerequisites
 *.d
@@ -185,3 +188,4 @@ compile_commands.json
 
 # Eclipse generated file for annotation processors
 .factorypath
+

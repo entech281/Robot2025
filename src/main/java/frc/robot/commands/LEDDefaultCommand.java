@@ -17,8 +17,6 @@ public class LEDDefaultCommand extends EntechCommand {
 
   private boolean hasError() {
     return RobotIO.getInstance().getNavXOutput().isFaultDetected();
-        //|| RobotIO.getInstance().getVisionOutput().isDriverMode()
-        //|| RobotIO.getInstance().getNoteDetectorOutput().isDriverMode();
   }
 
   @Override
@@ -27,14 +25,7 @@ public class LEDDefaultCommand extends EntechCommand {
       input.setBlinking(true);
       input.setColor(Color.kRed);
       input.setSecondaryColor(Color.kBlack);
-     } /*else if (RobotIO.getInstance().getInternalNoteDetectorOutput().hasNote()) {
-      input.setBlinking(false);
-      input.setColor(Color.kPurple);
-    } else if (RobotIO.getInstance().getNoteDetectorOutput() != null
-        && RobotIO.getInstance().getNoteDetectorOutput().hasNotes()) {
-      input.setBlinking(false);
-      input.setColor(Color.kOrange);
-    }*/ else {
+     } else {
       input.setBlinking(false);
       input.setColor(Color.kGreen);
     }
