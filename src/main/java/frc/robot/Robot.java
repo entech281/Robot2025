@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import frc.entech.util.StoppingCounter;
-import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -51,8 +49,6 @@ public class Robot extends LoggedRobot {
       powerDistribution.clearStickyFaults();
     } else {
       setUseTiming(false);
-      String logPath = LogFileUtil.findReplayLog();
-      Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
       Logger.addDataReceiver(new NT4Publisher());
     }
 
