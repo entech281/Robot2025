@@ -79,7 +79,7 @@ public class Robot extends LoggedRobot {
   public void simulationPeriodic() {
     long elapsedMilliSecondsSinceStart = System.currentTimeMillis() - robotStartTime;
      if (elapsedMilliSecondsSinceStart > SIMULATION_TIME_MILLIS ){
-       System.out.println("Simulation Success : Ending");
+       DriverStation.reportWarning("Simulation Success : Ending", false);
        System.exit(0);
     }
   }
