@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -116,6 +117,12 @@ public final class RobotConstants {
 
     public static final int DRIVING_MOTOR_CURRENT_LIMIT_AMPS = 40; // 50; // amps
     public static final int TURNING_MOTOR_CURRENT_LIMIT_AMPS = 20; // amps
+  }
+
+    public static interface LED {
+    public static final int PORT = 0;
+    public static final int NUM_LEDS = 42;
+    public static final double BLINK_INTERVAL = 0.25;
   }
 
 
