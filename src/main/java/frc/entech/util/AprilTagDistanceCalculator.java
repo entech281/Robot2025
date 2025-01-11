@@ -6,14 +6,14 @@ public class AprilTagDistanceCalculator {
  
       public static double calculateCurrentDistanceInches( AprilTagDistanceCalibration calibration, int newTagWidthPixels ) {
 
-            double distanceInches = 0;
+            double newDistanceFeet = 0;
 
             try { 
-                  distanceInches = (calibration.tagWidthPixels * calibration.distanceFeet) / newTagWidthPixels;
+                  newDistanceFeet = (calibration.tagWidthPixels * calibration.distanceFeet) / newTagWidthPixels;
             }
 
             catch (ArithmeticException e) {
-                  
+
                   if (newTagWidthPixels == 0) {
                         DriverStation.reportWarning("newTagWidthPixels read as 0", e.getStackTrace());
                   }
@@ -22,6 +22,6 @@ public class AprilTagDistanceCalculator {
                   }
             }
 
-            return distanceInches;
+            return newDistanceFeet;
       }
 }
