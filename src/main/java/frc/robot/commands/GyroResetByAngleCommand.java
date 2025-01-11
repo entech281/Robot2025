@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.entech.commands.AutonomousException;
 import frc.entech.commands.EntechCommand;
 import frc.robot.io.RobotIO;
 import frc.robot.processors.OdometryProcessor;
@@ -25,7 +26,7 @@ public class GyroResetByAngleCommand extends EntechCommand {
     try {
       startPath = PathPlannerAuto.getPathGroupFromAutoFile(auto).get(0);
     } catch (Exception e) {
-      throw new RuntimeException("Invalid auto file: " + auto, e);
+      throw new AutonomousException("Invalid auto file: " + auto, e);
     }
     
     Optional<Pose2d> startingPose = startPath.getStartingHolonomicPose();

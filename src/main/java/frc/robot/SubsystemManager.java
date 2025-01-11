@@ -7,23 +7,22 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 import frc.entech.subsystems.EntechSubsystem;
+import frc.entech.subsystems.SubsystemInput;
+import frc.entech.subsystems.SubsystemOutput;
 import frc.robot.io.RobotIO;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
-// import frc.robot.subsystems.vision.VisionSubsystem;
 
 /**
  * Manages the subsystems and the interactions between them.
  */
 public class SubsystemManager {
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-  // private final VisionSubsystem visionSubsystem = new VisionSubsystem();
   private final NavXSubsystem navXSubsystem = new NavXSubsystem();
 
   public SubsystemManager() {
     navXSubsystem.initialize();
     driveSubsystem.initialize();
-    // visionSubsystem.initialize();
 
     periodic();
   }
@@ -32,27 +31,20 @@ public class SubsystemManager {
     return driveSubsystem;
   }
 
-  // public VisionSubsystem getVisionSubsystem() {
-  //   return visionSubsystem;
-  // }
-
   public NavXSubsystem getNavXSubsystem() {
     return navXSubsystem;
   }
 
-  public List<EntechSubsystem<?, ?>> getSubsystemList() {
-    ArrayList<EntechSubsystem<?, ?>> r = new ArrayList<>();
+  public List<EntechSubsystem<? extends SubsystemInput, ? extends SubsystemOutput>> getSubsystemList() {
+    ArrayList<EntechSubsystem<? extends SubsystemInput, ? extends SubsystemOutput>> r = new ArrayList<>();
     r.add(navXSubsystem);
     r.add(driveSubsystem);
-    // r.add(visionSubsystem);
 
     return r;
   }
 
   public void periodic() {
     RobotIO outputs = RobotIO.getInstance();
-
-    // outputs.updateVision(visionSubsystem.getOutputs());
 
     if (driveSubsystem.isEnabled()) {
       outputs.updateDrive(driveSubsystem.getOutputs());

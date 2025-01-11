@@ -36,10 +36,6 @@ public class RobotIO implements DriveInputSupplier {
     return di;
   }
 
-  // public VisionOutput getVisionOutput() {
-  //   return latestVisionOutput;
-  // }
-
   public DriveOutput getDriveOutput() {
     return latestDriveOutput;
   }
@@ -51,11 +47,6 @@ public class RobotIO implements DriveInputSupplier {
   public Pose2d getOdometryPose() {
     return latestOdometryPose;
   }
-
-  // public void updateVision(VisionOutput vo) {
-  //   latestVisionOutput = vo;
-  //   vo.log();
-  // }
 
   public void updateNavx(NavXOutput no) {
     latestNavXOutput = no;
@@ -87,7 +78,6 @@ public class RobotIO implements DriveInputSupplier {
     }
   }
 
-  // private VisionOutput latestVisionOutput;
   private NavXOutput latestNavXOutput;
   private DriveOutput latestDriveOutput;
   private Pose2d latestOdometryPose = RobotConstants.ODOMETRY.INITIAL_POSE;

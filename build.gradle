@@ -18,6 +18,12 @@ task(replayWatch, type: JavaExec) {
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
+sonar {
+    properties {
+        property "sonar.exclusions", "src/main/java/frc/robot/RobotConstants.java"
+    }
+}
+
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.
 deploy {
@@ -108,6 +114,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'org.mockito:mockito-core:3.+'
+
 
     def akitJson = new groovy.json.JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
     annotationProcessor "org.littletonrobotics.akit:akit-autolog:$akitJson.version"
