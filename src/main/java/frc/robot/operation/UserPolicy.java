@@ -1,28 +1,16 @@
 package frc.robot.operation;
 
-import edu.wpi.first.math.geometry.Pose2d;
-
 public class UserPolicy {
   private static UserPolicy instance = new UserPolicy();
 
   private boolean twistable = false;
-  private boolean aligningToNote = false;
-  private Pose2d targetPose = null;
-  private boolean readyToShoot = false;
-  private boolean isPreparingToShoot = false;
+  private boolean aligningToAngle = false;
+  private double targetAngle = 0;
 
   private UserPolicy() {}
 
   public static UserPolicy getInstance() {
     return instance;
-  }
-
-  public boolean isReadyToShoot() {
-    return this.readyToShoot;
-  }
-
-  public void setReadyToShoot(boolean readyToShoot) {
-    this.readyToShoot = readyToShoot;
   }
 
   public boolean isTwistable() {
@@ -33,27 +21,19 @@ public class UserPolicy {
     this.twistable = twistable;
   }
 
-  public void setTargetPose(Pose2d targetPose) {
-    this.targetPose = targetPose;
+  public boolean isAligningToAngle() {
+    return this.aligningToAngle;
   }
 
-  public Pose2d getTargetPose() {
-    return targetPose;
+  public void setAligningToAngle(boolean aligningToAngle) {
+    this.aligningToAngle = aligningToAngle;
   }
 
-  public boolean isAligningToNote() {
-    return this.aligningToNote;
+  public double getTargetAngle() {
+    return this.targetAngle;
   }
 
-  public void setAligningToNote(boolean aligningToNote) {
-    this.aligningToNote = aligningToNote;
-  }
-
-  public boolean isPreparingToShoot() {
-    return this.isPreparingToShoot;
-  }
-
-  public void setPreparingToShoot(boolean isPreparingToShoot) {
-    this.isPreparingToShoot = isPreparingToShoot;
+  public void setTargetAngle(double targetAngle) {
+    this.targetAngle = targetAngle;
   }
 }
