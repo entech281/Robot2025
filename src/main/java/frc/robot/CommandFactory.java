@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.entech.commands.AutonomousException;
 import frc.robot.commands.GyroResetByAngleCommand;
 import frc.robot.commands.ResetOdometryCommand;
 import frc.robot.io.RobotIO;
@@ -45,13 +46,13 @@ public class CommandFactory {
     try{
       config = RobotConfig.fromGUISettings();
     } catch (Exception e) {
-      throw new RuntimeException("Failed to load robot config", e);
+      throw new AutonomousException("Failed to load robot config", e);
     }
 
     AutoBuilder.configure(odometry::getEstimatedPose,
         odometry::resetOdometry,
         driveSubsystem::getChassisSpeeds,
-        (speeds, feedforwards) -> driveSubsystem.pathFollowDrive(speeds),
+        (speeds, feedForwards) -> driveSubsystem.pathFollowDrive(speeds),
         new PPHolonomicDriveController(
             new PIDConstants(8.5, 3, 0.1),
             new PIDConstants(RobotConstants.AUTONOMOUS.ROTATION_CONTROLLER_P, 0.0, 0.0)

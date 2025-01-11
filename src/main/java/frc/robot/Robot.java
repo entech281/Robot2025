@@ -64,7 +64,6 @@ public class Robot extends LoggedRobot {
       loggerInit();
     } catch ( Exception e){
       DriverStation.reportWarning("Logger init failed.", e.getStackTrace());
-      e.printStackTrace();
     }
 
     subsystemManager = new SubsystemManager();
