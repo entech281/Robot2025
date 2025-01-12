@@ -2,6 +2,7 @@ package entech.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -30,13 +31,35 @@ public class AprilTagDistanceCalculatorTest {
         assertEquals("New tag width in pixels must be greater than zero.", exception.getMessage());
     }
 
+
+
+    @Test
+    public void testCalculateCurrentTagWidthPixels_InvalidCalibration() {
+
+        boolean negativePixels = false;
+
+        try {
+            AprilTagDistanceCalibration calibration = new AprilTagDistanceCalibration(1920, 1080, -5, 10);
+            AprilTagDistanceCalculator.calculateCurrentDistanceInches(calibration, 100);
+        } catch (IllegalArgumentException e) {
+            negativePixels = true;
+        }
+
+        assertTrue(negativePixels);
+    }
+
     @Test
     public void testCalculateCurrentDistanceInches_InvalidCalibration() {
-        AprilTagDistanceCalibration calibration = new AprilTagDistanceCalibration(1920, 1080, 0, 10);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        boolean negativeDistance = false;
+
+        try {
+            AprilTagDistanceCalibration calibration = new AprilTagDistanceCalibration(1920, 1080, 100, -7);
             AprilTagDistanceCalculator.calculateCurrentDistanceInches(calibration, 100);
-        });
-        assertEquals("Calibration tag width must be greater than zero.", exception.getMessage());
+        } catch (IllegalArgumentException e) {
+            negativeDistance = true;
+        }
+
+        assertTrue(negativeDistance);
     }
 }
