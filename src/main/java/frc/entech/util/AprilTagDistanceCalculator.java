@@ -3,8 +3,8 @@ package frc.entech.util;
 public class AprilTagDistanceCalculator {
 
     private AprilTagDistanceCalculator() {
-        // Private constructor to prevent instantiation
-    }
+
+}
 
     public static double calculateCurrentDistanceInches(AprilTagDistanceCalibration calibration, double newTagWidthPixels) {
         if (calibration == null) {
