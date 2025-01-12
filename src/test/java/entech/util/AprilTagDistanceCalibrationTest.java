@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import frc.entech.util.AprilTagDistanceCalibration;
 
-public class AprilTagDistanceCalibrationTest {
+class AprilTagDistanceCalibrationTest {
 
     @Test
-    public void testGettersAndSetters() {
+    private void testGettersAndSetters() {
         AprilTagDistanceCalibration calibration = new AprilTagDistanceCalibration(1920, 1080, 200, 10);
 
         assertEquals(1920, calibration.getScreenWidthPixels());

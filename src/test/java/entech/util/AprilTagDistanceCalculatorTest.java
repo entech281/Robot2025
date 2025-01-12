@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test;
 import frc.entech.util.AprilTagDistanceCalculator;
 import frc.entech.util.AprilTagDistanceCalibration;
 
-public class AprilTagDistanceCalculatorTest {
+class AprilTagDistanceCalculatorTest {
 
     @Test
-    public void testCalculateCurrentDistanceInches_ValidInputs() {
+    void testCalculateCurrentDistanceInches_ValidInputs() {
         AprilTagDistanceCalibration calibration = new AprilTagDistanceCalibration(1920, 1080, 200, 10);
         double newTagWidthPixels = 100;
         double expectedDistance = 20; // (200 * 10) / 100
@@ -21,7 +21,7 @@ public class AprilTagDistanceCalculatorTest {
     }
 
     @Test
-    public void testCalculateCurrentDistanceInches_NewTagWidthPixelsZero() {
+    void testCalculateCurrentDistanceInches_NewTagWidthPixelsZero() {
         AprilTagDistanceCalibration calibration = new AprilTagDistanceCalibration(1920, 1080, 200, 10);
 
         assertThrows(IllegalArgumentException.class, () -> {
@@ -30,7 +30,7 @@ public class AprilTagDistanceCalculatorTest {
     }
 
     @Test
-    public void testCalculateCurrentDistanceInches_InvalidCalibration() {
+    void testCalculateCurrentDistanceInches_InvalidCalibration() {
         AprilTagDistanceCalibration calibration = new AprilTagDistanceCalibration(1920, 1080, 0, 10);
 
         assertThrows(IllegalArgumentException.class, () -> {
