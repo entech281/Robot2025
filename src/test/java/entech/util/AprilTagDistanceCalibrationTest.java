@@ -9,7 +9,7 @@ import frc.entech.util.AprilTagDistanceCalibration;
 class AprilTagDistanceCalibrationTest {
 
     @Test
-    private void testGettersAndSetters() {
+    void testGettersAndSetters() {
         AprilTagDistanceCalibration calibration = new AprilTagDistanceCalibration(1920, 1080, 200, 10);
 
         assertEquals(1920, calibration.getScreenWidthPixels());
