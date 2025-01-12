@@ -12,7 +12,7 @@ import frc.entech.util.AprilTagDistanceCalibration;
 public class AprilTagDistanceCalculatorTest {
 
     @Test
-    public void testCalculateCurrentDistanceInches_ValidInputs() {
+    void testCalculateCurrentDistanceInches_ValidInputs() {
         AprilTagDistanceCalibration calibration = new AprilTagDistanceCalibration(1920, 1080, 200, 10);
         double newTagWidthPixels = 100;
         double expectedDistance = (200 * 10) / 100;
@@ -22,7 +22,7 @@ public class AprilTagDistanceCalculatorTest {
     }
 
     @Test
-    public void testCalculateCurrentDistanceInches_NewTagWidthPixelsZero() {
+    void testCalculateCurrentDistanceInches_NewTagWidthPixelsZero() {
         AprilTagDistanceCalibration calibration = new AprilTagDistanceCalibration(1920, 1080, 200, 10);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
