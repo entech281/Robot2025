@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import frc.entech.util.AprilTagDistanceCalculator;
 import frc.entech.util.AprilTagDistanceCalibration;
 
-public class AprilTagDistanceCalculatorTest {
+class AprilTagDistanceCalculatorTest {
 
     @Test
     void testCalculateCurrentDistanceInches_ValidInputs() {
@@ -34,7 +34,7 @@ public class AprilTagDistanceCalculatorTest {
 
 
     @Test
-    public void testCalculateCurrentTagWidthPixels_InvalidCalibration() {
+    void testCalculateCurrentTagWidthPixels_InvalidCalibration() {
 
         boolean negativePixels = false;
 
@@ -49,7 +49,7 @@ public class AprilTagDistanceCalculatorTest {
     }
 
     @Test
-    public void testCalculateCurrentDistanceInches_InvalidCalibration() {
+    void testCalculateCurrentDistanceInches_InvalidCalibration() {
 
         boolean negativeDistance = false;
 
