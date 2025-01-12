@@ -4,17 +4,13 @@ import edu.wpi.first.wpilibj.DriverStation;
 
 public class AprilTagDistanceCalculator {
 
-      // private double newDistanceFeet;
-      // private double newTagWidthPixels;
-      // private AprilTagDistanceCalibration calibration;
-
-      private AprilTagDistanceCalculator ( AprilTagDistanceCalibration calibration, double newTagWidthPixels) {
+      private AprilTagDistanceCalculator () {
  
       }
  
-      public static double calculateCurrentDistanceInches( AprilTagDistanceCalibration calibration, double newTagWidthPixels ) {
+      public static double calculateCurrentDistanceInches( AprilTagDistanceCalibration calibration, double newTagWidthPixels ) throws ArithmeticException{
 
-            double newDistanceFeet = 0;
+            double newDistanceFeet;
 
             try { 
                   newDistanceFeet = (calibration.getTagWidthPixels() * calibration.getDistanceFeet()) / newTagWidthPixels;
@@ -24,9 +20,11 @@ public class AprilTagDistanceCalculator {
 
                   if (newTagWidthPixels == 0) {
                         DriverStation.reportWarning("newTagWidthPixels read as 0", e.getStackTrace());
+                        throw e;
                   }
                   else {
                         DriverStation.reportWarning("Invalid input for calibration", e.getStackTrace());
+                        throw e;
                   }
             }
 
