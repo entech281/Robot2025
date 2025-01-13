@@ -2,7 +2,6 @@ package entech.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -33,35 +32,7 @@ class AprilTagDistanceCalculatorTest {
 
 
 
-    // @Test
-    // void testCalculateCurrentTagWidthPixels_InvalidCalibration() {
 
-    //     boolean negativePixels = false;
-
-    //     try {
-    //         AprilTagDistanceCalibration calibration = new AprilTagDistanceCalibration(1920, 1080, -5, 10);
-    //         AprilTagDistanceCalculator.calculateCurrentDistanceInches(calibration, 100);
-    //     } catch (IllegalArgumentException e) {
-    //         negativePixels = true;
-    //     }
-
-    //     assertTrue(negativePixels);
-    // }
-
-    // @Test
-    // void testCalculateCurrentDistanceInches_InvalidCalibration() {
-
-    //     boolean negativeDistance = false;
-
-    //     try {
-    //         AprilTagDistanceCalibration calibration = new AprilTagDistanceCalibration(1920, 1080, 100, -7);
-    //         AprilTagDistanceCalculator.calculateCurrentDistanceInches(calibration, 100);
-    //     } catch (IllegalArgumentException e) {
-    //         negativeDistance = true;
-    //     }
-
-    //     assertTrue(negativeDistance);
-    // }
     @Test
     void testCalculateCurrentDistanceFeet_InvalidCalibration(){
 
