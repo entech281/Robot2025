@@ -15,6 +15,8 @@ import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.CommandFactory;
 import frc.robot.RobotConstants;
 import frc.robot.SubsystemManager;
+import frc.robot.commands.DriveCommand;
+import frc.robot.commands.GyroReset;
 //import frc.robot.commands.AlignNoteToggleCommand;
 //import frc.robot.commands.ClimbJogLeftCommand;
 //import frc.robot.commands.ClimbJogRightCommand;
@@ -110,8 +112,8 @@ public class OperatorInterface
   public void enableJoystickBindings() {
     joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.TWIST)
         .whileTrue(new TwistCommand());
-    // joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.GYRO_RESET)
-        // .onTrue(new GyroReset(subsystemManager.getNavXSubsystem(), odometry));
+    joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.GYRO_RESET)
+        .onTrue(new GyroReset(subsystemManager.getNavXSubsystem(), odometry));
 
     joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.RUN_TESTS)
         .onTrue(new RunTestCommand(testChooser));
@@ -133,11 +135,11 @@ public class OperatorInterface
   }
 
   public void enableXboxBindings() {
-    // xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.GYRO_RESET)
-        // .onTrue(new GyroReset(subsystemManager.getNavXSubsystem(), odometry));
+    xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.GYRO_RESET)
+        .onTrue(new GyroReset(subsystemManager.getNavXSubsystem(), odometry));
 
-    // subsystemManager.getDriveSubsystem()
-        // .setDefaultCommand(new DriveCommand(subsystemManager.getDriveSubsystem(), this));
+    subsystemManager.getDriveSubsystem()
+        .setDefaultCommand(new DriveCommand(subsystemManager.getDriveSubsystem(), this));
 
     // xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.NOTE_ALIGN)
         // .whileTrue(new AlignNoteToggleCommand());
