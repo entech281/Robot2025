@@ -28,10 +28,10 @@ import frc.robot.RobotConstants.SwerveModuleConstants;
 public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
   private static final boolean ENABLED = true;
 
-  public static final double FRONT_LEFT_VIRTUAL_OFFSET_RADIANS = 0.0;
-  public static final double FRONT_RIGHT_VIRTUAL_OFFSET_RADIANS = 0.0;
-  public static final double REAR_LEFT_VIRTUAL_OFFSET_RADIANS = 0.0;
-  public static final double REAR_RIGHT_VIRTUAL_OFFSET_RADIANS = 0.0;
+  public static final double FRONT_LEFT_VIRTUAL_OFFSET_RADIANS = -0.6656784291742559;
+  public static final double FRONT_RIGHT_VIRTUAL_OFFSET_RADIANS = -0.47198700559;
+  public static final double REAR_LEFT_VIRTUAL_OFFSET_RADIANS = -1.2974314020082391;
+  public static final double REAR_RIGHT_VIRTUAL_OFFSET_RADIANS = -0.8561333695139126;
 
   public static final int GYRO_ORIENTATION = 1; // might be able to merge with kGyroReversed
 
