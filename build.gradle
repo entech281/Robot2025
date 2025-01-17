@@ -4,6 +4,11 @@ plugins {
     id "com.peterabeles.gversion" version "1.10"
 	id "jacoco"
     id "org.sonarqube" version "4.4.1.3373"
+    id 'org.hidetake.ssh' version '2.10.1'
+}
+
+ssh.settings {
+    knownHosts = allowAnyHosts // Disables host key checking.
 }
 
 java {
@@ -18,6 +23,15 @@ task(replayWatch, type: JavaExec) {
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
+remotes {
+    visionPi {
+        host = '10.2.81.11'
+        user = 'pi'
+        password = 'raspberry'
+    }
+}
+
+
 sonar {
     properties {
         property "sonar.exclusions", "src/main/java/frc/robot/RobotConstants.java"
@@ -28,6 +42,7 @@ sonar {
 // This is added by GradleRIO's backing project DeployUtils.
 deploy {
     targets {
+
         roborio(getTargetTypeClass('RoboRIO')) {
             // Team number is loaded either from the .wpilib/wpilib_preferences.json
             // or from command line. If not found an exception will be thrown.
@@ -147,4 +162,18 @@ wpi.java.configureTestTasks(test)
 // Configure string concat to always inline compile
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
+}
+
+task deployVision {
+    group = 'Deployment'
+    description = 'Deploys the vision file to the remote device'
+
+    doLast {
+        ssh.run {
+            session(remotes.visionPi) {
+                put from: file('src/main/vision/vision.py'), into: '/home/pi'
+                execute 'sudo systemctl restart vision'
+            }
+        }
+    }
 }
