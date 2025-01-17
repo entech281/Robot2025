@@ -75,19 +75,19 @@ def main():
 
     detector.addFamily("tag36h11")
 
-    mjpegServer = cs.MjpegServer("httpserver", 8081)
+    mjpegServer = cs.MjpegServer("httpserver", 5800)
     mjpegServer.setSource(camera)
 
-    print("mjpg server listening at http://0.0.0.0:8081")
+    print("mjpg server listening at http://0.0.0.0:5800")
 
     cvsink = cs.CvSink("cvsink")
     cvsink.setSource(camera)
 
     cvSource = cs.CvSource("cvsource", cs.VideoMode.PixelFormat.kMJPEG, RESOLUTION_WIDTH,RESOLUTION_HEIGHT, 100)
-    cvMjpegServer = cs.MjpegServer("cvhttpserver", 8082)
+    cvMjpegServer = cs.MjpegServer("cvhttpserver", 5801)
     cvMjpegServer.setSource(cvSource)
 
-    print("OpenCV output mjpg server listening at http://0.0.0.0:8082")
+    print("OpenCV output mjpg server listening at http://0.0.0.0:5801")
 
     test = np.zeros(shape=(600, 800, 3), dtype=np.uint8)
 
