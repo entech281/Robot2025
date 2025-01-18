@@ -20,7 +20,6 @@ import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.DrivetrainConstants;
 import frc.robot.RobotConstants.SwerveModuleConstants;
-import frc.robot.commands.test.TestDriveCommand;
 
 /**
  * The {@code Drivetrain} class contains fields and methods pertaining to the function of the
@@ -29,10 +28,10 @@ import frc.robot.commands.test.TestDriveCommand;
 public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
   private static final boolean ENABLED = true;
 
-  public static final double FRONT_LEFT_VIRTUAL_OFFSET_RADIANS = 1.4779245720125385;
-  public static final double FRONT_RIGHT_VIRTUAL_OFFSET_RADIANS = -2.247701101404261;
-  public static final double REAR_LEFT_VIRTUAL_OFFSET_RADIANS = 0.7613908452677798;
-  public static final double REAR_RIGHT_VIRTUAL_OFFSET_RADIANS = 1.704240497731777;
+  public static final double FRONT_LEFT_VIRTUAL_OFFSET_RADIANS = -0.6656784291742559;
+  public static final double FRONT_RIGHT_VIRTUAL_OFFSET_RADIANS = -0.47198700559;
+  public static final double REAR_LEFT_VIRTUAL_OFFSET_RADIANS = -1.2974314020082391;
+  public static final double REAR_RIGHT_VIRTUAL_OFFSET_RADIANS = -0.8561333695139126;
 
   public static final int GYRO_ORIENTATION = 1; // might be able to merge with kGyroReversed
 
@@ -88,11 +87,7 @@ public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
       setModuleStates(swerveModuleStates);
     }
   }
-
-  @Override
-  public void periodic() {
-  }
-
+  
   private double[] calculateSlewRateLimiting(double xSpeed, double ySpeed, double rotSpeed) {
     // Convert XY to polar for rate limiting
     double inputTranslationDir = Math.atan2(ySpeed, xSpeed);
