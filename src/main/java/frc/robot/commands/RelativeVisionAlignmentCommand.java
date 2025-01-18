@@ -14,7 +14,7 @@ public class RelativeVisionAlignmentCommand extends EntechCommand {
 
     @Override
     public void execute() {
-        // TODO: Implement this method
+        UserPolicy.getInstance().setTargetAngle(0);
     }
 
     @Override

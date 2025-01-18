@@ -9,10 +9,10 @@ import frc.robot.operation.UserPolicy;
 import frc.robot.subsystems.drive.DriveInput;
 
 public class HoldYawFilter implements DriveFilterI {
+  private final static double RESET_MARGIN = 3.0;
   private final PIDController controller = new PIDController(0.0035, 0, 0.0);
   private final StoppingCounter stopCounter = new StoppingCounter(0.25);
-  private final static double RESET_MARGIN = 3.0;
-  private Rotation2d holdAngle;
+  private Rotation2d holdAngle = new Rotation2d(0);
 
   public HoldYawFilter() {
     controller.enableContinuousInput(-180, 180);
