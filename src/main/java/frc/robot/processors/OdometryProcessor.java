@@ -1,11 +1,8 @@
 package frc.robot.processors;
 
-import java.util.Optional;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotConstants;
@@ -37,18 +34,6 @@ public class OdometryProcessor {
 
     RobotIO.getInstance().updateOdometryPose(getEstimatedPose());
     field.setRobotPose(getEstimatedPose());
-
-    Pose2d target = null;
-    Optional<Alliance> team = DriverStation.getAlliance();
-    if (team.isPresent() && team.get() == Alliance.Blue) {
-      target = new Pose2d(0.0, 5.31, new Rotation2d());
-    }
-
-    if (target == null) {
-      target = new Pose2d(16.54, 5.54, new Rotation2d());
-    }
-
-    RobotIO.getInstance().setDistanceFromTarget(Optional.of(calculateDistanceFromTarget(target)));
   }
 
   public void addVisionEstimatedPose(Pose2d visionPose, double timeStamp, Rotation2d yaw) {

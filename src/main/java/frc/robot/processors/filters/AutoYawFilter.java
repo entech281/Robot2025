@@ -5,7 +5,7 @@ import frc.robot.operation.UserPolicy;
 import frc.robot.subsystems.drive.DriveInput;
 
 public class AutoYawFilter implements DriveFilterI {
-  private final PIDController controller = new PIDController(0.009, 0, 0.0);
+  private final PIDController controller = new PIDController(0.004, 0, 0.0);
 
   @Override
   public DriveInput process(DriveInput input) {
