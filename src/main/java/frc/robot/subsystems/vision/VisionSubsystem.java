@@ -36,17 +36,12 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     // Set values in VisionOutput
     output.setHasTarget(hasTargetEntry.getBoolean(false));
     output.setTagID((int) idTagEntry.getDouble(0));
-    output.setTagHeight((int) tagHeightEntry.getDouble(0));
-    output.setTagWidth((int) tagWidthEntry.getDouble(0));
+    output.setTagHeight((int) tagHeightEntry.getInteger(0));
+    output.setTagWidth((int) tagWidthEntry.getInteger(0));
     output.setTagX(tagXEntry.getDouble(0));
     output.setTagY(tagYEntry.getDouble(0));
-    output.setTimestamp((long) timeStampEntry.getDouble(0));
+    output.setTimestamp((long) timeStampEntry.getInteger(0));
 
-    if (ENABLED) {
-      // Additional logic if needed when the subsystem is enabled
-    } else {
-      // Handle the case when the subsystem is not enabled
-    }
 
     return output;
   }
