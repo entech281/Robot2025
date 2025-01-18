@@ -19,6 +19,7 @@ public class DriveInputProcessor {
     driveFilters.add(new TwistFilter());
     driveFilters.add(new SquaringFilter());
     driveFilters.add(new MaxConstraintFilter());
+    driveFilters.add(new HoldYawFilter());
   }
 
   public DriveInput processInput(DriveInput input) {
