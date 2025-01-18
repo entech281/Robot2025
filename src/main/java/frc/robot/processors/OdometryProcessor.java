@@ -37,16 +37,6 @@ public class OdometryProcessor {
 
     RobotIO.getInstance().updateOdometryPose(getEstimatedPose());
     field.setRobotPose(getEstimatedPose());
-
-    Pose2d target = null;
-    Optional<Alliance> team = DriverStation.getAlliance();
-    if (team.isPresent() && team.get() == Alliance.Blue) {
-      target = new Pose2d(0.0, 5.31, new Rotation2d());
-    }
-
-    if (target == null) {
-      target = new Pose2d(16.54, 5.54, new Rotation2d());
-    }
   }
 
   public void addVisionEstimatedPose(Pose2d visionPose, double timeStamp, Rotation2d yaw) {
