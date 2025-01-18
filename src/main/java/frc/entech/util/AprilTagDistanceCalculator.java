@@ -3,9 +3,9 @@ package frc.entech.util;
 public class AprilTagDistanceCalculator {
 
     private AprilTagDistanceCalculator() {
-
+ 
 }
-
+   
     public static double calculateCurrentDistanceInches(AprilTagDistanceCalibration calibration, double newTagWidthPixels) {
         if (calibration == null) {
             throw new IllegalArgumentException("Calibration cannot be null.");
