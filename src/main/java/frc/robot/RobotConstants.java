@@ -262,7 +262,7 @@ public final class RobotConstants {
   }
 
   public static interface APRIL_TAG_DATA {
-    public static final HashMap<Integer, Double> REEF_TAGS = new HashMap<Integer, Double>();
+    public static final HashMap<Integer, Double> TAG_ANGLES = new HashMap<Integer, Double>();
   }
 
   private RobotConstants() {}

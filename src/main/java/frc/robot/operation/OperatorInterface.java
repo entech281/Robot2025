@@ -144,8 +144,8 @@ public class OperatorInterface
     // xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.NOTE_ALIGN)
         // .whileTrue(new AlignNoteToggleCommand());
 
-    // xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.TARGET_AMP)
-        // .onTrue(commandFactory.getTargetAmpCommand());
+    xboxController.button(9)
+        .onTrue(new RunTestCommand(testChooser));
 
     // xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.TARGET_SPEAKER)
     //     .onTrue(commandFactory.getTargetSpeakerCommand());

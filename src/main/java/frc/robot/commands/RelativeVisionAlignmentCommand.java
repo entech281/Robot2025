@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import frc.entech.commands.EntechCommand;
+import frc.robot.operation.UserPolicy;
 
 public class RelativeVisionAlignmentCommand extends EntechCommand {
     @Override
@@ -15,7 +16,8 @@ public class RelativeVisionAlignmentCommand extends EntechCommand {
 
     @Override
     public void end(boolean interrupted) {
-        // TODO: Implement this method
+        UserPolicy.getInstance().setAligningToAngle(false);
+        UserPolicy.getInstance().setLaterallyAligning(false);
     }
 
     @Override
