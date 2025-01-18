@@ -1,0 +1,5 @@
+robotpy
+opencv-python
+robotpy_apriltag
+cscore
+pytest
