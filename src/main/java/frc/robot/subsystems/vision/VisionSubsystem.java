@@ -40,7 +40,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     output.setTagWidth((int) tagWidthEntry.getInteger(0));
     output.setTagX(tagXEntry.getDouble(0));
     output.setTagY(tagYEntry.getDouble(0));
-    output.setTimestamp((long) timeStampEntry.getInteger(0));
+    output.setTimestamp(timeStampEntry.getInteger(0));
 
 
     return output;
