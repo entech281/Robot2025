@@ -23,5 +23,6 @@ public class VisionSimulationCommand extends EntechCommand {
 
   @Override
   public void end(boolean interrupted) {
-}
+    // Optionally handle cleanup when command ends
+  }
 }
