@@ -5,7 +5,9 @@ public class UserPolicy {
 
   private boolean twistable = false;
   private boolean aligningToAngle = false;
-  private double targetAngle = 0;
+  private double targetAngle = 0.0;
+  private double visionPositionSetPoint = 0.0;
+  private boolean laterallyAligning = false;
 
   private UserPolicy() {}
 
@@ -35,5 +37,21 @@ public class UserPolicy {
 
   public void setTargetAngle(double targetAngle) {
     this.targetAngle = targetAngle;
+  }
+
+  public double getVisionPositionSetPoint() {
+    return this.visionPositionSetPoint;
+  }
+
+  public void setVisionPositionSetPoint(double visionPositionSetPoint) {
+    this.visionPositionSetPoint = visionPositionSetPoint;
+  }
+
+  public boolean isLaterallyAligning() {
+    return this.laterallyAligning;
+  }
+
+  public void setLaterallyAligning(boolean laterallyAligning) {
+    this.laterallyAligning = laterallyAligning;
   }
 }

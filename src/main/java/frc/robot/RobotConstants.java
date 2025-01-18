@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.HashMap;
+
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.Matrix;
@@ -232,13 +234,13 @@ public final class RobotConstants {
   }
 
 
-  public interface INDICATOR_VALUES {
+  public static interface INDICATOR_VALUES {
     public static final double POSITION_UNKNOWN = -1.0;
     public static final double POSITION_NOT_SET = -1.1;
   }
 
 
-  public interface ODOMETRY {
+  public static interface ODOMETRY {
     public static final double FIELD_LENGTH_INCHES = 54 * 12 + 3.25;
     public static final double FIELD_WIDTH_INCHES = 26 * 12 + 11.25;
 
@@ -251,12 +253,16 @@ public final class RobotConstants {
   }
 
 
-  public interface OperatorMessages {
+  public static interface OperatorMessages {
     public static final String SUBSYSTEM_TEST = "SubsystemTest";
   }
 
-  public interface TEST_CONSTANTS {
+  public static interface TEST_CONSTANTS {
     public static final double STANDARD_TEST_LENGTH = 1;
+  }
+
+  public static interface APRIL_TAG_DATA {
+    public static final HashMap<Integer, Double> REEF_TAGS = new HashMap<Integer, Double>();
   }
 
   private RobotConstants() {}
