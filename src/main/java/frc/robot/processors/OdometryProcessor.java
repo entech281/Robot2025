@@ -47,8 +47,6 @@ public class OdometryProcessor {
     if (target == null) {
       target = new Pose2d(16.54, 5.54, new Rotation2d());
     }
-
-    RobotIO.getInstance().setDistanceFromTarget(Optional.of(calculateDistanceFromTarget(target)));
   }
 
   public void addVisionEstimatedPose(Pose2d visionPose, double timeStamp, Rotation2d yaw) {
