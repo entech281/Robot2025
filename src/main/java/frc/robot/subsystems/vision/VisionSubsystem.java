@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.entech.subsystems.EntechSubsystem;
 
 public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> {
-  private static final boolean ENABLED = false;
+  private static final boolean ENABLED = true;
 
   // NetworkTable instance
   private final NetworkTable table;
