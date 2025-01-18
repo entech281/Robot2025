@@ -7,14 +7,13 @@ public class RelativeVisionAlignmentCommand extends EntechCommand {
     @Override
     public void initialize() {
         UserPolicy.getInstance().setAligningToAngle(true);
-        UserPolicy.getInstance().setLaterallyAligning(false);
-        UserPolicy.getInstance().setTargetAngle(0);
+        UserPolicy.getInstance().setLaterallyAligning(true);
+        UserPolicy.getInstance().setTargetAngle(-60);
         UserPolicy.getInstance().setVisionPositionSetPoint(0);
     }
 
     @Override
     public void execute() {
-        UserPolicy.getInstance().setTargetAngle(0);
     }
 
     @Override

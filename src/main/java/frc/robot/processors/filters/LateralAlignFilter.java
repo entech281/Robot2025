@@ -28,8 +28,8 @@ public class LateralAlignFilter implements DriveFilterI {
         DriveInput processedInput = new DriveInput(input);
 
         double angleRadians = Units.degreesToRadians(goalAngle + 90);
-        processedInput.setXSpeed(Math.sin(angleRadians) * magnitude);
-        processedInput.setYSpeed(Math.cos(angleRadians) * magnitude);
+        processedInput.setXSpeed(input.getXSpeed() + Math.sin(angleRadians) * magnitude);
+        processedInput.setYSpeed(input.getYSpeed() + Math.cos(angleRadians) * magnitude);
 
         return processedInput;
     }
@@ -45,28 +45,15 @@ public class LateralAlignFilter implements DriveFilterI {
         DriveInput correctInput = new DriveInput(input);
 
         double angleRadians = Units.degreesToRadians(goalAngle);
-        double xMax = Math.abs(Math.sin(angleRadians));
-        double yMax = Math.abs(Math.cos(angleRadians));
+        
+        double inputAngle = Math.atan2(input.getYSpeed(), input.getXSpeed());
 
-        double xPlain = Math.min(xMax, Math.abs(input.getXSpeed()));
-        double yPlain = Math.min(yMax, Math.abs(input.getYSpeed()));
+        double inputMag = Math.sqrt(Math.pow(input.getXSpeed(), 2) + Math.pow(input.getYSpeed(), 2));
 
-        double xMargin = xPlain / xMax;
-        double yMargin = yPlain / yMax;
+        double outputMag = inputMag * Math.cos(angleRadians - inputAngle);
 
-        if (xMargin < yMargin) {
-            yPlain = yMax * xMargin;
-        } else if (yMargin < xMargin) {
-            xPlain = xMax * yMargin;
-        }
-
-        if (xMax > yMax) {
-            correctInput.setXSpeed(Math.copySign(xPlain, input.getXSpeed()));
-            correctInput.setYSpeed(Math.copySign(yPlain, input.getXSpeed()));
-        } else {
-            correctInput.setXSpeed(Math.copySign(xPlain, input.getYSpeed()));
-            correctInput.setYSpeed(Math.copySign(yPlain, input.getYSpeed()));
-        }
+        correctInput.setXSpeed(Math.cos(angleRadians) * outputMag);
+        correctInput.setYSpeed(Math.sin(angleRadians) * outputMag);
 
         return correctInput;
     }
