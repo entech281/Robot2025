@@ -1,9 +1,9 @@
 package frc.robot.commands;
 
-import frc.entech.commands.EntechCommand;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.vision_simulation.VisionSimulationSubsystem;
 
-public class VisionSimulationCommand extends EntechCommand {
+public class VisionSimulationCommand extends Command {
   private final VisionSimulationSubsystem visionSimulationSubsystem;
 
   public VisionSimulationCommand(VisionSimulationSubsystem visionSimulationSubsystem) {
@@ -13,7 +13,7 @@ public class VisionSimulationCommand extends EntechCommand {
 
   @Override
   public void execute() {
-    visionSimulationSubsystem.toOutputs().toLog();
+    visionSimulationSubsystem.updateVisionSimulation();
   }
 
   @Override

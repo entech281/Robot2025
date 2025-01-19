@@ -12,6 +12,7 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.subsystems.vision_simulation.VisionSimulationSubsystem;
+import frc.robot.commands.VisionSimulationCommand;
 
 /**
  * Manages the subsystems and the interactions between them.
@@ -29,9 +30,10 @@ public class SubsystemManager {
     periodic();
   }
 
-  public void setJoystick(Joystick joystick) {
+  public void initializeVisionSimulationSubsystem(VisionSubsystem visionSubsystem, Joystick joystick) {
     visionSimulationSubsystem = new VisionSimulationSubsystem(visionSubsystem, joystick);
     visionSimulationSubsystem.initialize();
+    visionSimulationSubsystem.setDefaultCommand(new VisionSimulationCommand(visionSimulationSubsystem));
   }
 
   public DriveSubsystem getDriveSubsystem() {

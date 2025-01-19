@@ -1,7 +1,5 @@
 package frc.robot;
 
-import java.util.HashMap;
-
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.Matrix;
@@ -157,6 +155,7 @@ public final class RobotConstants {
       public static final int PANEL = 1;
       public static final int TEST_JOYSTICK = 2;
       public static final int TUNING_CONTROLLER = 3;
+      public static final int JOYSTICK_PORT = 4;
 
       public static interface BUTTONS_JOYSTICK {
         public static final int TWIST = 1;
@@ -165,6 +164,8 @@ public final class RobotConstants {
         public static final int RESET_ODOMETRY = 3;
         public static final int CLIMB_JOG_LEFT = 9;
         public static final int CLIMB_JOG_RIGHT = 10;
+        public static final int VISION_SIMULATION = 5;
+        public static final int ENABLE_VISION_SIMULATION = 6;
       }
 
       public static interface BUTTONS_XBOX {

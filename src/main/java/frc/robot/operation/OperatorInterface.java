@@ -3,10 +3,12 @@ package frc.robot.operation;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -34,6 +36,7 @@ import frc.robot.commands.GyroReset;
 import frc.robot.commands.ResetOdometryCommand;
 import frc.robot.commands.RunTestCommand;
 import frc.robot.commands.TwistCommand;
+import frc.robot.commands.VisionSimulationCommand;
 import frc.robot.commands.XDriveCommand;
 import frc.robot.io.DebugInput;
 import frc.robot.io.DebugInputSupplier;
@@ -43,6 +46,7 @@ import frc.robot.io.OperatorInputSupplier;
 import frc.robot.io.RobotIO;
 import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.drive.DriveInput;
+import frc.robot.subsystems.vision_simulation.VisionSimulationSubsystem;
 
 public class OperatorInterface
     implements DriveInputSupplier, DebugInputSupplier, OperatorInputSupplier {
@@ -52,7 +56,6 @@ public class OperatorInterface
   private CommandXboxController tuningController;
 
   private final CommandJoystick operatorPanel =
-
       new CommandJoystick(RobotConstants.PORTS.CONTROLLER.PANEL);
 
   private final CommandFactory commandFactory;
@@ -61,12 +64,19 @@ public class OperatorInterface
 
   private final SendableChooser<Command> testChooser;
 
+  private VisionSimulationSubsystem visionSimulationSubsystem;
+
   public OperatorInterface(CommandFactory commandFactory, SubsystemManager subsystemManager,
       OdometryProcessor odometry) {
     this.commandFactory = commandFactory;
     this.subsystemManager = subsystemManager;
     this.odometry = odometry;
     this.testChooser = getTestCommandChooser();
+
+    // Initialize VisionSimulationSubsystem with joystick
+    Joystick joystick = new Joystick(RobotConstants.PORTS.CONTROLLER.JOYSTICK_PORT);
+    visionSimulationSubsystem = new VisionSimulationSubsystem(subsystemManager.getVisionSubsystem(), joystick);
+    visionSimulationSubsystem.initialize();
   }
 
   public void create() {
@@ -77,14 +87,12 @@ public class OperatorInterface
       enableJoystickBindings();
     }
 
-
     if (DriverControllerUtils
         .controllerIsPresent(RobotConstants.PORTS.CONTROLLER.TUNING_CONTROLLER)) {
       tuningController =
           new CommandXboxController(RobotConstants.PORTS.CONTROLLER.TUNING_CONTROLLER);
       enableTuningControllerBindings();
     }
-
 
     operatorBindings();
   }
@@ -119,20 +127,16 @@ public class OperatorInterface
     joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.RUN_TESTS)
         .onTrue(new RunTestCommand(testChooser));
 
-    // subsystemManager.getDriveSubsystem()
-        // .setDefaultCommand(new DriveCommand(subsystemManager.getDriveSubsystem(), this));
-    // align to speaker or amp depending on an operator switch
-
     joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.RESET_ODOMETRY)
         .onTrue(new ResetOdometryCommand(odometry));
-    // joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.CLIMB_JOG_LEFT)
-    //     // .whileTrue(new ClimbJogLeftCommand(subsystemManager.getClimbSubsystem()));
-    // joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.CLIMB_JOG_LEFT)
-    //     // .onFalse(new ClimbJogStopCommand(subsystemManager.getClimbSubsystem()));
-    // joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.CLIMB_JOG_RIGHT)
-    //     // .onFalse(new ClimbJogStopCommand(subsystemManager.getClimbSubsystem()));
-    // joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.CLIMB_JOG_RIGHT)
-        // .onTrue(new ClimbJogRightCommand(subsystemManager.getClimbSubsystem()));
+
+    // Add VisionSimulationCommand binding
+    joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.VISION_SIMULATION)
+        .whileTrue(new VisionSimulationCommand(visionSimulationSubsystem));
+
+    // Add button to enable VisionSimulationSubsystem
+    joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.ENABLE_VISION_SIMULATION)
+        .onTrue(new InstantCommand(() -> visionSimulationSubsystem.enable()));
   }
 
   public void enableXboxBindings() {

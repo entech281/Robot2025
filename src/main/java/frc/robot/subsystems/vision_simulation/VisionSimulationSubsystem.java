@@ -14,32 +14,49 @@ public class VisionSimulationSubsystem extends EntechSubsystem<VisionSimulationI
 
   private final VisionSubsystem visionSubsystem;
   private final Joystick joystick;
+  private boolean enabled = false;
 
   public VisionSimulationSubsystem(VisionSubsystem visionSubsystem, Joystick joystick) {
     this.visionSubsystem = visionSubsystem;
     this.joystick = joystick;
   }
 
-  @Override
-  public VisionSimulationOutput toOutputs() {
-    VisionSimulationOutput output = new VisionSimulationOutput();
+  public void enable() {
+    enabled = true;
+  }
 
-    if (ENABLED) {
+  public void disable() {
+    enabled = false;
+  }
+
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+  public void updateVisionSimulation() {
+    if (ENABLED && enabled) {
       VisionOutput visionOutput = visionSubsystem.toOutputs();
 
       boolean hasTarget = visionOutput.getHasTarget();
       double tagX = joystick.getX(); // Simulate tagX with joystick X-axis
       double tagY = joystick.getY(); // Simulate tagY with joystick Y-axis
+      int tagID = visionOutput.getTagID(); // Get tag ID from VisionSubsystem
 
       // Check if the AprilTag is in frame based on joystick input
       boolean inFrame = hasTarget && tagX >= -1 && tagX <= 1 && tagY >= -1 && tagY <= 1;
 
       // Log the results
+      VisionSimulationOutput output = new VisionSimulationOutput();
       output.setInFrame(inFrame);
+      output.setTagID(tagID); // Set the tag ID
       output.setTimestamp(System.currentTimeMillis());
+      output.toLog();
     }
+  }
 
-    return output;
+  @Override
+  public VisionSimulationOutput toOutputs() {
+    return new VisionSimulationOutput();
   }
 
   @Override
@@ -50,17 +67,12 @@ public class VisionSimulationSubsystem extends EntechSubsystem<VisionSimulationI
   }
 
   @Override
-  public boolean isEnabled() {
-        return ENABLED;
-  }
-
-  @Override
   public void updateInputs(VisionSimulationInput input) {
     throw new UnsupportedOperation();
   }
 
   @Override
-    public Command getTestCommand() {
+  public Command getTestCommand() {
     return Commands.none();
   }
 }
