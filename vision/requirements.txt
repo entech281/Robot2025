@@ -1,5 +1,5 @@
 robotpy
 opencv-python
 robotpy_apriltag
-cscore
+robotpy-cscore
 pytest
