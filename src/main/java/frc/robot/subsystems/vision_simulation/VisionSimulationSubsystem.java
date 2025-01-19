@@ -14,7 +14,7 @@ public class VisionSimulationSubsystem extends EntechSubsystem<VisionSimulationI
 
   private final VisionSubsystem visionSubsystem;
   private final Joystick joystick;
-  private boolean enabled = false;
+  private boolean isEnabled = false;
 
   public VisionSimulationSubsystem(VisionSubsystem visionSubsystem, Joystick joystick) {
     this.visionSubsystem = visionSubsystem;
@@ -22,19 +22,19 @@ public class VisionSimulationSubsystem extends EntechSubsystem<VisionSimulationI
   }
 
   public void enable() {
-    enabled = true;
+    isEnabled = true;
   }
 
   public void disable() {
-    enabled = false;
+    isEnabled = false;
   }
 
   public boolean isEnabled() {
-    return enabled;
+    return isEnabled;
   }
 
   public void updateVisionSimulation() {
-    if (ENABLED && enabled) {
+    if (ENABLED && isEnabled) {
       VisionOutput visionOutput = visionSubsystem.toOutputs();
 
       boolean hasTarget = visionOutput.getHasTarget();
