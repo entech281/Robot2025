@@ -31,7 +31,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     NetworkTableEntry tagWidthEntry = table.getEntry("tagWidth");
     NetworkTableEntry tagXEntry = table.getEntry("tagX");
     NetworkTableEntry tagYEntry = table.getEntry("tagY");
-    NetworkTableEntry timeStampEntry = table.getEntry("timeStamp");
+    NetworkTableEntry timestampEntry = table.getEntry("timestamp");
 
     // Set values in VisionOutput
     output.setHasTarget(hasTargetEntry.getBoolean(false));
@@ -40,7 +40,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     output.setTagWidth((int) tagWidthEntry.getInteger(0));
     output.setTagX(tagXEntry.getDouble(0));
     output.setTagY(tagYEntry.getDouble(0));
-    output.setTimestamp(timeStampEntry.getInteger(0));
+    output.setTimestamp(timestampEntry.getInteger(0));
 
 
     return output;

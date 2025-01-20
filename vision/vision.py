@@ -5,12 +5,18 @@
 
 
 import cscore as cs
+import ntcore.client as nt
 import numpy as np
 import cv2
 import time
 import ntcore
 import traceback
 from robotpy_apriltag import AprilTagDetector
+from networktables import NetworkTables
+
+
+
+
 
 RESOLUTION_WIDTH=1280
 RESOLUTION_HEIGHT=720
@@ -70,6 +76,20 @@ def put_exception_onto_frame(frame, exception ):
 
 def main():
 
+
+    NetworkTables.initialize()
+
+    table = NetworkTables.getTable("vision")
+
+
+    # targetPub = table.getBooleanTopic("hasTarget").publish()
+    # idPub = table.getIntegerTopic("tagID").publish()
+    # heightPub = table.getIntegerTopic("tagHeight").publish()
+    # widthPub = table.getIntegerTopic("tagWidth").publish()
+    # xPub = table.getDoubleTopic("tagX").publish()
+    # yPub = table.getDoubleTopic("tagY").publish()
+    # timestampPub = table.getDoubleTopic("timestamp").publish()
+
     inst = ntcore.NetworkTableInstance.getDefault()
 
     table = inst.getTable("datatable")
@@ -87,6 +107,7 @@ def main():
 
 
 
+
     camera = cs.UsbCamera("usbcam", 0)
     camera.setVideoMode(cs.VideoMode.PixelFormat.kMJPEG, RESOLUTION_WIDTH,RESOLUTION_HEIGHT, TARGET_FPS)
 
@@ -96,7 +117,7 @@ def main():
     # also see https://robotpy.readthedocs.io/projects/apriltag/en/latest/robotpy_apriltag/AprilTagDetector.html
     detector_config.numThreads =4
     detector_config.refineEdges = True
-    detector_config.quadDecimate = 1
+    detector_config.quadDecimate = 4
     detector_config.quadSigma = 0
     quad_params = AprilTagDetector.QuadThresholdParameters()
 
@@ -141,6 +162,7 @@ def main():
             continue
         fps = frame_timer.sps
 
+
         cv2.putText(frame, f"{fps:.0f} FPS",(20,30),cv2.FONT_HERSHEY_SIMPLEX,1.2,(0,255,0),2, cv2.LINE_AA)
         cv2.putText(frame, f"{cvSource.getActualFPS():.0f} CV FPS",(20,60),cv2.FONT_HERSHEY_SIMPLEX,1.2,(0,255,0),2, cv2.LINE_AA)
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -156,11 +178,12 @@ def main():
         try:
             #the body of this try block should be moved to a function
             hasTarget = False
-            tag_id = None
-            tag_height = None
-            tag_width = None
-            tag_x = None
-            tag_y = None
+            tag_id = -1
+            tag_height = -1
+            tag_width = -1
+            tag_x = -1
+            tag_y = -1
+
 
             detections = detector.detect(gray_frame)
             for detection in detections:
@@ -175,6 +198,16 @@ def main():
                 corner3 = detection.getCorner(3)
 
                 #exernalize this logic and write tests!
+                avg_height = ((corner0.y - corner3.y) + (corner1.y -corner2.y)) / 2
+                tag_height = avg_height
+
+                avg_width =  ((corner1.x - corner0.x) + (corner2.x -corner3.x)) / 2
+                tag_width = avg_width
+
+                tag_x = (2 * (center.x / RESOLUTION_WIDTH)) - 1
+                tag_y = (2 * (center.y / RESOLUTION_HEIGHT)) - 1
+
+                
                 avg_height = ((corner3 - corner0) + (corner2 -corner1)) / 2
                 tag_height = avg_height
 
@@ -214,29 +247,39 @@ def main():
             # double tagX (left -1 to right 1)
             # double tagY (bottom -1 to top 1)
             # long timestamp
-            targetPub.set(hasTarget)
-            idPub.set(tag_id)
-            heightPub.set(tag_height)
-            widthPub.set(tag_width)
-            xPub.set(tag_x)
-            yPub.set(tag_y)
-            timestampPub.set(time)
+            table.putBoolean("hasTarget", hasTarget)
+            table.putNumber("idTag", tag_id)
+            table.putNumber("tagHeight", tag_height)
+            table.putNumber("tagWidth", tag_width)
+            table.putNumber("tagX", tag_x)
+            table.putNumber("tagY", tag_y)
+            table.putNumber("timestamp", time)
+
+            
+
+
+
+
+            
 
 
         except Exception as e:
 
-            put_exception_onto_frame(frame,e)
+
+            # Commented out for now
             tb = traceback.print_exc()
 
 
 
-        gray_frame = cv2.resize(gray_frame, (frame.shape[1], frame.shape[0]))
-        gray_frame = cv2.cvtColor(gray_frame, cv2.COLOR_GRAY2BGR)
 
-        combined_frame = cv2.hconcat([gray_frame, frame])  
+        # gray_frame = cv2.resize(gray_frame, (frame.shape[1], frame.shape[0]))
+        # gray_frame = cv2.cvtColor(gray_frame, cv2.COLOR_GRAY2BGR)
+
+        # combined_frame = cv2.hconcat([gray_frame, frame])  
 
 
-        cvSource.putFrame(combined_frame)
+        cvSource.putFrame(frame)
+
 
 
 if __name__ == "__main__":
