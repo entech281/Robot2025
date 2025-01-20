@@ -17,6 +17,7 @@ from networktables import NetworkTables
 
 
 
+
 RESOLUTION_WIDTH=1280
 RESOLUTION_HEIGHT=720
 TARGET_FPS=121
@@ -75,6 +76,7 @@ def put_exception_onto_frame(frame, exception ):
 
 def main():
 
+
     NetworkTables.initialize()
 
     table = NetworkTables.getTable("vision")
@@ -87,6 +89,20 @@ def main():
     # xPub = table.getDoubleTopic("tagX").publish()
     # yPub = table.getDoubleTopic("tagY").publish()
     # timestampPub = table.getDoubleTopic("timestamp").publish()
+
+    inst = ntcore.NetworkTableInstance.getDefault()
+
+    table = inst.getTable("datatable")
+
+
+    targetPub = table.getBooleanTopic("hasTarget").publish()
+    idPub = table.getIntegerTopic("tagID").publish()
+    heightPub = table.getIntegerTopic("tagHeight").publish()
+    widthPub = table.getIntegerTopic("tagWidth").publish()
+    xPub = table.getDoubleTopic("tagX").publish()
+    yPub = table.getDoubleTopic("tagY").publish()
+    timestampPub = table.getDoubleTopic("timestamp").publish()
+
 
 
 
@@ -146,7 +162,8 @@ def main():
             continue
         fps = frame_timer.sps
 
-        cv2.putText(frame, f"{fps:.2f} FPS",(20,30),cv2.FONT_HERSHEY_SIMPLEX,1.2,(0,255,0),2, cv2.LINE_AA)
+
+        cv2.putText(frame, f"{fps:.0f} FPS",(20,30),cv2.FONT_HERSHEY_SIMPLEX,1.2,(0,255,0),2, cv2.LINE_AA)
         cv2.putText(frame, f"{cvSource.getActualFPS():.0f} CV FPS",(20,60),cv2.FONT_HERSHEY_SIMPLEX,1.2,(0,255,0),2, cv2.LINE_AA)
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
@@ -166,6 +183,7 @@ def main():
             tag_width = -1
             tag_x = -1
             tag_y = -1
+
 
             detections = detector.detect(gray_frame)
             for detection in detections:
@@ -190,6 +208,14 @@ def main():
                 tag_y = (2 * (center.y / RESOLUTION_HEIGHT)) - 1
 
                 
+                avg_height = ((corner3 - corner0) + (corner2 -corner1)) / 2
+                tag_height = avg_height
+
+                avg_width =  ((corner1 - corner0) + (corner2 -corner3)) / 2
+                tag_width = avg_width
+
+                tag_x = center.x
+                tag_y = center.y
 
 
                 # Draw the center point and tag ID on the frame
@@ -239,9 +265,10 @@ def main():
 
         except Exception as e:
 
+
             # Commented out for now
-            # put_exception_onto_frame(frame,e)
             tb = traceback.print_exc()
+
 
 
 
@@ -252,6 +279,7 @@ def main():
 
 
         cvSource.putFrame(frame)
+
 
 
 if __name__ == "__main__":
