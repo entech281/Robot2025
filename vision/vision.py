@@ -5,14 +5,19 @@ Streams camera feed and performs real-time AprilTag detection using OpenCV.
 """
 
 import cscore as cs
+import ntcore.util
 import numpy as np
 import cv2
 import time
 import traceback
 from robotpy_apriltag import AprilTagDetector
-from networktables import NetworkTables
+import ntcore
+
+
 
 # Constants
+LOCAL_TEST_MODE = True  # Set to True to run NetworkTables locally
+TEAM_NUMBER = 281
 RESOLUTION_WIDTH = 800
 RESOLUTION_HEIGHT = 600
 TARGET_FPS = 121
@@ -151,8 +156,18 @@ def process_apriltag_detection(frame, detection, resolution_width, resolution_he
 def main():
     """Main vision processing loop."""
     # Initialize NetworkTables
-    NetworkTables.initialize()
-    table = NetworkTables.getTable("vision")
+    inst = ntcore.util.NetworkTableInstance.getDefault()
+    if LOCAL_TEST_MODE:
+        print("Running in local test mode - NetworkTables running as server")
+        inst.startServer()
+    else:
+        print("Running in robot mode - NetworkTables running as client")
+        inst.startClient4("Vision")
+        inst.setServer(f"10.{int(TEAM_NUMBER/100)}.{TEAM_NUMBER%100}.2")  # RoboRIO IP address: 10.TE.AM.2
+        inst.startDSClient()
+    
+    # Get the vision table
+    table = inst.getTable("vision")
     
     # Setup camera
     camera = cs.UsbCamera("usbcam", 0)
@@ -216,16 +231,16 @@ def main():
             # Update NetworkTables
             table.putBoolean("hasTarget", has_target)
             table.putNumber("idTag", tag_id)
-            table.putNumber("tagHeight", tag_height)
-            table.putNumber("tagWidth", tag_width)
-            table.putNumber("tagX", tag_x)
-            table.putNumber("tagY", tag_y)
-            table.putNumber("timestamp", timestamp)
+            table.putNumber("tagHeight", float(tag_height))
+            table.putNumber("tagWidth", float(tag_width))
+            table.putNumber("tagX", float(tag_x))
+            table.putNumber("tagY", float(tag_y))
+            table.putNumber("timestamp", float(timestamp))
             
         except Exception as e:
 
-
             # Commented out for now
+            # put_exception_onto_frame(frame,e)
             tb = traceback.print_exc()
         
 
@@ -236,9 +251,12 @@ def main():
         # combined_frame = cv2.hconcat([gray_frame, frame])  
 
         # Convert back to BGR for display
-        if len(frame.shape) == 2:
-            frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
+        
+        # if len(frame.shape) == 2:
+
+        frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
         cvSource.putFrame(frame)
+
 
 if __name__ == "__main__":
     main()
