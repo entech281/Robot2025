@@ -8,6 +8,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.entech.subsystems.EntechSubsystem;
+import frc.entech.util.AprilTagDistanceCalculator;
 
 public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> {
   private static final boolean ENABLED = true;
@@ -32,6 +33,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     NetworkTableEntry tagXEntry = table.getEntry("tagX");
     NetworkTableEntry tagYEntry = table.getEntry("tagY");
     NetworkTableEntry timestampEntry = table.getEntry("timestamp");
+    NetworkTableEntry tagXPEntry = table.getEntry("tagxp");
 
     // Set values in VisionOutput
     output.setHasTarget(hasTargetEntry.getBoolean(false));
@@ -41,6 +43,8 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     output.setTagX(tagXEntry.getDouble(0));
     output.setTagY(tagYEntry.getDouble(0));
     output.setTimestamp(timestampEntry.getInteger(0));
+    output.setTagXP(tagXPEntry.getDouble(0));
+    // output.setDistance(AprilTagDistanceCalculator.ca));
 
 
     return output;

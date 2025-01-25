@@ -1,6 +1,5 @@
 package frc.robot;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -17,6 +16,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+
+import frc.entech.util.AprilTagDistanceCalibration;
 
 public final class RobotConstants {
   public static final double TIME_PER_PERIODICAL_LOOP_SECONDS = 0.00;
@@ -263,6 +264,7 @@ public final class RobotConstants {
   }
 
   public static interface APRIL_TAG_DATA {
+    public static final AprilTagDistanceCalibration CALIBRATION = new AprilTagDistanceCalibration(800, 600, 12, 10);
     public static final Map<Integer, Double> TAG_ANGLES = Map.ofEntries(
       Map.entry(1, 0.0),
       Map.entry(6, 300.0),
