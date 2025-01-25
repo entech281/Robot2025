@@ -1,6 +1,7 @@
 package frc.robot;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
@@ -262,8 +263,21 @@ public final class RobotConstants {
   }
 
   public static interface APRIL_TAG_DATA {
-    public static final int[] TAGS = {};
-    public static final double[] TAG_ANGLES = {};
+    public static final Map<Integer, Double> TAG_ANGLES = Map.ofEntries(
+      Map.entry(1, 0.0),
+      Map.entry(6, 300.0),
+      Map.entry(7, 0.0),
+      Map.entry(8, 60.0),
+      Map.entry(9, 120.0),
+      Map.entry(10, 180.0),
+      Map.entry(11, 240.0),
+      Map.entry(17, 240.0),
+      Map.entry(18, 180.0),
+      Map.entry(19, 120.0),
+      Map.entry(20, 60.0),
+      Map.entry(21, 0.0),
+      Map.entry(22, 300.0)
+    );
   }
 
   private RobotConstants() {}

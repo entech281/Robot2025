@@ -17,6 +17,7 @@ import frc.robot.RobotConstants;
 import frc.robot.SubsystemManager;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.GyroReset;
+import frc.robot.commands.RelativeVisionAlignmentCommand;
 //import frc.robot.commands.AlignNoteToggleCommand;
 //import frc.robot.commands.ClimbJogLeftCommand;
 //import frc.robot.commands.ClimbJogRightCommand;
@@ -147,8 +148,8 @@ public class OperatorInterface
     xboxController.button(9)
         .onTrue(new RunTestCommand(testChooser));
 
-    // xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.TARGET_SPEAKER)
-    //     .onTrue(commandFactory.getTargetSpeakerCommand());
+    xboxController.button(6)
+        .whileTrue(new RelativeVisionAlignmentCommand());
 
     // xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.FEED_SHOOTER)
     //     .whileTrue(new FeedShooterCommand(subsystemManager.getTransferSubsystem()));
