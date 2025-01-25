@@ -3,3 +3,4 @@ opencv-python
 robotpy_apriltag
 cscore
 pytest
+ntccore

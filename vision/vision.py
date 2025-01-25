@@ -1,51 +1,61 @@
 #!/usr/bin/env python3
-#
-# Demonstrates streaming and modifying the image via OpenCV
-#
-
+"""
+Vision processing module for FRC robot using AprilTag detection.
+Streams camera feed and performs real-time AprilTag detection using OpenCV.
+"""
 
 import cscore as cs
+import ntcore.util
 import numpy as np
 import cv2
 import time
-import ntcore
 import traceback
 from robotpy_apriltag import AprilTagDetector
+import ntcore
 
-RESOLUTION_WIDTH=1280
-RESOLUTION_HEIGHT=720
-TARGET_FPS=121
 
-SETTINGS_STREAM_PORT=5800
-ANNOTATED_STREAM_PORT=5801
 
-class FrameTimer(object):
+# Constants
+LOCAL_TEST_MODE = True  # Set to True to run NetworkTables locally
+TEAM_NUMBER = 281
+RESOLUTION_WIDTH = 800
+RESOLUTION_HEIGHT = 600
+TARGET_FPS = 121
+SETTINGS_STREAM_PORT = 5800
+ANNOTATED_STREAM_PORT = 5801
 
-    def __init__(self,sample_count):
+class FrameTimer:
+    """Tracks frame processing timing statistics."""
+    
+    def __init__(self, sample_count):
+        """Initialize the frame timer.
+        
+        Args:
+            sample_count: Number of samples to average over
+        """
         self.sample_count = sample_count
         self.start_time = time.time()
         self.samples = 0
         self.sps = 0
 
     def tick(self):
+        """Update frame timing statistics."""
         self.samples += 1
         if self.samples > self.sample_count:
             elapsed = time.time() - self.start_time
             self.sps = self.sample_count / elapsed
             self.start_time = time.time()
-            self.samples =0
+            self.samples = 0
 
 def get_stack_trace_lines(exception, wrap_length=80):
-    """
-    Accepts an exception object and returns a list of strings
-    representing the stack trace for the exception, including
-    tilde characters underlining the source of the error as
-    seen with traceback.print_exc(). Lines longer than the specified
-    wrap_length will be wrapped to the next line.
-
-    :param exception: Exception object to extract the stack trace from.
-    :param wrap_length: Maximum length of a line before wrapping.
-    :return: List of strings corresponding to the stack trace lines.
+    """Get formatted stack trace lines from an exception.
+    
+    Args:
+        exception: Exception object to extract the stack trace from
+        wrap_length: Maximum length of a line before wrapping
+        
+    Returns:
+        List of strings corresponding to the stack trace lines
     """
     raw_lines = traceback.format_exc().splitlines(keepends=False)
     wrapped_lines = []
@@ -58,186 +68,195 @@ def get_stack_trace_lines(exception, wrap_length=80):
 
     return wrapped_lines
 
-def put_exception_onto_frame(frame, exception ):
+def put_exception_onto_frame(frame, exception):
+    """Render exception information onto a frame.
+    
+    Args:
+        frame: OpenCV frame to draw on
+        exception: Exception to display
+    """
     VERTICAL_SPACING = 30
     INIT_VERTICAL_POS = 120
-    vertical_pos = INIT_VERTICAL_POS
     HORIZONTAL_POS = 20
+    vertical_pos = INIT_VERTICAL_POS
+    
     for line in get_stack_trace_lines(exception):
-        cv2.putText(frame, line, (HORIZONTAL_POS,vertical_pos),cv2.FONT_HERSHEY_SIMPLEX,0.8,(0,0,255),2,cv2.LINE_AA)
+        cv2.putText(frame, line, (HORIZONTAL_POS, vertical_pos),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2, cv2.LINE_AA)
         vertical_pos += VERTICAL_SPACING
 
-
-def main():
-
-    inst = ntcore.NetworkTableInstance.getDefault()
-
-    table = inst.getTable("datatable")
-
-
-    targetPub = table.getBooleanTopic("hasTarget").publish()
-    idPub = table.getIntegerTopic("tagID").publish()
-    heightPub = table.getIntegerTopic("tagHeight").publish()
-    widthPub = table.getIntegerTopic("tagWidth").publish()
-    xPub = table.getDoubleTopic("tagX").publish()
-    yPub = table.getDoubleTopic("tagY").publish()
-    timestampPub = table.getDoubleTopic("timestamp").publish()
-
-
-
-
-
-    camera = cs.UsbCamera("usbcam", 0)
-    camera.setVideoMode(cs.VideoMode.PixelFormat.kMJPEG, RESOLUTION_WIDTH,RESOLUTION_HEIGHT, TARGET_FPS)
-
+def setup_apriltag_detector():
+    """Configure and return an AprilTag detector with optimal settings."""
     detector = AprilTagDetector()
     detector_config = AprilTagDetector.Config()
-    #photonvision settings from    https://github.com/PhotonVision/photonvision/blob/main/photon-core/src/main/java/org/photonvision/vision/pipeline/AprilTagPipelineSettings.java
-    # also see https://robotpy.readthedocs.io/projects/apriltag/en/latest/robotpy_apriltag/AprilTagDetector.html
-    detector_config.numThreads =4
+    
+    # Configure detector settings
+    detector_config.numThreads = 4
     detector_config.refineEdges = True
-    detector_config.quadDecimate = 1
+    detector_config.quadDecimate = 4
+    # I think if we are going to be moving
+    # a lot then we should increase this
     detector_config.quadSigma = 0
+    
+    # Configure quad threshold parameters
     quad_params = AprilTagDetector.QuadThresholdParameters()
-
     quad_params.maxNumMaxima = 10
     quad_params.criticalAngle = 45 * 3.14159 / 180.0
     quad_params.maxLineFitMSE = 10.0
     quad_params.minWhiteBlackDiff = 5
     quad_params.deglitch = False
     quad_params.minClusterPixels = 5
-    quad_params.minWhiteBlackDiff = 5
-
+    
     detector.setConfig(detector_config)
     detector.setQuadThresholdParameters(quad_params)
+    detector.addFamily("tag36h11")
+    
+    return detector
 
+def process_apriltag_detection(frame, detection, resolution_width, resolution_height):
+    """Process a single AprilTag detection and draw visualization.
+    
+    Args:
+        frame: OpenCV frame to draw on
+        detection: AprilTag detection object
+        resolution_width: Camera resolution width
+        resolution_height: Camera resolution height
+        
+    Returns:
+        Tuple of (tag_id, tag_height, tag_width, tag_x, tag_y)
+    """
+    tag_id = detection.getId()
+    center = detection.getCenter()
+    corners = [detection.getCorner(i) for i in range(4)]
+    
+    # Calculate tag dimensions
+    avg_height = ((corners[0].y - corners[3].y) + (corners[1].y - corners[2].y)) / 2
+    avg_width = ((corners[1].x - corners[0].x) + (corners[2].x - corners[3].x)) / 2
+    
+    # Calculate normalized coordinates
+    tag_x = (2 * (center.x / resolution_width)) - 1
+    tag_y = (2 * (center.y / resolution_height)) - 1
+    
+    # Draw visualization
+    cv2.circle(frame, (int(center[0]), int(center[1])), 5, (0, 255, 0), -1)
+    cv2.putText(frame, f"ID: {tag_id}", (int(center[0]), int(center[1]) - 10),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
+    
+    # Draw tag outline
+    def draw_line(pt1, pt2):
+        p1 = (int(pt1.x), int(pt1.y))
+        p2 = (int(pt2.x), int(pt2.y))
+        cv2.line(frame, p1, p2, (255, 0, 0), 2)
+    
+    for i in range(4):
+        draw_line(corners[i], corners[(i + 1) % 4])
+    
+    return tag_id, avg_height, avg_width, tag_x, tag_y
+
+def main():
+    """Main vision processing loop."""
+    # Initialize NetworkTables
+    inst = ntcore.util.NetworkTableInstance.getDefault()
+    if LOCAL_TEST_MODE:
+        print("Running in local test mode - NetworkTables running as server")
+        inst.startServer()
+    else:
+        print("Running in robot mode - NetworkTables running as client")
+        inst.startClient4("Vision")
+        inst.setServer(f"10.{int(TEAM_NUMBER/100)}.{TEAM_NUMBER%100}.2")  # RoboRIO IP address: 10.TE.AM.2
+        inst.startDSClient()
+    
+    # Get the vision table
+    table = inst.getTable("vision")
+    
+    # Setup camera
+    camera = cs.UsbCamera("usbcam", 0)
+    camera.setVideoMode(cs.VideoMode.PixelFormat.kMJPEG, 
+                       RESOLUTION_WIDTH, RESOLUTION_HEIGHT, TARGET_FPS)
+    
+    # Setup AprilTag detector
+    detector = setup_apriltag_detector()
+    
+    # Setup frame timer
     frame_timer = FrameTimer(200)
 
-    detector.addFamily("tag36h11")
-
+    
+    # Setup video streaming
     mjpegServer = cs.MjpegServer("httpserver", SETTINGS_STREAM_PORT)
     mjpegServer.setSource(camera)
-
     print(f"mjpg server listening at http://0.0.0.0:{SETTINGS_STREAM_PORT}")
-
+    
     cvsink = cs.CvSink("cvsink")
     cvsink.setSource(camera)
-
-    cvSource = cs.CvSource("cvsource", cs.VideoMode.PixelFormat.kMJPEG, RESOLUTION_WIDTH,RESOLUTION_HEIGHT, 100)
+    
+    cvSource = cs.CvSource("cvsource", cs.VideoMode.PixelFormat.kMJPEG, 
+                          RESOLUTION_WIDTH, RESOLUTION_HEIGHT, 100)
     cvMjpegServer = cs.MjpegServer("cvhttpserver", ANNOTATED_STREAM_PORT)
     cvMjpegServer.setSource(cvSource)
-
     print(f"OpenCV output mjpg server listening at http://0.0.0.0:{ANNOTATED_STREAM_PORT}")
-
-    test = np.zeros(shape=(600, 800, 3), dtype=np.uint8)
-
+    
+    # Initialize frame buffer
+    frame_buffer = np.zeros(shape=(RESOLUTION_HEIGHT, RESOLUTION_WIDTH), dtype=np.uint8)
+    
     while True:
-
         frame_timer.tick()
         
-        time, frame = cvsink.grabFrame(test)
-        if time == 0:
+        timestamp, frame = cvsink.grabFrame(frame_buffer)
+        if timestamp == 0:
             print("error:", cvsink.getError())
             continue
-        fps = frame_timer.sps
-
-        cv2.putText(frame, f"{fps:.0f} FPS",(20,30),cv2.FONT_HERSHEY_SIMPLEX,1.2,(0,255,0),2, cv2.LINE_AA)
-        cv2.putText(frame, f"{cvSource.getActualFPS():.0f} CV FPS",(20,60),cv2.FONT_HERSHEY_SIMPLEX,1.2,(0,255,0),2, cv2.LINE_AA)
-        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-        average_intensity = cv2.mean(gray_frame)[0]
-
-        thresh = 1 * average_intensity
-
-        _, gray_frame = cv2.threshold(gray_frame, thresh, 255, cv2.THRESH_BINARY)
-
-        # gray_frame = cv2.
-
+            
+        # Draw FPS counter
+        cv2.putText(frame, f"{frame_timer.sps:.2f} FPS", (20, 30),
+                   cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 255, 0), 2, cv2.LINE_AA)
+        
+        # Convert to grayscale directly in the frame buffer
+        if len(frame.shape) == 3:
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        
         try:
-            #the body of this try block should be moved to a function
-            hasTarget = False
-            tag_id = None
-            tag_height = None
-            tag_width = None
-            tag_x = None
-            tag_y = None
-
-            detections = detector.detect(gray_frame)
-            for detection in detections:
-                hasTarget = True
-
-
-                tag_id = detection.getId()
-                center = detection.getCenter()  # (x, y) coordinates of the center
-                corner0 = detection.getCorner(0)
-                corner1 = detection.getCorner(1)
-                corner2 = detection.getCorner(2)
-                corner3 = detection.getCorner(3)
-
-                #exernalize this logic and write tests!
-                avg_height = ((corner3 - corner0) + (corner2 -corner1)) / 2
-                tag_height = avg_height
-
-                avg_width =  ((corner1 - corner0) + (corner2 -corner3)) / 2
-                tag_width = avg_width
-
-                tag_x = center.x
-                tag_y = center.y
-
-
-                # Draw the center point and tag ID on the frame
-                cv2.circle(frame, (int(center[0]), int(center[1])), 5, (0, 255, 0), -1)
-                cv2.putText(frame, f"ID: {tag_id}", (int(center[0]), int(center[1]) - 10),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
-
-                # Draw the tag's corners on the frame
-                def line_between_pnts (pt1, pt2):
-
-                    p1 = (int(pt1.x), int(pt1.y))
-                    p2 = (int(pt2.x), int(pt2.y))
-                    cv2.line(frame, p1, p2, (255, 0, 0), 2)
-
-                line_between_pnts(detection.getCorner(0), detection.getCorner(1))
-                line_between_pnts(detection.getCorner(1), detection.getCorner(2))
-                line_between_pnts(detection.getCorner(2), detection.getCorner(3))
-                line_between_pnts(detection.getCorner(3), detection.getCorner(0))
-
-                # Print the tag's center coordinates
-                #print(f"Detected Tag ID: {tag_id}, Center: {center}")
-
-
-
-            # Boolean hasTarget
-            # int tagID
-            # int tagHeight
-            # int tagWidth
-            # double tagX (left -1 to right 1)
-            # double tagY (bottom -1 to top 1)
-            # long timestamp
-            targetPub.set(hasTarget)
-            idPub.set(tag_id)
-            heightPub.set(tag_height)
-            widthPub.set(tag_width)
-            xPub.set(tag_x)
-            yPub.set(tag_y)
-            timestampPub.set(time)
-
-
+            # Initialize detection values
+            has_target = False
+            tag_id = tag_height = tag_width = -1
+            tag_x = tag_y = -1.0
+            
+            # Process detections
+            detections = detector.detect(frame)
+            if detections:
+                has_target = True
+                detection = detections[0]  # Process first detection
+                tag_id, tag_height, tag_width, tag_x, tag_y = process_apriltag_detection(
+                    frame, detection, RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
+            
+            # Update NetworkTables
+            table.putBoolean("hasTarget", has_target)
+            table.putNumber("idTag", tag_id)
+            table.putNumber("tagHeight", float(tag_height))
+            table.putNumber("tagWidth", float(tag_width))
+            table.putNumber("tagX", float(tag_x))
+            table.putNumber("tagY", float(tag_y))
+            table.putNumber("timestamp", float(timestamp))
+            
         except Exception as e:
 
-            put_exception_onto_frame(frame,e)
+            # Commented out for now
+            # put_exception_onto_frame(frame,e)
             tb = traceback.print_exc()
+        
 
+    	# gray_frame = cv2.resize(gray_frame, (frame.shape[1], frame.shape[0]))
+        # gray_frame = cv2.cvtColor(gray_frame, cv2.COLOR_GRAY2BGR)
+        
 
+        # combined_frame = cv2.hconcat([gray_frame, frame])  
 
-        gray_frame = cv2.resize(gray_frame, (frame.shape[1], frame.shape[0]))
-        gray_frame = cv2.cvtColor(gray_frame, cv2.COLOR_GRAY2BGR)
+        # Convert back to BGR for display
+        
+        # if len(frame.shape) == 2:
 
-        combined_frame = cv2.hconcat([gray_frame, frame])  
-
-
-        cvSource.putFrame(combined_frame)
+        frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
+        cvSource.putFrame(frame)
 
 
 if __name__ == "__main__":
-    main()          
+    main()

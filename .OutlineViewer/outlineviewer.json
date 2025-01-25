@@ -1,0 +1,17 @@
+{
+  "Connections": {
+    "open": true
+  },
+  "NetworkTables Settings": {
+    "mode": "Client (NT3)",
+    "serverTeam": "127.0.0.1"
+  },
+  "Server": {
+    "open": true
+  },
+  "transitory": {
+    "datatable": {
+      "open": true
+    }
+  }
+}
