@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.util.AprilTagDistanceCalculator;
+import frc.robot.RobotConstants;
 
 public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> {
   private static final boolean ENABLED = true;
@@ -44,7 +45,11 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     output.setTagY(tagYEntry.getDouble(0));
     output.setTimestamp(timestampEntry.getInteger(0));
     output.setTagXP(tagXPEntry.getDouble(0));
-    // output.setDistance(AprilTagDistanceCalculator.ca));
+    if (tagWidthEntry.getDouble(-1) >= 0) {
+      output.setDistance(AprilTagDistanceCalculator.calculateCurrentDistanceInches(RobotConstants.APRIL_TAG_DATA.CALIBRATION, tagWidthEntry.getDouble(-1)));
+    } else {
+      output.setDistance(-1.0);
+    }
 
 
     return output;

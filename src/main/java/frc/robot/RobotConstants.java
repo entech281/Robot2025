@@ -264,7 +264,7 @@ public final class RobotConstants {
   }
 
   public static interface APRIL_TAG_DATA {
-    public static final AprilTagDistanceCalibration CALIBRATION = new AprilTagDistanceCalibration(800, 600, 12, 10);
+    public static final AprilTagDistanceCalibration CALIBRATION = new AprilTagDistanceCalibration(640, 480, 70.2, 37.25/12);
     public static final Map<Integer, Double> TAG_ANGLES = Map.ofEntries(
       Map.entry(1, 0.0),
       Map.entry(6, 300.0),

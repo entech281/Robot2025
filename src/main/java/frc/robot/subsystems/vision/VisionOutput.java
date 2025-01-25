@@ -11,7 +11,7 @@ public class VisionOutput extends SubsystemOutput {
   private int tagWidth;
   private double tagX;
   private double tagY;
-  // private double distance;
+  private double distance;
   private double tagXP;
   private long timestamp;
 
@@ -25,7 +25,7 @@ public class VisionOutput extends SubsystemOutput {
     Logger.recordOutput("VisionOutput/tagX", tagX);
     Logger.recordOutput("VisionOutput/tagXP", tagXP);
     Logger.recordOutput("VisionOutput/tagY", tagY);
-    // Logger.recordOutput("VisionOutput/distance", distance);
+    Logger.recordOutput("VisionOutput/distance", distance);
   }
 
   public Boolean getHasTarget() {
@@ -92,11 +92,11 @@ public class VisionOutput extends SubsystemOutput {
     this.timestamp = timestamp;
   }
 
-  // public double getDistance() {
-  //   return this.distance;
-  // }
+  public double getDistance() {
+    return this.distance;
+  }
 
-  // public void setDistance(double distance) {
-  //   this.distance = distance;
-  // }
+  public void setDistance(double distance) {
+    this.distance = distance;
+  }
 }
