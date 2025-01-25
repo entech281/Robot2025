@@ -22,12 +22,13 @@ public class LateralAlignFilter implements DriveFilterI {
         if (UserPolicy.getInstance().isLaterallyAligning() && !UserPolicy.getInstance().isTwistable()) {
             processedInput = operatorDirectionalSnap(processedInput, UserPolicy.getInstance().getTargetAngle());
 
-            if (Math.abs(RobotIO.getInstance().getVisionOutput().getTagXP() - UserPolicy.getInstance().getVisionPositionSetPoint()) >= TOLERANCE)
-            processedInput = motionTowardsAlignment(
-                processedInput,
-                controller.calculate(RobotIO.getInstance().getVisionOutput().getTagXP(), UserPolicy.getInstance().getVisionPositionSetPoint()),
-                UserPolicy.getInstance().getTargetAngle()
-            );
+            if (Math.abs(RobotIO.getInstance().getVisionOutput().getTagXP() - UserPolicy.getInstance().getVisionPositionSetPoint()) >= TOLERANCE) {
+                processedInput = motionTowardsAlignment(
+                    processedInput,
+                    controller.calculate(RobotIO.getInstance().getVisionOutput().getTagXP(), UserPolicy.getInstance().getVisionPositionSetPoint()),
+                    UserPolicy.getInstance().getTargetAngle()
+                );
+            }
         }
 
         return processedInput;
