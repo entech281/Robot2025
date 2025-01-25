@@ -1,6 +1,5 @@
 package frc.robot.io;
 
-import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -9,6 +8,7 @@ import frc.robot.RobotConstants;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveOutput;
 import frc.robot.subsystems.navx.NavXOutput;
+import frc.robot.subsystems.vision.VisionOutput;
 
 public class RobotIO implements DriveInputSupplier {
   private static RobotIO instance = new RobotIO();
@@ -44,6 +44,10 @@ public class RobotIO implements DriveInputSupplier {
     return latestNavXOutput;
   }
 
+  public VisionOutput getVisionOutput() {
+    return latestVisionOutput;
+  }
+
   public Pose2d getOdometryPose() {
     return latestOdometryPose;
   }
@@ -63,23 +67,13 @@ public class RobotIO implements DriveInputSupplier {
     Logger.recordOutput("OdometryPose", pose);
   }
 
-
-
-  public Optional<Double> getDistanceFromTarget() {
-    return distanceFromTarget;
+  public void updateVision(VisionOutput vo) {
+    latestVisionOutput = vo;
+    vo.log();
   }
 
-  public void setDistanceFromTarget(Optional<Double> distance) {
-    distanceFromTarget = distance;
-    if (distance.isPresent()) {
-      Logger.recordOutput("DistanceFromTarget", distance.get());
-    } else {
-      Logger.recordOutput("DistanceFromTarget", -1);
-    }
-  }
-
+  private VisionOutput latestVisionOutput;
   private NavXOutput latestNavXOutput;
   private DriveOutput latestDriveOutput;
   private Pose2d latestOdometryPose = RobotConstants.ODOMETRY.INITIAL_POSE;
-  private Optional<Double> distanceFromTarget = Optional.empty();
 }
