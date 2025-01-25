@@ -1,5 +1,6 @@
 package frc.robot.processors.filters;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import frc.robot.operation.UserPolicy;
@@ -7,10 +8,11 @@ import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.io.RobotIO;
 
 public class LateralAlignFilter implements DriveFilterI {
-    private final PIDController controller = new PIDController(0.27, 0, 0.0);
+    private final PIDController controller = new PIDController(0.05, 0, 0.0);
+    public static final double TOLERANCE = 0.1;
 
     public LateralAlignFilter() {
-        controller.setTolerance(0.0075);
+        controller.setTolerance(TOLERANCE);
     }
 
     @Override
@@ -19,11 +21,14 @@ public class LateralAlignFilter implements DriveFilterI {
         
         if (UserPolicy.getInstance().isLaterallyAligning() && !UserPolicy.getInstance().isTwistable()) {
             processedInput = operatorDirectionalSnap(processedInput, UserPolicy.getInstance().getTargetAngle());
-            processedInput = motionTowardsAlignment(
-                processedInput,
-                controller.calculate(RobotIO.getInstance().getVisionOutput().getTagX(), UserPolicy.getInstance().getVisionPositionSetPoint()),
-                UserPolicy.getInstance().getTargetAngle()
-            );
+
+            if (Math.abs(RobotIO.getInstance().getVisionOutput().getTagXP() - UserPolicy.getInstance().getVisionPositionSetPoint()) >= TOLERANCE) {
+                processedInput = motionTowardsAlignment(
+                    processedInput,
+                    controller.calculate(RobotIO.getInstance().getVisionOutput().getTagXP(), UserPolicy.getInstance().getVisionPositionSetPoint()),
+                    UserPolicy.getInstance().getTargetAngle()
+                );
+            }
         }
 
         return processedInput;
@@ -32,9 +37,11 @@ public class LateralAlignFilter implements DriveFilterI {
     public static DriveInput motionTowardsAlignment(DriveInput input, double magnitude, double goalAngle) {
         DriveInput processedInput = new DriveInput(input);
 
+        double mag = MathUtil.clamp(magnitude, -1, 1);
+
         double angleRadians = Units.degreesToRadians(goalAngle + 90);
-        processedInput.setXSpeed(input.getXSpeed() + Math.cos(angleRadians) * magnitude);
-        processedInput.setYSpeed(input.getYSpeed() + Math.sin(angleRadians) * magnitude);
+        processedInput.setXSpeed(input.getXSpeed() + Math.cos(angleRadians) * mag);
+        processedInput.setYSpeed(input.getYSpeed() + Math.sin(angleRadians) * mag);
 
         return processedInput;
     }

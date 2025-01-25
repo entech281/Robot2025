@@ -2,35 +2,21 @@ package frc.robot.operation;
 
 import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.entech.subsystems.EntechSubsystem;
-//import frc.entech.util.DriverControllerUtils;
 import frc.robot.CommandFactory;
 import frc.robot.RobotConstants;
 import frc.robot.SubsystemManager;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.GyroReset;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
-//import frc.robot.commands.AlignNoteToggleCommand;
-//import frc.robot.commands.ClimbJogLeftCommand;
-//import frc.robot.commands.ClimbJogRightCommand;
-//import frc.robot.commands.ClimbJogStopCommand;
-//import frc.robot.commands.DriveCommand;
-//import frc.robot.commands.EjectNoteCommand;
-//import frc.robot.commands.FeedShooterCommand;
-//import frc.robot.commands.GyroReset;
-//import frc.robot.commands.IntakeNoteCommand;
-// import frc.robot.commands.LowerClimbCommand;
-// import frc.robot.commands.PivotUpCommand;
-// import frc.robot.commands.PrepareToShootCommand;
-// import frc.robot.commands.RaiseClimbCommand;
 import frc.robot.commands.ResetOdometryCommand;
 import frc.robot.commands.RunTestCommand;
 import frc.robot.commands.TwistCommand;
@@ -51,9 +37,7 @@ public class OperatorInterface
 
   private CommandXboxController tuningController;
 
-  private final CommandJoystick operatorPanel =
-
-      new CommandJoystick(RobotConstants.PORTS.CONTROLLER.PANEL);
+  private CommandJoystick operatorPanel;
 
   private final CommandFactory commandFactory;
   private final SubsystemManager subsystemManager;
@@ -85,19 +69,15 @@ public class OperatorInterface
       enableTuningControllerBindings();
     }
 
-
-    operatorBindings();
+    if (DriverStation.isJoystickConnected(RobotConstants.PORTS.CONTROLLER.PANEL)) {
+      operatorPanel = new CommandJoystick(RobotConstants.PORTS.CONTROLLER.PANEL);
+      operatorBindings();
+    }
   }
 
   public void enableTuningControllerBindings() {
-    tuningController.a().whileTrue(new RunCommand(() -> {
-      // RobotConstants.SwerveModuleConstants.DYNAMIC_MODULE_SETTINGS.setWheelDiameter(
-      //     RobotConstants.SwerveModuleConstants.DYNAMIC_MODULE_SETTINGS.getWheelDiameter() - 0.001);
-    }));
-    tuningController.y().whileTrue(new RunCommand(() -> {
-      // RobotConstants.SwerveModuleConstants.DYNAMIC_MODULE_SETTINGS.setWheelDiameter(
-      //     RobotConstants.SwerveModuleConstants.DYNAMIC_MODULE_SETTINGS.getWheelDiameter() + 0.001);
-    }));
+    tuningController.a().whileTrue(Commands.none());
+    tuningController.y().whileTrue(Commands.none());
   }
 
   public void configureBindings() {
@@ -119,20 +99,11 @@ public class OperatorInterface
     joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.RUN_TESTS)
         .onTrue(new RunTestCommand(testChooser));
 
-    // subsystemManager.getDriveSubsystem()
-        // .setDefaultCommand(new DriveCommand(subsystemManager.getDriveSubsystem(), this));
-    // align to speaker or amp depending on an operator switch
+    subsystemManager.getDriveSubsystem()
+        .setDefaultCommand(new DriveCommand(subsystemManager.getDriveSubsystem(), this));
 
     joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.RESET_ODOMETRY)
         .onTrue(new ResetOdometryCommand(odometry));
-    // joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.CLIMB_JOG_LEFT)
-    //     // .whileTrue(new ClimbJogLeftCommand(subsystemManager.getClimbSubsystem()));
-    // joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.CLIMB_JOG_LEFT)
-    //     // .onFalse(new ClimbJogStopCommand(subsystemManager.getClimbSubsystem()));
-    // joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.CLIMB_JOG_RIGHT)
-    //     // .onFalse(new ClimbJogStopCommand(subsystemManager.getClimbSubsystem()));
-    // joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.CLIMB_JOG_RIGHT)
-        // .onTrue(new ClimbJogRightCommand(subsystemManager.getClimbSubsystem()));
   }
 
   public void enableXboxBindings() {
@@ -142,63 +113,20 @@ public class OperatorInterface
     subsystemManager.getDriveSubsystem()
         .setDefaultCommand(new DriveCommand(subsystemManager.getDriveSubsystem(), this));
 
-    // xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.NOTE_ALIGN)
-        // .whileTrue(new AlignNoteToggleCommand());
-
     xboxController.button(9)
         .onTrue(new RunTestCommand(testChooser));
 
     xboxController.button(6)
         .whileTrue(new RelativeVisionAlignmentCommand());
 
-    // xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.FEED_SHOOTER)
-    //     .whileTrue(new FeedShooterCommand(subsystemManager.getTransferSubsystem()));
-
     xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.DRIVE_X)
         .whileTrue(new XDriveCommand(subsystemManager.getDriveSubsystem()));
+    
     xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.RESET_ODOMETRY)
         .onTrue(new ResetOdometryCommand(odometry));
-
-    // xboxController.povDown().whileTrue(commandFactory.moveSixFeetForward());
   }
 
   public void operatorBindings() {
-
-    // operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.SHOOT)
-    //     .whileTrue(new PrepareToShootCommand(subsystemManager.getShooterSubsystem(),
-    //         subsystemManager.getPivotSubsystem(), subsystemManager.getIntakeSubsystem(),
-    //         operatorPanel.button(RobotConstants.OPERATOR_PANEL.SWITCHES.PIVOT_AMP),
-    //         operatorPanel.button(RobotConstants.OPERATOR_PANEL.SWITCHES.PIVOT_SPEAKER),
-    //         operatorPanel.button(RobotConstants.OPERATOR_PANEL.SWITCHES.AUTO_ANGLE),
-    //         xboxController.getHID()));
-
-    // operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.INTAKE)
-    //     .whileTrue(new IntakeNoteCommand(subsystemManager.getIntakeSubsystem(),
-    //         subsystemManager.getTransferSubsystem(), subsystemManager.getShooterSubsystem(),
-    //         subsystemManager.getLedSubsystem()));
-
-    // operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.EJECT)
-    //     .whileTrue(new EjectNoteCommand(subsystemManager.getIntakeSubsystem(),
-    //         subsystemManager.getTransferSubsystem(), subsystemManager.getShooterSubsystem()));
-
-
-    // operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.CLIMB)
-    //     .whileTrue(new RaiseClimbCommand(subsystemManager.getClimbSubsystem(),
-    //         operatorPanel.button(RobotConstants.OPERATOR_PANEL.SWITCHES.CANCEL_CLIMB)))
-    //     .whileFalse(new LowerClimbCommand(subsystemManager.getClimbSubsystem(),
-    //         operatorPanel.button(RobotConstants.OPERATOR_PANEL.SWITCHES.CANCEL_CLIMB)));
-
-    // operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.RAISE_ARM)
-    //     .whileTrue(new PivotUpCommand(subsystemManager.getPivotSubsystem()));
-    // operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.LOWER_CLIMB_LEFT)
-    //     .whileTrue(new ClimbJogLeftCommand(subsystemManager.getClimbSubsystem()));
-    // operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.LOWER_CLIMB_RIGHT)
-    //     .whileTrue(new ClimbJogRightCommand(subsystemManager.getClimbSubsystem()));
-    // operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.LOWER_CLIMB_LEFT)
-    //     .onFalse(new ClimbJogStopCommand(subsystemManager.getClimbSubsystem()));
-    // operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.LOWER_CLIMB_RIGHT)
-    //     .onFalse(new ClimbJogStopCommand(subsystemManager.getClimbSubsystem()));
-
     testChooser.addOption("All tests", getTestCommand());
     Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST, "No Current Test");
     SmartDashboard.putData("Test Chooser", testChooser);
