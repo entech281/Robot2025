@@ -148,7 +148,7 @@ public class OperatorInterface
     xboxController.button(9)
         .onTrue(new RunTestCommand(testChooser));
 
-    xboxController.button(10)
+    xboxController.button(6)
         .whileTrue(new RelativeVisionAlignmentCommand());
 
     // xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.FEED_SHOOTER)

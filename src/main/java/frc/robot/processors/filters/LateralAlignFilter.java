@@ -4,9 +4,14 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import frc.robot.operation.UserPolicy;
 import frc.robot.subsystems.drive.DriveInput;
+import frc.robot.io.RobotIO;
 
 public class LateralAlignFilter implements DriveFilterI {
-    private final PIDController controller = new PIDController(0.0075, 0, 0.0);
+    private final PIDController controller = new PIDController(0.27, 0, 0.0);
+
+    public LateralAlignFilter() {
+        controller.setTolerance(0.0075);
+    }
 
     @Override
     public DriveInput process(DriveInput input) {
@@ -16,7 +21,7 @@ public class LateralAlignFilter implements DriveFilterI {
             processedInput = operatorDirectionalSnap(processedInput, UserPolicy.getInstance().getTargetAngle());
             processedInput = motionTowardsAlignment(
                 processedInput,
-                controller.calculate(0, UserPolicy.getInstance().getVisionPositionSetPoint()),
+                controller.calculate(RobotIO.getInstance().getVisionOutput().getTagX(), UserPolicy.getInstance().getVisionPositionSetPoint()),
                 UserPolicy.getInstance().getTargetAngle()
             );
         }
@@ -28,8 +33,8 @@ public class LateralAlignFilter implements DriveFilterI {
         DriveInput processedInput = new DriveInput(input);
 
         double angleRadians = Units.degreesToRadians(goalAngle + 90);
-        processedInput.setXSpeed(input.getXSpeed() + Math.sin(angleRadians) * magnitude);
-        processedInput.setYSpeed(input.getYSpeed() + Math.cos(angleRadians) * magnitude);
+        processedInput.setXSpeed(input.getXSpeed() + Math.cos(angleRadians) * magnitude);
+        processedInput.setYSpeed(input.getYSpeed() + Math.sin(angleRadians) * magnitude);
 
         return processedInput;
     }

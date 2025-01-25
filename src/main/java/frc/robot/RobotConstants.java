@@ -264,6 +264,7 @@ public final class RobotConstants {
 
   public static interface APRIL_TAG_DATA {
     public static final Map<Integer, Double> TAG_ANGLES = Map.ofEntries(
+      Map.entry(1, 0.0),
       Map.entry(6, 300.0),
       Map.entry(7, 0.0),
       Map.entry(8, 60.0),
