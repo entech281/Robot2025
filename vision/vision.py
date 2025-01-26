@@ -16,10 +16,10 @@ import ntcore
 
 
 # Constants
-LOCAL_TEST_MODE = True  # Set to True to run NetworkTables locally
+LOCAL_TEST_MODE = False  # Set to True to run NetworkTables locally
 TEAM_NUMBER = 281
-RESOLUTION_WIDTH = 800
-RESOLUTION_HEIGHT = 600
+RESOLUTION_WIDTH = 640
+RESOLUTION_HEIGHT = 480
 TARGET_FPS = 121
 SETTINGS_STREAM_PORT = 5800
 ANNOTATED_STREAM_PORT = 5801
@@ -93,7 +93,7 @@ def setup_apriltag_detector():
     # Configure detector settings
     detector_config.numThreads = 4
     detector_config.refineEdges = True
-    detector_config.quadDecimate = 4
+    detector_config.quadDecimate = 2
     # I think if we are going to be moving
     # a lot then we should increase this
     detector_config.quadSigma = 0
@@ -136,6 +136,7 @@ def process_apriltag_detection(frame, detection, resolution_width, resolution_he
     # Calculate normalized coordinates
     tag_x = (2 * (center.x / resolution_width)) - 1
     tag_y = (2 * (center.y / resolution_height)) - 1
+    tag_xp = (center.x - (resolution_width/2))/avg_width
     
     # Draw visualization
     cv2.circle(frame, (int(center[0]), int(center[1])), 5, (0, 255, 0), -1)
@@ -151,7 +152,10 @@ def process_apriltag_detection(frame, detection, resolution_width, resolution_he
     for i in range(4):
         draw_line(corners[i], corners[(i + 1) % 4])
     
-    return tag_id, avg_height, avg_width, tag_x, tag_y
+    return tag_id, avg_height, avg_width, tag_x, tag_y,tag_xp
+
+def put_text( frame, location, value ):
+    cv2.putText(frame, value, location,cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,255,255),2,cv2.LINE_AA )
 
 def main():
     """Main vision processing loop."""
@@ -225,7 +229,7 @@ def main():
             if detections:
                 has_target = True
                 detection = detections[0]  # Process first detection
-                tag_id, tag_height, tag_width, tag_x, tag_y = process_apriltag_detection(
+                tag_id, tag_height, tag_width, tag_x, tag_y,tag_xp = process_apriltag_detection(
                     frame, detection, RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
             
             # Update NetworkTables
@@ -235,12 +239,19 @@ def main():
             table.putNumber("tagWidth", float(tag_width))
             table.putNumber("tagX", float(tag_x))
             table.putNumber("tagY", float(tag_y))
+            table.putNumber("tagxp", tag_xp)
+
             table.putNumber("timestamp", float(timestamp))
+
+            put_text(frame,(20,370),f"xp { float(tag_xp):.2f}")
+            put_text(frame,(20,400),f"w: {float(tag_width):.2f}")
+            put_text(frame,(20,430),f"x: {float(tag_x):.2f}")
+            put_text(frame,(20,460),f"ts: { float(timestamp)}")
             
         except Exception as e:
 
             # Commented out for now
-            # put_exception_onto_frame(frame,e)
+            put_exception_onto_frame(frame,e)
             tb = traceback.print_exc()
         
 
