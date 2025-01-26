@@ -8,30 +8,37 @@ import edu.wpi.first.math.MathUtil;
 
 public class YawSetPointCalculator {
 
-    private int start_tag_width_px;
-    private int current_tag_width_px = 0;
-    private final int FINAL_TAG_WIDTH_PX = 400;  // CAUTION: depends on camera resolution
-    private double initial_yaw = 0.0;
-    private double final_yaw = 0.0;
-    private double current_yaw_setpoint;
+    private static final int FINAL_TAG_WIDTH_PX = 400;  // CAUTION: depends on camera resolution
+    private final int initialTagWidthInPixel;
+    private final double initialYaw;
+    private final double finalYaw;
+    private int currentTagWidthInPixels = 0;
+    private boolean atFinal = false;
 
-    public YawSetPointCalculator(int tag_width_px, double current_yaw_angle, double desired_yaw_angle ) {
-        this.start_tag_width_px = tag_width_px;
-        this.current_tag_width_px = tag_width_px;
-        this.initial_yaw = current_yaw_angle;
-        this.final_yaw = desired_yaw_angle;
+    public YawSetPointCalculator(int tagWidthInPixels, double currentYawAngle, double desiredYawAngle ) {
+        this.initialTagWidthInPixel = tagWidthInPixels;
+        this.currentTagWidthInPixels = tagWidthInPixels;
+        this.initialYaw = currentYawAngle;
+        this.finalYaw = desiredYawAngle;
+        this.atFinal = false;
     }
 
-    public double get(int tag_width_px) {
+    public double get(int tagWidthInPixels) {
         // Make sure tag width never decreases
-        current_tag_width_px = Math.max(tag_width_px,current_tag_width_px);
+        currentTagWidthInPixels = Math.max(tagWidthInPixels,currentTagWidthInPixels);
+        if (currentTagWidthInPixels >= FINAL_TAG_WIDTH_PX) {
+            atFinal = true;
+        }
 
         // cap ratio into the 0.0-1.0 range
-        double ratio = (double)(current_tag_width_px - start_tag_width_px)/(double)(FINAL_TAG_WIDTH_PX - start_tag_width_px);
+        double ratio = (double)(currentTagWidthInPixels - initialTagWidthInPixel)/(double)(FINAL_TAG_WIDTH_PX - initialTagWidthInPixel);
         ratio = MathUtil.clamp(ratio,0.0,1.0);
 
-        current_yaw_setpoint = ratio*final_yaw + (1.0-ratio)*initial_yaw;
-        return current_yaw_setpoint;
+        return ratio*finalYaw + (1.0-ratio)*initialYaw;
+    }
+
+    public boolean isReturningFinal() {
+        return atFinal;
     }
 
 }

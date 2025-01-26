@@ -13,8 +13,10 @@ class TestYawSetPointCalculator {
         assertEquals(90.0, yc.get(15));  // outside range ==> capped
         assertEquals(90.0, yc.get(20));  // starting limit
         assertEquals(75.0, yc.get(210)); // intermediate value
+        assertFalse(yc.isReturningFinal());
         assertEquals(75.0, yc.get(150)); // don't allow smaller target
         assertEquals(60.0, yc.get(400)); // reach desired yaw at 400 pixel width
+        assertTrue(yc.isReturningFinal());
         assertEquals(60.0, yc.get(640)); // past upper limit ==> capped
     }
 }
