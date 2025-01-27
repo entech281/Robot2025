@@ -8,7 +8,7 @@ import frc.entech.util.YawSetPointCalculator;
 class TestYawSetPointCalculator {
 
     @Test
-    void TestCalculator() {
+    void testCalculator() {
         YawSetPointCalculator yc = new YawSetPointCalculator(20, 90.0, 60.0);
         assertEquals(90.0, yc.get(15));  // outside range ==> capped
         assertEquals(90.0, yc.get(20));  // starting limit

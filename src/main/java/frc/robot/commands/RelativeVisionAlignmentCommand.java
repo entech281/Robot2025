@@ -1,16 +1,25 @@
 package frc.robot.commands;
 
 import frc.entech.commands.EntechCommand;
+import frc.entech.util.YawSetPointCalculator;
 import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
 import frc.robot.operation.UserPolicy;
 
 public class RelativeVisionAlignmentCommand extends EntechCommand {
+    private YawSetPointCalculator calc;
+
     @Override
     public void initialize() {
+        calc = new YawSetPointCalculator(
+            RobotIO.getInstance().getVisionOutput().getTagWidth(),
+            RobotIO.getInstance().getOdometryPose().getRotation().getDegrees(),
+            findTargetAngle(RobotIO.getInstance().getVisionOutput().getTagID())
+        );
+
         UserPolicy.getInstance().setAligningToAngle(true);
         UserPolicy.getInstance().setLaterallyAligning(true);
-        UserPolicy.getInstance().setTargetAngle(findTargetAngle(RobotIO.getInstance().getVisionOutput().getTagID()));
+        UserPolicy.getInstance().setTargetAngle(calc.get(RobotIO.getInstance().getVisionOutput().getTagWidth()));
         UserPolicy.getInstance().setVisionPositionSetPoint(0);
     }
 
@@ -18,7 +27,7 @@ public class RelativeVisionAlignmentCommand extends EntechCommand {
     public void execute() {
         UserPolicy.getInstance().setAligningToAngle(true);
         UserPolicy.getInstance().setLaterallyAligning(true);
-        UserPolicy.getInstance().setTargetAngle(findTargetAngle(RobotIO.getInstance().getVisionOutput().getTagID()));
+        UserPolicy.getInstance().setTargetAngle(calc.get(RobotIO.getInstance().getVisionOutput().getTagWidth()));
     }
 
     private double findTargetAngle(int tagID) {
