@@ -15,6 +15,7 @@ import ntcore
 
 
 
+
 # Constants
 LOCAL_TEST_MODE = True  # Set to True to run NetworkTables locally
 TEAM_NUMBER = 281
@@ -188,9 +189,7 @@ def main():
     mjpegServer.setSource(camera)
     print(f"mjpg server listening at http://0.0.0.0:{SETTINGS_STREAM_PORT}")
     
-    # Setup SmartDashboard camera output
-    sd_source = cs.CvSource("SmartDashboard", cs.VideoMode.PixelFormat.kMJPEG, 
-                          RESOLUTION_WIDTH, RESOLUTION_HEIGHT, TARGET_FPS)
+    
     cs.CameraServer.putVideo("vision", RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
     
     cvsink = cs.CvSink("cvsink")
@@ -269,7 +268,7 @@ def main():
             frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
             cvSource.putFrame(frame)
 
-            sd_source.putFrame(frame)
+            # sd_source.putFrame(frame)
             counter = 0
 
         counter += 1
