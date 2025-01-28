@@ -153,6 +153,8 @@ def process_apriltag_detection(frame, detection, resolution_width, resolution_he
     
     return tag_id, avg_height, avg_width, tag_x, tag_y
 
+
+
 def main():
     """Main vision processing loop."""
     # Initialize NetworkTables
@@ -186,6 +188,11 @@ def main():
     mjpegServer.setSource(camera)
     print(f"mjpg server listening at http://0.0.0.0:{SETTINGS_STREAM_PORT}")
     
+    # Setup SmartDashboard camera output
+    sd_source = cs.CvSource("SmartDashboard", cs.VideoMode.PixelFormat.kMJPEG, 
+                          RESOLUTION_WIDTH, RESOLUTION_HEIGHT, TARGET_FPS)
+    cs.CameraServer.putVideo("vision", RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
+    
     cvsink = cs.CvSink("cvsink")
     cvsink.setSource(camera)
     
@@ -198,6 +205,9 @@ def main():
     # Initialize frame buffer
     frame_buffer = np.zeros(shape=(RESOLUTION_HEIGHT, RESOLUTION_WIDTH), dtype=np.uint8)
     
+    counter = 0
+
+
     while True:
         frame_timer.tick()
         
@@ -254,8 +264,15 @@ def main():
         
         # if len(frame.shape) == 2:
 
-        frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
-        cvSource.putFrame(frame)
+        if counter % 5 == 0:
+            
+            frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
+            cvSource.putFrame(frame)
+
+            sd_source.putFrame(frame)
+            counter = 0
+
+        counter += 1
 
 
 if __name__ == "__main__":
