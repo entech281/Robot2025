@@ -18,7 +18,7 @@ public class RelativeVisionAlignmentCommand extends EntechCommand {
         );
 
         UserPolicy.getInstance().setAligningToAngle(true);
-        UserPolicy.getInstance().setLaterallyAligning(true);
+        UserPolicy.getInstance().setLaterallyAligning(false);
         UserPolicy.getInstance().setTargetAngle(calc.get(RobotIO.getInstance().getVisionOutput().getTagWidth()));
         UserPolicy.getInstance().setVisionPositionSetPoint(0);
     }
