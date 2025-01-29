@@ -17,7 +17,7 @@ import ntcore
 
 
 # Constants
-LOCAL_TEST_MODE = True  # Set to True to run NetworkTables locally
+LOCAL_TEST_MODE = False  # Set to True to run NetworkTables locally
 TEAM_NUMBER = 281
 RESOLUTION_WIDTH = 640
 RESOLUTION_HEIGHT = 480
@@ -140,7 +140,7 @@ def setup_apriltag_detector():
     # Configure detector settings
     detector_config.numThreads = 4
     detector_config.refineEdges = True
-    detector_config.quadDecimate = 2
+    detector_config.quadDecimate = 3
     detector_config.quadSigma = 0
 
     # Configure quad threshold parameters
@@ -199,6 +199,8 @@ def process_apriltag_detection(frame, detection, resolution_width, resolution_he
 
     return tag_id, avg_height, avg_width, tag_x, tag_y,tag_xp
 
+def put_text( frame, location, value ):
+    cv2.putText(frame, value, location,cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,255,255),2,cv2.LINE_AA )
 
 
 def main():
@@ -300,6 +302,12 @@ def main():
                 table.putNumber("tagY", float(tag_y))
                 table.putNumber("timestamp", float(timestamp))
                 table.putNumber("tagxp", tag_xp)
+
+                put_text(frame,(20,370),f"xp { float(tag_xp):.2f}")
+                put_text(frame,(20,400),f"w: {float(tag_width):.2f}")
+                put_text(frame,(20,430),f"x: {float(tag_x):.2f}")
+                put_text(frame,(20,460),f"ts: { float(timestamp)}")
+
             else:
                 missed_frame_counter += 1
                 if missed_frame_counter > MISSED_FRAMES_TO_TOLERATE_BEFORE_GIVING_UP:
@@ -314,7 +322,7 @@ def main():
 
 
         except Exception as e:
-            # put_exception_onto_frame(frame,e)
+            put_exception_onto_frame(frame,e)
             tb = traceback.print_exc()
 
 
