@@ -262,8 +262,14 @@ def main():
     counter = 0
     missed_frame_counter = 0
 
+    has_target = False
+    tag_id = tag_height = tag_width = -1
+    tag_x = tag_y = -1.0
     while True:
         frame_timer.tick()
+
+
+
 
         timestamp, frame = cvsink.grabFrame(frame_buffer)
         if timestamp == 0:
@@ -278,11 +284,36 @@ def main():
         if len(frame.shape) == 3:
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
+       
         try:
+
+            if has_target and frame.size != 0:
+                # Undo the normalization done to the tag_x
+
+                # result = (2 * (center.x / resolution_width)) - 1
+                # result + 1 = (2 * (center.x / resolution_width))
+                # (result + 1) / 2 = center.x / resolution_width
+                # resolution_width * ((result + 1) / 2) = center.x
+
+                
+
+                last_tag_x = ((tag_x + 1) / 2) * RESOLUTION_WIDTH
+
+                # print(f"Hi, I'm trying to create this roi {last_tag_x}:{tag_width}")
+
+                print(frame.shape)
+                frame = frame[0:RESOLUTION_HEIGHT, int(last_tag_x - tag_width * 1.5):int(last_tag_x + tag_width * 1.5)]
+                print(frame.shape)
+                # cv2.rectangle(frame, (int(last_tag_x + tag_width), 0), (int(last_tag_x- tag_width), RESOLUTION_HEIGHT), (0, 0, 255), 2)
+
+
+            
+
             # Initialize detection values
             has_target = False
             tag_id = tag_height = tag_width = -1
             tag_x = tag_y = -1.0
+
 
             # Process detections
             detections = detector.detect(frame)
@@ -293,6 +324,7 @@ def main():
                 tag_id, tag_height, tag_width, tag_x, tag_y,tag_xp = process_apriltag_detection(
                     frame, detection, RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
 
+                
                 # Update NetworkTables
                 table.putBoolean("hasTarget", has_target)
                 table.putNumber("idTag", tag_id)
@@ -327,7 +359,11 @@ def main():
 
 
         if counter % FRAMES_TO_SKIP_FOR_DEBUG_STREAM == 0:
-            cvSource.putFrame(frame)
+            
+            if (frame.size != 0):
+                frame = np.ascontiguousarray(frame)
+                cvSource.putFrame(frame)
+
 
             # sd_source.putFrame(frame)
             counter = 0
