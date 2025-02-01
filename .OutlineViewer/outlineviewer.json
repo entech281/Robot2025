@@ -1,12 +1,21 @@
 {
+  "Clients": {
+    "open": true
+  },
   "Connections": {
     "open": true
   },
   "NetworkTables Settings": {
     "mode": "Client (NT3)",
-    "serverTeam": "127.0.0.1"
+    "serverTeam": "localhost"
   },
   "Server": {
+    "Publishers": {
+      "open": true
+    },
+    "Subscribers": {
+      "open": true
+    },
     "open": true
   },
   "transitory": {
