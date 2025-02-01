@@ -25,7 +25,7 @@ TARGET_FPS = 121
 SETTINGS_STREAM_PORT = 5800
 ANNOTATED_STREAM_PORT = 5801
 NOT_AVAILABLE=-999
-MISSED_FRAMES_TO_TOLERATE_BEFORE_GIVING_UP = 0
+MISSED_FRAMES_TO_TOLERATE_BEFORE_GIVING_UP = 2
 FRAMES_TO_SKIP_FOR_DEBUG_STREAM=5
 DETECTOR_QUAD_DECIMATE = 1
 
@@ -232,7 +232,6 @@ def main():
     camera.getProperty(CameraProperties.BRIGHTNESS).set(CameraValues.NOT_PRETTY_DARN_BRIGHT)
     camera.getProperty(CameraProperties.AUTO_WHITE_BALANCE).set(CameraValues.NO_AUTO_WHITE_BALANCE)
     print_camera_properties(camera)
-    print("This is the right file")
     # Setup AprilTag detector
     detector = setup_apriltag_detector()
 
@@ -321,7 +320,6 @@ def main():
             else:
                 missed_frames_counter += 1
                 missed_frames_total_counter += 1
-                print(f"Missed frames counter: {missed_frames_counter}" )
                 if missed_frames_counter > MISSED_FRAMES_TO_TOLERATE_BEFORE_GIVING_UP:
                     table.putBoolean("hasTarget", False)
                     table.putNumber("idTag", NOT_AVAILABLE)
