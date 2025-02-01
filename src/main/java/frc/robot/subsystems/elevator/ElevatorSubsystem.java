@@ -1,8 +1,5 @@
 package frc.robot.subsystems.elevator;
 
-import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -23,7 +20,7 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   private ElevatorInput currentInput = new ElevatorInput();
 
   private SparkMax leftElevator;
-  private SparkMax rightElevator;
+  //private SparkMax rightElevator;
 
 
   private IdleMode mode;
@@ -43,10 +40,8 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       SparkMaxConfig relevator = new SparkMaxConfig();
 
 
-      // IMPORTANT! DO NOT BURN FLASH OR SET SETTINGS FOR THIS SUBSYSTEM in code!
-      // we want to avoid accidently disabling the controller soft limits
       leftElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_A, MotorType.kBrushless);
-      rightElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_B, MotorType.kBrushless);
+      //rightElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_B, MotorType.kBrushless);
       relevator.follow(leftElevator);
       leftElevator.getEncoder().setPosition(0.0);
 
@@ -77,8 +72,6 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   public void periodic() {
     double clampedPosition = clampRequestedPosition(currentInput.getRequestedPosition());
     if (ENABLED) {
-      SparkMaxConfig lelevator = new SparkMaxConfig();
-      SparkMaxConfig relevator = new SparkMaxConfig();
       
       if (currentInput.getActivate()) {
         if ((leftElevator.getEncoder().getPosition() * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR)
