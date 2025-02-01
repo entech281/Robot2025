@@ -16,7 +16,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
-
 import frc.entech.util.AprilTagDistanceCalibration;
 
 public final class RobotConstants {
@@ -123,6 +122,26 @@ public final class RobotConstants {
     public static final int TURNING_MOTOR_CURRENT_LIMIT_AMPS = 20; // amps
   }
 
+  public static interface ELEVATOR {
+    public static final double INITIAL_POSITION = 0.0;
+    public static final double UPPER_SOFT_LIMIT_DEG = 85.5;
+    public static final double LOWER_SOFT_LIMIT_DEG = 1;
+    public static final double ELEVATOR_CONVERSION_FACTOR = 2.4;
+    public static final double SHOOT_AMP_POSITION_DEG = 85.5;
+    public static final double POSITION_TOLERANCE_DEG = 2;
+
+    public static final double kA = 2.31586;
+    public static final double kB = -25.1345;
+    public static final double kC = 94.4448;
+    public static final double kD = -132.894;
+    public static final double kE = 76.0679;
+
+    public static final double LOB_ANGLE = 10.0;
+
+    public static final double SPEAKER_SUBWOOFER_SCORING = 8;
+    public static final double SPEAKER_PODIUM_SCORING = 30;
+  }
+
     public static interface LED {
     public static final int PORT = 0;
     public static final int NUM_LEDS = 42;
@@ -150,6 +169,9 @@ public final class RobotConstants {
       public static final int FRONT_RIGHT_TURNING = 21;
       public static final int REAR_LEFT_TURNING = 31;
       public static final int REAR_RIGHT_TURNING = 41;
+
+      public static final int ELEVATOR_A = 13;
+      public static final int ELEVATOR_B = 14;
     }
 
 
