@@ -8,7 +8,7 @@ import edu.wpi.first.math.MathUtil;
 
 public class YawSetPointCalculator {
 
-    private static final int FINAL_TAG_WIDTH_PX = 400;  // CAUTION: depends on camera resolution
+    private static final int FINAL_TAG_WIDTH_PX = 125;  // CAUTION: depends on camera resolution
     private final int initialTagWidthInPixel;
     private final double initialYaw;
     private final double finalYaw;
