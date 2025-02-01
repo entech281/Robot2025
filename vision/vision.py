@@ -27,6 +27,7 @@ ANNOTATED_STREAM_PORT = 5801
 NOT_AVAILABLE=-999
 MISSED_FRAMES_TO_TOLERATE_BEFORE_GIVING_UP = 2
 FRAMES_TO_SKIP_FOR_DEBUG_STREAM=5
+DETECTOR_QUAD_DECIMATE = 1
 
 class CameraProperties(object):
     EXPOSURE_RAW_ABSOLUTE = 'raw_exposure_time_absolute'
@@ -35,9 +36,9 @@ class CameraProperties(object):
     AUTO_WHITE_BALANCE="white_balance_automatic"
 
 class CameraValues(object):
-    EXPOSURE_SUPER_LOW = 10
+    EXPOSURE_SUPER_LOW = 2
     AUTO_EXPOSURE_MANUAL=1
-    PRETTY_DARN_BRIGHT=50
+    NOT_PRETTY_DARN_BRIGHT=30
     NO_AUTO_WHITE_BALANCE=0
 
 
@@ -140,7 +141,7 @@ def setup_apriltag_detector():
     # Configure detector settings
     detector_config.numThreads = 4
     detector_config.refineEdges = True
-    detector_config.quadDecimate = 3
+    detector_config.quadDecimate = DETECTOR_QUAD_DECIMATE
     detector_config.quadSigma = 0
 
     # Configure quad threshold parameters
@@ -228,10 +229,9 @@ def main():
 
     camera.getProperty(CameraProperties.EXPOSURE_RAW_ABSOLUTE).set(CameraValues.EXPOSURE_SUPER_LOW)
     camera.getProperty(CameraProperties.AUTO_EXPOSURE).set(CameraValues.AUTO_EXPOSURE_MANUAL)
-    camera.getProperty(CameraProperties.BRIGHTNESS).set(CameraValues.PRETTY_DARN_BRIGHT)
+    camera.getProperty(CameraProperties.BRIGHTNESS).set(CameraValues.NOT_PRETTY_DARN_BRIGHT)
     camera.getProperty(CameraProperties.AUTO_WHITE_BALANCE).set(CameraValues.NO_AUTO_WHITE_BALANCE)
     print_camera_properties(camera)
-
     # Setup AprilTag detector
     detector = setup_apriltag_detector()
 
@@ -260,10 +260,15 @@ def main():
     frame_buffer = np.zeros(shape=(RESOLUTION_HEIGHT, RESOLUTION_WIDTH), dtype=np.uint8)
 
     counter = 0
-    missed_frame_counter = 0
+    missed_frames_counter = 0
+    missed_frames_total_counter = 0
+    loop_total_counter = 0
 
     while True:
         frame_timer.tick()
+
+        loop_total_counter += 1
+        table.putNumber("loop_total_counter", loop_total_counter)
 
         timestamp, frame = cvsink.grabFrame(frame_buffer)
         if timestamp == 0:
@@ -286,8 +291,10 @@ def main():
 
             # Process detections
             detections = detector.detect(frame)
-            if detections:
-                missed_frame_counter = 0
+            
+            if len(detections) > 0 :
+                print(detections)
+                missed_frames_counter = 0
                 has_target = True
                 detection = detections[0]  # Process first detection
                 tag_id, tag_height, tag_width, tag_x, tag_y,tag_xp = process_apriltag_detection(
@@ -302,15 +309,18 @@ def main():
                 table.putNumber("tagY", float(tag_y))
                 table.putNumber("timestamp", float(timestamp))
                 table.putNumber("tagxp", tag_xp)
+                table.putNumber("missed_frames_counter", missed_frames_counter)
+                table.putNumber("missed_frames_total_counter", missed_frames_total_counter)
 
                 put_text(frame,(20,370),f"xp { float(tag_xp):.2f}")
                 put_text(frame,(20,400),f"w: {float(tag_width):.2f}")
                 put_text(frame,(20,430),f"x: {float(tag_x):.2f}")
-                put_text(frame,(20,460),f"ts: { float(timestamp)}")
+                put_text(frame,(20,460),f"lc: { float(loop_total_counter)}")
 
             else:
-                missed_frame_counter += 1
-                if missed_frame_counter > MISSED_FRAMES_TO_TOLERATE_BEFORE_GIVING_UP:
+                missed_frames_counter += 1
+                missed_frames_total_counter += 1
+                if missed_frames_counter > MISSED_FRAMES_TO_TOLERATE_BEFORE_GIVING_UP:
                     table.putBoolean("hasTarget", False)
                     table.putNumber("idTag", NOT_AVAILABLE)
                     table.putNumber("tagHeight", NOT_AVAILABLE)
@@ -319,7 +329,8 @@ def main():
                     table.putNumber("tagY", NOT_AVAILABLE)
                     table.putNumber("timestamp", float(timestamp))
                     table.putNumber("tagxp", NOT_AVAILABLE)
-
+                    table.putNumber("missed_frames_counter", missed_frames_counter)
+                    table.putNumber("missed_frames_total_counter", missed_frames_total_counter)
 
         except Exception as e:
             put_exception_onto_frame(frame,e)
