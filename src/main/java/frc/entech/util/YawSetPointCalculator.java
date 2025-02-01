@@ -8,7 +8,7 @@ import edu.wpi.first.math.MathUtil;
 
 public class YawSetPointCalculator {
 
-    private static final int FINAL_TAG_WIDTH_PX = 100;  // CAUTION: depends on camera resolution
+    private static final int FINAL_TAG_WIDTH_PX = 125;  // CAUTION: depends on camera resolution
     private final int initialTagWidthInPixel;
     private final double initialYaw;
     private final double finalYaw;
@@ -26,15 +26,17 @@ public class YawSetPointCalculator {
     public double get(int tagWidthInPixels) {
         // Make sure tag width never decreases
         currentTagWidthInPixels = Math.max(tagWidthInPixels,currentTagWidthInPixels);
+        currentTagWidthInPixels = Math.min(FINAL_TAG_WIDTH_PX,currentTagWidthInPixels);
         if (currentTagWidthInPixels >= FINAL_TAG_WIDTH_PX) {
             atFinal = true;
         }
 
         // cap ratio into the 0.0-1.0 range
-        double ratio = (double)(currentTagWidthInPixels - initialTagWidthInPixel)/(double)(FINAL_TAG_WIDTH_PX - initialTagWidthInPixel);
-        ratio = MathUtil.clamp(ratio,0.0,1.0);
+        double ratio = (double)(FINAL_TAG_WIDTH_PX - currentTagWidthInPixels)/(double)(FINAL_TAG_WIDTH_PX - initialTagWidthInPixel);
+        ratio = MathUtil.clamp(ratio*ratio,0.0,1.0);
+        // System.out.println(ratio);
 
-        return ratio*finalYaw + (1.0-ratio)*initialYaw;
+        return (1.0-ratio)*finalYaw + ratio*initialYaw;
     }
 
     public boolean isReturningFinal() {

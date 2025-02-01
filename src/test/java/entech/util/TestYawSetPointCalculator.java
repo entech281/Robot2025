@@ -9,14 +9,14 @@ class TestYawSetPointCalculator {
 
     @Test
     void testCalculator() {
-        YawSetPointCalculator yc = new YawSetPointCalculator(20, 90.0, 60.0);
+        YawSetPointCalculator yc = new YawSetPointCalculator(25, 90.0, 60.0);
         assertEquals(90.0, yc.get(15));  // outside range ==> capped
-        assertEquals(90.0, yc.get(20));  // starting limit
-        assertEquals(75.0, yc.get(210)); // intermediate value
+        assertEquals(90.0, yc.get(25));  // starting limit
+        assertEquals(67.5, yc.get(75)); // intermediate value
         assertFalse(yc.isReturningFinal());
-        assertEquals(75.0, yc.get(150)); // don't allow smaller target
-        assertEquals(60.0, yc.get(400)); // reach desired yaw at 400 pixel width
+        assertEquals(67.5, yc.get(50)); // don't allow smaller target
+        assertEquals(60.0, yc.get(125)); // reach desired yaw at 400 pixel width
         assertTrue(yc.isReturningFinal());
-        assertEquals(60.0, yc.get(640)); // past upper limit ==> capped
+        assertEquals(60.0, yc.get(200)); // past upper limit ==> capped
     }
 }
