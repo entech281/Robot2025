@@ -70,10 +70,10 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
 
   @Override
   public void periodic() {
-    double clampedPosition = clampRequestedPosition(currentInput.getRequestedPosition());
+    //double clampedPosition = clampRequestedPosition(currentInput.getRequestedPosition());
     if (ENABLED) {
       
-      if (currentInput.getActivate()) {
+      /*if (currentInput.getActivate()) {
         if ((leftElevator.getEncoder().getPosition() * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR)
             - clampedPosition <= 0) {
        //   leftElevator.getClosedLoopController().setReference(
@@ -86,7 +86,7 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
        // leftElevator.getClosedLoopController().setReference(
          //   calculateMotorPositionFromDegrees(RobotConstants.ELEVATOR.LOWER_SOFT_LIMIT_DEG),
          //   ControlType.kSmartMotion, 1);
-      }
+      }*/
     }
   }
 
