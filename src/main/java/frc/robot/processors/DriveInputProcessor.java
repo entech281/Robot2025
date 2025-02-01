@@ -8,8 +8,8 @@ import frc.robot.processors.filters.DriveFilterI;
 import frc.robot.processors.filters.HoldYawFilter;
 import frc.robot.processors.filters.LateralAlignFilter;
 import frc.robot.processors.filters.MaxConstraintFilter;
-import frc.robot.processors.filters.SquaringFilter;
 import frc.robot.processors.filters.TwistFilter;
+import frc.robot.processors.filters.SquaringFilter;
 import frc.robot.subsystems.drive.DriveInput;
 
 public class DriveInputProcessor {
@@ -17,8 +17,8 @@ public class DriveInputProcessor {
 
   public DriveInputProcessor() {
     driveFilters.add(new TwistFilter());
-    driveFilters.add(new SquaringFilter());
     driveFilters.add(new MaxConstraintFilter());
+    driveFilters.add(new SquaringFilter());
     driveFilters.add(new HoldYawFilter());
     driveFilters.add(new AutoYawFilter());
     driveFilters.add(new LateralAlignFilter());

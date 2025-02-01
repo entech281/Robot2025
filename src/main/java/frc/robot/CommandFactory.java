@@ -82,9 +82,10 @@ public class CommandFactory {
   }
 
   public Command getAlignmentCommand() {
-    return new SequentialCommandGroup(
-      new RotateToFaceTargetCommand(),
-      new RelativeVisionAlignmentCommand()
-    );
+    return new RelativeVisionAlignmentCommand();
+    // return new SequentialCommandGroup(
+    //   new RotateToFaceTargetCommand(),
+    //   new RelativeVisionAlignmentCommand()
+    // );
   }
 }
