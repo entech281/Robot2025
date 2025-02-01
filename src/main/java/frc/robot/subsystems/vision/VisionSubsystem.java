@@ -41,7 +41,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     output.setTagX(tagXEntry.getDouble(0));
     output.setTagY(tagYEntry.getDouble(0));
     output.setTimestamp(timeStampEntry.getInteger(0));
-
+``//    System.out.println("VisionSubsystem: " + output.toString());
 
     return output;
   }
