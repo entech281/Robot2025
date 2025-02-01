@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import frc.robot.io.RobotIO;
 import frc.robot.processors.filters.AutoYawFilter;
+import frc.robot.processors.filters.CollisionDampeningFilter;
 import frc.robot.processors.filters.DriveFilterI;
 import frc.robot.processors.filters.HoldYawFilter;
 import frc.robot.processors.filters.LateralAlignFilter;
@@ -22,6 +23,7 @@ public class DriveInputProcessor {
     driveFilters.add(new HoldYawFilter());
     driveFilters.add(new AutoYawFilter());
     driveFilters.add(new LateralAlignFilter());
+    driveFilters.add(new CollisionDampeningFilter());
   }
 
   public DriveInput processInput(DriveInput input) {
