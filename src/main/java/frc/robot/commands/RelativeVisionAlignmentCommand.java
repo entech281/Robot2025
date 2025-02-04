@@ -6,10 +6,11 @@ import frc.robot.io.RobotIO;
 import frc.robot.operation.UserPolicy;
 
 public class RelativeVisionAlignmentCommand extends EntechCommand {
+    private static final double LATERAL_START_ANGLE = 22.5;
     @Override
     public void initialize() {
         UserPolicy.getInstance().setAligningToAngle(true);
-        UserPolicy.getInstance().setLaterallyAligning(true);
+        UserPolicy.getInstance().setLaterallyAligning(false);
         UserPolicy.getInstance().setTargetAngle(findTargetAngle(RobotIO.getInstance().getVisionOutput().getTagID()));
         UserPolicy.getInstance().setVisionPositionSetPoint(0);
     }
@@ -17,17 +18,16 @@ public class RelativeVisionAlignmentCommand extends EntechCommand {
     @Override
     public void execute() {
         UserPolicy.getInstance().setAligningToAngle(true);
-        UserPolicy.getInstance().setLaterallyAligning(true);
         UserPolicy.getInstance().setTargetAngle(findTargetAngle(RobotIO.getInstance().getVisionOutput().getTagID()));
+
+        UserPolicy.getInstance().setLaterallyAligning(Math.abs(RobotIO.getInstance().getOdometryPose().getRotation().getDegrees()) - (findTargetAngle(RobotIO.getInstance().getVisionOutput().getTagID() - 180)) < LATERAL_START_ANGLE);
     }
 
     private double findTargetAngle(int tagID) {
         if (RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.containsKey(tagID)) {
             return RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.get(tagID);
         } else {
-            UserPolicy.getInstance().setAligningToAngle(false);
-            UserPolicy.getInstance().setLaterallyAligning(false);
-            return 0.0;
+            return UserPolicy.getInstance().getTargetAngle();
         }
     }
 
@@ -39,6 +39,6 @@ public class RelativeVisionAlignmentCommand extends EntechCommand {
 
     @Override
     public boolean runsWhenDisabled() {
-        return true;
+        return false;
     }
 }

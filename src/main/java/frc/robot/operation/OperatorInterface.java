@@ -16,7 +16,6 @@ import frc.robot.RobotConstants;
 import frc.robot.SubsystemManager;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.GyroReset;
-import frc.robot.commands.RelativeVisionAlignmentCommand;
 import frc.robot.commands.ResetOdometryCommand;
 import frc.robot.commands.RunTestCommand;
 import frc.robot.commands.TwistCommand;
@@ -117,7 +116,7 @@ public class OperatorInterface
         .onTrue(new RunTestCommand(testChooser));
 
     xboxController.button(6)
-        .whileTrue(new RelativeVisionAlignmentCommand());
+        .whileTrue(commandFactory.getAlignmentCommand());
 
     xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.DRIVE_X)
         .whileTrue(new XDriveCommand(subsystemManager.getDriveSubsystem()));

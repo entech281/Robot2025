@@ -18,10 +18,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.AutonomousException;
 import frc.robot.commands.GyroResetByAngleCommand;
+import frc.robot.commands.RelativeVisionAlignmentCommand;
 import frc.robot.commands.ResetOdometryCommand;
 import frc.robot.io.RobotIO;
 import frc.robot.operation.UserPolicy;
 import frc.robot.processors.OdometryProcessor;
+import frc.robot.processors.filters.LateralAlignFilter;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
 import com.pathplanner.lib.config.PIDConstants;
@@ -71,10 +73,11 @@ public class CommandFactory {
 
   public Command getAutoCommand() {
     SequentialCommandGroup auto = new SequentialCommandGroup();
-    auto.addCommands(
-        new GyroResetByAngleCommand(navXSubsystem, odometry, autoChooser.getSelected().getName()));
     auto.addCommands(new WaitCommand(0.5));
-    auto.addCommands(autoChooser.getSelected());
     return auto;
+  }
+
+  public Command getAlignmentCommand() {
+    return new RelativeVisionAlignmentCommand();
   }
 }

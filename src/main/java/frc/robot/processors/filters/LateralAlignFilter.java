@@ -8,7 +8,7 @@ import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.io.RobotIO;
 
 public class LateralAlignFilter implements DriveFilterI {
-    private final PIDController controller = new PIDController(0.05, 0, 0.0);
+    private final PIDController controller = new PIDController(0.075, 0.0, 0.0);
     public static final double TOLERANCE = 0.1;
 
     public LateralAlignFilter() {
@@ -22,7 +22,7 @@ public class LateralAlignFilter implements DriveFilterI {
         if (UserPolicy.getInstance().isLaterallyAligning() && !UserPolicy.getInstance().isTwistable()) {
             processedInput = operatorDirectionalSnap(processedInput, UserPolicy.getInstance().getTargetAngle());
 
-            if (Math.abs(RobotIO.getInstance().getVisionOutput().getTagXP() - UserPolicy.getInstance().getVisionPositionSetPoint()) >= TOLERANCE) {
+            if (RobotIO.getInstance().getVisionOutput().getHasTarget() && (Math.abs(RobotIO.getInstance().getVisionOutput().getTagXP() - UserPolicy.getInstance().getVisionPositionSetPoint()) >= TOLERANCE)) {
                 processedInput = motionTowardsAlignment(
                     processedInput,
                     controller.calculate(RobotIO.getInstance().getVisionOutput().getTagXP(), UserPolicy.getInstance().getVisionPositionSetPoint()),

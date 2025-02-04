@@ -5,7 +5,7 @@ import org.littletonrobotics.junction.Logger;
 import frc.entech.subsystems.SubsystemOutput;
 
 public class VisionOutput extends SubsystemOutput {
-  private Boolean hasTarget;
+  private boolean hasTarget;
   private int tagID;
   private int tagHeight;
   private int tagWidth;
@@ -28,11 +28,11 @@ public class VisionOutput extends SubsystemOutput {
     Logger.recordOutput("VisionOutput/distance", distance);
   }
 
-  public Boolean getHasTarget() {
+  public boolean getHasTarget() {
     return this.hasTarget;
   }
 
-  public void setHasTarget(Boolean hasTarget) {
+  public void setHasTarget(boolean hasTarget) {
     this.hasTarget = hasTarget;
   }
 
