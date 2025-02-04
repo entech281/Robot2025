@@ -2,8 +2,6 @@ package frc.robot.operation;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj.DriverStation;
-
 public class UserPolicy {
   private static UserPolicy instance = new UserPolicy();
 
@@ -40,7 +38,6 @@ public class UserPolicy {
 
   public void setAligningToAngle(boolean aligningToAngle) {
     this.aligningToAngle = aligningToAngle;
-    DriverStation.reportWarning("UserPolicy/aligningToAngle" + this.aligningToAngle, false);
     Logger.recordOutput("UserPolicy/aligningToAngle", aligningToAngle);
   }
 
