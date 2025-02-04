@@ -142,6 +142,13 @@ public final class RobotConstants {
     public static final double SPEAKER_PODIUM_SCORING = 30;
   }
 
+  public static interface CORAL{
+    public static final double CORAL_CONVERSION_FACTOR = 2.4;
+    public static final double CORAL_TOLERANCE_DEG = 2;
+    
+
+  }
+
     public static interface LED {
     public static final int PORT = 0;
     public static final int NUM_LEDS = 42;

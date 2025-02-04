@@ -1,6 +1,7 @@
 package frc.robot.subsystems.coralMechanism;
 
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -17,9 +18,12 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
 
     public void initialize() {
         if (ENABLED) {
+            SparkMaxConfig Coral = new SparkMaxConfig();
+            
             CoralMotor = new SparkMax(0, SparkMax.MotorType.kBrushless);
             CoralMotor.getEncoder().setPosition(0.0);
-            CoralMotor.setInverted(IS_INVERTED);
+            Coral.inverted(IS_INVERTED);
+            
         }
     }
 
@@ -37,13 +41,11 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
 
     @Override
     public Command getTestCommand() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTestCommand'");
+        return null;
     }
 
     @Override
     public CoralMechanismOutput toOutputs() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'toOutputs'");
     }
 }
