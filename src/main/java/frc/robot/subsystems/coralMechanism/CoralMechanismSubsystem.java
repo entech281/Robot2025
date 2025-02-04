@@ -12,6 +12,7 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
     private static final boolean ENABLED = true;
     private static final boolean IS_INVERTED = false;
     
+    //This is not working right now I think....
     private CoralMechanismInput currentInput = new CoralMechanismInput();
 
     private SparkMax CoralMotor;
