@@ -7,7 +7,6 @@ import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
 import frc.robot.operation.UserPolicy;
 import frc.robot.processors.DriveInputProcessor;
-import frc.robot.processors.filters.CollisionDampeningFilter;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveSubsystem;
 
@@ -18,7 +17,6 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
     private final DriveSubsystem drive;
     private final int tagID;
     private final DriveInputProcessor inputProcessor;
-    private final CollisionDampeningFilter filter = new CollisionDampeningFilter();
     public static final double TOLERANCE = 0.1;
     private static final double START_DISTANCE = 8.0;
 
@@ -41,11 +39,7 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
         UserPolicy.getInstance().setAligningToAngle(true);
         UserPolicy.getInstance().setTargetAngle(findTargetAngle(RobotIO.getInstance().getVisionOutput().getTagID()));
 
-        if (Math.abs(RobotIO.getInstance().getOdometryPose().getRotation().getDegrees()) - (findTargetAngle(RobotIO.getInstance().getVisionOutput().getTagID() - 180)) < LATERAL_START_ANGLE) {
-            UserPolicy.getInstance().setLaterallyAligning(true);
-        } else {
-            UserPolicy.getInstance().setLaterallyAligning(false);
-        }
+        UserPolicy.getInstance().setLaterallyAligning(Math.abs(RobotIO.getInstance().getOdometryPose().getRotation().getDegrees()) - (findTargetAngle(RobotIO.getInstance().getVisionOutput().getTagID() - 180)) < LATERAL_START_ANGLE);
 
         double angle = Units.degreesToRadians(findTargetAngle(tagID));
 

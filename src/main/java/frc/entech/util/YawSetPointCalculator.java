@@ -34,7 +34,6 @@ public class YawSetPointCalculator {
         // cap ratio into the 0.0-1.0 range
         double ratio = (double)(FINAL_TAG_WIDTH_PX - currentTagWidthInPixels)/(double)(FINAL_TAG_WIDTH_PX - initialTagWidthInPixel);
         ratio = MathUtil.clamp(ratio*ratio,0.0,1.0);
-        // System.out.println(ratio);
 
         return (1.0-ratio)*finalYaw + ratio*initialYaw;
     }
