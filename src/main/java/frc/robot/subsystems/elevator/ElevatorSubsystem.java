@@ -4,6 +4,10 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.LimitSwitchConfig.Type;
+import com.revrobotics.spark.config.LimitSwitchConfig;
+import com.revrobotics.spark.SparkLimitSwitch;
+
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,13 +24,7 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   private ElevatorInput currentInput = new ElevatorInput();
 
   private SparkMax leftElevator;
-  //private SparkMax rightElevator;
-
-
-  private IdleMode mode;
-
-
-  //private IdleMode mode;
+  private SparkMax rightElevator;
 
   public static double calculateMotorPositionFromDegrees(double degrees) {
     return degrees / RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
@@ -41,7 +39,10 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
 
 
       leftElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_A, MotorType.kBrushless);
-      //rightElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_B, MotorType.kBrushless);
+      rightElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_B, MotorType.kBrushless);
+
+      leftElevator.getReverseLimitSwitch().enableLimitSwitch(true);
+
       relevator.follow(leftElevator);
       leftElevator.getEncoder().setPosition(0.0);
 
@@ -50,7 +51,6 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
 
       lelevator.idleMode(IdleMode.kBrake);
       relevator.idleMode(IdleMode.kBrake);
-      mode = IdleMode.kBrake;
     }
   }
 
@@ -70,23 +70,23 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
 
   @Override
   public void periodic() {
-    //double clampedPosition = clampRequestedPosition(currentInput.getRequestedPosition());
+    double clampedPosition = clampRequestedPosition(currentInput.getRequestedPosition());
     if (ENABLED) {
       
-      /*if (currentInput.getActivate()) {
+      if (currentInput.getActivate()) {
         if ((leftElevator.getEncoder().getPosition() * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR)
             - clampedPosition <= 0) {
-       //   leftElevator.getClosedLoopController().setReference(
-       //       calculateMotorPositionFromDegrees(clampedPosition), ControlType.kSmartMotion, 1, 0);
+         leftElevator.getClosedLoopController().setReference(
+             calculateMotorPositionFromDegrees(clampedPosition), ControlType.kSmartMotion, 1, 0);
         } else {
-        //  leftElevator.getClosedLoopController().setReference(
-        //      calculateMotorPositionFromDegrees(clampedPosition), ControlType.kSmartMotion, 1);
+         leftElevator.getClosedLoopController().setReference(
+             calculateMotorPositionFromDegrees(clampedPosition), ControlType.kSmartMotion, 1);
         }
       } else {
-       // leftElevator.getClosedLoopController().setReference(
-         //   calculateMotorPositionFromDegrees(RobotConstants.ELEVATOR.LOWER_SOFT_LIMIT_DEG),
-         //   ControlType.kSmartMotion, 1);
-      }*/
+       leftElevator.getClosedLoopController().setReference(
+           calculateMotorPositionFromDegrees(RobotConstants.ELEVATOR.LOWER_SOFT_LIMIT_DEG),
+           ControlType.kSmartMotion, 1);
+      }
     }
   }
 
@@ -105,21 +105,21 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   public ElevatorOutput toOutputs() {
     ElevatorOutput elevatorOutput = new ElevatorOutput();
     elevatorOutput.setMoving(leftElevator.getEncoder().getVelocity() != 0);
-    elevatorOutput.setLeftBrakeModeEnabled(IdleMode.kBrake == mode);
-    elevatorOutput.setRightBrakeModeEnabled(IdleMode.kBrake == mode);
+    elevatorOutput.setLeftBrakeModeEnabled(initialize().SparkMaxConfig.lelevator.setIdleMode());
+    elevatorOutput.setRightBrakeModeEnabled(true);
     elevatorOutput.setCurrentPosition(
         leftElevator.getEncoder().getPosition() * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR);
     elevatorOutput.setAtRequestedPosition(EntechUtils.isWithinTolerance(2,
         elevatorOutput.getCurrentPosition(), currentInput.getRequestedPosition()));
-   // elevatorOutput.setAtLowerLimit(
-       // leftElevator.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed());
+   elevatorOutput.setAtLowerLimit(
+       leftElevator.getReverseLimitSwitch().enableLimitSwitch(true).isPressed());
     elevatorOutput.setRequestedPosition(currentInput.getRequestedPosition());
     return elevatorOutput;
   }
 
   @Override
   public Command getTestCommand() {
-    // return new TestPivotCommand(this);
+    return new TestPivotCommand(this);
     return null;
   }
 
