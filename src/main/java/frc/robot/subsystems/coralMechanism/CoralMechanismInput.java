@@ -3,23 +3,21 @@ package frc.robot.subsystems.coralMechanism;
 import org.littletonrobotics.junction.LogTable;
 
 import frc.entech.subsystems.SubsystemInput;
-import frc.robot.RobotConstants;
 
 public class CoralMechanismInput implements SubsystemInput {
-
-private boolean activate = true;
-  private double requestedPosition = RobotConstants.ELEVATOR.INITIAL_POSITION;
+  private boolean activate = true;
+  private double requestedSpeed = 0.0;
 
   @Override
   public void toLog(LogTable table) {
     table.put("Activate", activate);
-    table.put("Requested position", requestedPosition);
+    table.put("Requested Speed", requestedSpeed);
   }
 
   @Override
   public void fromLog(LogTable table) {
     activate = table.get("Activate", activate);
-    requestedPosition = table.get("Requested position", 0.0);
+    requestedSpeed = table.get("Requested Speed", 0.0);
   }
 
   public boolean getActivate() {
@@ -30,11 +28,11 @@ private boolean activate = true;
     this.activate = activate;
   }
 
-  public double getRequestedPosition() {
-    return this.requestedPosition;
+  public double getRequestedSpeed() {
+    return this.requestedSpeed;
   }
 
-  public void setRequestedPosition(double requestedPosition) {
-    this.requestedPosition = requestedPosition;
+  public void setRequestedSpeed(double requestedSpeed) {
+    this.requestedSpeed = requestedSpeed;
   }
-}   
+}
