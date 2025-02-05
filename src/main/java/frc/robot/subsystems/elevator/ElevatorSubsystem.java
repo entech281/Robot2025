@@ -5,6 +5,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkLimitSwitch;
 
 
@@ -71,14 +72,14 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
     if (ENABLED) {
       if (currentInput.getActivate()) {
         if ((leftElevator.getEncoder().getPosition() * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR) - clampedPosition <= 0) {
-          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromDegrees(clampedPosition), ControlType.kSmartMotion);
+          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromDegrees(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
         } 
         else {
-          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromDegrees(clampedPosition), ControlType.kSmartMotion);
+          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromDegrees(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
         }
       } 
       else {
-        leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromDegrees(RobotConstants.ELEVATOR.LOWER_SOFT_LIMIT_DEG), ControlType.kSmartMotion);
+        leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromDegrees(RobotConstants.ELEVATOR.LOWER_SOFT_LIMIT_DEG), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
       }
     }
   }
