@@ -4,8 +4,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.LimitSwitchConfig.Type;
-import com.revrobotics.spark.config.LimitSwitchConfig;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLimitSwitch;
 
@@ -25,7 +23,6 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   private ElevatorInput currentInput = new ElevatorInput();
 
   private SparkMax leftElevator;
-  private SparkMax rightElevator;
 
   public static double calculateMotorPositionFromDegrees(double degrees) {
     return degrees / RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
@@ -37,12 +34,10 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       
       SparkMaxConfig lelevator = new SparkMaxConfig();
       SparkMaxConfig relevator = new SparkMaxConfig();
+      SparkMax rightElevator;
 
       leftElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_A, MotorType.kBrushless);
       rightElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_B, MotorType.kBrushless);
-
-      SparkLimitSwitch forwardLimitSwitch = leftElevator.getForwardLimitSwitch();
-      SparkLimitSwitch reverseLimitSwitch = leftElevator.getReverseLimitSwitch();
 
       relevator.follow(leftElevator);
       leftElevator.getEncoder().setPosition(0.0);
@@ -75,20 +70,15 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
     double clampedPosition = clampRequestedPosition(currentInput.getRequestedPosition());
     if (ENABLED) {
       if (currentInput.getActivate()) {
-        if ((leftElevator.getEncoder().getPosition() * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR)
-          - clampedPosition <= 0) {
-            leftElevator.getClosedLoopController().setReference(
-              calculateMotorPositionFromDegrees(clampedPosition), ControlType.kSmartMotion);
+        if ((leftElevator.getEncoder().getPosition() * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR) - clampedPosition <= 0) {
+          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromDegrees(clampedPosition), ControlType.kSmartMotion);
         } 
         else {
-          leftElevator.getClosedLoopController().setReference(
-            calculateMotorPositionFromDegrees(clampedPosition), ControlType.kSmartMotion);
+          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromDegrees(clampedPosition), ControlType.kSmartMotion);
         }
       } 
       else {
-        leftElevator.getClosedLoopController().setReference(
-          calculateMotorPositionFromDegrees(RobotConstants.ELEVATOR.LOWER_SOFT_LIMIT_DEG), 
-            ControlType.kSmartMotion);
+        leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromDegrees(RobotConstants.ELEVATOR.LOWER_SOFT_LIMIT_DEG), ControlType.kSmartMotion);
       }
     }
   }
