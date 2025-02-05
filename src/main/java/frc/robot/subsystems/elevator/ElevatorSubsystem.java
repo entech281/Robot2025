@@ -3,11 +3,14 @@ package frc.robot.subsystems.elevator;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.SparkLimitSwitch;
 
+import java.io.ObjectInputFilter.Config;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,6 +27,7 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   private ElevatorInput currentInput = new ElevatorInput();
 
   private SparkMax leftElevator;
+  private SparkMax rightElevator;
 
   public static double calculateMotorPositionFromDegrees(double degrees) {
     return degrees / RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
@@ -35,7 +39,6 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       
       SparkMaxConfig lelevator = new SparkMaxConfig();
       SparkMaxConfig relevator = new SparkMaxConfig();
-      SparkMax rightElevator;
 
       leftElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_A, MotorType.kBrushless);
       rightElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_B, MotorType.kBrushless);
@@ -48,6 +51,9 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
 
       lelevator.idleMode(IdleMode.kBrake);
       relevator.idleMode(IdleMode.kBrake);
+
+      leftElevator.configure(lelevator, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      rightElevator.configure(relevator, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
   }
   private double clampRequestedPosition(double position) {
