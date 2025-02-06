@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.RobotConstants;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveOutput;
+import frc.robot.subsystems.elevator.ElevatorOutput;
 import frc.robot.subsystems.navx.NavXOutput;
 import frc.robot.subsystems.vision.VisionOutput;
 
@@ -48,6 +49,10 @@ public class RobotIO implements DriveInputSupplier {
     return latestVisionOutput;
   }
 
+  public ElevatorOutput getElevatorOutput() {
+    return latestElevatorOutput;
+  }
+
   public Pose2d getOdometryPose() {
     return latestOdometryPose;
   }
@@ -72,8 +77,14 @@ public class RobotIO implements DriveInputSupplier {
     vo.log();
   }
 
+  public void updateElevator(ElevatorOutput elo) {
+    latestElevatorOutput = elo;
+    elo.log();
+  }
+
   private VisionOutput latestVisionOutput;
   private NavXOutput latestNavXOutput;
   private DriveOutput latestDriveOutput;
+  private ElevatorOutput latestElevatorOutput;
   private Pose2d latestOdometryPose = RobotConstants.ODOMETRY.INITIAL_POSE;
 }
