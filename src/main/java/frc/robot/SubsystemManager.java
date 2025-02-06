@@ -11,6 +11,7 @@ import frc.entech.subsystems.SubsystemInput;
 import frc.entech.subsystems.SubsystemOutput;
 import frc.robot.io.RobotIO;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 
@@ -21,11 +22,13 @@ public class SubsystemManager {
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final NavXSubsystem navXSubsystem = new NavXSubsystem();
   private final VisionSubsystem visionSubsystem = new VisionSubsystem();
+  private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
   public SubsystemManager() {
     navXSubsystem.initialize();
     driveSubsystem.initialize();
     visionSubsystem.initialize();
+    elevatorSubsystem.initialize();
 
     periodic();
   }
@@ -42,11 +45,16 @@ public class SubsystemManager {
     return visionSubsystem;
   }
 
+  public ElevatorSubsystem getElevatorSubsystem() {
+    return elevatorSubsystem;
+  }
+
   public List<EntechSubsystem<? extends SubsystemInput, ? extends SubsystemOutput>> getSubsystemList() {
     ArrayList<EntechSubsystem<? extends SubsystemInput, ? extends SubsystemOutput>> r = new ArrayList<>();
     r.add(navXSubsystem);
     r.add(driveSubsystem);
     r.add(visionSubsystem);
+    r.add(elevatorSubsystem);
 
     return r;
   }
@@ -61,5 +69,7 @@ public class SubsystemManager {
     outputs.updateNavx(navXSubsystem.getOutputs());
 
     outputs.updateVision(visionSubsystem.getOutputs());
+
+    outputs.updateElevator(elevatorSubsystem.getOutputs());
   }
 }
