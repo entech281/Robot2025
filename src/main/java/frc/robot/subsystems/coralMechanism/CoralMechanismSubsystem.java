@@ -3,6 +3,7 @@ package frc.robot.subsystems.coralMechanism;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.RobotConstants;
@@ -15,6 +16,8 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
   private CoralMechanismInput currentInput = new CoralMechanismInput();
   private SparkMax coralMotor;
 
+  private IdleMode mode;
+
   public static double calculateMotorSpeedFromInput(double inputSpeed) {
     return inputSpeed * RobotConstants.CORAL.CORAL_CONVERSION_FACTOR;
   }
@@ -26,7 +29,9 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
       coralMotor = new SparkMax(RobotConstants.PORTS.CAN.CORAL_MOTOR, SparkMax.MotorType.kBrushless);
       coralMotor.getEncoder().setPosition(0.0);
       coralConfig.inverted(IS_INVERTED);
+
       coralConfig.idleMode(IdleMode.kBrake);
+      mode = IdleMode.kBrake;
     }
   }
 
@@ -46,6 +51,8 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
     CoralMechanismOutput output = new CoralMechanismOutput();
     output.setRunning(currentInput.getActivate());
     output.setCurrentSpeed(coralMotor.getEncoder().getVelocity());
+    output.setBrakeModeEnabled(IdleMode.kBrake == mode);
+
     return output;
   }
 

@@ -9,6 +9,7 @@ public class CoralMechanismOutput extends SubsystemOutput {
   private double currentSpeed = 0.0;
   private double encoderPosition = 0.0;
   private boolean isAtTargetPosition = false;
+  private boolean brakeModeEnabled = false;
 
   @Override
   public void toLog() {
@@ -16,6 +17,7 @@ public class CoralMechanismOutput extends SubsystemOutput {
     Logger.recordOutput("CoralMechanismOutput/currentSpeed", currentSpeed);
     Logger.recordOutput("CoralMechanismOutput/encoderPosition", encoderPosition);
     Logger.recordOutput("CoralMechanismOutput/isAtTargetPosition", isAtTargetPosition);
+    Logger.recordOutput("CoralMechanismOutput/brakeModeEnabled", brakeModeEnabled);
   }
 
   public boolean isRunning() {
@@ -49,4 +51,12 @@ public class CoralMechanismOutput extends SubsystemOutput {
   public void setAtTargetPosition(boolean isAtTargetPosition) {
     this.isAtTargetPosition = isAtTargetPosition;
   }
+  
+  public boolean isBrakeModeEnabled() {
+    return this.brakeModeEnabled;
+  }
+
+    public void setBrakeModeEnabled(boolean brakeModeEnabled) {
+        this.brakeModeEnabled = brakeModeEnabled;
+    }
 }
