@@ -1,5 +1,6 @@
 package frc.robot.subsystems.pivot;
 
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -25,7 +26,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
     public void initialize() {
         if (ENABLED) {
             SparkMaxConfig pivotConfig = new SparkMaxConfig();
-            pivotMotor = new SparkMax(RobotConstants.PORTS.CAN.PIVOT_MOTOR, SparkMax.MotorType.kBrushless);
+            pivotMotor = new SparkMax(RobotConstants.PORTS.CAN.PIVOT_MOTOR, MotorType.kBrushless);
             pivotMotor.getEncoder().setPosition(0.0);
             pivotConfig.inverted(IS_INVERTED);
             pivotConfig.idleMode(IdleMode.kBrake);
