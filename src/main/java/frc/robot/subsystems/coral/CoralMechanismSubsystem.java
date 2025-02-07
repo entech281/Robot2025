@@ -1,4 +1,4 @@
-package frc.robot.subsystems.coralMechanism;
+package frc.robot.subsystems.coral;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
