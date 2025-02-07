@@ -36,9 +36,6 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
             pivotConfig.idleMode(IdleMode.kBrake);
             mode = IdleMode.kBrake;
             pidController = pivotMotor.getClosedLoopController();
-
-            pivotConfig.idleMode(IdleMode.kBrake);
-            mode = IdleMode.kBrake;
         }
     }
 
