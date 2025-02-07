@@ -1,5 +1,7 @@
 package frc.robot.subsystems.pivot;
 
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -16,6 +18,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
 
     private PivotInput currentInput = new PivotInput();
     private SparkMax pivotMotor;
+    private SparkClosedLoopController pidController;
     private IdleMode mode;
 
     public static double calculateMotorPositionFromDegrees(double degrees) {
@@ -27,9 +30,15 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
         if (ENABLED) {
             SparkMaxConfig pivotConfig = new SparkMaxConfig();
             pivotMotor = new SparkMax(RobotConstants.PORTS.CAN.PIVOT_MOTOR, MotorType.kBrushless);
+
             pivotMotor.getEncoder().setPosition(0.0);
             pivotConfig.inverted(IS_INVERTED);
             pivotConfig.idleMode(IdleMode.kBrake);
+            mode = IdleMode.kBrake;
+            pidController = pivotMotor.getClosedLoopController();
+
+            pivotConfig.idleMode(IdleMode.kBrake);
+            mode = IdleMode.kBrake;
         }
     }
 
@@ -58,5 +67,17 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
     @Override
     public Command getTestCommand() {
         return null;
+    }
+
+    @Override
+    public void periodic() {
+        if (ENABLED) {
+            if (currentInput.getActivate()) {
+                double targetPosition = calculateMotorPositionFromDegrees(currentInput.getRequestedPosition());
+                pidController.setReference(targetPosition, ControlType.kPosition);
+            } else {
+                pivotMotor.set(0);
+            }
+        }
     }
 }
