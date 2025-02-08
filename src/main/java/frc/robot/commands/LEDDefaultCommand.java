@@ -19,12 +19,19 @@ public class LEDDefaultCommand extends EntechCommand {
     return RobotIO.getInstance().getNavXOutput().isFaultDetected();
   }
 
+  private boolean hasTarget(){
+    return RobotIO.getInstance().getVisionOutput().getHasTarget();
+  }
+
   @Override
   public void execute() {
     if (hasError()) {
       input.setBlinking(true);
       input.setColor(Color.kRed);
       input.setSecondaryColor(Color.kBlack);
+     } else if (hasTarget()) {
+      input.setBlinking(false);
+      input.setColor(Color.kPurple); 
      } else {
       input.setBlinking(false);
       input.setColor(Color.kGreen);

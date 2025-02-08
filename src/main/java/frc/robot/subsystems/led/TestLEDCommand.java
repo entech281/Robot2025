@@ -5,15 +5,21 @@ import frc.entech.commands.EntechCommand;
 import frc.entech.util.StoppingCounter;
 import frc.robot.RobotConstants;
 
+enum robotState{
+  ERROR,
+  ALIGNED,
+  NORMAL
+}
+
 public class TestLEDCommand extends EntechCommand {
   private final LEDSubsystem ledSubsystem;
   private final StoppingCounter counter =
       new StoppingCounter(RobotConstants.TEST_CONSTANTS.STANDARD_TEST_LENGTH);
   private int stage = 0;
-
   public TestLEDCommand(LEDSubsystem ledSubsystem) {
     this.ledSubsystem = ledSubsystem;
   }
+
 
   @Override
   public void initialize() {
