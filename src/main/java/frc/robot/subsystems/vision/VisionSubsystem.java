@@ -1,5 +1,8 @@
 package frc.robot.subsystems.vision;
 
+import java.util.ArrayList;
+import java.util.Optional;
+
 import org.ejml.simple.UnsupportedOperation;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -34,23 +37,59 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     NetworkTableEntry tagXEntry = table.getEntry("tagX");
     NetworkTableEntry tagYEntry = table.getEntry("tagY");
     NetworkTableEntry timestampEntry = table.getEntry("timestamp");
-    NetworkTableEntry tagXPEntry = table.getEntry("tagXWidths");
+    NetworkTableEntry tagXWEntry = table.getEntry("tagXWidths");
+    NetworkTableEntry cameraUsedEntry = table.getEntry("cameraUsed");
+
+    ArrayList<VisionTarget> targetList = new ArrayList<>();
+    
+    long timestamp = timestampEntry.getInteger(0);
+    long[] ids = idTagEntry.getIntegerArray(new long[] {});
+    long[] heights = tagHeightEntry.getIntegerArray(new long[] {});
+    long[] widths = tagWidthEntry.getIntegerArray(new long[] {});
+    double[] xs = tagXEntry.getDoubleArray(new double[] {});
+    double[] ys = tagYEntry.getDoubleArray(new double[] {});
+    double[] tagXWs = tagXWEntry.getDoubleArray(new double[] {});
+    String[] cameraUsed = cameraUsedEntry.getStringArray(new String[] {});
+
+    for (int i = 0; i < ids.length; i++) {
+      targetList.add(
+        new VisionTarget(
+          (int) ids[i],
+          (int) heights[i],
+          (int) widths[i],
+          xs[i],
+          ys[i],
+          AprilTagDistanceCalculator.calculateCurrentDistanceInches(RobotConstants.APRIL_TAG_DATA.CALIBRATION, widths[i]),
+          tagXWs[i],
+          timestamp,
+          cameraUsed[i]
+        )
+      );
+    }
+
 
     // Set values in VisionOutput
     output.setHasTarget(hasTargetEntry.getBoolean(false));
-    output.setTagID((int) idTagEntry.getIntegerArray(0));
-    output.setTagHeight((int) tagHeightEntry.getIntegerArray(0));
-    output.setTagWidth((int) tagWidthEntry.getIntegerArray(0));
-    output.setTagX(tagXEntry.getDoubleArray(0));
-    output.setTagY(tagYEntry.getDoubleArray(0));
     output.setTimestamp(timestampEntry.getInteger(0));
-    output.setTagXP(tagXPEntry.getDoubleArray(0));
-    if (tagWidthEntry.getDouble(-1) >= 0) {
-      output.setDistance(AprilTagDistanceCalculator.calculateCurrentDistanceInches(RobotConstants.APRIL_TAG_DATA.CALIBRATION, tagWidthEntry.getDouble(-1)));
+    if (output.hasTarget()) {
+      output.setTargets(targetList);
+      double closest = 999;
+      VisionTarget bestTarget = null;
+      for (VisionTarget target : targetList) {
+        if (target.getDistance() < closest) {
+          closest = target.getDistance();
+          bestTarget = target;
+        }
+      }
+      if (bestTarget != null) {
+        output.setBestTarget(Optional.of(bestTarget));
+      } else {
+        output.setBestTarget(Optional.empty());
+      }
     } else {
-      output.setDistance(-1.0);
+      output.setTargets(new ArrayList<>());
+      output.setBestTarget(Optional.empty());
     }
-
 
     return output;
   }

@@ -17,7 +17,7 @@ import ntcore
 
 
 # Constants
-LOCAL_TEST_MODE = False  # Set to True to run NetworkTables locally
+LOCAL_TEST_MODE = True  # Set to True to run NetworkTables locally
 TEAM_NUMBER = 281
 RESOLUTION_WIDTH = 640
 RESOLUTION_HEIGHT = 480
@@ -286,8 +286,12 @@ def main():
         try:
             # Initialize detection values
             has_target = False
-            tag_id = tag_height = tag_width = []
-            tag_x = tag_y = tag_x_widths = []
+            tag_id = []
+            tag_height = []
+            tag_width = []
+            tag_x = []
+            tag_y = []
+            tag_x_widths = []
 
             # Process detections
             detections = detector.detect(frame)
@@ -313,15 +317,16 @@ def main():
                 table.putNumberArray("tagWidth", tag_width)
                 table.putNumberArray("tagX", tag_x)
                 table.putNumberArray("tagY", tag_y)
-                table.putNumberArray("timestamp", timestamp)
+                table.putNumber("timestamp", timestamp)
                 table.putNumberArray("tagXWidths", tag_x_widths)
                 table.putNumber("missed_frames_counter", missed_frames_counter)
                 table.putNumber("missed_frames_total_counter", missed_frames_total_counter)
+                table.putNumber("numberOfTargets", len(tag_id))
 
                 put_text(frame,(20,370),f"xws: { float(tag_x_widths[0]):.2f}")
                 put_text(frame,(20,400),f"w: {float(tag_width[0]):.2f}")
                 put_text(frame,(20,430),f"x: {float(tag_x[0]):.2f}")
-                put_text(frame,(20,460),f"lc: { float(loop_total_counter[0])}")
+                put_text(frame,(20,460),f"lc: { float(loop_total_counter)}")
 
             else:
                 missed_frames_counter += 1
@@ -333,7 +338,7 @@ def main():
                     table.putNumberArray("tagWidth", tag_width)
                     table.putNumberArray("tagX", tag_x)
                     table.putNumberArray("tagY", tag_y)
-                    table.putNumberArray("timestamp", timestamp)
+                    table.putNumber("timestamp", timestamp)
                     table.putNumberArray("tagXWidths", tag_x_widths)
                     table.putNumber("missed_frames_counter", missed_frames_counter)
                     table.putNumber("missed_frames_total_counter", missed_frames_total_counter)
