@@ -286,8 +286,8 @@ def main():
         try:
             # Initialize detection values
             has_target = False
-            tag_id = tag_height = tag_width = -1
-            tag_x = tag_y = -1.0
+            tag_id = tag_height = tag_width = []
+            tag_x = tag_y = tag_x_widths = []
 
             # Process detections
             detections = detector.detect(frame)
@@ -296,39 +296,45 @@ def main():
                 print(detections)
                 missed_frames_counter = 0
                 has_target = True
-                detection = detections[0]  # Process first detection
-                tag_id, tag_height, tag_width, tag_x, tag_y,tag_xp = process_apriltag_detection(
-                    frame, detection, RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
+                for detection in detections:
+                    id, height, width, x, y, x_widths = process_apriltag_detection(
+                        frame, detection, RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
+                    tag_id.append(id)
+                    tag_height.append(float(height))
+                    tag_width.append(float(width))
+                    tag_x.append(float(x))
+                    tag_y.append(float(y))
+                    tag_x_widths.append(float(x_widths))
 
                 # Update NetworkTables
                 table.putBoolean("hasTarget", has_target)
-                table.putNumber("idTag", tag_id)
-                table.putNumber("tagHeight", float(tag_height))
-                table.putNumber("tagWidth", float(tag_width))
-                table.putNumber("tagX", float(tag_x))
-                table.putNumber("tagY", float(tag_y))
-                table.putNumber("timestamp", float(timestamp))
-                table.putNumber("tagxp", tag_xp)
+                table.putNumberArray("tagID", tag_id)
+                table.putNumberArray("tagHeight", tag_height)
+                table.putNumberArray("tagWidth", tag_width)
+                table.putNumberArray("tagX", tag_x)
+                table.putNumberArray("tagY", tag_y)
+                table.putNumberArray("timestamp", timestamp)
+                table.putNumberArray("tagXWidths", tag_x_widths)
                 table.putNumber("missed_frames_counter", missed_frames_counter)
                 table.putNumber("missed_frames_total_counter", missed_frames_total_counter)
 
-                put_text(frame,(20,370),f"xp { float(tag_xp):.2f}")
-                put_text(frame,(20,400),f"w: {float(tag_width):.2f}")
-                put_text(frame,(20,430),f"x: {float(tag_x):.2f}")
-                put_text(frame,(20,460),f"lc: { float(loop_total_counter)}")
+                put_text(frame,(20,370),f"xws: { float(tag_x_widths[0]):.2f}")
+                put_text(frame,(20,400),f"w: {float(tag_width[0]):.2f}")
+                put_text(frame,(20,430),f"x: {float(tag_x[0]):.2f}")
+                put_text(frame,(20,460),f"lc: { float(loop_total_counter[0])}")
 
             else:
                 missed_frames_counter += 1
                 missed_frames_total_counter += 1
                 if missed_frames_counter > MISSED_FRAMES_TO_TOLERATE_BEFORE_GIVING_UP:
                     table.putBoolean("hasTarget", False)
-                    table.putNumber("idTag", NOT_AVAILABLE)
-                    table.putNumber("tagHeight", NOT_AVAILABLE)
-                    table.putNumber("tagWidth", NOT_AVAILABLE)
-                    table.putNumber("tagX", NOT_AVAILABLE)
-                    table.putNumber("tagY", NOT_AVAILABLE)
-                    table.putNumber("timestamp", float(timestamp))
-                    table.putNumber("tagxp", NOT_AVAILABLE)
+                    table.putNumberArray("tagID", tag_id)
+                    table.putNumberArray("tagHeight", tag_height)
+                    table.putNumberArray("tagWidth", tag_width)
+                    table.putNumberArray("tagX", tag_x)
+                    table.putNumberArray("tagY", tag_y)
+                    table.putNumberArray("timestamp", timestamp)
+                    table.putNumberArray("tagXWidths", tag_x_widths)
                     table.putNumber("missed_frames_counter", missed_frames_counter)
                     table.putNumber("missed_frames_total_counter", missed_frames_total_counter)
 

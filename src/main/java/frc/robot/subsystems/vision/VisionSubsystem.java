@@ -34,17 +34,17 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     NetworkTableEntry tagXEntry = table.getEntry("tagX");
     NetworkTableEntry tagYEntry = table.getEntry("tagY");
     NetworkTableEntry timestampEntry = table.getEntry("timestamp");
-    NetworkTableEntry tagXPEntry = table.getEntry("tagxp");
+    NetworkTableEntry tagXPEntry = table.getEntry("tagXWidths");
 
     // Set values in VisionOutput
     output.setHasTarget(hasTargetEntry.getBoolean(false));
-    output.setTagID((int) idTagEntry.getDouble(0));
-    output.setTagHeight((int) tagHeightEntry.getInteger(0));
-    output.setTagWidth((int) tagWidthEntry.getInteger(0));
-    output.setTagX(tagXEntry.getDouble(0));
-    output.setTagY(tagYEntry.getDouble(0));
+    output.setTagID((int) idTagEntry.getIntegerArray(0));
+    output.setTagHeight((int) tagHeightEntry.getIntegerArray(0));
+    output.setTagWidth((int) tagWidthEntry.getIntegerArray(0));
+    output.setTagX(tagXEntry.getDoubleArray(0));
+    output.setTagY(tagYEntry.getDoubleArray(0));
     output.setTimestamp(timestampEntry.getInteger(0));
-    output.setTagXP(tagXPEntry.getDouble(0));
+    output.setTagXP(tagXPEntry.getDoubleArray(0));
     if (tagWidthEntry.getDouble(-1) >= 0) {
       output.setDistance(AprilTagDistanceCalculator.calculateCurrentDistanceInches(RobotConstants.APRIL_TAG_DATA.CALIBRATION, tagWidthEntry.getDouble(-1)));
     } else {
