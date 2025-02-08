@@ -31,10 +31,6 @@ public class VisionOutput extends SubsystemOutput {
     return this.hasTarget;
   }
 
-  public boolean getHasTarget() {
-    return this.hasTarget;
-  }
-
   public void setHasTarget(boolean hasTarget) {
     this.hasTarget = hasTarget;
   }

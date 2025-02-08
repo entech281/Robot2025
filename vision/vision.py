@@ -17,7 +17,7 @@ import video_util
 
 
 # Constants
-LOCAL_TEST_MODE = True  # Set to True to run NetworkTables locally
+LOCAL_TEST_MODE = False  # Set to True to run NetworkTables locally
 TEAM_NUMBER = 281
 RESOLUTION_WIDTH = 640
 RESOLUTION_HEIGHT = 480

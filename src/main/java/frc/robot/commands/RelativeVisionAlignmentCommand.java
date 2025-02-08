@@ -11,16 +11,20 @@ public class RelativeVisionAlignmentCommand extends EntechCommand {
     public void initialize() {
         UserPolicy.getInstance().setAligningToAngle(true);
         UserPolicy.getInstance().setLaterallyAligning(false);
-        UserPolicy.getInstance().setTargetAngle(findTargetAngle(RobotIO.getInstance().getVisionOutput().getTagID()));
+        if (RobotIO.getInstance().getVisionOutput().hasTarget()) {
+            UserPolicy.getInstance().setTargetAngle(findTargetAngle(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagID()));
+        }
         UserPolicy.getInstance().setVisionPositionSetPoint(0);
     }
 
     @Override
     public void execute() {
         UserPolicy.getInstance().setAligningToAngle(true);
-        UserPolicy.getInstance().setTargetAngle(findTargetAngle(RobotIO.getInstance().getVisionOutput().getTagID()));
+        if (RobotIO.getInstance().getVisionOutput().hasTarget()) {
+            UserPolicy.getInstance().setTargetAngle(findTargetAngle(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagID()));
+        }
 
-        UserPolicy.getInstance().setLaterallyAligning(Math.abs(RobotIO.getInstance().getOdometryPose().getRotation().getDegrees()) - (findTargetAngle(RobotIO.getInstance().getVisionOutput().getTagID() - 180)) < LATERAL_START_ANGLE);
+        UserPolicy.getInstance().setLaterallyAligning(Math.abs(RobotIO.getInstance().getOdometryPose().getRotation().getDegrees()) - (findTargetAngle(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagID()) - 180) < LATERAL_START_ANGLE);
     }
 
     private double findTargetAngle(int tagID) {
