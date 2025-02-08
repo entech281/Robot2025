@@ -51,20 +51,18 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     String[] cameraUsed = cameraUsedEntry.getStringArray(new String[] {});
     long numberOfTargets = numberOfTargetsEntry.getInteger(0);
 
-    for (int i = 0; i < ids.length; i++) {
-      targetList.add(
-        new VisionTarget(
-          (int) ids[i],
-          (int) heights[i],
-          (int) widths[i],
-          xs[i],
-          ys[i],
-          AprilTagDistanceCalculator.calculateCurrentDistanceInches(RobotConstants.APRIL_TAG_DATA.CALIBRATION, widths[i]),
-          tagXWs[i],
-          timestamp,
-          cameraUsed[i]
-        )
-      );
+    for (int i = 0; i < numberOfTargets; i++) {
+      VisionTarget target = new VisionTarget();
+      target.setTagID((int) ids[i]);
+      target.setTagHeight((int) heights[i]);
+      target.setTagWidth((int) widths[i]);
+      target.setTagX(xs[i]);
+      target.setTagY(ys[i]);
+      target.setDistance(AprilTagDistanceCalculator.calculateCurrentDistanceInches(RobotConstants.APRIL_TAG_DATA.CALIBRATION, widths[i]));
+      target.setTagXW(tagXWs[i]);
+      target.setTimestamp(timestamp);
+      target.setCameraName(cameraUsed[i]);
+      targetList.add(target);
     }
 
 

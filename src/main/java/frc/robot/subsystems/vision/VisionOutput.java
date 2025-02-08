@@ -1,6 +1,6 @@
 package frc.robot.subsystems.vision;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.littletonrobotics.junction.Logger;
@@ -10,7 +10,7 @@ import frc.entech.subsystems.SubsystemOutput;
 public class VisionOutput extends SubsystemOutput {
   private boolean hasTarget;
   private Optional<VisionTarget> bestTarget;
-  private ArrayList<VisionTarget> targets;
+  private List<VisionTarget> targets;
   private long timestamp;
   private int numberOfTags;
 
@@ -43,11 +43,11 @@ public class VisionOutput extends SubsystemOutput {
     this.bestTarget = bestTarget;
   }
 
-  public ArrayList<VisionTarget> getTargets() {
+  public List<VisionTarget> getTargets() {
     return this.targets;
   }
 
-  public void setTargets(ArrayList<VisionTarget> targets) {
+  public void setTargets(List<VisionTarget> targets) {
     this.targets = targets;
   }
 

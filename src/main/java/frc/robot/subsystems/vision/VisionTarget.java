@@ -3,64 +3,86 @@ package frc.robot.subsystems.vision;
 import org.littletonrobotics.junction.Logger;
 
 public class VisionTarget {
-    private final int tagID;
-    private final String cameraName;
-    private final int tagHeight;
-    private final int tagWidth;
-    private final double tagX;
-    private final double tagY;
-    private final double distance;
-    private final double tagXW;
-    private final long timestamp;
-
-    public VisionTarget(int tagID, int tagHeight, int tagWidth, double tagX, double tagY, double distance, double tagXW, long timestamp, String cameraName) {
-        this.tagID = tagID;
-        this.tagHeight = tagHeight;
-        this.tagWidth = tagWidth;
-        this.tagX = tagX;
-        this.tagY = tagY;
-        this.distance = distance;
-        this.tagXW = tagXW;
-        this.timestamp = timestamp;
-        this.cameraName = cameraName;
-    }
-
+    private int tagID;
+    private String cameraName;
+    private int tagHeight;
+    private int tagWidth;
+    private double tagX;
+    private double tagY;
+    private double distance;
+    private double tagXW;
+    private long timestamp;
 
     public int getTagID() {
         return this.tagID;
+    }
+
+    public void setTagID(int tagID) {
+        this.tagID = tagID;
+    }
+
+    public String getCameraName() {
+        return this.cameraName;
+    }
+
+    public void setCameraName(String cameraName) {
+        this.cameraName = cameraName;
     }
 
     public int getTagHeight() {
         return this.tagHeight;
     }
 
+    public void setTagHeight(int tagHeight) {
+        this.tagHeight = tagHeight;
+    }
+
     public int getTagWidth() {
         return this.tagWidth;
+    }
+
+    public void setTagWidth(int tagWidth) {
+        this.tagWidth = tagWidth;
     }
 
     public double getTagX() {
         return this.tagX;
     }
 
+    public void setTagX(double tagX) {
+        this.tagX = tagX;
+    }
+
     public double getTagY() {
         return this.tagY;
+    }
+
+    public void setTagY(double tagY) {
+        this.tagY = tagY;
     }
 
     public double getDistance() {
         return this.distance;
     }
 
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
     public double getTagXW() {
         return this.tagXW;
+    }
+
+    public void setTagXW(double tagXW) {
+        this.tagXW = tagXW;
     }
 
     public long getTimestamp() {
         return this.timestamp;
     }
 
-
-    public String getCameraName() {
-        return this.cameraName;
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public void log(String table) {

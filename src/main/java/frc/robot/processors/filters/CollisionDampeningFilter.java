@@ -18,19 +18,18 @@ public class CollisionDampeningFilter implements DriveFilterI {
             double inputAngle = Math.atan2(input.getYSpeed(), input.getXSpeed());
 
             double inputMag = Math.sqrt(Math.pow(input.getXSpeed(), 2) + Math.pow(input.getYSpeed(), 2));
-            if (Math.abs(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle()) - inputAngle) < 2) {
-                if (RobotIO.getInstance().getVisionOutput().getNumberOfTags() > 0) {
-                    double ratio = MathUtil.clamp(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getDistance() / START_DISTANCE, 0.0, 1.0);
+            if ((Math.abs(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle()) - inputAngle) < 2) &&
+                    (RobotIO.getInstance().getVisionOutput().getNumberOfTags() > 0)) {
+                double ratio = MathUtil.clamp(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getDistance() / START_DISTANCE, 0.0, 1.0);
 
-                    double outputMag = ratio * inputMag;
+                double outputMag = ratio * inputMag;
 
-                    if (outputMag < MIN_SPEED) {
-                        outputMag = MIN_SPEED;
-                    }
-
-                    processedInput.setXSpeed(Math.cos(inputAngle) * outputMag);
-                    processedInput.setYSpeed(Math.sin(inputAngle) * outputMag);
+                if (outputMag < MIN_SPEED) {
+                    outputMag = MIN_SPEED;
                 }
+
+                processedInput.setXSpeed(Math.cos(inputAngle) * outputMag);
+                processedInput.setYSpeed(Math.sin(inputAngle) * outputMag);
             }    
         }
         return processedInput;
