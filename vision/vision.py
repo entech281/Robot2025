@@ -32,14 +32,17 @@ DETECTOR_QUAD_DECIMATE = 1
 class CameraProperties(object):
     EXPOSURE_RAW_ABSOLUTE = 'raw_exposure_time_absolute'
     AUTO_EXPOSURE = 'auto_exposure'
+    ABSOLUTE_EXPOSURE = 'exposure_time_absolute'
     BRIGHTNESS= "brightness"
     AUTO_WHITE_BALANCE="white_balance_automatic"
 
 class CameraValues(object):
     EXPOSURE_SUPER_LOW = 2
+    HIGHISH_EXPOSURE = 30
     AUTO_EXPOSURE_MANUAL=1
     NOT_PRETTY_DARN_BRIGHT=30
     NO_AUTO_WHITE_BALANCE=0
+    PRETTY_BRIGHT=60
 
 
 def print_camera_properties(camera):
@@ -227,13 +230,26 @@ def main():
     current_camera = 'top'
     for location, name in camera_location.items():
         cameras[location] = cs.UsbCamera(name['DEVNAME'], name['DEVNAME'])
-        cameras[location].setVideoMode(cs.VideoMode.PixelFormat.kMJPEG,
-                        RESOLUTION_WIDTH, RESOLUTION_HEIGHT, TARGET_FPS)
 
-        cameras[location].getProperty(CameraProperties.EXPOSURE_RAW_ABSOLUTE).set(CameraValues.EXPOSURE_SUPER_LOW)
-        cameras[location].getProperty(CameraProperties.AUTO_EXPOSURE).set(CameraValues.AUTO_EXPOSURE_MANUAL)
-        cameras[location].getProperty(CameraProperties.BRIGHTNESS).set(CameraValues.NOT_PRETTY_DARN_BRIGHT)
-        cameras[location].getProperty(CameraProperties.AUTO_WHITE_BALANCE).set(CameraValues.NO_AUTO_WHITE_BALANCE)
+        if location == 'top':
+            print("Setting top properties")
+            cameras[location].setVideoMode(cs.VideoMode.PixelFormat.kMJPEG,
+                            RESOLUTION_WIDTH, RESOLUTION_HEIGHT, TARGET_FPS)
+            cameras[location].getProperty(CameraProperties.EXPOSURE_RAW_ABSOLUTE).set(CameraValues.EXPOSURE_SUPER_LOW)
+            cameras[location].getProperty(CameraProperties.AUTO_EXPOSURE).set(CameraValues.AUTO_EXPOSURE_MANUAL)
+            cameras[location].getProperty(CameraProperties.BRIGHTNESS).set(CameraValues.NOT_PRETTY_DARN_BRIGHT)
+            cameras[location].getProperty(CameraProperties.AUTO_WHITE_BALANCE).set(CameraValues.NO_AUTO_WHITE_BALANCE)
+        elif location == 'side':
+            print("Setting side properties")
+            cameras[location].setVideoMode(cs.VideoMode.PixelFormat.kMJPEG,
+                            RESOLUTION_WIDTH, RESOLUTION_HEIGHT, TARGET_FPS)
+            cameras[location].getProperty(CameraProperties.AUTO_EXPOSURE).set(CameraValues.AUTO_EXPOSURE_MANUAL)
+            cameras[location].getProperty(CameraProperties.BRIGHTNESS).set(CameraValues.NOT_PRETTY_DARN_BRIGHT)
+            cameras[location].getProperty(CameraProperties.AUTO_WHITE_BALANCE).set(CameraValues.NO_AUTO_WHITE_BALANCE)
+            cameras[location].getProperty(CameraProperties.EXPOSURE_RAW_ABSOLUTE).set(CameraValues.HIGHISH_EXPOSURE)
+        elif location == 'bottom':
+            print("Setting bottom properties")
+            pass
         print("Properties for " + location + " camera:")
         print_camera_properties(cameras[location])
 
@@ -271,7 +287,9 @@ def main():
     loop_total_counter = 0
 
     while True:
-        current_camera = table.getString("camera", "top")
+        camera_net = table.getString("camera", "top")
+        if camera_net != current_camera:
+            current_camera = camera_net
         if current_camera in cameras.keys():
             mjpegServer.setSource(cameras[current_camera])
             cvsink.setSource(cameras[current_camera])
@@ -311,7 +329,6 @@ def main():
             detections = detector.detect(frame)
             
             if len(detections) > 0 :
-                print(detections)
                 missed_frames_counter = 0
                 has_target = True
                 for detection in detections:
