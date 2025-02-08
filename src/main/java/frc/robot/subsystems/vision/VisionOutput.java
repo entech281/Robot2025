@@ -12,11 +12,13 @@ public class VisionOutput extends SubsystemOutput {
   private Optional<VisionTarget> bestTarget;
   private ArrayList<VisionTarget> targets;
   private long timestamp;
+  private int numberOfTags;
 
   @Override
   public void toLog() {
     Logger.recordOutput("VisionOutput/timestamp", timestamp);
     Logger.recordOutput("VisionOutput/hasTarget", hasTarget);
+    Logger.recordOutput("VisionOutput/numberOfTags", numberOfTags);
     if (bestTarget.isPresent()) {
       bestTarget.get().log("VisionOutput/bestTarget");
     }
@@ -59,5 +61,13 @@ public class VisionOutput extends SubsystemOutput {
 
   public void setTimestamp(long timestamp) {
     this.timestamp = timestamp;
+  }
+
+  public int getNumberOfTags() {
+    return this.numberOfTags;
+  }
+
+  public void setNumberOfTags(int numberOfTags) {
+    this.numberOfTags = numberOfTags;
   }
 }

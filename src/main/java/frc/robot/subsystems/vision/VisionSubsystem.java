@@ -3,8 +3,6 @@ package frc.robot.subsystems.vision;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import org.ejml.simple.UnsupportedOperation;
-
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -39,6 +37,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     NetworkTableEntry timestampEntry = table.getEntry("timestamp");
     NetworkTableEntry tagXWEntry = table.getEntry("tagXWidths");
     NetworkTableEntry cameraUsedEntry = table.getEntry("cameraUsed");
+    NetworkTableEntry numberOfTargetsEntry = table.getEntry("numberOfTargets");
 
     ArrayList<VisionTarget> targetList = new ArrayList<>();
     
@@ -50,6 +49,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     double[] ys = tagYEntry.getDoubleArray(new double[] {});
     double[] tagXWs = tagXWEntry.getDoubleArray(new double[] {});
     String[] cameraUsed = cameraUsedEntry.getStringArray(new String[] {});
+    long numberOfTargets = numberOfTargetsEntry.getInteger(0);
 
     for (int i = 0; i < ids.length; i++) {
       targetList.add(
@@ -70,7 +70,8 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
 
     // Set values in VisionOutput
     output.setHasTarget(hasTargetEntry.getBoolean(false));
-    output.setTimestamp(timestampEntry.getInteger(0));
+    output.setTimestamp(timestamp);
+    output.setNumberOfTags((int) numberOfTargets);
     if (output.hasTarget()) {
       output.setTargets(targetList);
       double closest = 999;
@@ -106,7 +107,10 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
 
   @Override
   public void updateInputs(VisionInput input) {
-    throw new UnsupportedOperation();
+    try (NetworkTableEntry entry = new NetworkTableEntry(NetworkTableInstance.getDefault(), 0)) {
+      entry.setString(input.getCamera());
+      table.putValue("camera", entry.getValue());
+    }
   }
 
    @Override

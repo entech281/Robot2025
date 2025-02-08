@@ -12,7 +12,7 @@ import time
 import traceback
 from robotpy_apriltag import AprilTagDetector
 import ntcore
-
+import video_util
 
 
 
@@ -222,16 +222,22 @@ def main():
     table = inst.getTable("vision")
 
     # Setup camera
-    camera = cs.UsbCamera("usbcam", 0)
-    camera.setVideoMode(cs.VideoMode.PixelFormat.kMJPEG,
-                       RESOLUTION_WIDTH, RESOLUTION_HEIGHT, TARGET_FPS)
+    camera_location = video_util.get_devices_by_location()
+    cameras =  {}
+    current_camera = 'top'
+    for location, name in camera_location.items():
+        cameras[location] = cs.UsbCamera(name['DEVNAME'], name['DEVNAME'])
+        cameras[location].setVideoMode(cs.VideoMode.PixelFormat.kMJPEG,
+                        RESOLUTION_WIDTH, RESOLUTION_HEIGHT, TARGET_FPS)
+
+        cameras[location].getProperty(CameraProperties.EXPOSURE_RAW_ABSOLUTE).set(CameraValues.EXPOSURE_SUPER_LOW)
+        cameras[location].getProperty(CameraProperties.AUTO_EXPOSURE).set(CameraValues.AUTO_EXPOSURE_MANUAL)
+        cameras[location].getProperty(CameraProperties.BRIGHTNESS).set(CameraValues.NOT_PRETTY_DARN_BRIGHT)
+        cameras[location].getProperty(CameraProperties.AUTO_WHITE_BALANCE).set(CameraValues.NO_AUTO_WHITE_BALANCE)
+        print("Properties for " + location + " camera:")
+        print_camera_properties(cameras[location])
 
 
-    camera.getProperty(CameraProperties.EXPOSURE_RAW_ABSOLUTE).set(CameraValues.EXPOSURE_SUPER_LOW)
-    camera.getProperty(CameraProperties.AUTO_EXPOSURE).set(CameraValues.AUTO_EXPOSURE_MANUAL)
-    camera.getProperty(CameraProperties.BRIGHTNESS).set(CameraValues.NOT_PRETTY_DARN_BRIGHT)
-    camera.getProperty(CameraProperties.AUTO_WHITE_BALANCE).set(CameraValues.NO_AUTO_WHITE_BALANCE)
-    print_camera_properties(camera)
     # Setup AprilTag detector
     detector = setup_apriltag_detector()
 
@@ -242,15 +248,15 @@ def main():
     # Setup video streaming
     mjpegServer = cs.CameraServer.addServer('annotated',SETTINGS_STREAM_PORT)
 
-    mjpegServer.setSource(camera)
+    mjpegServer.setSource(cameras['top'])
     print(f"mjpg server listening at http://0.0.0.0:{SETTINGS_STREAM_PORT}")
 
 
     cvsink = cs.CvSink("cvsink")
-    cvsink.setSource(camera)
+    cvsink.setSource(cameras['top'])
     cvSource = cs.CameraServer.putVideo("vision", RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
 
-
+    table.putString("camera", "top")
 
     cvMjpegServer = cs.CameraServer.addServer("annotated",ANNOTATED_STREAM_PORT)
     cvMjpegServer.setSource(cvSource)
@@ -265,6 +271,14 @@ def main():
     loop_total_counter = 0
 
     while True:
+        current_camera = table.getString("camera", "top")
+        if current_camera in cameras.keys():
+            mjpegServer.setSource(cameras[current_camera])
+            cvsink.setSource(cameras[current_camera])
+        else:
+            mjpegServer.setSource(cameras['top'])
+            cvsink.setSource(cameras['top'])
+            current_camera.replace(current_camera, 'top')
         frame_timer.tick()
 
         loop_total_counter += 1
@@ -322,6 +336,7 @@ def main():
                 table.putNumber("missed_frames_counter", missed_frames_counter)
                 table.putNumber("missed_frames_total_counter", missed_frames_total_counter)
                 table.putNumber("numberOfTargets", len(tag_id))
+                table.putStringArray("cameraUsed", [current_camera for i in range(len(tag_id))])
 
                 put_text(frame,(20,370),f"xws: { float(tag_x_widths[0]):.2f}")
                 put_text(frame,(20,400),f"w: {float(tag_width[0]):.2f}")
