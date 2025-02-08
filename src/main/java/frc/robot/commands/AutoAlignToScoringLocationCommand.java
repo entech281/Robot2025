@@ -37,16 +37,19 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
     @Override
     public void execute() {
         UserPolicy.getInstance().setAligningToAngle(true);
-        UserPolicy.getInstance().setTargetAngle(findTargetAngle(RobotIO.getInstance().getVisionOutput().getTagID()));
 
-        UserPolicy.getInstance().setLaterallyAligning(Math.abs(RobotIO.getInstance().getOdometryPose().getRotation().getDegrees()) - (findTargetAngle(RobotIO.getInstance().getVisionOutput().getTagID() - 180)) < LATERAL_START_ANGLE);
+        if (RobotIO.getInstance().getVisionOutput().hasTarget()) {
+            UserPolicy.getInstance().setTargetAngle(findTargetAngle(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagID()));
+
+        UserPolicy.getInstance().setLaterallyAligning(Math.abs(RobotIO.getInstance().getOdometryPose().getRotation().getDegrees()) - (findTargetAngle(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagID() - 180)) < LATERAL_START_ANGLE);
+        }
 
         double angle = Units.degreesToRadians(findTargetAngle(tagID));
 
         DriveInput input = inputProcessor.processInput(RobotIO.getInstance().getDriveInput());
         
-        if (RobotIO.getInstance().getVisionOutput().getDistance() > STOPPING_DISTANCE) {
-            double ratio = MathUtil.clamp(RobotIO.getInstance().getVisionOutput().getDistance() / START_DISTANCE, 0.0, 1.0);
+        if (RobotIO.getInstance().getVisionOutput().hasTarget() && RobotIO.getInstance().getVisionOutput().getTargets().get(0).getDistance() > STOPPING_DISTANCE) {
+            double ratio = MathUtil.clamp(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getDistance() / START_DISTANCE, 0.0, 1.0);
             input.setXSpeed((Math.cos(angle) * SPEED * ratio) + input.getXSpeed());
             input.setYSpeed((Math.sin(angle) * SPEED * ratio) + input.getYSpeed());
         }
@@ -56,7 +59,9 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
 
     @Override
     public boolean isFinished() {
-        return (RobotIO.getInstance().getVisionOutput().getDistance() <= STOPPING_DISTANCE) && (Math.abs(RobotIO.getInstance().getVisionOutput().getTagXP() - UserPolicy.getInstance().getVisionPositionSetPoint()) >= TOLERANCE);
+        return RobotIO.getInstance().getVisionOutput().hasTarget() &&
+        (RobotIO.getInstance().getVisionOutput().getTargets().get(0).getDistance() <= STOPPING_DISTANCE) &&
+        (Math.abs(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagXW() - UserPolicy.getInstance().getVisionPositionSetPoint()) >= TOLERANCE);
     }
 
     @Override

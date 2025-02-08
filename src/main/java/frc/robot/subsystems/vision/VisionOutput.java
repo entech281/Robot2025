@@ -1,34 +1,33 @@
 package frc.robot.subsystems.vision;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.littletonrobotics.junction.Logger;
 
 import frc.entech.subsystems.SubsystemOutput;
 
 public class VisionOutput extends SubsystemOutput {
   private boolean hasTarget;
-  private int tagID;
-  private int tagHeight;
-  private int tagWidth;
-  private double tagX;
-  private double tagY;
-  private double distance;
-  private double tagXP;
+  private Optional<VisionTarget> bestTarget;
+  private List<VisionTarget> targets;
   private long timestamp;
+  private int numberOfTags;
 
   @Override
   public void toLog() {
     Logger.recordOutput("VisionOutput/timestamp", timestamp);
     Logger.recordOutput("VisionOutput/hasTarget", hasTarget);
-    Logger.recordOutput("VisionOutput/tagID", tagID);
-    Logger.recordOutput("VisionOutput/tagHeight", tagHeight);
-    Logger.recordOutput("VisionOutput/tagWidth", tagWidth);
-    Logger.recordOutput("VisionOutput/tagX", tagX);
-    Logger.recordOutput("VisionOutput/tagXP", tagXP);
-    Logger.recordOutput("VisionOutput/tagY", tagY);
-    Logger.recordOutput("VisionOutput/distance", distance);
+    Logger.recordOutput("VisionOutput/numberOfTags", numberOfTags);
+    if (bestTarget.isPresent()) {
+      bestTarget.get().log("VisionOutput/bestTarget");
+    }
+    for (int i = 0; i < targets.size(); i++) {
+      targets.get(i).log("VisionOutput/targets/target" + i);
+    }
   }
 
-  public boolean getHasTarget() {
+  public boolean hasTarget() {
     return this.hasTarget;
   }
 
@@ -36,52 +35,20 @@ public class VisionOutput extends SubsystemOutput {
     this.hasTarget = hasTarget;
   }
 
-  public int getTagID() {
-    return this.tagID;
+  public Optional<VisionTarget> getBestTarget() {
+    return this.bestTarget;
   }
 
-  public void setTagID(int tagID) {
-    this.tagID = tagID;
+  public void setBestTarget(Optional<VisionTarget> bestTarget) {
+    this.bestTarget = bestTarget;
   }
 
-  public int getTagHeight() {
-    return this.tagHeight;
+  public List<VisionTarget> getTargets() {
+    return this.targets;
   }
 
-  public void setTagHeight(int tagHeight) {
-    this.tagHeight = tagHeight;
-  }
-
-  public int getTagWidth() {
-    return this.tagWidth;
-  }
-
-  public void setTagWidth(int tagWidth) {
-    this.tagWidth = tagWidth;
-  }
-
-  public double getTagX() {
-    return this.tagX;
-  }
-
-  public void setTagX(double tagX) {
-    this.tagX = tagX;
-  }
-
-  public double getTagXP() {
-    return this.tagXP;
-  }
-
-  public void setTagXP(double tagXP) {
-    this.tagXP = tagXP;
-  }
-
-  public double getTagY() {
-    return this.tagY;
-  }
-
-  public void setTagY(double tagY) {
-    this.tagY = tagY;
+  public void setTargets(List<VisionTarget> targets) {
+    this.targets = targets;
   }
 
   public long getTimestamp() {
@@ -92,11 +59,11 @@ public class VisionOutput extends SubsystemOutput {
     this.timestamp = timestamp;
   }
 
-  public double getDistance() {
-    return this.distance;
+  public int getNumberOfTags() {
+    return this.numberOfTags;
   }
 
-  public void setDistance(double distance) {
-    this.distance = distance;
+  public void setNumberOfTags(int numberOfTags) {
+    this.numberOfTags = numberOfTags;
   }
 }

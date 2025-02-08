@@ -2,6 +2,7 @@ package frc.robot.io;
 
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.RobotConstants;
@@ -12,7 +13,7 @@ import frc.robot.subsystems.navx.NavXOutput;
 import frc.robot.subsystems.vision.VisionOutput;
 
 public class RobotIO implements DriveInputSupplier {
-  private static RobotIO instance = new RobotIO();
+  private static final RobotIO instance = new RobotIO();
 
   public static RobotIO getInstance() {
     return instance;
