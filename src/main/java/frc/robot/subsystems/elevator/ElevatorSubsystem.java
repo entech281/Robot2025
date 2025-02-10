@@ -60,12 +60,12 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
           return RobotConstants.ELEVATOR.LOWER_SOFT_LIMIT_DEG;
     } 
     else if (position > RobotConstants.ELEVATOR.UPPER_SOFT_LIMIT_DEG) {
-    DriverStation.reportWarning("Pivot tried to go to " + currentInput.getRequestedPosition()
-        + " value was changed to " + RobotConstants.ELEVATOR.UPPER_SOFT_LIMIT_DEG, false);
-    return RobotConstants.ELEVATOR.UPPER_SOFT_LIMIT_DEG;
+      DriverStation.reportWarning("Pivot tried to go to " + currentInput.getRequestedPosition()
+          + " value was changed to " + RobotConstants.ELEVATOR.UPPER_SOFT_LIMIT_DEG, false);
+      return RobotConstants.ELEVATOR.UPPER_SOFT_LIMIT_DEG;
     } 
     else {
-    return position;
+      return position;
     }
   }
 
@@ -100,16 +100,18 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   @Override
   public ElevatorOutput toOutputs() {
     ElevatorOutput elevatorOutput = new ElevatorOutput();
-    elevatorOutput.setMoving(leftElevator.getEncoder().getVelocity() != 0);
-    elevatorOutput.setLeftBrakeModeEnabled(true);
-    elevatorOutput.setRightBrakeModeEnabled(true);
-    elevatorOutput.setCurrentPosition(
-        leftElevator.getEncoder().getPosition() * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR);
-    elevatorOutput.setAtRequestedPosition(EntechUtils.isWithinTolerance(2,
-        elevatorOutput.getCurrentPosition(), currentInput.getRequestedPosition()));
-    elevatorOutput.setAtLowerLimit(
-        leftElevator.getReverseLimitSwitch().isPressed());
-    elevatorOutput.setRequestedPosition(currentInput.getRequestedPosition());
+    if (ENABLED) {
+      elevatorOutput.setMoving(leftElevator.getEncoder().getVelocity() != 0);
+      elevatorOutput.setLeftBrakeModeEnabled(true);
+      elevatorOutput.setRightBrakeModeEnabled(true);
+      elevatorOutput.setCurrentPosition(
+          leftElevator.getEncoder().getPosition() * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR);
+      elevatorOutput.setAtRequestedPosition(EntechUtils.isWithinTolerance(2,
+          elevatorOutput.getCurrentPosition(), currentInput.getRequestedPosition()));
+      elevatorOutput.setAtLowerLimit(
+          leftElevator.getReverseLimitSwitch().isPressed());
+      elevatorOutput.setRequestedPosition(currentInput.getRequestedPosition());
+    }
     return elevatorOutput;
   }
 

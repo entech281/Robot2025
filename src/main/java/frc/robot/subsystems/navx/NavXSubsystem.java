@@ -4,6 +4,7 @@ import org.ejml.simple.UnsupportedOperation;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,7 +14,7 @@ import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.util.StoppingCounter;
 
 public class NavXSubsystem extends EntechSubsystem<NavXInput, NavXOutput> {
-  private static final boolean ENABLED = true;
+  private static final boolean ENABLED = false;
   private AHRS gyro;
   private final StoppingCounter faultCounter = new StoppingCounter(3.5);
   private boolean faultDetected = false;
@@ -22,29 +23,32 @@ public class NavXSubsystem extends EntechSubsystem<NavXInput, NavXOutput> {
   public NavXOutput toOutputs() {
     NavXOutput output = new NavXOutput();
 
-    output.setYaw(gyro.getAngle());
-    output.setPitch(gyro.getPitch());
-    output.setRoll(gyro.getRoll());
-    output.setYawRate(gyro.getRate());
-    output.setChassisSpeeds(getChassisSpeeds());
-    output.setZVelocity(gyro.getVelocityZ());
-    output.setTemperature(gyro.getTempC());
-    output.setAngleAdjustment(gyro.getAngleAdjustment());
-    output.setCompassHeading(gyro.getCompassHeading());
-    output.setIsCalibrating(gyro.isCalibrating());
-    output.setIsMagneticDisturbance(gyro.isMagneticDisturbance());
-    output.setIsMagnetometerCalibrated(gyro.isMagnetometerCalibrated());
-    output.setIsMoving(gyro.isMoving());
-    output.setIsRotating(gyro.isRotating());
-    output.setIsFaultDetected(faultDetected);
-
+    if (ENABLED) {
+      output.setYaw(gyro.getAngle());
+      output.setPitch(gyro.getPitch());
+      output.setRoll(gyro.getRoll());
+      output.setYawRate(gyro.getRate());
+      output.setChassisSpeeds(getChassisSpeeds());
+      output.setZVelocity(gyro.getVelocityZ());
+      output.setTemperature(gyro.getTempC());
+      output.setAngleAdjustment(gyro.getAngleAdjustment());
+      output.setCompassHeading(gyro.getCompassHeading());
+      output.setIsCalibrating(gyro.isCalibrating());
+      output.setIsMagneticDisturbance(gyro.isMagneticDisturbance());
+      output.setIsMagnetometerCalibrated(gyro.isMagnetometerCalibrated());
+      output.setIsMoving(gyro.isMoving());
+      output.setIsRotating(gyro.isRotating());
+      output.setIsFaultDetected(faultDetected);
+    }
     return output;
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putData(gyro);
-    faultDetected = faultCounter.isFinished(gyro.isCalibrating());
+    if (ENABLED) {
+      SmartDashboard.putData(gyro);
+      faultDetected = faultCounter.isFinished(gyro.isCalibrating());
+    }
   }
 
   @Override
@@ -63,9 +67,13 @@ public class NavXSubsystem extends EntechSubsystem<NavXInput, NavXOutput> {
   }
 
   private ChassisSpeeds getChassisSpeeds() {
-    double radiansPerSecond = Units.degreesToRadians(gyro.getRate());
-    return ChassisSpeeds.fromRobotRelativeSpeeds(gyro.getVelocityX(), gyro.getVelocityY(),
-        radiansPerSecond, gyro.getRotation2d());
+    if (ENABLED) {
+      double radiansPerSecond = Units.degreesToRadians(gyro.getRate());
+      return ChassisSpeeds.fromRobotRelativeSpeeds(gyro.getVelocityX(), gyro.getVelocityY(),
+          radiansPerSecond, gyro.getRotation2d());
+    } else {
+        return ChassisSpeeds.fromRobotRelativeSpeeds(0.0, 0.0, 0.0, new Rotation2d(0.0));
+    }
   }
 
   @Override
@@ -79,7 +87,9 @@ public class NavXSubsystem extends EntechSubsystem<NavXInput, NavXOutput> {
   }
 
   public void zeroYaw() {
-    gyro.zeroYaw();
+      if (ENABLED) {
+          gyro.zeroYaw();
+      }
   }
 
   @Override
@@ -88,6 +98,8 @@ public class NavXSubsystem extends EntechSubsystem<NavXInput, NavXOutput> {
   }
 
   public void setAngleAdjustment(double angleAdjustment) {
-    gyro.setAngleAdjustment(angleAdjustment);
+      if (ENABLED) {
+          gyro.setAngleAdjustment(angleAdjustment);
+      }
   }
 }

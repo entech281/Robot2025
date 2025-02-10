@@ -25,10 +25,12 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   private Timer blinkTimer = new Timer();
 
   public LEDSubsystem() {
-    leds = new AddressableLED(RobotConstants.LED.PORT);
-    buffer = new AddressableLEDBuffer(RobotConstants.LED.NUM_LEDS);
-    leds.setLength(buffer.getLength());
-    leds.start();
+    if (ENABLED) {
+      leds = new AddressableLED(RobotConstants.LED.PORT);
+      buffer = new AddressableLEDBuffer(RobotConstants.LED.NUM_LEDS);
+      leds.setLength(buffer.getLength());
+      leds.start();
+    }
   }
 
   @Override
@@ -62,10 +64,12 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   }
 
   private void setColor(Color c) {
-    for (var i = 0; i < buffer.getLength(); i++) {
-      buffer.setLED(i, c);
+    if (ENABLED) {
+      for (var i = 0; i < buffer.getLength(); i++) {
+        buffer.setLED(i, c);
+      }
+      leds.setData(buffer);
     }
-    leds.setData(buffer);
   }
 
   @Override
@@ -87,8 +91,10 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   @Override
   public LEDOutput toOutputs() {
     LEDOutput output = new LEDOutput();
-    output.setColor(currentInput.getColor());
-    output.setBlinking(currentInput.getBlinking());
+    if (ENABLED) {
+      output.setColor(currentInput.getColor());
+      output.setBlinking(currentInput.getBlinking());
+    }
     return output;
   }
 }
