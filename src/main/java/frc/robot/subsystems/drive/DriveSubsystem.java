@@ -87,7 +87,7 @@ public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
       setModuleStates(swerveModuleStates);
     }
   }
-  
+
   private double[] calculateSlewRateLimiting(double xSpeed, double ySpeed, double rotSpeed) {
     // Convert XY to polar for rate limiting
     double inputTranslationDir = Math.atan2(ySpeed, xSpeed);
@@ -138,25 +138,35 @@ public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
   @Override
   public DriveOutput toOutputs() {
     DriveOutput output = new DriveOutput();
-    output.setModulePositions(getModulePositions());
-    output.setRawAbsoluteEncoders(new double[] {frontLeft.getTurningAbsoluteEncoder().getPosition(),
-        frontRight.getTurningAbsoluteEncoder().getPosition(),
-        rearLeft.getTurningAbsoluteEncoder().getPosition(),
-        rearRight.getTurningAbsoluteEncoder().getPosition()});
-    output.setVirtualAbsoluteEncoders(
-        new double[] {frontLeft.getTurningAbsoluteEncoder().getVirtualPosition(),
-            frontRight.getTurningAbsoluteEncoder().getVirtualPosition(),
-            rearLeft.getTurningAbsoluteEncoder().getVirtualPosition(),
-            rearRight.getTurningAbsoluteEncoder().getVirtualPosition()});
-    output.setModuleStates(new SwerveModuleState[] {frontLeft.getState(), frontRight.getState(),
-        rearLeft.getState(), rearRight.getState()});
-    output.setSpeeds(lastChassisSpeeds);
+    if (ENABLED) {
+        output.setModulePositions(getModulePositions());
+        output.setRawAbsoluteEncoders(new double[] {frontLeft.getTurningAbsoluteEncoder().getPosition(),
+                frontRight.getTurningAbsoluteEncoder().getPosition(),
+                rearLeft.getTurningAbsoluteEncoder().getPosition(),
+                rearRight.getTurningAbsoluteEncoder().getPosition()});
+        output.setVirtualAbsoluteEncoders(
+            new double[] {frontLeft.getTurningAbsoluteEncoder().getVirtualPosition(),
+                frontRight.getTurningAbsoluteEncoder().getVirtualPosition(),
+                rearLeft.getTurningAbsoluteEncoder().getVirtualPosition(),
+                rearRight.getTurningAbsoluteEncoder().getVirtualPosition()});
+        output.setModuleStates(new SwerveModuleState[] {frontLeft.getState(), frontRight.getState(),
+                rearLeft.getState(), rearRight.getState()});
+        output.setSpeeds(lastChassisSpeeds);
+    }
     return output;
   }
 
   private SwerveModulePosition[] getModulePositions() {
-    return new SwerveModulePosition[] {frontLeft.getPosition(), frontRight.getPosition(),
+    if (ENABLED) {
+      return new SwerveModulePosition[] {frontLeft.getPosition(), frontRight.getPosition(),
         rearLeft.getPosition(), rearRight.getPosition()};
+    } else {
+      return new SwerveModulePosition[] {
+        new SwerveModulePosition(0.0,Rotation2d.fromDegrees(0.0)),
+        new SwerveModulePosition(0.0,Rotation2d.fromDegrees(0.0)),
+        new SwerveModulePosition(0.0,Rotation2d.fromDegrees(0.0)),
+        new SwerveModulePosition(0.0,Rotation2d.fromDegrees(0.0)) };
+    }
   }
 
   public void pathFollowDrive(ChassisSpeeds speeds) {

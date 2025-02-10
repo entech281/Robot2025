@@ -13,8 +13,6 @@ import frc.entech.util.AprilTagDistanceCalculator;
 import frc.robot.RobotConstants;
 
 public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> {
-  private static final boolean ENABLED = true;
-
   // NetworkTable instance
   private final NetworkTable table;
 
@@ -100,7 +98,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
 
   @Override
   public boolean isEnabled() {
-    return ENABLED;
+    return true;
   }
 
   @Override
