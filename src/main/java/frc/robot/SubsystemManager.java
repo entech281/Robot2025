@@ -62,9 +62,7 @@ public class SubsystemManager {
   public void periodic() {
     RobotIO outputs = RobotIO.getInstance();
 
-    if (driveSubsystem.isEnabled()) {
-      outputs.updateDrive(driveSubsystem.getOutputs());
-    }
+    outputs.updateDrive(driveSubsystem.getOutputs());
 
     outputs.updateNavx(navXSubsystem.getOutputs());
 
