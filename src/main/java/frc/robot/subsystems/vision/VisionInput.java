@@ -1,18 +1,34 @@
 package frc.robot.subsystems.vision;
 
-import org.ejml.simple.UnsupportedOperation;
 import org.littletonrobotics.junction.LogTable;
+
 import frc.entech.subsystems.SubsystemInput;
 
 
 public class VisionInput implements SubsystemInput {
+  private String camera;
+
+  public VisionInput() {
+  }
+
+  public VisionInput(String camera) {
+    this.camera = camera;
+  }
   @Override
   public void toLog(LogTable table) {
-    throw new UnsupportedOperation();
+    table.put("Camera", this.camera);
   }
 
   @Override
   public void fromLog(LogTable table) {
-    throw new UnsupportedOperation();
+    this.camera = table.get("Camera", "top");
+  }
+
+  public String getCamera() {
+    return camera;
+  }
+
+  public void setCamera(String camera) {
+    this.camera = camera;
   }
 }

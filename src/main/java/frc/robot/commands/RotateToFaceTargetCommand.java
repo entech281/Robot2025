@@ -15,8 +15,8 @@ public class RotateToFaceTargetCommand extends EntechCommand {
 
     @Override
     public void execute() {
-        if (RobotIO.getInstance().getVisionOutput().getTagXP() >= -99) {
-            double change = KP * RobotIO.getInstance().getVisionOutput().getTagXP();
+        if (RobotIO.getInstance().getVisionOutput().hasTarget() && RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagXW() >= -99) {
+            double change = KP * RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagXW();
             UserPolicy.getInstance().setTargetAngle(RobotIO.getInstance().getOdometryPose().getRotation().getDegrees() - change);
         }
     }
@@ -29,6 +29,6 @@ public class RotateToFaceTargetCommand extends EntechCommand {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(RobotIO.getInstance().getVisionOutput().getTagXP()) <= TOLERANCE;
+        return RobotIO.getInstance().getVisionOutput().hasTarget() && Math.abs(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagXW()) <= TOLERANCE;
     }
 }

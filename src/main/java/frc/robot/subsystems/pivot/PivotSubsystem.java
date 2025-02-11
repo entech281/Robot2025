@@ -53,11 +53,14 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
     @Override
     public PivotOutput toOutputs() {
         PivotOutput output = new PivotOutput();
-        output.setMoving(pivotMotor.getEncoder().getVelocity() != 0);
-        output.setBrakeModeEnabled(IdleMode.kBrake == mode);
-        output.setCurrentPosition(pivotMotor.getEncoder().getPosition() * RobotConstants.PIVOT.PIVOT_CONVERSION_FACTOR);
-        output.setAtRequestedPosition(Math.abs(output.getCurrentPosition() - currentInput.getRequestedPosition()) < RobotConstants.PIVOT.POSITION_TOLERANCE_DEG);
-        output.setRequestedPosition(currentInput.getRequestedPosition());
+        if (ENABLED) {
+            output.setMoving(pivotMotor.getEncoder().getVelocity() != 0);
+            output.setBrakeModeEnabled(IdleMode.kBrake == mode);
+            output.setCurrentPosition(pivotMotor.getEncoder().getPosition() * RobotConstants.PIVOT.PIVOT_CONVERSION_FACTOR);
+            output.setAtRequestedPosition(Math.abs(output.getCurrentPosition()
+                    - currentInput.getRequestedPosition()) < RobotConstants.PIVOT.POSITION_TOLERANCE_DEG);
+            output.setRequestedPosition(currentInput.getRequestedPosition());
+        }
         return output;
     }
 

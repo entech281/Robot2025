@@ -171,7 +171,7 @@ task deployVision {
     doLast {
         ssh.run {
             session(remotes.visionPi) {
-                put from: file('vision/vision.py'), into: '/home/pi'
+                put from: fileTree('vision/').matching { include '*' }, into: '/home/pi'
                 execute 'sudo systemctl restart vision'
             }
         }

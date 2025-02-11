@@ -12,7 +12,7 @@ import time
 import traceback
 from robotpy_apriltag import AprilTagDetector
 import ntcore
-
+import video_util
 
 
 
@@ -32,14 +32,17 @@ DETECTOR_QUAD_DECIMATE = 1
 class CameraProperties(object):
     EXPOSURE_RAW_ABSOLUTE = 'raw_exposure_time_absolute'
     AUTO_EXPOSURE = 'auto_exposure'
+    ABSOLUTE_EXPOSURE = 'exposure_time_absolute'
     BRIGHTNESS= "brightness"
     AUTO_WHITE_BALANCE="white_balance_automatic"
 
 class CameraValues(object):
     EXPOSURE_SUPER_LOW = 2
+    HIGHISH_EXPOSURE = 30
     AUTO_EXPOSURE_MANUAL=1
     NOT_PRETTY_DARN_BRIGHT=30
     NO_AUTO_WHITE_BALANCE=0
+    PRETTY_BRIGHT=60
 
 
 def print_camera_properties(camera):
@@ -222,16 +225,35 @@ def main():
     table = inst.getTable("vision")
 
     # Setup camera
-    camera = cs.UsbCamera("usbcam", 0)
-    camera.setVideoMode(cs.VideoMode.PixelFormat.kMJPEG,
-                       RESOLUTION_WIDTH, RESOLUTION_HEIGHT, TARGET_FPS)
+    camera_location = video_util.get_devices_by_location()
+    cameras =  {}
+    current_camera = 'top'
+    for location, name in camera_location.items():
+        cameras[location] = cs.UsbCamera(name['DEVNAME'], name['DEVNAME'])
+
+        if location == 'top':
+            print("Setting top properties")
+            cameras[location].setVideoMode(cs.VideoMode.PixelFormat.kMJPEG,
+                            RESOLUTION_WIDTH, RESOLUTION_HEIGHT, TARGET_FPS)
+            cameras[location].getProperty(CameraProperties.EXPOSURE_RAW_ABSOLUTE).set(CameraValues.EXPOSURE_SUPER_LOW)
+            cameras[location].getProperty(CameraProperties.AUTO_EXPOSURE).set(CameraValues.AUTO_EXPOSURE_MANUAL)
+            cameras[location].getProperty(CameraProperties.BRIGHTNESS).set(CameraValues.NOT_PRETTY_DARN_BRIGHT)
+            cameras[location].getProperty(CameraProperties.AUTO_WHITE_BALANCE).set(CameraValues.NO_AUTO_WHITE_BALANCE)
+        elif location == 'side':
+            print("Setting side properties")
+            cameras[location].setVideoMode(cs.VideoMode.PixelFormat.kMJPEG,
+                            RESOLUTION_WIDTH, RESOLUTION_HEIGHT, TARGET_FPS)
+            cameras[location].getProperty(CameraProperties.AUTO_EXPOSURE).set(CameraValues.AUTO_EXPOSURE_MANUAL)
+            cameras[location].getProperty(CameraProperties.BRIGHTNESS).set(CameraValues.NOT_PRETTY_DARN_BRIGHT)
+            cameras[location].getProperty(CameraProperties.AUTO_WHITE_BALANCE).set(CameraValues.NO_AUTO_WHITE_BALANCE)
+            cameras[location].getProperty(CameraProperties.EXPOSURE_RAW_ABSOLUTE).set(CameraValues.HIGHISH_EXPOSURE)
+        elif location == 'bottom':
+            print("Setting bottom properties")
+            pass
+        print("Properties for " + location + " camera:")
+        print_camera_properties(cameras[location])
 
 
-    camera.getProperty(CameraProperties.EXPOSURE_RAW_ABSOLUTE).set(CameraValues.EXPOSURE_SUPER_LOW)
-    camera.getProperty(CameraProperties.AUTO_EXPOSURE).set(CameraValues.AUTO_EXPOSURE_MANUAL)
-    camera.getProperty(CameraProperties.BRIGHTNESS).set(CameraValues.NOT_PRETTY_DARN_BRIGHT)
-    camera.getProperty(CameraProperties.AUTO_WHITE_BALANCE).set(CameraValues.NO_AUTO_WHITE_BALANCE)
-    print_camera_properties(camera)
     # Setup AprilTag detector
     detector = setup_apriltag_detector()
 
@@ -242,15 +264,15 @@ def main():
     # Setup video streaming
     mjpegServer = cs.CameraServer.addServer('annotated',SETTINGS_STREAM_PORT)
 
-    mjpegServer.setSource(camera)
+    mjpegServer.setSource(cameras['top'])
     print(f"mjpg server listening at http://0.0.0.0:{SETTINGS_STREAM_PORT}")
 
 
     cvsink = cs.CvSink("cvsink")
-    cvsink.setSource(camera)
+    cvsink.setSource(cameras['top'])
     cvSource = cs.CameraServer.putVideo("vision", RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
 
-
+    table.putString("camera", "top")
 
     cvMjpegServer = cs.CameraServer.addServer("annotated",ANNOTATED_STREAM_PORT)
     cvMjpegServer.setSource(cvSource)
@@ -265,6 +287,16 @@ def main():
     loop_total_counter = 0
 
     while True:
+        camera_net = table.getString("camera", "top")
+        if camera_net != current_camera:
+            current_camera = camera_net
+        if current_camera in cameras.keys():
+            mjpegServer.setSource(cameras[current_camera])
+            cvsink.setSource(cameras[current_camera])
+        else:
+            mjpegServer.setSource(cameras['top'])
+            cvsink.setSource(cameras['top'])
+            current_camera.replace(current_camera, 'top')
         frame_timer.tick()
 
         loop_total_counter += 1
@@ -286,35 +318,46 @@ def main():
         try:
             # Initialize detection values
             has_target = False
-            tag_id = tag_height = tag_width = -1
-            tag_x = tag_y = -1.0
+            tag_id = []
+            tag_height = []
+            tag_width = []
+            tag_x = []
+            tag_y = []
+            tag_x_widths = []
 
             # Process detections
             detections = detector.detect(frame)
             
             if len(detections) > 0 :
-                print(detections)
                 missed_frames_counter = 0
                 has_target = True
-                detection = detections[0]  # Process first detection
-                tag_id, tag_height, tag_width, tag_x, tag_y,tag_xp = process_apriltag_detection(
-                    frame, detection, RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
+                for detection in detections:
+                    id, height, width, x, y, x_widths = process_apriltag_detection(
+                        frame, detection, RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
+                    tag_id.append(id)
+                    tag_height.append(float(height))
+                    tag_width.append(float(width))
+                    tag_x.append(float(x))
+                    tag_y.append(float(y))
+                    tag_x_widths.append(float(x_widths))
 
                 # Update NetworkTables
                 table.putBoolean("hasTarget", has_target)
-                table.putNumber("idTag", tag_id)
-                table.putNumber("tagHeight", float(tag_height))
-                table.putNumber("tagWidth", float(tag_width))
-                table.putNumber("tagX", float(tag_x))
-                table.putNumber("tagY", float(tag_y))
-                table.putNumber("timestamp", float(timestamp))
-                table.putNumber("tagxp", tag_xp)
+                table.putNumberArray("tagID", tag_id)
+                table.putNumberArray("tagHeight", tag_height)
+                table.putNumberArray("tagWidth", tag_width)
+                table.putNumberArray("tagX", tag_x)
+                table.putNumberArray("tagY", tag_y)
+                table.putNumber("timestamp", timestamp)
+                table.putNumberArray("tagXWidths", tag_x_widths)
                 table.putNumber("missed_frames_counter", missed_frames_counter)
                 table.putNumber("missed_frames_total_counter", missed_frames_total_counter)
+                table.putNumber("numberOfTargets", len(tag_id))
+                table.putStringArray("cameraUsed", [current_camera for i in range(len(tag_id))])
 
-                put_text(frame,(20,370),f"xp { float(tag_xp):.2f}")
-                put_text(frame,(20,400),f"w: {float(tag_width):.2f}")
-                put_text(frame,(20,430),f"x: {float(tag_x):.2f}")
+                put_text(frame,(20,370),f"xws: { float(tag_x_widths[0]):.2f}")
+                put_text(frame,(20,400),f"w: {float(tag_width[0]):.2f}")
+                put_text(frame,(20,430),f"x: {float(tag_x[0]):.2f}")
                 put_text(frame,(20,460),f"lc: { float(loop_total_counter)}")
 
             else:
@@ -322,13 +365,13 @@ def main():
                 missed_frames_total_counter += 1
                 if missed_frames_counter > MISSED_FRAMES_TO_TOLERATE_BEFORE_GIVING_UP:
                     table.putBoolean("hasTarget", False)
-                    table.putNumber("idTag", NOT_AVAILABLE)
-                    table.putNumber("tagHeight", NOT_AVAILABLE)
-                    table.putNumber("tagWidth", NOT_AVAILABLE)
-                    table.putNumber("tagX", NOT_AVAILABLE)
-                    table.putNumber("tagY", NOT_AVAILABLE)
-                    table.putNumber("timestamp", float(timestamp))
-                    table.putNumber("tagxp", NOT_AVAILABLE)
+                    table.putNumberArray("tagID", tag_id)
+                    table.putNumberArray("tagHeight", tag_height)
+                    table.putNumberArray("tagWidth", tag_width)
+                    table.putNumberArray("tagX", tag_x)
+                    table.putNumberArray("tagY", tag_y)
+                    table.putNumber("timestamp", timestamp)
+                    table.putNumberArray("tagXWidths", tag_x_widths)
                     table.putNumber("missed_frames_counter", missed_frames_counter)
                     table.putNumber("missed_frames_total_counter", missed_frames_total_counter)
 

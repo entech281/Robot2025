@@ -49,9 +49,11 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
     @Override
     public CoralMechanismOutput toOutputs() {
         CoralMechanismOutput output = new CoralMechanismOutput();
-        output.setRunning(currentInput.getActivate());
-        output.setCurrentSpeed(coralMotor.getEncoder().getVelocity());
-        output.setBrakeModeEnabled(IdleMode.kBrake == mode);
+        if (ENABLED) {
+            output.setRunning(currentInput.getActivate());
+            output.setCurrentSpeed(coralMotor.getEncoder().getVelocity());
+            output.setBrakeModeEnabled(IdleMode.kBrake == mode);
+        }
         return output;
     }
 

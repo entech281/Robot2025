@@ -20,7 +20,7 @@ public class LEDDefaultCommand extends EntechCommand {
   }
 
   private boolean hasTarget(){
-    return RobotIO.getInstance().getVisionOutput().getHasTarget();
+    return RobotIO.getInstance().getVisionOutput().hasTarget();
   }
 
   @Override
