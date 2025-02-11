@@ -26,7 +26,7 @@ import frc.robot.RobotConstants.SwerveModuleConstants;
  * drivetrain.
  */
 public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
-  private static final boolean ENABLED = true;
+  private static final boolean ENABLED = false;
 
   public static final double FRONT_LEFT_VIRTUAL_OFFSET_RADIANS = -0.6656784291742559;
   public static final double FRONT_RIGHT_VIRTUAL_OFFSET_RADIANS = -0.47198700559;
@@ -138,8 +138,8 @@ public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
   @Override
   public DriveOutput toOutputs() {
     DriveOutput output = new DriveOutput();
+    output.setModulePositions(getModulePositions());
     if (ENABLED) {
-        output.setModulePositions(getModulePositions());
         output.setRawAbsoluteEncoders(new double[] {frontLeft.getTurningAbsoluteEncoder().getPosition(),
                 frontRight.getTurningAbsoluteEncoder().getPosition(),
                 rearLeft.getTurningAbsoluteEncoder().getPosition(),

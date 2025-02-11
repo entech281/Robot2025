@@ -18,7 +18,7 @@ import frc.robot.io.RobotIO;
 
 public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOutput> {
 
-  private static final boolean ENABLED = true;
+  private static final boolean ENABLED = false;
   private static final boolean IS_INVERTED = false;
   
   private ElevatorInput currentInput = new ElevatorInput();

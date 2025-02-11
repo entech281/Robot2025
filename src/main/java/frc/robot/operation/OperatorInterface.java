@@ -16,6 +16,7 @@ import frc.robot.RobotConstants;
 import frc.robot.SubsystemManager;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.GyroReset;
+import frc.robot.commands.PivotCommand;
 import frc.robot.commands.ResetOdometryCommand;
 import frc.robot.commands.RunTestCommand;
 import frc.robot.commands.TwistCommand;
@@ -28,6 +29,7 @@ import frc.robot.io.OperatorInputSupplier;
 import frc.robot.io.RobotIO;
 import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.drive.DriveInput;
+import frc.robot.subsystems.pivot.PivotSubsystem;
 
 public class OperatorInterface
     implements DriveInputSupplier, DebugInputSupplier, OperatorInputSupplier {
@@ -114,6 +116,9 @@ public class OperatorInterface
 
     xboxController.button(9)
         .onTrue(new RunTestCommand(testChooser));
+
+    xboxController.button(4)
+      .onTrue(new PivotCommand(subsystemManager.getPivotSubsystem()));
 
     xboxController.button(6)
         .whileTrue(commandFactory.getAlignmentCommand());

@@ -13,6 +13,7 @@ import frc.robot.io.RobotIO;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
+import frc.robot.subsystems.pivot.PivotSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 
 /**
@@ -23,12 +24,14 @@ public class SubsystemManager {
   private final NavXSubsystem navXSubsystem = new NavXSubsystem();
   private final VisionSubsystem visionSubsystem = new VisionSubsystem();
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+  private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
 
   public SubsystemManager() {
     navXSubsystem.initialize();
     driveSubsystem.initialize();
     visionSubsystem.initialize();
     elevatorSubsystem.initialize();
+    pivotSubsystem.initialize();
 
     periodic();
   }
@@ -49,12 +52,17 @@ public class SubsystemManager {
     return elevatorSubsystem;
   }
 
+  public PivotSubsystem getPivotSubsystem() {
+    return pivotSubsystem;
+  }
+
   public List<EntechSubsystem<? extends SubsystemInput, ? extends SubsystemOutput>> getSubsystemList() {
     ArrayList<EntechSubsystem<? extends SubsystemInput, ? extends SubsystemOutput>> r = new ArrayList<>();
     r.add(navXSubsystem);
     r.add(driveSubsystem);
     r.add(visionSubsystem);
     r.add(elevatorSubsystem);
+    r.add(pivotSubsystem);
 
     return r;
   }
@@ -62,14 +70,14 @@ public class SubsystemManager {
   public void periodic() {
     RobotIO outputs = RobotIO.getInstance();
 
-    if (driveSubsystem.isEnabled()) {
       outputs.updateDrive(driveSubsystem.getOutputs());
-    }
 
     outputs.updateNavx(navXSubsystem.getOutputs());
 
     outputs.updateVision(visionSubsystem.getOutputs());
 
     outputs.updateElevator(elevatorSubsystem.getOutputs());
+
+    outputs.updatePivot(pivotSubsystem.getOutputs());
   }
 }
