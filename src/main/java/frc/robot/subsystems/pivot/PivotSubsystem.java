@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
@@ -35,6 +36,10 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
             pivotConfig.inverted(IS_INVERTED);
             pivotConfig.idleMode(IdleMode.kBrake);
             mode = IdleMode.kBrake;
+            pivotConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+            pivotConfig.closedLoop.pidf(0.2, 0, 0, 0);
+            pivotConfig.closedLoop.outputRange(-0.2, 0.2);
+            pivotMotor.configure(pivotConfig, null, null);
             pidController = pivotMotor.getClosedLoopController();
         }
     }
