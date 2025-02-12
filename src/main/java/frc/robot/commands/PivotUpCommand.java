@@ -10,13 +10,13 @@ import frc.robot.subsystems.pivot.PivotOutput;
 import frc.robot.subsystems.pivot.PivotSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class PivotCommand extends EntechCommand {
+public class PivotUpCommand extends EntechCommand {
   /** Creates a new PivotCommand. */
   private PivotInput pivotInput = new PivotInput();
   private PivotOutput pivotOutput;
   private PivotSubsystem pivotSS;
 
-  public PivotCommand(PivotSubsystem pivotSubsystem) {
+  public PivotUpCommand(PivotSubsystem pivotSubsystem) {
     super(pivotSubsystem);
     pivotSS = pivotSubsystem;
   }
