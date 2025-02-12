@@ -31,7 +31,8 @@ public class PivotUpCommand extends EntechCommand {
   public void execute() {
     pivotSS.updateInputs(pivotInput);
   }
-
+  
+  //Code stops on it's own so nothing to put in the end method
   @Override
   public void end(boolean interrupted) {
   }

@@ -30,7 +30,6 @@ import frc.robot.io.OperatorInputSupplier;
 import frc.robot.io.RobotIO;
 import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.drive.DriveInput;
-import frc.robot.subsystems.pivot.PivotSubsystem;
 
 public class OperatorInterface
     implements DriveInputSupplier, DebugInputSupplier, OperatorInputSupplier {
