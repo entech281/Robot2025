@@ -32,9 +32,9 @@ public class PivotDownCommand extends EntechCommand {
     pivotSS.updateInputs(pivotInput);
   }
 
-  //Code stops on it's own so nothing to put in the end method
   @Override
   public void end(boolean interrupted) {
+    //Code stops on it's own so nothing to put in the end method
   }
 
   @Override
