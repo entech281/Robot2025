@@ -34,6 +34,7 @@ public class PivotUpCommand extends EntechCommand {
 
   @Override
   public void end(boolean interrupted) {
+    
   }
 
   @Override

@@ -24,7 +24,7 @@ public class PivotDownCommand extends EntechCommand {
   @Override
   public void initialize() {
     pivotOutput = pivotSS.toOutputs();
-    pivotInput.setRequestedPosition(pivotOutput.getCurrentPosition() - 5);
+    pivotInput.setRequestedPosition(pivotOutput.getCurrentPosition() + 5);
   }
 
   @Override
