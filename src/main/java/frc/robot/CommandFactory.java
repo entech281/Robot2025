@@ -67,6 +67,15 @@ public class CommandFactory {
           return false;
         }, driveSubsystem);
 
+    NamedCommands.registerCommand("L1", Commands.none());
+    NamedCommands.registerCommand("L2", Commands.none());
+    NamedCommands.registerCommand("L3", Commands.none());
+    NamedCommands.registerCommand("L4", Commands.none());
+    NamedCommands.registerCommand("DeAlgae", Commands.none());
+    NamedCommands.registerCommand("Home", Commands.none());
+    NamedCommands.registerCommand("AlignToFace", Commands.none());
+    NamedCommands.registerCommand("ScoreCoral", Commands.none());
+
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
