@@ -218,6 +218,11 @@ public final class RobotConstants {
         public static final int RESET_ODOMETRY = 8;
       }
     }
+
+    public static interface HAS_CORAL {
+      public static final int INTERNAL_SENSOR_FORWARD = 0;
+      public static final int INTERNAL_SENSOR_REAR = 1;
+    }
   }
 
   public interface OPERATOR_PANEL {
