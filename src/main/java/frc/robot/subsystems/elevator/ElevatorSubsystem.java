@@ -20,6 +20,11 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
 
   private static final boolean ENABLED = false;
   private static final boolean IS_INVERTED = false;
+
+  public static final double STAGE1 = 18 * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
+  public static final double STAGE2 = 31.875 * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
+  public static final double STAGE3 = 47.625 * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
+  public static final double STAGE4 = 72 * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
   
   private ElevatorInput currentInput = new ElevatorInput();
 
