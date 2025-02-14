@@ -23,11 +23,11 @@ public class LEDDefaultCommand extends EntechCommand {
   public void execute() {
     if (hasError()) {
       input.setBlinking(true);
-      input.setColor(Color.kRed);
-      input.setSecondaryColor(Color.kBlack);
+      input.setColors(new Color[] {Color.kRed, Color.kBlue});
+      input.setSecondaryColors(new Color[] {Color.kGreen, Color.kRed});
      } else {
       input.setBlinking(false);
-      input.setColor(Color.kGreen);
+      input.setColors(new Color[] {Color.kGreen, Color.kOrange});
     }
 
     ledSubsystem.updateInputs(input);

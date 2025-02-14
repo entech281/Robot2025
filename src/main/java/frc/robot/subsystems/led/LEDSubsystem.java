@@ -19,7 +19,7 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
 
   private AddressableLED leds;
   private AddressableLEDBuffer buffer;
-  private Color currentColor;
+  private Color[] currentColors;
 
   private LEDInput currentInput = new LEDInput();
   private Timer blinkTimer = new Timer();
@@ -35,7 +35,7 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
 
   @Override
   public void initialize() {
-    setColor(currentInput.getColor());
+    setColor(currentInput.getColors(), currentInput.getIntervals());
     blinkTimer.start();
   }
 
@@ -48,25 +48,28 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
           blinkTimer.restart();
         }
       } else {
-        setColor(currentInput.getColor());
+        setColor(currentInput.getColors(), currentInput.getIntervals());
       }
     }
   }
 
   private void toggleColor() {
-    if (currentColor == currentInput.getSecondaryColor()) {
-      setColor(currentInput.getColor());
-      currentColor = currentInput.getColor();
+    if (currentColors.equals(currentInput.getSecondaryColors())) {
+      setColor(currentInput.getColors(), currentInput.getIntervals());
+      currentColors = currentInput.getColors();
     } else {
-      setColor(currentInput.getSecondaryColor());
-      currentColor = currentInput.getSecondaryColor();
+      setColor(currentInput.getSecondaryColors(), currentInput.getIntervals());
+      currentColors = currentInput.getSecondaryColors();
     }
   }
 
-  private void setColor(Color c) {
+  private void setColor(Color[] c, int[][] intervals) {
     if (ENABLED) {
-      for (var i = 0; i < buffer.getLength(); i++) {
-        buffer.setLED(i, c);
+      for (int i = 0; i < c.length; i++) {
+        for (int j = intervals[i][0]; j < intervals[i][1]; j++) {
+          buffer.setLED(j, c[i]);
+
+        }
       }
       leds.setData(buffer);
     }
@@ -92,9 +95,14 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   public LEDOutput toOutputs() {
     LEDOutput output = new LEDOutput();
     if (ENABLED) {
-      output.setColor(currentInput.getColor());
+      output.setColors(currentInput.getColors());
       output.setBlinking(currentInput.getBlinking());
     }
     return output;
+  }
+
+
+  public void close() {
+    leds.close();
   }
 }

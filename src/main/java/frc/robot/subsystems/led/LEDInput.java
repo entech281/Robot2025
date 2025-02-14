@@ -6,22 +6,23 @@ import frc.entech.subsystems.SubsystemInput;
 
 public class LEDInput implements SubsystemInput {
 
-  private Color color = Color.kGreen;
-  private Color secondaryColor = Color.kBlack;
+  private Color[] colors = {Color.kGreen, Color.kOrange};
+  private Color[] secondaryColors = {Color.kRed, Color.kBlue};
   private boolean blinking = false;
+  private int[][] intervals = new int[2][2];
 
-  public Color getSecondaryColor() {
-    return secondaryColor;
+  public Color[] getSecondaryColors() {
+    return secondaryColors;
   }
 
-  public void setSecondaryColor(Color secondaryColor) {
-    this.secondaryColor = secondaryColor;
+  public void setSecondaryColors(Color[] secondaryColors) {
+    this.secondaryColors = secondaryColors;
   }
 
   @Override
   public void toLog(LogTable table) {
     table.put("Blinking", blinking);
-    table.put("CurrentColor", color + "");
+    table.put("CurrentColor", colors + "");
   }
 
   @Override
@@ -29,12 +30,12 @@ public class LEDInput implements SubsystemInput {
     blinking = table.get("Blinking", false);
   }
 
-  public Color getColor() {
-    return color;
+  public Color[] getColors() {
+    return colors;
   }
 
-  public void setColor(Color color) {
-    this.color = color;
+  public void setColors(Color[] colors) {
+    this.colors = colors;
   }
 
   public boolean getBlinking() {
@@ -44,5 +45,14 @@ public class LEDInput implements SubsystemInput {
   public void setBlinking(boolean blinking) {
     this.blinking = blinking;
   }
+
+  public void setIntervals(int[][] intervals) {
+    this.intervals = intervals;
+  }
+
+  public int[][] getIntervals() {
+    return intervals;
+  }
+
 
 }

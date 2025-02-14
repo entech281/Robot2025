@@ -27,20 +27,20 @@ public class TestLEDCommand extends EntechCommand {
     LEDInput input = new LEDInput();
     switch (stage) {
       case 0:
-        input.setColor(Color.kWhite);
+        input.setColors(new Color[]{Color.kWhite, Color.kBlack});
         break;
       case 1:
-        input.setColor(Color.kRed);
+        input.setColors(new Color[] {Color.kRed, Color.kBlue});
         break;
       case 2:
-        input.setColor(Color.kBlue);
+        input.setColors(new Color[] {Color.kOrange, Color.kYellow});
         break;
       case 3:
-        input.setColor(Color.kGreen);
+        input.setColors(new Color[] {Color.kGreen, Color.kCyan});
         input.setBlinking(true);
         break;
       default:
-        input.setColor(Color.kBlack);
+        input.setColors(new Color[] {Color.kAntiqueWhite, Color.kBeige});
         break;
     }
     ledSubsystem.updateInputs(input);
