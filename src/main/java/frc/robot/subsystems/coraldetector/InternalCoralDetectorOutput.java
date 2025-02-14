@@ -1,4 +1,4 @@
-package frc.robot.subsystems.internalcoraldetector;
+package frc.robot.subsystems.coraldetector;
 
 import org.littletonrobotics.junction.Logger;
 import frc.entech.subsystems.SubsystemOutput;

@@ -3,7 +3,7 @@ package frc.robot.commands;
 import org.littletonrobotics.junction.Logger;
 import frc.entech.commands.EntechCommand;
 import frc.robot.RobotConstants;
-import frc.robot.subsystems.internalcoraldetector.InternalCoralDetectorSubsystem;
+import frc.robot.subsystems.coraldetector.InternalCoralDetectorSubsystem;
 
 public class TestInternalCoralDetectorCommand extends EntechCommand {
   private final InternalCoralDetectorSubsystem detector;

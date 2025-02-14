@@ -1,4 +1,4 @@
-package frc.robot.subsystems.internalcoraldetector;
+package frc.robot.subsystems.coraldetector;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
