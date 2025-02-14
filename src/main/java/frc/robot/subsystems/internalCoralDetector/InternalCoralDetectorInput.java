@@ -1,4 +1,4 @@
-package frc.robot.subsystems.internalCoralDetector;
+package frc.robot.subsystems.internalcoraldetector;
 
 import org.ejml.simple.UnsupportedOperation;
 import org.littletonrobotics.junction.LogTable;
