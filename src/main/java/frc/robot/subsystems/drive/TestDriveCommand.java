@@ -52,6 +52,7 @@ public class TestDriveCommand extends EntechCommand {
         counter.isFinished(sum < 0.0001);
       }
       case 9 -> drive.setX();
+      default -> { break; }
     }
 
     if (counter.isFinished(true)) {

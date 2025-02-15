@@ -35,7 +35,7 @@ public class TestInternalCoralDetectorCommand extends EntechCommand {
               "Trigger the rear sensor.");
         }
       }
-      default -> {break;}
+      default -> { break; }
     }
   }
 
