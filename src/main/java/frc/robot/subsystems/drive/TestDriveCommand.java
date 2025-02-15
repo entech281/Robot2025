@@ -30,16 +30,12 @@ public class TestDriveCommand extends EntechCommand {
     input.setYSpeed(0.0);
 
     switch (stage) {
-      case 0 -> {
-        input.setXSpeed(DRIVE_POWER);
-      }
+      case 0 -> input.setXSpeed(DRIVE_POWER);
       case 1 -> {
         input.setYSpeed(DRIVE_POWER);
         input.setXSpeed(DRIVE_POWER);
       }
-      case 2 -> {
-        input.setYSpeed(DRIVE_POWER);
-      }
+      case 2 -> input.setYSpeed(DRIVE_POWER);
       case 3 -> {
         input.setXSpeed(-DRIVE_POWER);
         input.setYSpeed(DRIVE_POWER);
