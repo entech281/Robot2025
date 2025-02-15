@@ -1,9 +1,9 @@
-package frc.robot.commands;
+package frc.robot.subsystems.coraldetector;
 
 import org.littletonrobotics.junction.Logger;
+
 import frc.entech.commands.EntechCommand;
 import frc.robot.RobotConstants;
-import frc.robot.subsystems.internalcoraldetector.InternalCoralDetectorSubsystem;
 
 public class TestInternalCoralDetectorCommand extends EntechCommand {
   private final InternalCoralDetectorSubsystem detector;
@@ -19,24 +19,23 @@ public class TestInternalCoralDetectorCommand extends EntechCommand {
   @Override
   public void execute() {
     switch (stage) {
-      case 0:
+      case 0 -> {
         if (detector.getOutputs().forwardSensorHasCoral()) {
           stage++;
         } else {
           Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST,
               "Trigger the forward sensor.");
         }
-        break;
-      case 1:
+      }
+      case 1 -> {
         if (detector.getOutputs().rearSensorHasCoral()) {
           stage++;
         } else {
           Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST,
               "Trigger the rear sensor.");
         }
-        break;
-      default:
-        break;
+      }
+      default -> { break; }
     }
   }
 
@@ -47,7 +46,7 @@ public class TestInternalCoralDetectorCommand extends EntechCommand {
 
   @Override
   public boolean isFinished() {
-    return stage >= 2;
+    return stage > 1;
   }
 
   @Override
