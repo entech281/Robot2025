@@ -2,38 +2,40 @@ package frc.robot.livetuning;
 
 import java.util.Map;
 
+import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.RobotConstants;
 
 public class LiveTuningHandler {
-    private static final LiveTuningHandler INSTANCE = new LiveTuningHandler();
-    private final NetworkTable table;
+    private static LiveTuningHandler INSTANCE;
+    private NetworkTable table;
     
     public static LiveTuningHandler getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new LiveTuningHandler();
+        }
         return INSTANCE;
     }
 
     private LiveTuningHandler() {
-        table = NetworkTableInstance.getDefault().getTable("LiveTuning");
     }
 
     /**
      * Loads default values from constants into network tables then loads JSON values.
      */
     public void init() {
+        table = NetworkTableInstance.getDefault().getTable("LiveTuning");
         resetToDefaults();
         resetToJSON();
     }
 
     public void resetToDefaults() {
         Map<String, Double> values = RobotConstants.LiveTuning.VALUES;
+
         for (Map.Entry<String, Double> value : values.entrySet()) {
-            try (NetworkTableEntry entry = new NetworkTableEntry(NetworkTableInstance.getDefault(), 0)) {
-                entry.setDouble(value.getValue());
-                table.putValue(value.getKey(), entry.getValue());
-            }
+            DoublePublisher publisher = table.getDoubleTopic(value.getKey()).publish();
+            publisher.accept(value.getValue());
         }
     }
 
