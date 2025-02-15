@@ -10,7 +10,8 @@ import frc.robot.RobotConstants;
 public class LiveTuningHandler {
     private static final LiveTuningHandler INSTANCE = new LiveTuningHandler();
     private final NetworkTable table;
-    
+
+
     public static LiveTuningHandler getInstance() {
         return INSTANCE;
     }
@@ -36,6 +37,7 @@ public class LiveTuningHandler {
             }
         }
     }
+    
 
     public void resetToJSON() {
 
@@ -44,6 +46,8 @@ public class LiveTuningHandler {
     public void saveToJSON() {
 
     }
+
+    
 
     public double getValue(String key) {
         return table.getEntry(key).getDouble(0.0);
