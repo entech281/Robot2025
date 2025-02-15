@@ -30,44 +30,33 @@ public class TestDriveCommand extends EntechCommand {
     input.setYSpeed(0.0);
 
     switch (stage) {
-      case 0:
+      case 0 -> {
         input.setXSpeed(DRIVE_POWER);
-        break;
-      case 1:
+      }
+      case 1 -> {
         input.setYSpeed(DRIVE_POWER);
         input.setXSpeed(DRIVE_POWER);
-        break;
-      case 2:
+      }
+      case 2 -> {
         input.setYSpeed(DRIVE_POWER);
-        break;
-      case 3:
+      }
+      case 3 -> {
         input.setXSpeed(-DRIVE_POWER);
         input.setYSpeed(DRIVE_POWER);
-        break;
-      case 4:
-        input.setXSpeed(-DRIVE_POWER);
-        break;
-      case 5:
-        input.setRotation(DRIVE_POWER);
-        break;
-      case 6:
-        input.setRotation(-DRIVE_POWER);
-        break;
-      case 7:
-        input.setXSpeed(DRIVE_POWER);
-        break;
-      case 8:
+      }
+      case 4 -> input.setXSpeed(-DRIVE_POWER);
+      case 5 -> input.setRotation(DRIVE_POWER);
+      case 6 -> input.setRotation(-DRIVE_POWER);
+      case 7 -> input.setXSpeed(DRIVE_POWER);
+      case 8 -> {
         double sum = 0;
         for (SwerveModuleState state : drive.getOutputs().getModuleStates()) {
           sum += state.speedMetersPerSecond;
         }
         counter.isFinished(sum < 0.0001);
-        break;
-      case 9:
-        drive.setX();
-        break;
-      default:
-        break;
+      }
+      case 9 -> drive.setX();
+      default -> {}
     }
 
     if (counter.isFinished(true)) {

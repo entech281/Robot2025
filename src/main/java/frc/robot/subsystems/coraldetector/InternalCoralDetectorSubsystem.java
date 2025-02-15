@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.RobotConstants;
-import frc.robot.commands.TestInternalCoralDetectorCommand;
 import frc.robot.io.RobotIO;
 
 public class InternalCoralDetectorSubsystem
