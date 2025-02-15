@@ -130,12 +130,6 @@ public final class RobotConstants {
     public static final double SHOOT_AMP_POSITION_DEG = 85.5;
     public static final double POSITION_TOLERANCE_DEG = 2;
 
-    public static final double kA = 2.31586;
-    public static final double kB = -25.1345;
-    public static final double kC = 94.4448;
-    public static final double kD = -132.894;
-    public static final double kE = 76.0679;
-
     public static final double LOB_ANGLE = 10.0;
 
     public static final double SPEAKER_SUBWOOFER_SCORING = 8;
