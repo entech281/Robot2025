@@ -9,6 +9,7 @@ import frc.robot.RobotConstants;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveOutput;
 import frc.robot.subsystems.elevator.ElevatorOutput;
+import frc.robot.subsystems.led.LEDOutput;
 import frc.robot.subsystems.navx.NavXOutput;
 import frc.robot.subsystems.pivot.PivotOutput;
 import frc.robot.subsystems.vision.VisionOutput;
@@ -59,6 +60,10 @@ public class RobotIO implements DriveInputSupplier {
     return latestPivotOutput;
   }
 
+  public LEDOutput getLEDOutput() {
+    return latestLEDOutput;
+  }
+
   public Pose2d getOdometryPose() {
     return latestOdometryPose;
   }
@@ -93,10 +98,16 @@ public class RobotIO implements DriveInputSupplier {
     po.log();
   }
 
+  public void updateLED(LEDOutput ledo) {
+    latestLEDOutput = ledo;
+    ledo.log();
+  }
+
   private VisionOutput latestVisionOutput;
   private NavXOutput latestNavXOutput;
   private DriveOutput latestDriveOutput;
   private ElevatorOutput latestElevatorOutput;
   private PivotOutput latestPivotOutput;
+  private LEDOutput latestLEDOutput;
   private Pose2d latestOdometryPose = RobotConstants.ODOMETRY.INITIAL_POSE;
 }
