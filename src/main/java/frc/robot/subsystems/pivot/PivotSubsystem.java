@@ -4,9 +4,9 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
@@ -14,7 +14,7 @@ import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
 
 public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
-    private static final boolean ENABLED = true;
+    private static final boolean ENABLED = false;
     private static final boolean IS_INVERTED = false;
 
     private PivotInput currentInput = new PivotInput();

@@ -2,19 +2,37 @@ package frc.entech.util;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-
 import java.util.Map;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 public class PresetHandler {
+    public static final String USB_PATH = "/u/";
     public static final String USB_SETTINGS_FILE_PATH = "/u/presets.json";
 
     private static File getFile(){
         return new File(USB_SETTINGS_FILE_PATH);
     }
 
+    public static boolean USBStickConnected() {
+        return (new File(USB_PATH).exists());
+    }
+
+    public static boolean presetFileExists() {
+        return getFile().exists();
+    }
+
     public static void writePresets( Map<String,Double> presets){
-        File file = getFile();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        // Write JSON to a file
+        try (FileWriter writer = new FileWriter(getFile())) {
+            gson.toJson(presets, writer);
+        } catch (IOException e) {
+        }
     }
 
     public static Map<String, Double> readPresetsJson() {
@@ -30,10 +48,8 @@ public class PresetHandler {
 
         try (FileReader reader = new FileReader(file)) {
             // Define the type for Map<String, Double>
-            MapPresetReader.readPresets(reader);
+            return MapPresetReader.readPresets(reader);
         } catch (IOException e) {
-            // Handle any errors (e.g., file reading issues)
-            e.printStackTrace();
         }
 
         return Map.of();  // Return empty map in case of an error
