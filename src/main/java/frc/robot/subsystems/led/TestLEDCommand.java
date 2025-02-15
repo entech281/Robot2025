@@ -19,7 +19,6 @@ public class TestLEDCommand extends EntechCommand {
   public void initialize() {
     counter.reset();
     stage = 0;
-
   }
 
   @Override

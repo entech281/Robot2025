@@ -5,8 +5,8 @@
 package frc.robot.subsystems.drive;
 
 import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -35,6 +35,8 @@ public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
 
   public static final int GYRO_ORIENTATION = 1; // might be able to merge with kGyroReversed
 
+  private final SlewRateLimiter magLimiter = new SlewRateLimiter(DrivetrainConstants.MAGNITUDE_SLEW_RATE);
+  private final SlewRateLimiter rotLimiter = new SlewRateLimiter(DrivetrainConstants.ROTATIONAL_SLEW_RATE);
 
   private SwerveModule frontLeft;
   private SwerveModule frontRight;
@@ -44,9 +46,6 @@ public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
   private double currentTranslationDir = 0.0;
   private double currentTranslationMag = 0.0;
 
-  private SlewRateLimiter magLimiter = new SlewRateLimiter(DrivetrainConstants.MAGNITUDE_SLEW_RATE);
-  private SlewRateLimiter rotLimiter =
-      new SlewRateLimiter(DrivetrainConstants.ROTATIONAL_SLEW_RATE);
   private double prevTime = WPIUtilJNI.now() * 1e-6;
 
   private ChassisSpeeds lastChassisSpeeds =
