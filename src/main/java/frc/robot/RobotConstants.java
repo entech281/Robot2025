@@ -122,6 +122,16 @@ public final class RobotConstants {
     public static final int TURNING_MOTOR_CURRENT_LIMIT_AMPS = 20; // amps
   }
 
+  public static interface LiveTuning {
+    public static final Map<String, Double> VALUES = Map.ofEntries(
+      Map.entry("ElevatorSubsystem/L1Height", 0.0),
+      Map.entry("ElevatorSubsystem/L2Height", 0.0),
+      Map.entry("ElevatorSubsystem/L3Height", 0.0),
+      Map.entry("ElevatorSubsystem/L4Height", 0.0),
+      Map.entry("PivotSubsystem/NudgeAmount", 5.0)
+    );
+  }
+
   public static interface ELEVATOR {
     public static final double INITIAL_POSITION = 0.0;
     public static final double UPPER_SOFT_LIMIT_DEG = 85.5;
