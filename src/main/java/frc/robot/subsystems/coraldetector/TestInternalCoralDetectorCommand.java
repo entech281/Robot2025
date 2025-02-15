@@ -35,7 +35,6 @@ public class TestInternalCoralDetectorCommand extends EntechCommand {
               "Trigger the rear sensor.");
         }
       }
-      default -> {}
     }
   }
 
@@ -46,7 +45,7 @@ public class TestInternalCoralDetectorCommand extends EntechCommand {
 
   @Override
   public boolean isFinished() {
-    return stage >= 2;
+    return stage > 1;
   }
 
   @Override

@@ -56,7 +56,6 @@ public class TestDriveCommand extends EntechCommand {
         counter.isFinished(sum < 0.0001);
       }
       case 9 -> drive.setX();
-      default -> {}
     }
 
     if (counter.isFinished(true)) {
@@ -85,7 +84,7 @@ public class TestDriveCommand extends EntechCommand {
 
   @Override
   public boolean isFinished() {
-    return stage >= 10;
+    return stage > 9;
   }
 
   @Override
