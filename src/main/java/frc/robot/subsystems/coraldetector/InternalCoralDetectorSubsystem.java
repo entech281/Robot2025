@@ -42,7 +42,7 @@ public class InternalCoralDetectorSubsystem
     InternalCoralDetectorOutput output = new InternalCoralDetectorOutput();
     if (ENABLED) {
       output.setForwardCoralSensor(internalSensorF.get());
-      output.setRearCorealSensor(internalSensorR.get());
+      output.setRearCoralSensor(internalSensorR.get());
     }
     return output;
   }
