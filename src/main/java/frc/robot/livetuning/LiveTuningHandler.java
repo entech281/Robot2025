@@ -38,6 +38,7 @@ public class LiveTuningHandler {
             publisher.accept(value.getValue());
         }
     }
+    
 
     public void resetToJSON() {
 
@@ -46,6 +47,8 @@ public class LiveTuningHandler {
     public void saveToJSON() {
 
     }
+
+    
 
     public double getValue(String key) {
         return table.getEntry(key).getDouble(0.0);
