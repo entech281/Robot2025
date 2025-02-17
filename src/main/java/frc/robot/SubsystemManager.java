@@ -10,6 +10,7 @@ import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.subsystems.SubsystemInput;
 import frc.entech.subsystems.SubsystemOutput;
 import frc.robot.io.RobotIO;
+import frc.robot.subsystems.coral.CoralMechanismSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.led.LEDSubsystem;
@@ -27,6 +28,7 @@ public class SubsystemManager {
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
   private final LEDSubsystem ledSubsystem = new LEDSubsystem();
+  private final CoralMechanismSubsystem coralMechanismSubsystem = new CoralMechanismSubsystem();
 
   public SubsystemManager() {
     navXSubsystem.initialize();
