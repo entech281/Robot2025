@@ -14,6 +14,7 @@ import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.CommandFactory;
 import frc.robot.RobotConstants;
 import frc.robot.SubsystemManager;
+import frc.robot.commands.CoralIntakeCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.GyroReset;
 import frc.robot.commands.PivotDownCommand;
@@ -126,6 +127,9 @@ public class OperatorInterface
 
     xboxController.button(1)
       .onTrue(new PivotDownCommand(subsystemManager.getPivotSubsystem()));
+
+    xboxController.button(5)
+      .whileTrue(new CoralIntakeCommand(subsystemManager.getCoralMechanismSubsystem()));
 
     xboxController.button(6)
         .whileTrue(commandFactory.getAlignmentCommand());

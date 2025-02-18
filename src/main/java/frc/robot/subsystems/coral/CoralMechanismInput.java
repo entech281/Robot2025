@@ -7,17 +7,23 @@ import frc.entech.subsystems.SubsystemInput;
 public class CoralMechanismInput implements SubsystemInput {
   private boolean activate = true;
   private double requestedSpeed = 0.0;
+  private double requestedPosition = 0.0;
+
 
   @Override
   public void toLog(LogTable table) {
     table.put("Activate", activate);
     table.put("Requested Speed", requestedSpeed);
+    table.put("Requested Position", requestedPosition);
+
   }
 
   @Override
   public void fromLog(LogTable table) {
     activate = table.get("Activate", activate);
     requestedSpeed = table.get("Requested Speed", 0.0);
+    requestedPosition = table.get("Requested Position", 0.0);
+
   }
 
   public boolean getActivate() {
@@ -34,5 +40,13 @@ public class CoralMechanismInput implements SubsystemInput {
 
   public void setRequestedSpeed(double requestedSpeed) {
     this.requestedSpeed = requestedSpeed;
+  }
+
+  public double requestedPosition(){
+    return this.requestedPosition;
+  }
+
+  public void setRequestedPosition(double requestedPosition){
+    this.requestedPosition = requestedPosition;
   }
 }

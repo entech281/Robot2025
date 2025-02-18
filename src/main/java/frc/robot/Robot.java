@@ -117,7 +117,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopPeriodic() {
-    // for things that only happen in teleop
+   
   }
 
   @Override

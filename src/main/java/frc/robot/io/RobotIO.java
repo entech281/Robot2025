@@ -6,6 +6,7 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.RobotConstants;
+import frc.robot.subsystems.coral.CoralMechanismOutput;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveOutput;
 import frc.robot.subsystems.elevator.ElevatorOutput;
@@ -64,6 +65,10 @@ public class RobotIO implements DriveInputSupplier {
     return latestLEDOutput;
   }
 
+  public CoralMechanismOutput getCoralMechanismOutput() {
+    return latestCoralMechanismOutput;
+  }
+
   public Pose2d getOdometryPose() {
     return latestOdometryPose;
   }
@@ -103,11 +108,17 @@ public class RobotIO implements DriveInputSupplier {
     ledo.log();
   }
 
+  public void updateCoralMechanism(CoralMechanismOutput cmo) {
+    latestCoralMechanismOutput = cmo;
+    cmo.log();
+  }
+
   private VisionOutput latestVisionOutput;
   private NavXOutput latestNavXOutput;
   private DriveOutput latestDriveOutput;
   private ElevatorOutput latestElevatorOutput;
   private PivotOutput latestPivotOutput;
   private LEDOutput latestLEDOutput;
+  private CoralMechanismOutput latestCoralMechanismOutput;
   private Pose2d latestOdometryPose = RobotConstants.ODOMETRY.INITIAL_POSE;
 }

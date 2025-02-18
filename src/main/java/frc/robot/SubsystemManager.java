@@ -37,6 +37,7 @@ public class SubsystemManager {
     elevatorSubsystem.initialize();
     pivotSubsystem.initialize();
     ledSubsystem.initialize();
+    coralMechanismSubsystem.initialize();
 
     periodic();
   }
@@ -65,6 +66,10 @@ public class SubsystemManager {
     return ledSubsystem;
   }
 
+  public CoralMechanismSubsystem getCoralMechanismSubsystem() {
+    return coralMechanismSubsystem;
+  }
+
   public List<EntechSubsystem<? extends SubsystemInput, ? extends SubsystemOutput>> getSubsystemList() {
     ArrayList<EntechSubsystem<? extends SubsystemInput, ? extends SubsystemOutput>> r = new ArrayList<>();
     r.add(navXSubsystem);
@@ -73,6 +78,7 @@ public class SubsystemManager {
     r.add(elevatorSubsystem);
     r.add(pivotSubsystem);
     r.add(ledSubsystem);
+    r.add(coralMechanismSubsystem);
 
     return r;
   }
@@ -91,5 +97,7 @@ public class SubsystemManager {
     outputs.updatePivot(pivotSubsystem.getOutputs());
 
     outputs.updateLED(ledSubsystem.getOutputs());
+
+    outputs.updateCoralMechanism(coralMechanismSubsystem.getOutputs());
   }
 }
