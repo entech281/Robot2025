@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import edu.wpi.first.wpilibj.util.Color;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
-import java.util.Arrays;
+
 
 public class TestSubdividedLedString {
 

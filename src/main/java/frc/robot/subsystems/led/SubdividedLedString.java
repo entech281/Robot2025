@@ -53,6 +53,15 @@ public class SubdividedLedString {
     return r;
   }
 
+
+
+  @Override
+  public String toString() {
+    return "SubdividedLedString [sections=" + sections + "]";
+  }
+
+
+
   /**
    * Represents a section of the subdivided LED string.
    * A section handles its own foreground, background, and current color along with blinking state.
@@ -188,6 +197,12 @@ public class SubdividedLedString {
        */
       public int getEndIndex() {
         return endIndex;
+      }
+
+      @Override
+      public String toString() {
+        return "LedSection [startIndex=" + startIndex + ", endIndex=" + endIndex + ", fgColor=" + fgColor + ", bgColor="
+            + bgColor + ", currentColor=" + currentColor + ", blinking=" + blinking + "]";
       }
       
   }
