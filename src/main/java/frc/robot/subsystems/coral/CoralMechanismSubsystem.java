@@ -5,13 +5,14 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
 
 public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput, CoralMechanismOutput> {
-    private static final boolean ENABLED = false;
+    private static final boolean ENABLED = true;
     private static final boolean IS_INVERTED = false;
 
     private CoralMechanismInput currentInput = new CoralMechanismInput();
@@ -53,6 +54,9 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
             output.setRunning(currentInput.getActivate());
             output.setCurrentSpeed(coralMotor.getEncoder().getVelocity());
             output.setBrakeModeEnabled(IdleMode.kBrake == mode);
+        }
+        else{
+            DriverStation.reportWarning("This subsystem is currently enabled", false);
         }
         return output;
     }

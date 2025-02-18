@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.entech.commands.EntechCommand;
 import frc.robot.io.RobotIO;
 import frc.robot.subsystems.coral.CoralMechanismInput;
@@ -21,14 +20,13 @@ public class CoralIntakeCommand extends EntechCommand {
     
     super(coralSubsystem);
     coralSS = coralSubsystem;
-    DriverStation.reportWarning("I started ",false);  
   }
 
   @Override
   public void initialize() {
     DriverStation.reportWarning("I started ",false);
     coralInput.setActivate(true);
-    coralInput.setRequestedSpeed(2);
+    coralInput.setRequestedSpeed(1);
   }
 
   @Override
