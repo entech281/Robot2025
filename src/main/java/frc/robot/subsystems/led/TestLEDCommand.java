@@ -5,6 +5,11 @@ import frc.entech.commands.EntechCommand;
 import frc.entech.util.StoppingCounter;
 import frc.robot.RobotConstants;
 
+/**
+ * TestLEDCommand cycles through different LED configurations using the new subdivided LED string.
+ * Each stage creates a new LEDInput with a subdivided LED string that covers the entire LED strip.
+ * At stage 3, blinking is enabled.
+ */
 public class TestLEDCommand extends EntechCommand {
   private final LEDSubsystem ledSubsystem;
   private final StoppingCounter counter =
@@ -19,30 +24,44 @@ public class TestLEDCommand extends EntechCommand {
   public void initialize() {
     counter.reset();
     stage = 0;
-
   }
 
   @Override
   public void execute() {
     LEDInput input = new LEDInput();
+    // Create new subdivided LED string for configuring segments.
+    SubdividedLedString subdivided = new SubdividedLedString();
+    int numLEDs = RobotConstants.LED.NUM_LEDS;
+    Color fgColor;
+    Color bgColor = Color.kBlack;  // default background
+
     switch (stage) {
       case 0:
-        input.setColors(new Color[]{Color.kWhite, Color.kBlack});
+        fgColor = Color.kWhite;
+        bgColor = Color.kBlack;
         break;
       case 1:
-        input.setColors(new Color[] {Color.kRed, Color.kBlue});
+        fgColor = Color.kRed;
+        bgColor = Color.kBlue;
         break;
       case 2:
-        input.setColors(new Color[] {Color.kOrange, Color.kYellow});
+        fgColor = Color.kOrange;
+        bgColor = Color.kYellow;
         break;
       case 3:
-        input.setColors(new Color[] {Color.kGreen, Color.kCyan});
+        fgColor = Color.kGreen;
+        bgColor = Color.kCyan;
         input.setBlinking(true);
         break;
       default:
-        input.setColors(new Color[] {Color.kAntiqueWhite, Color.kBeige});
+        fgColor = Color.kAntiqueWhite;
+        bgColor = Color.kBeige;
         break;
     }
+    // Add one section that covers the entire LED strip.
+    subdivided.addSection(fgColor, bgColor, 0, numLEDs);
+    input.setSubdividedString(subdivided);
+
     ledSubsystem.updateInputs(input);
 
     if (counter.isFinished(true)) {

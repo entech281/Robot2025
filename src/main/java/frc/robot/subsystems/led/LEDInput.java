@@ -1,58 +1,64 @@
 package frc.robot.subsystems.led;
 
 import org.littletonrobotics.junction.LogTable;
-import edu.wpi.first.wpilibj.util.Color;
 import frc.entech.subsystems.SubsystemInput;
 
+/**
+ * LEDInput encapsulates the desired configuration for the LED subsystem
+ * using a SubdividedLedString. It specifies the per‐segment LED colors and
+ * an overall blinking flag.
+ */
 public class LEDInput implements SubsystemInput {
 
-  private Color[] colors = {Color.kGreen, Color.kOrange};
-  private Color[] secondaryColors = {Color.kRed, Color.kBlue};
+  private SubdividedLedString subdividedString;
   private boolean blinking = false;
-  private int[][] intervals = new int[2][2];
 
-  public Color[] getSecondaryColors() {
-    return secondaryColors;
+  /**
+   * Returns the subdivided LED string configuration.
+   *
+   * @return the subdivided LED string (or null if not set)
+   */
+  public SubdividedLedString getSubdividedString() {
+    return subdividedString;
   }
 
-  public void setSecondaryColors(Color[] secondaryColors) {
-    this.secondaryColors = secondaryColors;
+  /**
+   * Sets the subdivided LED string configuration.
+   *
+   * @param subdividedString the subdivided LED string to use
+   */
+  public void setSubdividedString(SubdividedLedString subdividedString) {
+    this.subdividedString = subdividedString;
+  }
+
+  /**
+   * Returns the blinking flag.
+   *
+   * @return true if blinking is enabled, false otherwise
+   */
+  public boolean getBlinking() {
+    return blinking;
+  }
+
+  /**
+   * Sets whether the LEDs should blink.
+   *
+   * @param blinking true to enable blinking, false to disable
+   */
+  public void setBlinking(boolean blinking) {
+    this.blinking = blinking;
   }
 
   @Override
   public void toLog(LogTable table) {
     table.put("Blinking", blinking);
-    table.put("CurrentColor", colors + "");
+    table.put("SubdividedString", subdividedString != null 
+        ? subdividedString.getSections().toString() : "null");
   }
 
   @Override
   public void fromLog(LogTable table) {
     blinking = table.get("Blinking", false);
+    // Optionally, update subdividedString based on logged data.
   }
-
-  public Color[] getColors() {
-    return colors;
-  }
-
-  public void setColors(Color[] colors) {
-    this.colors = colors;
-  }
-
-  public boolean getBlinking() {
-    return blinking;
-  }
-
-  public void setBlinking(boolean blinking) {
-    this.blinking = blinking;
-  }
-
-  public void setIntervals(int[][] intervals) {
-    this.intervals = intervals;
-  }
-
-  public int[][] getIntervals() {
-    return intervals;
-  }
-
-
 }

@@ -173,12 +173,22 @@ public class SubdividedLedString {
       }
 
       /**
-       * Sets the current color.
+       * Returns the starting index of this section in the LED strip.
        *
-       * @param currentColor the new {@link Color} for the section
+       * @return the starting index of this section
        */
-      public void setCurrentColor(Color currentColor) {
-        this.currentColor = currentColor;
+      public int getStartIndex() {
+        return startIndex;
       }
+
+      /**
+       * Returns the ending index of this section in the LED strip.
+       *
+       * @return the ending index of this section
+       */
+      public int getEndIndex() {
+        return endIndex;
+      }
+      
   }
 }

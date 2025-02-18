@@ -1,39 +1,39 @@
 package frc.robot.subsystems.led;
 
-
 import org.littletonrobotics.junction.Logger;
-import edu.wpi.first.wpilibj.util.Color;
 import frc.entech.subsystems.SubsystemOutput;
 
-import java.util.Arrays;
-
+/**
+ * LEDOutput captures the current state of the LED subsystem.
+ * It reflects the state of the subdivided LED string and the blinking flag.
+ */
 public class LEDOutput extends SubsystemOutput {
 
-  private Color[] colors = {Color.kGreen, Color.kOrange};
+  private SubdividedLedString subdividedString;
   private boolean blinking;
-  private Color[] secondaryColors = {Color.kRed, Color.kBlue};
-  private int[][] intervals;
 
-  public Color[] getSecondaryColors() {
-    return secondaryColors;
+  /**
+   * Returns the current subdivided LED string state.
+   *
+   * @return the current subdivided LED string state
+   */
+  public SubdividedLedString getSubdividedString() {
+    return subdividedString;
   }
 
-  public void setSecondaryColors(Color[] secondaryColors) {
-    this.secondaryColors = secondaryColors;
+  /**
+   * Sets the current subdivided LED string state.
+   *
+   * @param subdividedString the new subdivided LED string state
+   */
+  public void setSubdividedString(SubdividedLedString subdividedString) {
+    this.subdividedString = subdividedString;
   }
 
   @Override
   public void toLog() {
-    Logger.recordOutput("LEDOutput/CurrentColor", Arrays.toString(colors) + "");
+    Logger.recordOutput("LEDOutput/SubdividedString", subdividedString.toString());
     Logger.recordOutput("LEDOutput/Blinking", blinking);
-  }
-
-  public Color[] getColors() {
-    return this.colors;
-  }
-
-  public void setColors(Color[] colors) {
-    this.colors = colors;
   }
 
   public boolean isBlinking() {
@@ -43,13 +43,4 @@ public class LEDOutput extends SubsystemOutput {
   public void setBlinking(boolean blinking) {
     this.blinking = blinking;
   }
-
-  public void setIntervals(int[][] intervals) {
-    this.intervals = intervals;
-  }
-
-  public int[][] getIntervals() {
-    return intervals;
-  }
-
 }
