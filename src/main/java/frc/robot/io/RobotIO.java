@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.RobotConstants;
 import frc.robot.subsystems.coral.CoralMechanismOutput;
+import frc.robot.subsystems.coraldetector.InternalCoralDetectorOutput;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveOutput;
 import frc.robot.subsystems.elevator.ElevatorOutput;
@@ -69,6 +70,10 @@ public class RobotIO implements DriveInputSupplier {
     return latestCoralMechanismOutput;
   }
 
+  public InternalCoralDetectorOutput getInternalCoralDetectorSubsystemOutput(){
+    return latestInternalCoralDetectorOutput;
+  }
+
   public Pose2d getOdometryPose() {
     return latestOdometryPose;
   }
@@ -113,6 +118,10 @@ public class RobotIO implements DriveInputSupplier {
     cmo.log();
   }
 
+  public void updateInternalCoralDetector(InternalCoralDetectorOutput icdo) {
+    latestInternalCoralDetectorOutput = icdo;
+    icdo.log();
+  }
   private VisionOutput latestVisionOutput;
   private NavXOutput latestNavXOutput;
   private DriveOutput latestDriveOutput;
@@ -120,5 +129,6 @@ public class RobotIO implements DriveInputSupplier {
   private PivotOutput latestPivotOutput;
   private LEDOutput latestLEDOutput;
   private CoralMechanismOutput latestCoralMechanismOutput;
+  private InternalCoralDetectorOutput latestInternalCoralDetectorOutput;
   private Pose2d latestOdometryPose = RobotConstants.ODOMETRY.INITIAL_POSE;
 }

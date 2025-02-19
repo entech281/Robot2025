@@ -9,16 +9,14 @@ import frc.entech.commands.EntechCommand;
 import frc.robot.io.RobotIO;
 import frc.robot.subsystems.coral.CoralMechanismInput;
 import frc.robot.subsystems.coral.CoralMechanismSubsystem;
-import frc.robot.subsystems.coraldetector.InternalCoralDetectorOutput;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class CoralIntakeCommand extends EntechCommand {
+public class CoralOuttakeCommand extends EntechCommand {
 
   private final CoralMechanismInput coralInput = new CoralMechanismInput();
   private final CoralMechanismSubsystem coralSS;
-  private final InternalCoralDetectorOutput detectorOutput = new InternalCoralDetectorOutput();
 
-  public CoralIntakeCommand(CoralMechanismSubsystem coralSubsystem) {
+  public CoralOuttakeCommand(CoralMechanismSubsystem coralSubsystem) {
     
     super(coralSubsystem);
     coralSS = coralSubsystem;
@@ -28,14 +26,13 @@ public class CoralIntakeCommand extends EntechCommand {
   public void initialize() {
     DriverStation.reportWarning("I started ",false);
     coralInput.setActivate(true);
-    coralInput.setRequestedSpeed(-1);
-   
+    coralInput.setRequestedSpeed(1);
   }
 
   @Override
   public void execute() {
-    coralInput.setActivate(true);
 
+    coralSS.updateInputs(coralInput);
   }
 
   @Override
@@ -46,6 +43,7 @@ public class CoralIntakeCommand extends EntechCommand {
 
   @Override
   public boolean isFinished() {
-    return detectorOutput.hasCoral();
-    }
+    DriverStation.reportWarning("I ended", false);
+    return RobotIO.getInstance().getCoralMechanismOutput().isFinished();
+  }
 }

@@ -25,7 +25,8 @@ public class InternalCoralDetectorOutput extends SubsystemOutput {
   }
 
   public boolean hasCoral() {
-    return forwardCoralSensor || rearCoralSensor;
+    //return forwardCoralSensor || rearCoralSensor;
+    return rearCoralSensor && forwardCoralSensor;
   }
 
   @Override
