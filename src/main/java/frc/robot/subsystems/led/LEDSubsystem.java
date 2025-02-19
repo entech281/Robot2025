@@ -12,8 +12,8 @@ import frc.robot.io.RobotIO;
 /**
  * LEDSubsystem controls the LED hardware using a subdivided LED string.
  * The configuration is provided via LEDInput that encapsulates a SubdividedLedString,
- * which defines individual LED segments and their colors. An overall blinking flag is
- * supported by toggling each segment's display between its foreground and background colors.
+ * which defines individual LED segments and their colors. Each segment may be configured
+ * to blink independently by setting its own blinking flag.
  */
 public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
 
@@ -39,8 +39,7 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
 
   /**
    * Initializes the LED subsystem.
-   * Configures the LED output based on the current subdivided LED string
-   * and starts the blink timer.
+   * Configures the LED output based on the current subdivided LED string and starts the blink timer.
    */
   @Override
   public void initialize() {
@@ -50,37 +49,35 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
 
   /**
    * Periodically updates the LED output.
-   * If blinking is enabled, toggles the LED segments when the blink timer elapses.
-   * Otherwise, continuously updates the LED output with the current configuration.
+   * Every 0.25 seconds, toggles only those LED sections whose blinking flag is enabled.
+   * Otherwise, the LED buffer is updated continuously.
    */
   @Override
   public void periodic() {
     if (ENABLED) {
-      if (currentInput.getBlinking()) {
-        if (blinkTimer.hasElapsed(0.25)) {
-          toggleLED();
-          blinkTimer.restart();
-        }
-      } else {
-        updateLEDs();
+      if (blinkTimer.hasElapsed(0.25)) {
+        toggleBlinkingSections();
+        blinkTimer.restart();
       }
+      updateLEDs();
     }
   }
 
   /**
-   * Toggles each LED segment's state between its foreground and background color.
+   * Toggles the state (foreground/background) only for LED segments flagged to blink.
    */
-  private void toggleLED() {
+  private void toggleBlinkingSections() {
     if (currentInput.getSubdividedString() != null) {
       for (SubdividedLedString.LedSection section : currentInput.getSubdividedString().getSections()) {
-        // Toggle between foreground (on) and background (off).
-        if (section.getCurrentColor().equals(section.getFgColor())) {
-          section.off();
-        } else {
-          section.on();
+        if (section.isBlinking()) {
+          // Toggle current color
+          if (section.getCurrentColor().equals(section.getFgColor())) {
+            section.off();
+          } else {
+            section.on();
+          }
         }
       }
-      updateLEDs();
     }
   }
 
@@ -91,7 +88,6 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   private void updateLEDs() {
     if (currentInput.getSubdividedString() != null) {
       for (SubdividedLedString.LedSection section : currentInput.getSubdividedString().getSections()) {
-        // Ensure indices are within bounds.
         int startIdx = Math.max(0, section.getStartIndex());
         int endIdx = Math.min(buffer.getLength(), section.getEndIndex());
         for (int i = startIdx; i < endIdx; i++) {
@@ -142,8 +138,8 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   public LEDOutput toOutputs() {
     LEDOutput output = new LEDOutput();
     if (ENABLED) {
-      output.setBlinking(currentInput.getBlinking());
       output.setSubdividedString(currentInput.getSubdividedString());
+      // Note: global blinking flag is no longer used; each section controls its own blink.
     }
     return output;
   }

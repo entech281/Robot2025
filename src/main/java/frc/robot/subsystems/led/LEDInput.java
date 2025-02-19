@@ -6,7 +6,8 @@ import frc.entech.subsystems.SubsystemInput;
 /**
  * LEDInput encapsulates the desired configuration for the LED subsystem
  * using a SubdividedLedString. It specifies the per‐segment LED colors and
- * an overall blinking flag.
+ * an overall blinking flag. Setting the global blinking flag propagates the value
+ * to each LED segment.
  */
 public class LEDInput implements SubsystemInput {
 
@@ -42,11 +43,15 @@ public class LEDInput implements SubsystemInput {
 
   /**
    * Sets whether the LEDs should blink.
+   * This will also update each LED section's blinking configuration.
    *
    * @param blinking true to enable blinking, false to disable
    */
   public void setBlinking(boolean blinking) {
     this.blinking = blinking;
+    if (subdividedString != null) {
+      subdividedString.getSections().forEach(section -> section.setBlinking(blinking));
+    }
   }
 
   @Override

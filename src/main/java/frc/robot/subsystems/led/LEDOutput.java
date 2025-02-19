@@ -5,12 +5,14 @@ import frc.entech.subsystems.SubsystemOutput;
 
 /**
  * LEDOutput captures the current state of the LED subsystem.
- * It reflects the state of the subdivided LED string and the blinking flag.
+ * It reflects the state of the subdivided LED string.
+ * Note: The global blinking flag is no longer used for output,
+ * as each LED segment controls its own blinking.
  */
 public class LEDOutput extends SubsystemOutput {
 
   private SubdividedLedString subdividedString;
-  private boolean blinking;
+  private boolean blinking;   // retained for logging, but not actively used
 
   /**
    * Returns the current subdivided LED string state.
@@ -32,7 +34,7 @@ public class LEDOutput extends SubsystemOutput {
 
   @Override
   public void toLog() {
-    Logger.recordOutput("LEDOutput/SubdividedString", subdividedString.toString());
+    Logger.recordOutput("LEDOutput/SubdividedString", subdividedString != null ? subdividedString.getSections().toString() : "null");
     Logger.recordOutput("LEDOutput/Blinking", blinking);
   }
 
