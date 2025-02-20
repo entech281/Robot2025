@@ -8,6 +8,7 @@ import frc.robot.subsystems.led.LEDInput;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.led.SubdividedLedString;
 import frc.robot.RobotConstants;
+import frc.robot.operation.UserPolicy;
 
 
 public class LEDDefaultCommand extends EntechCommand {
@@ -34,6 +35,7 @@ public class LEDDefaultCommand extends EntechCommand {
     LedSection driver_section = subdivided.addSection(Color.kBlack, Color.kBlack, driver_leds_start, driver_leds_end);
 
     boolean hasPiece = false;
+    boolean notAligned = UserPolicy.getInstance().isAligningToAngle();
 
 
     if (hasError()) {
@@ -49,8 +51,27 @@ public class LEDDefaultCommand extends EntechCommand {
         operator_section.setBlinking(false);
       }
 
-      driver_section = subdivided.addSection(Color.kBlack, Color.kBlack, driver_leds_start, driver_leds_end);
-      driver_section.setBlinking(false);
+      if (notAligned) {
+        driver_section = subdivided.addSection(Color.kGreen, Color.kBlack, driver_leds_start, driver_leds_end);
+        driver_section.setBlinking(true);
+      } else {
+        //TODO: Find out what getTargetAngle() actually returns
+        //I assumed it returned radians and we can only see 180 deg
+        int redIndex = (int) UserPolicy.getInstance().getTargetAngle();
+        redIndex = (int) (redIndex / Math.PI * ledCount);
+        if (redIndex > 0) {
+          subdivided.addSection(Color.kGreen, Color.kGreen, 0, redIndex);
+        }
+        // Single LED marked red at the target.
+        subdivided.addSection(Color.kRed, Color.kRed, redIndex, redIndex + 1);
+        // From redIndex+1 to ledCount: green segment.
+        if (redIndex < ledCount - 1) {
+          subdivided.addSection(Color.kGreen, Color.kGreen, redIndex + 1, ledCount);
+        }
+      }
+
+      // driver_section = subdivided.addSection(Color.kBlack, Color.kBlack, driver_leds_start, driver_leds_end);
+      // driver_section.setBlinking(false);
       // In normal state: solid display with green (foreground) and orange (as backup if blinking)
       // input.setBlinking(false);
       // subdivided.addSection(Color.kGreen, Color.kBlack, 0, ledCount);
