@@ -25,6 +25,7 @@ import frc.robot.operation.UserPolicy;
 import frc.robot.processors.OdometryProcessor;
 import frc.robot.processors.filters.LateralAlignFilter;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -35,12 +36,14 @@ public class CommandFactory {
   private final NavXSubsystem navXSubsystem;
   private final OdometryProcessor odometry;
   private final SubsystemManager subsystemManager;
+  private final LEDSubsystem ledSubsystem;
   private final SendableChooser<Command> autoChooser;
 
 
   public CommandFactory(SubsystemManager subsystemManager, OdometryProcessor odometry) {
     this.driveSubsystem = subsystemManager.getDriveSubsystem();
     this.navXSubsystem = subsystemManager.getNavXSubsystem();
+    this.ledSubsystem = subsystemManager.getLEDSubsystem();
     this.odometry = odometry;
     this.subsystemManager = subsystemManager;
 
@@ -66,6 +69,15 @@ public class CommandFactory {
           }
           return false;
         }, driveSubsystem);
+
+    NamedCommands.registerCommand("L1", Commands.none());
+    NamedCommands.registerCommand("L2", Commands.none());
+    NamedCommands.registerCommand("L3", Commands.none());
+    NamedCommands.registerCommand("L4", Commands.none());
+    NamedCommands.registerCommand("DeAlgae", Commands.none());
+    NamedCommands.registerCommand("Home", Commands.none());
+    NamedCommands.registerCommand("AlignToFace", Commands.none());
+    NamedCommands.registerCommand("ScoreCoral", Commands.none());
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);

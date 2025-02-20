@@ -38,6 +38,7 @@ public class TestLEDCommand extends EntechCommand {
         input.setBlinking(true);
       }
       default -> subdivided.addSection(Color.kBlack, Color.kBlack, 0, ledCount);
+
     }
     input.setSubdividedString(subdivided);
     ledSubsystem.updateInputs(input);
