@@ -17,6 +17,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.entech.util.AprilTagDistanceCalibration;
+import frc.robot.commandCheker.SafeZone;
 
 public final class RobotConstants {
   public static final double TIME_PER_PERIODICAL_LOOP_SECONDS = 0.00;
@@ -52,6 +53,14 @@ public final class RobotConstants {
 
     public static final boolean GYRO_REVERSED = false;
     public static final boolean RATE_LIMITING = true;
+  }
+
+  public static interface SafeZones {
+    public static final SafeZone[] safeZones = new SafeZone[] {
+      new SafeZone(10, 50, 0, 30),
+      new SafeZone(20, 70, 31, 60),
+      new SafeZone(30, 90, 61, 90)
+    };
   }
 
 
