@@ -58,4 +58,7 @@ public class PresetHandler {
 
         return Map.of();  // Return empty map in case of an error
     }
+
+    private PresetHandler() {
+    }
 }
