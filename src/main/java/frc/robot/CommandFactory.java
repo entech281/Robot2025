@@ -1,34 +1,28 @@
 package frc.robot;
 
-import java.util.Optional;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.path.PathPlannerPath;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.AutonomousException;
-import frc.robot.commands.GyroResetByAngleCommand;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
-import frc.robot.commands.ResetOdometryCommand;
-import frc.robot.io.RobotIO;
-import frc.robot.operation.UserPolicy;
+import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.processors.OdometryProcessor;
-import frc.robot.processors.filters.LateralAlignFilter;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.config.RobotConfig;
 
 @SuppressWarnings("unused")
 public class CommandFactory {
@@ -53,6 +47,10 @@ public class CommandFactory {
     } catch (Exception e) {
       throw new AutonomousException("Failed to load robot config", e);
     }
+
+    ShuffleboardTab tab = Shuffleboard.getTab("stuffs");
+    tab.add("Save", new InstantCommand(() -> LiveTuningHandler.getInstance().saveToJSON()));
+    tab.add("Load", new InstantCommand(() -> LiveTuningHandler.getInstance().resetToJSON()));
 
     AutoBuilder.configure(odometry::getEstimatedPose,
         odometry::resetOdometry,

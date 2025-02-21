@@ -1,6 +1,7 @@
 package frc.robot.subsystems.coraldetector;
 
 import org.littletonrobotics.junction.Logger;
+
 import frc.entech.subsystems.SubsystemOutput;
 
 public class InternalCoralDetectorOutput extends SubsystemOutput {
@@ -20,7 +21,7 @@ public class InternalCoralDetectorOutput extends SubsystemOutput {
     return rearCoralSensor;
   }
 
-  public void setRearCorealSensor(boolean rearCoralSensor) {
+  public void setRearCoralSensor(boolean rearCoralSensor) {
     this.rearCoralSensor = rearCoralSensor;
   }
 
