@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.io.Reader;
 import java.lang.reflect.Type;
-import java.io.File;
+
 public class MapPresetReader {
     
     private MapPresetReader(){
@@ -17,7 +17,6 @@ public class MapPresetReader {
         // Define the type for Map<String, Double>
         Type type = new TypeToken<Map<String, Double>>() {}.getType();
         
-        Map<String, Double> data = gson.fromJson(input, type);
-        return data;        
+        return gson.fromJson(input, type);    
     }
 }

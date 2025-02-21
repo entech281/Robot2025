@@ -11,14 +11,14 @@ import frc.entech.util.PresetHandler;
 import frc.robot.RobotConstants;
 
 public class LiveTuningHandler {
-    private static LiveTuningHandler INSTANCE;
+    private static LiveTuningHandler instance;
     private NetworkTable table;
     
     public static LiveTuningHandler getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new LiveTuningHandler();
+        if (instance == null) {
+            instance = new LiveTuningHandler();
         }
-        return INSTANCE;
+        return instance;
     }
 
     private LiveTuningHandler() {
@@ -30,7 +30,7 @@ public class LiveTuningHandler {
     public void init() {
         table = NetworkTableInstance.getDefault().getTable("LiveTuning");
         resetToDefaults();
-        if (PresetHandler.USBStickConnected()) {
+        if (PresetHandler.isUSBStickConnected()) {
             if (PresetHandler.presetFileExists()) {
                 resetToJSON();
             } else {

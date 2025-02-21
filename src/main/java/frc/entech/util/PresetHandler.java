@@ -9,6 +9,8 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
 public class PresetHandler {
     public static final String USB_PATH = "/u/";
     public static final String USB_SETTINGS_FILE_PATH = "/u/presets.json";
@@ -17,7 +19,7 @@ public class PresetHandler {
         return new File(USB_SETTINGS_FILE_PATH);
     }
 
-    public static boolean USBStickConnected() {
+    public static boolean isUSBStickConnected() {
         return (new File(USB_PATH).exists());
     }
 
@@ -32,6 +34,7 @@ public class PresetHandler {
         try (FileWriter writer = new FileWriter(getFile())) {
             gson.toJson(presets, writer);
         } catch (IOException e) {
+            DriverStation.reportWarning("Presets can't be written to USB drive.", false);
         }
     }
 
@@ -50,14 +53,9 @@ public class PresetHandler {
             // Define the type for Map<String, Double>
             return MapPresetReader.readPresets(reader);
         } catch (IOException e) {
+            DriverStation.reportWarning("Presets can't be read from USB drive.", false);
         }
 
         return Map.of();  // Return empty map in case of an error
-    }
-
-    public static void main(String[] args) {
-        // Test the function
-        Map<String, Double> presets = readPresetsJson();
-        System.out.println(presets);
     }
 }
