@@ -6,6 +6,8 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.RobotConstants;
+import frc.robot.subsystems.coral.CoralMechanismOutput;
+import frc.robot.subsystems.coraldetector.InternalCoralDetectorOutput;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveOutput;
 import frc.robot.subsystems.elevator.ElevatorOutput;
@@ -68,6 +70,14 @@ public class RobotIO implements DriveInputSupplier {
     return latestOdometryPose;
   }
 
+  public CoralMechanismOutput getCoralMechanismOutput() {
+    return latestCoralMechanismOutput;
+  }
+
+  public InternalCoralDetectorOutput getInternalCoralDetectorOutput() {
+    return latestInternalCoralDetectorOutput;
+  }
+
   public void updateNavx(NavXOutput no) {
     latestNavXOutput = no;
     no.log();
@@ -103,11 +113,23 @@ public class RobotIO implements DriveInputSupplier {
     ledo.log();
   }
 
+  public void updateCoralMechanism(CoralMechanismOutput cmo) {
+    latestCoralMechanismOutput = cmo;
+    cmo.log();
+  }
+
+  public void updateInternalCoralDetector(InternalCoralDetectorOutput icdo) {
+    latestInternalCoralDetectorOutput = icdo;
+    icdo.log();
+  }
+
   private VisionOutput latestVisionOutput;
   private NavXOutput latestNavXOutput;
   private DriveOutput latestDriveOutput;
   private ElevatorOutput latestElevatorOutput;
   private PivotOutput latestPivotOutput;
   private LEDOutput latestLEDOutput;
+  private CoralMechanismOutput latestCoralMechanismOutput;
+  private InternalCoralDetectorOutput latestInternalCoralDetectorOutput;
   private Pose2d latestOdometryPose = RobotConstants.ODOMETRY.INITIAL_POSE;
 }

@@ -11,6 +11,8 @@ import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.subsystems.SubsystemInput;
 import frc.entech.subsystems.SubsystemOutput;
 import frc.robot.io.RobotIO;
+import frc.robot.subsystems.coral.CoralMechanismSubsystem;
+import frc.robot.subsystems.coraldetector.InternalCoralDetectorSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.led.LEDSubsystem;
@@ -28,6 +30,9 @@ public class SubsystemManager {
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
   private final LEDSubsystem ledSubsystem = new LEDSubsystem();
+  private final CoralMechanismSubsystem coralMechanismSubsystem = new CoralMechanismSubsystem();
+  private final InternalCoralDetectorSubsystem internalCoralDetectorSubsystem = new InternalCoralDetectorSubsystem();
+
 
   public SubsystemManager() {
     navXSubsystem.initialize();
@@ -36,6 +41,8 @@ public class SubsystemManager {
     elevatorSubsystem.initialize();
     pivotSubsystem.initialize();
     ledSubsystem.initialize();
+    coralMechanismSubsystem.initialize();
+    internalCoralDetectorSubsystem.initialize();
 
     periodic();
   }
@@ -64,6 +71,14 @@ public class SubsystemManager {
     return ledSubsystem;
   }
 
+  public CoralMechanismSubsystem getCoralMechanismSubsystem() {
+    return coralMechanismSubsystem;
+  }
+
+  public InternalCoralDetectorSubsystem getInternalCoralDetectorSubsystem() {
+    return internalCoralDetectorSubsystem;
+  }
+
   public List<EntechSubsystem<? extends SubsystemInput, ? extends SubsystemOutput>> getSubsystemList() {
     ArrayList<EntechSubsystem<? extends SubsystemInput, ? extends SubsystemOutput>> r = new ArrayList<>();
     r.add(navXSubsystem);
@@ -72,6 +87,8 @@ public class SubsystemManager {
     r.add(elevatorSubsystem);
     r.add(pivotSubsystem);
     r.add(ledSubsystem);
+    r.add(coralMechanismSubsystem);
+    r.add(internalCoralDetectorSubsystem);
 
     return r;
   }
@@ -90,5 +107,9 @@ public class SubsystemManager {
     outputs.updatePivot(pivotSubsystem.getOutputs());
 
     outputs.updateLED(ledSubsystem.getOutputs());
+    
+    outputs.updateCoralMechanism(coralMechanismSubsystem.getOutputs());
+
+    outputs.updateInternalCoralDetector(internalCoralDetectorSubsystem.getOutputs());
   }
 }

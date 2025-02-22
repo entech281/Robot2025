@@ -22,6 +22,7 @@ import frc.robot.commands.PivotUpCommand;
 import frc.robot.commands.ResetOdometryCommand;
 import frc.robot.commands.RunTestCommand;
 import frc.robot.commands.TwistCommand;
+import frc.robot.commands.VisionCameraSwitchingCommand;
 import frc.robot.commands.XDriveCommand;
 import frc.robot.io.DebugInput;
 import frc.robot.io.DebugInputSupplier;
@@ -136,6 +137,8 @@ public class OperatorInterface
     
     xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.RESET_ODOMETRY)
         .onTrue(new ResetOdometryCommand(odometry));
+
+    subsystemManager.getVisionSubsystem().setDefaultCommand(new VisionCameraSwitchingCommand(subsystemManager.getVisionSubsystem(), xboxController::getRightY));
   }
 
   public void operatorBindings() {
