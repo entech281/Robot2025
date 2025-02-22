@@ -42,9 +42,9 @@ public class PivotInput implements SubsystemInput {
         L2("PivotSubsystem/L2"),
         L3("PivotSubsystem/L3"),
         L4("PivotSubsystem/L4"),
-        A_L2("PivotSubsystem/a_L2"),
-        A_L3("PivotSubsystem/a_L3"),
-        A_GROUND("PivotSubsystem/a_ground"),
+        ALGAE_L2("PivotSubsystem/algae_L2"),
+        ALGAE_L3("PivotSubsystem/algae_L3"),
+        ALGAE_GROUND("PivotSubsystem/algae_ground"),
         BARGE("PivotSubsystem/barge");
 
         public final String label;

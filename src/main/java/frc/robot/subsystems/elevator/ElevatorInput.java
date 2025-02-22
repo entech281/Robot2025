@@ -43,9 +43,9 @@ public class ElevatorInput implements SubsystemInput {
     L2("ElevatorSubsystem/L2"),
     L3("ElevatorSubsystem/L3"),
     L4("ElevatorSubsystem/L4"),
-    A_L2("ElevatorSubsystem/a_L2"),
-    A_L3("ElevatorSubsystem/a_L3"),
-    A_GROUND("ElevatorSubsystem/a_ground"),
+    ALGAE_L2("ElevatorSubsystem/algae_L2"),
+    ALGAE_L3("ElevatorSubsystem/algae_L3"),
+    ALGAE_GROUND("ElevatorSubsystem/algae_ground"),
     BARGE("ElevatorSubsystem/barge");
 
     public final String label;

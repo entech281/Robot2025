@@ -17,6 +17,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.entech.util.AprilTagDistanceCalibration;
+import frc.robot.subsystems.elevator.ElevatorInput;
+import frc.robot.subsystems.pivot.PivotInput;
 
 public final class RobotConstants {
   public static final double TIME_PER_PERIODICAL_LOOP_SECONDS = 0.00;
@@ -129,11 +131,25 @@ public final class RobotConstants {
 
   public static interface LiveTuning {
     public static final Map<String, Double> VALUES = Map.ofEntries(
-      Map.entry("ElevatorSubsystem/L1Height", 0.0),
-      Map.entry("ElevatorSubsystem/L2Height", 0.0),
-      Map.entry("ElevatorSubsystem/L3Height", 0.0),
-      Map.entry("ElevatorSubsystem/L4Height", 0.0),
-      Map.entry("PivotSubsystem/NudgeAmount", 5.0)
+      Map.entry("PivotSubsystem/NudgeAmount", 5.0),
+      Map.entry(ElevatorInput.Position.L1.label, 5.0),
+      Map.entry(ElevatorInput.Position.L2.label, 5.0),
+      Map.entry(ElevatorInput.Position.L3.label, 5.0),
+      Map.entry(ElevatorInput.Position.L4.label, 5.0),
+      Map.entry(ElevatorInput.Position.ALGAE_L2.label, 5.0),
+      Map.entry(ElevatorInput.Position.ALGAE_L3.label, 5.0),
+      Map.entry(ElevatorInput.Position.ALGAE_GROUND.label, 5.0),
+      Map.entry(ElevatorInput.Position.BARGE.label, 5.0),
+      Map.entry(ElevatorInput.Position.HOME.label, 5.0),
+      Map.entry(PivotInput.Position.L1.label, 5.0),
+      Map.entry(PivotInput.Position.L2.label, 5.0),
+      Map.entry(PivotInput.Position.L3.label, 5.0),
+      Map.entry(PivotInput.Position.L4.label, 5.0),
+      Map.entry(PivotInput.Position.ALGAE_L2.label, 5.0),
+      Map.entry(PivotInput.Position.ALGAE_L3.label, 5.0),
+      Map.entry(PivotInput.Position.ALGAE_GROUND.label, 5.0),
+      Map.entry(PivotInput.Position.BARGE.label, 5.0),
+      Map.entry(PivotInput.Position.HOME.label, 5.0)
     );
   }
 
@@ -143,6 +159,16 @@ public final class RobotConstants {
     public static final double LOWER_SOFT_LIMIT_DEG = 1;
     public static final double ELEVATOR_CONVERSION_FACTOR = 2.4;
     public static final double POSITION_TOLERANCE_DEG = 2;
+
+    public static final double HOME_POSITION = 0.0;
+    public static final double L1_POSITION = 0.0;
+    public static final double L2_POSITION = 0.0;
+    public static final double L3_POSITION = 0.0;
+    public static final double L4_POSITION = 0.0;
+    public static final double ALGAE_L2_POSITION = 0.0;
+    public static final double ALGAE_L3_POSITION = 0.0;
+    public static final double ALGAE_GROUND_POSITION = 0.0;
+    public static final double BARGE_POSITION = 0.0;
   }
 
   public static interface CORAL{
@@ -153,6 +179,16 @@ public final class RobotConstants {
   public static interface PIVOT {
     public static final double PIVOT_CONVERSION_FACTOR = 2.4;
     public static final double POSITION_TOLERANCE_DEG = 2;
+
+    public static final double HOME_POSITION = 0.0;
+    public static final double L1_POSITION = 0.0;
+    public static final double L2_POSITION = 0.0;
+    public static final double L3_POSITION = 0.0;
+    public static final double L4_POSITION = 0.0;
+    public static final double ALGAE_L2_POSITION = 0.0;
+    public static final double ALGAE_L3_POSITION = 0.0;
+    public static final double ALGAE_GROUND_POSITION = 0.0;
+    public static final double BARGE_POSITION = 0.0;
   }
 
     public static interface LED {
