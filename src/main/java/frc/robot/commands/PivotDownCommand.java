@@ -5,16 +5,16 @@
 package frc.robot.commands;
 
 import frc.entech.commands.EntechCommand;
+import frc.robot.io.RobotIO;
+import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.subsystems.pivot.PivotInput;
-import frc.robot.subsystems.pivot.PivotOutput;
 import frc.robot.subsystems.pivot.PivotSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class PivotDownCommand extends EntechCommand {
   /** Creates a new PivotCommand. */
-  private PivotInput pivotInput = new PivotInput();
-  private PivotOutput pivotOutput;
-  private PivotSubsystem pivotSS;
+  private final PivotInput pivotInput = new PivotInput();
+  private final PivotSubsystem pivotSS;
 
   public PivotDownCommand(PivotSubsystem pivotSubsystem) {
     super(pivotSubsystem);
@@ -23,8 +23,7 @@ public class PivotDownCommand extends EntechCommand {
 
   @Override
   public void initialize() {
-    pivotOutput = pivotSS.toOutputs();
-    pivotInput.setRequestedPosition(pivotOutput.getCurrentPosition() + 5);
+    pivotInput.setRequestedPosition(RobotIO.getInstance().getPivotOutput().getCurrentPosition() + LiveTuningHandler.getInstance().getValue("PivotSubsystem/NudgeAmount"));
   }
 
   @Override
@@ -39,7 +38,6 @@ public class PivotDownCommand extends EntechCommand {
 
   @Override
   public boolean isFinished() {
-    pivotOutput = pivotSS.toOutputs();
-    return pivotOutput.atRequestedPosition();
+    return RobotIO.getInstance().getPivotOutput().atRequestedPosition();
   }
 }

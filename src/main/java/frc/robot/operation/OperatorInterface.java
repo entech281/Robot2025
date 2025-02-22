@@ -1,6 +1,7 @@
 package frc.robot.operation;
 
 import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -30,6 +31,7 @@ import frc.robot.io.OperatorInputSupplier;
 import frc.robot.io.RobotIO;
 import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.drive.DriveInput;
+import frc.robot.subsystems.led.TestLEDCommand;
 
 public class OperatorInterface
     implements DriveInputSupplier, DebugInputSupplier, OperatorInputSupplier {
@@ -102,6 +104,9 @@ public class OperatorInterface
 
     subsystemManager.getDriveSubsystem()
         .setDefaultCommand(new DriveCommand(subsystemManager.getDriveSubsystem(), this));
+
+    subsystemManager.getLEDSubsystem()
+        .setDefaultCommand(new TestLEDCommand(subsystemManager.getLEDSubsystem()));
 
     joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.RESET_ODOMETRY)
         .onTrue(new ResetOdometryCommand(odometry));

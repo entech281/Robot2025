@@ -18,6 +18,9 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.entech.util.AprilTagDistanceCalibration;
 import frc.robot.commandCheker.SafeZone;
+import frc.robot.subsystems.elevator.ElevatorInput;
+import frc.robot.subsystems.pivot.PivotInput;
+
 
 public final class RobotConstants {
   public static final double TIME_PER_PERIODICAL_LOOP_SECONDS = 0.00;
@@ -129,6 +132,35 @@ public final class RobotConstants {
 
     public static final int DRIVING_MOTOR_CURRENT_LIMIT_AMPS = 40; // 50; // amps
     public static final int TURNING_MOTOR_CURRENT_LIMIT_AMPS = 20; // amps
+
+    public static final double FRONT_LEFT_VIRTUAL_OFFSET_RADIANS = 0.25552591580217987;
+    public static final double FRONT_RIGHT_VIRTUAL_OFFSET_RADIANS = -0.4542734933134782;
+    public static final double REAR_LEFT_VIRTUAL_OFFSET_RADIANS = -2.1838283853944285;
+    public static final double REAR_RIGHT_VIRTUAL_OFFSET_RADIANS = -0.8463679267332642;
+  }
+
+  public static interface LiveTuning {
+    public static final Map<String, Double> VALUES = Map.ofEntries(
+      Map.entry("PivotSubsystem/NudgeAmount", 5.0),
+      Map.entry(ElevatorInput.Position.L1.label, 5.0),
+      Map.entry(ElevatorInput.Position.L2.label, 5.0),
+      Map.entry(ElevatorInput.Position.L3.label, 5.0),
+      Map.entry(ElevatorInput.Position.L4.label, 5.0),
+      Map.entry(ElevatorInput.Position.ALGAE_L2.label, 5.0),
+      Map.entry(ElevatorInput.Position.ALGAE_L3.label, 5.0),
+      Map.entry(ElevatorInput.Position.ALGAE_GROUND.label, 5.0),
+      Map.entry(ElevatorInput.Position.BARGE.label, 5.0),
+      Map.entry(ElevatorInput.Position.HOME.label, 5.0),
+      Map.entry(PivotInput.Position.L1.label, 5.0),
+      Map.entry(PivotInput.Position.L2.label, 5.0),
+      Map.entry(PivotInput.Position.L3.label, 5.0),
+      Map.entry(PivotInput.Position.L4.label, 5.0),
+      Map.entry(PivotInput.Position.ALGAE_L2.label, 5.0),
+      Map.entry(PivotInput.Position.ALGAE_L3.label, 5.0),
+      Map.entry(PivotInput.Position.ALGAE_GROUND.label, 5.0),
+      Map.entry(PivotInput.Position.BARGE.label, 5.0),
+      Map.entry(PivotInput.Position.HOME.label, 5.0)
+    );
   }
 
   public static interface ELEVATOR {
@@ -136,19 +168,17 @@ public final class RobotConstants {
     public static final double UPPER_SOFT_LIMIT_DEG = 85.5;
     public static final double LOWER_SOFT_LIMIT_DEG = 1;
     public static final double ELEVATOR_CONVERSION_FACTOR = 2.4;
-    public static final double SHOOT_AMP_POSITION_DEG = 85.5;
     public static final double POSITION_TOLERANCE_DEG = 2;
 
-    public static final double kA = 2.31586;
-    public static final double kB = -25.1345;
-    public static final double kC = 94.4448;
-    public static final double kD = -132.894;
-    public static final double kE = 76.0679;
-
-    public static final double LOB_ANGLE = 10.0;
-
-    public static final double SPEAKER_SUBWOOFER_SCORING = 8;
-    public static final double SPEAKER_PODIUM_SCORING = 30;
+    public static final double HOME_POSITION = 0.0;
+    public static final double L1_POSITION = 0.0;
+    public static final double L2_POSITION = 0.0;
+    public static final double L3_POSITION = 0.0;
+    public static final double L4_POSITION = 0.0;
+    public static final double ALGAE_L2_POSITION = 0.0;
+    public static final double ALGAE_L3_POSITION = 0.0;
+    public static final double ALGAE_GROUND_POSITION = 0.0;
+    public static final double BARGE_POSITION = 0.0;
   }
 
   public static interface CORAL{
@@ -159,11 +189,23 @@ public final class RobotConstants {
   public static interface PIVOT {
     public static final double PIVOT_CONVERSION_FACTOR = 2.4;
     public static final double POSITION_TOLERANCE_DEG = 2;
+
+    public static final double HOME_POSITION = 0.0;
+    public static final double L1_POSITION = 0.0;
+    public static final double L2_POSITION = 0.0;
+    public static final double L3_POSITION = 0.0;
+    public static final double L4_POSITION = 0.0;
+    public static final double ALGAE_L2_POSITION = 0.0;
+    public static final double ALGAE_L3_POSITION = 0.0;
+    public static final double ALGAE_GROUND_POSITION = 0.0;
+    public static final double BARGE_POSITION = 0.0;
   }
 
     public static interface LED {
     public static final int PORT = 0;
-    public static final int NUM_LEDS = 100;
+
+    public static final int NUM_LEDS = 10;
+
     public static final double BLINK_INTERVAL = 0.25;
     public static final int OPERATOR_LEDS_START_INDEX = 0;
     public static final int OPERATOR_LEDS_END_INDEX = 67;
@@ -175,10 +217,10 @@ public final class RobotConstants {
   public static interface PORTS {
 
     public static interface ANALOG {
-      public static final int FRONT_LEFT_TURNING_ABSOLUTE_ENCODER = 3;
-      public static final int REAR_LEFT_TURNING_ABSOLUTE_ENCODER = 0;
-      public static final int FRONT_RIGHT_TURNING_ABSOLUTE_ENCODER = 2;
-      public static final int REAR_RIGHT_TURNING_ABSOLUTE_ENCODER = 1;
+      public static final int FRONT_LEFT_TURNING_ABSOLUTE_ENCODER = 0;
+      public static final int REAR_LEFT_TURNING_ABSOLUTE_ENCODER = 2;
+      public static final int FRONT_RIGHT_TURNING_ABSOLUTE_ENCODER = 1;
+      public static final int REAR_RIGHT_TURNING_ABSOLUTE_ENCODER = 3;
     }
 
 
@@ -230,6 +272,11 @@ public final class RobotConstants {
         public static final int DRIVE_X = 3;
         public static final int RESET_ODOMETRY = 8;
       }
+    }
+
+    public static interface HAS_CORAL {
+      public static final int INTERNAL_SENSOR_FORWARD = 0;
+      public static final int INTERNAL_SENSOR_REAR = 1;
     }
   }
 

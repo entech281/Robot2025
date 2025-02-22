@@ -1,9 +1,8 @@
-package frc.processors.filters;
+package frc.robot.processors.filters;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
-import frc.robot.processors.filters.LateralAlignFilter;
 import frc.robot.subsystems.drive.DriveInput;
 
 class TestLateralAlignFilter {
@@ -14,6 +13,7 @@ class TestLateralAlignFilter {
         input.setYSpeed(0.0);
 
         DriveInput output = LateralAlignFilter.operatorDirectionalSnap(input, 0);
+
 
         assertEquals(0.0, output.getYSpeed(), 0.001);
         assertEquals(1.0, output.getXSpeed(), 0.001);

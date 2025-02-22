@@ -5,8 +5,8 @@
 package frc.robot.subsystems.drive;
 
 import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -26,15 +26,12 @@ import frc.robot.RobotConstants.SwerveModuleConstants;
  * drivetrain.
  */
 public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
-  private static final boolean ENABLED = false;
-
-  public static final double FRONT_LEFT_VIRTUAL_OFFSET_RADIANS = -0.6656784291742559;
-  public static final double FRONT_RIGHT_VIRTUAL_OFFSET_RADIANS = -0.47198700559;
-  public static final double REAR_LEFT_VIRTUAL_OFFSET_RADIANS = -1.2974314020082391;
-  public static final double REAR_RIGHT_VIRTUAL_OFFSET_RADIANS = -0.8561333695139126;
+  private static final boolean ENABLED = true;
 
   public static final int GYRO_ORIENTATION = 1; // might be able to merge with kGyroReversed
 
+  private final SlewRateLimiter magLimiter = new SlewRateLimiter(DrivetrainConstants.MAGNITUDE_SLEW_RATE);
+  private final SlewRateLimiter rotLimiter = new SlewRateLimiter(DrivetrainConstants.ROTATIONAL_SLEW_RATE);
 
   private SwerveModule frontLeft;
   private SwerveModule frontRight;
@@ -44,9 +41,6 @@ public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
   private double currentTranslationDir = 0.0;
   private double currentTranslationMag = 0.0;
 
-  private SlewRateLimiter magLimiter = new SlewRateLimiter(DrivetrainConstants.MAGNITUDE_SLEW_RATE);
-  private SlewRateLimiter rotLimiter =
-      new SlewRateLimiter(DrivetrainConstants.ROTATIONAL_SLEW_RATE);
   private double prevTime = WPIUtilJNI.now() * 1e-6;
 
   private ChassisSpeeds lastChassisSpeeds =
@@ -284,10 +278,10 @@ public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
           RobotConstants.PORTS.CAN.REAR_RIGHT_TURNING,
           RobotConstants.PORTS.ANALOG.REAR_RIGHT_TURNING_ABSOLUTE_ENCODER, turningConfig, drivingConfig);
 
-      frontLeft.calibrateVirtualPosition(FRONT_LEFT_VIRTUAL_OFFSET_RADIANS);
-      frontRight.calibrateVirtualPosition(FRONT_RIGHT_VIRTUAL_OFFSET_RADIANS);
-      rearLeft.calibrateVirtualPosition(REAR_LEFT_VIRTUAL_OFFSET_RADIANS);
-      rearRight.calibrateVirtualPosition(REAR_RIGHT_VIRTUAL_OFFSET_RADIANS);
+      frontLeft.calibrateVirtualPosition(RobotConstants.SwerveModuleConstants.FRONT_LEFT_VIRTUAL_OFFSET_RADIANS);
+      frontRight.calibrateVirtualPosition(RobotConstants.SwerveModuleConstants.FRONT_RIGHT_VIRTUAL_OFFSET_RADIANS);
+      rearLeft.calibrateVirtualPosition(RobotConstants.SwerveModuleConstants.REAR_LEFT_VIRTUAL_OFFSET_RADIANS);
+      rearRight.calibrateVirtualPosition(RobotConstants.SwerveModuleConstants.REAR_RIGHT_VIRTUAL_OFFSET_RADIANS);
 
       resetEncoders();
     }

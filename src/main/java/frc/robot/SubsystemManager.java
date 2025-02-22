@@ -6,12 +6,14 @@ package frc.robot;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.subsystems.SubsystemInput;
 import frc.entech.subsystems.SubsystemOutput;
 import frc.robot.io.RobotIO;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
 import frc.robot.subsystems.pivot.PivotSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
@@ -25,6 +27,7 @@ public class SubsystemManager {
   private final VisionSubsystem visionSubsystem = new VisionSubsystem();
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
+  private final LEDSubsystem ledSubsystem = new LEDSubsystem();
 
   public SubsystemManager() {
     navXSubsystem.initialize();
@@ -32,6 +35,7 @@ public class SubsystemManager {
     visionSubsystem.initialize();
     elevatorSubsystem.initialize();
     pivotSubsystem.initialize();
+    ledSubsystem.initialize();
 
     periodic();
   }
@@ -56,6 +60,10 @@ public class SubsystemManager {
     return pivotSubsystem;
   }
 
+  public LEDSubsystem getLEDSubsystem() {
+    return ledSubsystem;
+  }
+
   public List<EntechSubsystem<? extends SubsystemInput, ? extends SubsystemOutput>> getSubsystemList() {
     ArrayList<EntechSubsystem<? extends SubsystemInput, ? extends SubsystemOutput>> r = new ArrayList<>();
     r.add(navXSubsystem);
@@ -63,14 +71,15 @@ public class SubsystemManager {
     r.add(visionSubsystem);
     r.add(elevatorSubsystem);
     r.add(pivotSubsystem);
+    r.add(ledSubsystem);
 
     return r;
   }
 
-  public void periodic() {
+  public final void periodic() {
     RobotIO outputs = RobotIO.getInstance();
 
-      outputs.updateDrive(driveSubsystem.getOutputs());
+    outputs.updateDrive(driveSubsystem.getOutputs());
 
     outputs.updateNavx(navXSubsystem.getOutputs());
 
@@ -79,5 +88,7 @@ public class SubsystemManager {
     outputs.updateElevator(elevatorSubsystem.getOutputs());
 
     outputs.updatePivot(pivotSubsystem.getOutputs());
+
+    outputs.updateLED(ledSubsystem.getOutputs());
   }
 }
