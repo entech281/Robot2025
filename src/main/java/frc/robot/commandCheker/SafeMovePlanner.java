@@ -1,8 +1,13 @@
 package frc.robot.commandCheker;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.Map.Entry;
+
 import frc.robot.RobotConstants;
+import frc.robot.RobotConstants.LiveTuning;
+import frc.robot.livetuning.LiveTuningHandler;
+import frc.robot.subsystems.pivot.PivotInput;
+import frc.robot.subsystems.elevator.ElevatorInput;
 
 /**
  * SafeMovePlanner computes a series of safe moves required to transition
@@ -22,8 +27,8 @@ public class SafeMovePlanner {
     this.checker = new SafeCommandChecker();
   }
 
-  public List<Move> planMoves(double currentElevator, double currentPivot, double targetElevator, double targetPivot) {
-    return planMoves(currentElevator, currentPivot, new Move(targetElevator, targetPivot));
+  public List<Move> planMoves(double currentElevator, double currentPivot, double targetElevator, double targetPivot, Map<ElevatorInput.Position, Double> elevatorPos, Map<PivotInput.Position, Double> pivotPos) {
+    return planMoves(currentElevator, currentPivot, new Move(targetElevator, targetPivot), elevatorPos, pivotPos);
   }
 
   /**
@@ -35,13 +40,21 @@ public class SafeMovePlanner {
    * @param command         the target move
    * @return a List of {@link Move} objects representing a safe path.
    */
-  public List<Move> planMoves(double currentElevator, double currentPivot, Move command) {
+  public List<Move> planMoves(double currentElevator, double currentPivot, Move command, Map<ElevatorInput.Position, Double> elevatorPos, Map<PivotInput.Position, Double> pivotPos) {
     if (!checker.isSafe(command)) {
       //since we have preset locations
       //this should never be thrown
-      throw new IllegalArgumentException("Target move is unsafe.");
+      throw new IllegalStateException("Target move is unsafe.");
     }
     return planSegment(currentElevator, currentPivot, command, 100);
+  }
+
+  public List<String> planMovesNames(double currentElevator, double currentPivot, Move command, Map<ElevatorInput.Position, Double> elevatorPos, Map<PivotInput.Position, Double> pivotPos) {
+    return convertMovesToKnownPositions(planMoves(currentElevator, currentPivot, command, elevatorPos, pivotPos), elevatorPos, pivotPos);
+  }
+
+  public List<String> planMovesNames(double currentElevator, double currentPivot, double targetElevator, double targetPivot, Map<ElevatorInput.Position, Double> elevatorPos, Map<PivotInput.Position, Double> pivotPos) {
+    return planMovesNames(currentElevator, currentPivot, new Move(targetElevator, targetPivot), elevatorPos, pivotPos);
   }
 
   /**
@@ -86,8 +99,60 @@ public class SafeMovePlanner {
     
     return moves;
   }
-  
 
+  private List<String> getKnownPositions() {
+
+    List<String> knownMoves = new ArrayList<String>();
+    for (int i = 0; i < PivotInput.Position.values().length; i++) {
+      knownMoves.add(PivotInput.Position.values()[i].label);
+    }
+    
+    return knownMoves;
+  }
+
+
+  public List<String> convertMovesToKnownPositions (List<Move> moves, Map<ElevatorInput.Position, Double> elevatorPos, Map<PivotInput.Position, Double> pivotPos) {
+    
+    List<String> knownMoves = getKnownPositions();
+    List<String> convertedMoves = new ArrayList<>();
+
+    for (Move move : moves) {
+      String closestPos = getClosestMove(knownMoves, move, elevatorPos, pivotPos);
+      convertedMoves.add(closestPos);
+    }
+    
+    return convertedMoves;
+  }
+
+  private String getClosestMove(List<String> str_moves, Move target, Map<ElevatorInput.Position, Double> elevatorPos, Map<PivotInput.Position, Double> pivotPos) {
+    
+    List<Move> moves = new ArrayList<Move>();
+    for (String moveName : str_moves) {
+      for (Entry<ElevatorInput.Position, Double> pos : elevatorPos.entrySet()) {
+        if (pos.getKey().label.equals(moveName)) {
+          for (Entry <PivotInput.Position, Double> pos2 : pivotPos.entrySet()) {
+            if (pos2.getKey().label.equals(moveName)) {
+              moves.add(new Move(pos.getValue(), pos2.getValue()));
+            }
+          }
+        }
+      }
+    }
+
+    Move closestMove = moves.get(0);
+    
+    double closestDistance = Double.MAX_VALUE;
+    for (Move move : moves) {
+      double distance = Math.sqrt(Math.pow(move.getTargetElevator() - target.getTargetElevator(), 2) + Math.pow(move.getTargetPivot() - target.getTargetPivot(), 2));
+      if (distance < closestDistance) {
+        closestMove = move;
+        closestDistance = distance;
+      }
+    }
+    
+    return str_moves.get(moves.indexOf(closestMove));
+  }
+  
 
   /**
    * Determines whether moving directly from the current position to the requested move's target position

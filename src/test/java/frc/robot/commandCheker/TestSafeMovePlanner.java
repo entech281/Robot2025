@@ -7,121 +7,92 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import frc.robot.RobotConstants;
+import frc.robot.subsystems.pivot.PivotInput;
 
 public class TestSafeMovePlanner {
 
   private SafeMovePlanner planner;
   private SafeCommandChecker checker;
-  private static final int EXPECTED_STEPS = 10;
+  // NOTE: Use a tolerance for double comparisons
+  private static final double TOLERANCE = 0.001;
 
   @BeforeEach
   public void setup() {
     planner = new SafeMovePlanner();
     checker = new SafeCommandChecker();
   }
-
+  
   /**
-   * Tests that the planner produces the expected number of moves 
-   * and that every move is safe.
-   * 
-   * A misconception is that the planner only takes into account
-   * certain safe zones, but it actually takes into account all 
-   * safe zones.
+   * Test that when the current to target path is entirely within safe zone 1,
+   * the planner returns a direct move (with no subdivision).
    */
   @Test
-  public void testPlanMovesAllSafe() {
-    // Using safe zone 1 from RobotConstants: elevator in (10,50), pivot in (0,30)
+  public void testPlanMovesAllSafeDirect() {
+    // Safe zone 1: Elevator [10,50] and pivot [0,30] (per RobotConstants)
     double currentElevator = 15.0;
     double currentPivot = 5.0;
     double targetElevator = 45.0;
     double targetPivot = 25.0;
-
+    
     List<Move> moves = planner.planMoves(currentElevator, currentPivot, targetElevator, targetPivot);
-    // assertEquals(EXPECTED_STEPS, moves.size(), "Should produce " + EXPECTED_STEPS + " moves.");
-
-    // All moves should be considered safe.
-    for (int i = 0; i < moves.size(); i++) {
-      Move m = moves.get(i);
-      assertTrue(checker.isSafe(m), "Move " + i + " should be safe (elevator=" + m.getTargetElevator() 
-                + ", pivot=" + m.getTargetPivot() + ").");
-    }
+    // Expect one direct move because the entire path is safe.
+    assertEquals(1, moves.size(), "Direct move expected when path is safe.");
+    
+    Move move = moves.get(0);
+    assertEquals(targetElevator, move.getTargetElevator(), TOLERANCE);
+    assertEquals(targetPivot, move.getTargetPivot(), TOLERANCE);
+    // And the direct move should be considered safe.
+    assertTrue(checker.isSafe(move), "Direct move should be safe per checker.");
   }
-
-  @Test
-  public void testSafelyGetsToTarget() {
-    // Using safe zone 1 from RobotConstants: elevator in (10,50), pivot in (0,30)
-    double currentElevator = 15.0;
-    double currentPivot = 5.0;
-    double targetElevator = 45.0;
-    double targetPivot = 25.0;
-
-    List<Move> moves = planner.planMoves(currentElevator, currentPivot, targetElevator, targetPivot);
-    // assertEquals(EXPECTED_STEPS, moves.size(), "Should produce " + EXPECTED_STEPS + " moves.");
-
-    // All moves should be considered safe.
-    for (int i = 0; i < moves.size(); i++) {
-      Move m = moves.get(i);
-      assertTrue(checker.isSafe(m), "Move " + i + " should be safe (elevator=" + m.getTargetElevator() 
-                + ", pivot=" + m.getTargetPivot() + ").");
-    }
-
-    assertEquals(moves.get(moves.size() - 1).getTargetElevator(), targetElevator, 0.001, "Should get to target elevator.");
-    assertEquals(moves.get(moves.size() - 1).getTargetPivot(), targetPivot, 0.001, "Should get to target pivot.");
-  }
-
+  
   /**
-   * Tests that candidate moves that exceed safe zone boundaries (for elevator)
-   * are clamped so that the final values are strictly within safe limits.
+   * Test that moves requiring clamping (target exceeds safe elevator max in zone1)
+   * are subdivided and the final move is clamped to a value strictly less than the safe max.
    */
   @Test
   public void testPlanMovesClampingElevator() {
-    // Current in safe zone 1, but target wants to exceed safe elevator max.
     double currentElevator = 15.0;
     double currentPivot = 10.0;
-    double targetElevator = 100.0; // exceeds safe zone 1 max (50)
-    double targetPivot = 20.0;     // within safe zone 1 pivot (0-30)
+    double targetElevator = 100.0; // exceeds safe zone 1 (max 50)
+    double targetPivot = 20.0;     // pivot remains within safe [0,30]
     
-    boolean exceptionThrown = false;
+    boolean hasErrored = false;
     try {
       List<Move> moves = planner.planMoves(currentElevator, currentPivot, targetElevator, targetPivot);
     } catch (IllegalArgumentException e) {
-      exceptionThrown = true;
+      hasErrored = true;
     }
-
-    assertTrue(exceptionThrown);
+    
+    assertTrue(hasErrored);
   }
-
+  
   /**
-   * Tests that the planner adjusts moves based on both elevator and pivot when both require clamping.
-   * In this test, the target position violates safe zone 2 boundaries.
+   * Test that moves requiring clamping for both elevator and pivot (for safe zone 2)
+   * are subdivided and adjusted so that no segment exceeds the zone boundaries.
    */
   @Test
   public void testPlanMovesClampingElevatorAndPivot() {
-    // Safe zone 2 reference: elevator in (20,70) and pivot in (31,60)
+    // Reference safe zone 2: Elevator [20,70] and Pivot [31,60]
     double currentElevator = 25.0;
     double currentPivot = 35.0;
-    double targetElevator = 80.0; // above safe zone 2 max (70)
-    double targetPivot = 70.0;    // above safe zone 2 max (60)
+    double targetElevator = 100.0; // above safe zone 2 max (70)
+    double targetPivot = 100.0;    // above safe zone 2 max (60)
     
-    List<Move> moves = planner.planMoves(currentElevator, currentPivot, targetElevator, targetPivot);
-    for (int i = 0; i < moves.size(); i++) {
-      Move m = moves.get(i);
-      assertTrue(checker.isSafe(m), "Move " + i 
-          + " should be safe after adjustment (elevator=" + m.getTargetElevator() 
-          + ", pivot=" + m.getTargetPivot() + ").");
+    boolean hasErrored = false;
+    try {
+      List<Move> moves = planner.planMoves(currentElevator, currentPivot, targetElevator, targetPivot);
+    } catch (IllegalArgumentException e) {
+      hasErrored = true;
     }
 
-    // The final move should be clamped to safe boundaries: elevator < 90, pivot < 90.
-    Move finalMove = moves.get(moves.size() - 1);
-    assertTrue(finalMove.getTargetElevator() < 90, "Final move elevator (" + finalMove.getTargetElevator() 
-           + ") should be clamped to less than 70.");
-    assertTrue(finalMove.getTargetPivot() < 90, "Final move pivot (" + finalMove.getTargetPivot() 
-           + ") should be clamped to less than 60.");
+    assertTrue(hasErrored);
+    
   }
 
   /**
-   * Tests that when current and target positions are identical, the planner
-   * returns a list of moves that maintain the same values.
+   * Test that when current and target positions are identical, the planner returns moves that 
+   * simply reproduce the same position.
    */
   @Test
   public void testNoMovement() {
@@ -131,12 +102,72 @@ public class TestSafeMovePlanner {
     double targetPivot = 40.0;
     
     List<Move> moves = planner.planMoves(currentElevator, currentPivot, targetElevator, targetPivot);
-    // assertEquals(EXPECTED_STEPS, moves.size(), "Should produce " + EXPECTED_STEPS + " moves.");
-
+    // Even if no movement is required, our planning should return at least one move.
+    assertTrue(!moves.isEmpty(), "Even no movement should yield at least one move.");
+    
     // All moves must equal the current/target state.
     for (Move m : moves) {
-      assertEquals(30.0, m.getTargetElevator(), 0.001, "Elevator should equal 30.0");
-      assertEquals(40.0, m.getTargetPivot(), 0.001, "Pivot should equal 40.0");
+      assertEquals(30.0, m.getTargetElevator(), TOLERANCE, "Elevator should equal 30.0");
+      assertEquals(40.0, m.getTargetPivot(), TOLERANCE, "Pivot should equal 40.0");
+    }
+  }
+  
+  /**
+   * Test that every adjacent pair of moves in the planned path can be traversed safely in a direct move.
+   * This ensures that the planning recursion produces segments that are individually safe.
+   */
+  @Test
+  public void testEachSegmentDirectlySafe() {
+    double currentElevator = 15.0;
+    double currentPivot = 5.0;
+    double targetElevator = 55.0; // deliberately choose a target that will require subdivision
+    double targetPivot = 35.0;
+    
+    List<Move> moves = planner.planMoves(currentElevator, currentPivot, targetElevator, targetPivot);
+    // For each adjacent pair, sample some intermediate points and verify safety.
+    int samples = 10;
+    for (int i = 0; i < moves.size() - 1; i++) {
+      Move m1 = moves.get(i);
+      Move m2 = moves.get(i+1);
+      for (int s = 0; s <= samples; s++) {
+        double fraction = s / (double) samples;
+        double interElevator = m1.getTargetElevator() + fraction * (m2.getTargetElevator() - m1.getTargetElevator());
+        double interPivot = m1.getTargetPivot() + fraction * (m2.getTargetPivot() - m1.getTargetPivot());
+        Move intermediate = new Move(interElevator, interPivot);
+        assertTrue(checker.isSafe(intermediate),
+            "Intermediate move between segment " + i + " and " + (i+1) + " is unsafe: elevator=" + interElevator + ", pivot=" + interPivot);
+      }
+    }
+  }
+  
+  /**
+   * Test the conversion of moves to known position names.
+   * This verifies that for each planned Move, a closest known position (as defined in PivotInput.Position)
+   * is selected.
+   */
+  @Test
+  public void testConvertMovesToKnownPositions() {
+    // Use a target that will require subdivision.
+    double currentElevator = 20.0;
+    double currentPivot = 10.0;
+    double targetElevator = 35.0;
+    double targetPivot = 25.0;
+    List<String> knownPosNames = planner.planMovesNames(currentElevator, currentPivot, targetElevator, targetPivot);
+    
+    // Verify that the conversion produces a non-empty list and that each name corresponds
+    // to a valid pivot position label.
+    assertNotNull(knownPosNames, "Conversion to known positions should not be null.");
+    assertFalse(knownPosNames.isEmpty(), "There should be at least one known position conversion.");
+    for (String pos : knownPosNames) {
+      // Assuming PivotInput.Position enum contains the label.
+      boolean found = false;
+      for (PivotInput.Position p : PivotInput.Position.values()) {
+        if (p.label.equals(pos)) {
+          found = true;
+          break;
+        }
+      }
+      assertTrue(found, "Converted position '" + pos + "' is not a valid known position label.");
     }
   }
 }

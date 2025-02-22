@@ -29,5 +29,9 @@ public class SafeZone {
     public double getPivotEnd() {
         return pivotEnd;
     }
+
+    public String toString() {
+        return "(" + elevatorStart + ", " + elevatorEnd + ", " + pivotStart + ", " + pivotEnd + ")";
+    }
     
 }

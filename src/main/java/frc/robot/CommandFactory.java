@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.*;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.PIDConstants;
@@ -17,29 +19,42 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.AutonomousException;
+import frc.robot.commandCheker.*;
+import frc.robot.commands.ElevatorMoveCommand;
+import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
+import frc.robot.io.RobotIO;
 import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.elevator.ElevatorInput;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
-
+import frc.robot.subsystems.pivot.PivotInput;
+import frc.robot.subsystems.pivot.PivotSubsystem;
 @SuppressWarnings("unused")
 public class CommandFactory {
   private final DriveSubsystem driveSubsystem;
   private final NavXSubsystem navXSubsystem;
+  private final PivotSubsystem pivotSubsystem;
+  private final ElevatorSubsystem elevatorSubsystem;
   private final OdometryProcessor odometry;
   private final SubsystemManager subsystemManager;
   private final LEDSubsystem ledSubsystem;
   private final SendableChooser<Command> autoChooser;
+  private final SafeMovePlanner planner;
 
 
   public CommandFactory(SubsystemManager subsystemManager, OdometryProcessor odometry) {
     this.driveSubsystem = subsystemManager.getDriveSubsystem();
     this.navXSubsystem = subsystemManager.getNavXSubsystem();
     this.ledSubsystem = subsystemManager.getLEDSubsystem();
+    this.elevatorSubsystem = subsystemManager.getElevatorSubsystem();
+    this.pivotSubsystem = subsystemManager.getPivotSubsystem();
     this.odometry = odometry;
     this.subsystemManager = subsystemManager;
+    this.planner = new SafeMovePlanner();
 
     RobotConfig config;
     try{
@@ -79,6 +94,25 @@ public class CommandFactory {
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
+  }
+
+  public Command safeElevatorAndPivotMove(double targetElevator, double targetPivot) {
+    List<String> moves = planner.planMovesNames(RobotIO.getInstance().getElevatorOutput().getCurrentPosition(), RobotIO.getInstance().getPivotOutput().getCurrentPosition(), targetElevator, targetPivot);
+    SequentialCommandGroup commands = new SequentialCommandGroup();
+
+    for (String move : moves) {
+      commands.addCommands(new ElevatorMoveCommand(elevatorSubsystem, ElevatorInput.Position.valueOf(move)), new PivotMoveCommand(pivotSubsystem, PivotInput.Position.valueOf(move)));
+    }
+
+    return commands;
+  }
+
+  public Command safeElevatorMove(double target) {
+    return safeElevatorAndPivotMove(target, RobotIO.getInstance().getPivotOutput().getCurrentPosition());
+  }
+
+  public Command safePivotMove(double target) {
+    return safeElevatorAndPivotMove(RobotIO.getInstance().getElevatorOutput().getCurrentPosition(), target);
   }
 
   public Command getAutoCommand() {
