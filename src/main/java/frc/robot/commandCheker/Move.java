@@ -18,4 +18,7 @@ public class Move {
         return targetPivot;
     }
 
+    public String toString() {
+        return "targetElevator: " + targetElevator + " targetPivot: " + targetPivot;
+    }
 }
