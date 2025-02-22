@@ -6,7 +6,6 @@ import frc.entech.subsystems.SubsystemInput;
 import frc.robot.RobotConstants;
 
 public class ElevatorInput implements SubsystemInput {
-
   private boolean activate = true;
   private double requestedPosition = RobotConstants.ELEVATOR.INITIAL_POSITION;
 
@@ -36,5 +35,23 @@ public class ElevatorInput implements SubsystemInput {
 
   public void setRequestedPosition(double requestedPosition) {
     this.requestedPosition = requestedPosition;
+  }
+
+  public enum Position {
+    HOME("ElevatorSubsystem/home"),
+    L1("ElevatorSubsystem/L1"),
+    L2("ElevatorSubsystem/L2"),
+    L3("ElevatorSubsystem/L3"),
+    L4("ElevatorSubsystem/L4"),
+    A_L2("ElevatorSubsystem/a_L2"),
+    A_L3("ElevatorSubsystem/a_L3"),
+    A_GROUND("ElevatorSubsystem/a_ground"),
+    BARGE("ElevatorSubsystem/barge");
+
+    public final String label;
+
+    private Position(String label) {
+        this.label = label;
+    }
   }
 }

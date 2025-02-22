@@ -142,13 +142,7 @@ public final class RobotConstants {
     public static final double UPPER_SOFT_LIMIT_DEG = 85.5;
     public static final double LOWER_SOFT_LIMIT_DEG = 1;
     public static final double ELEVATOR_CONVERSION_FACTOR = 2.4;
-    public static final double SHOOT_AMP_POSITION_DEG = 85.5;
     public static final double POSITION_TOLERANCE_DEG = 2;
-
-    public static final double LOB_ANGLE = 10.0;
-
-    public static final double SPEAKER_SUBWOOFER_SCORING = 8;
-    public static final double SPEAKER_PODIUM_SCORING = 30;
   }
 
   public static interface CORAL{

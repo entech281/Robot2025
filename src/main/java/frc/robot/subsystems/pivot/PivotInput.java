@@ -35,4 +35,22 @@ public class PivotInput implements SubsystemInput {
     public void setRequestedPosition(double requestedPosition) {
         this.requestedPosition = requestedPosition;
     }
+
+    public enum Position {
+        HOME("PivotSubsystem/home"),
+        L1("PivotSubsystem/L1"),
+        L2("PivotSubsystem/L2"),
+        L3("PivotSubsystem/L3"),
+        L4("PivotSubsystem/L4"),
+        A_L2("PivotSubsystem/a_L2"),
+        A_L3("PivotSubsystem/a_L3"),
+        A_GROUND("PivotSubsystem/a_ground"),
+        BARGE("PivotSubsystem/barge");
+
+        public final String label;
+
+        private Position(String label) {
+            this.label = label;
+        }
+    }
 }
