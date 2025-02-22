@@ -120,6 +120,11 @@ public final class RobotConstants {
 
     public static final int DRIVING_MOTOR_CURRENT_LIMIT_AMPS = 40; // 50; // amps
     public static final int TURNING_MOTOR_CURRENT_LIMIT_AMPS = 20; // amps
+
+    public static final double FRONT_LEFT_VIRTUAL_OFFSET_RADIANS = 0.25552591580217987;
+    public static final double FRONT_RIGHT_VIRTUAL_OFFSET_RADIANS = -0.4542734933134782;
+    public static final double REAR_LEFT_VIRTUAL_OFFSET_RADIANS = -2.1838283853944285;
+    public static final double REAR_RIGHT_VIRTUAL_OFFSET_RADIANS = -0.8463679267332642;
   }
 
   public static interface LiveTuning {
@@ -166,10 +171,10 @@ public final class RobotConstants {
   public static interface PORTS {
 
     public static interface ANALOG {
-      public static final int FRONT_LEFT_TURNING_ABSOLUTE_ENCODER = 3;
-      public static final int REAR_LEFT_TURNING_ABSOLUTE_ENCODER = 0;
-      public static final int FRONT_RIGHT_TURNING_ABSOLUTE_ENCODER = 2;
-      public static final int REAR_RIGHT_TURNING_ABSOLUTE_ENCODER = 1;
+      public static final int FRONT_LEFT_TURNING_ABSOLUTE_ENCODER = 0;
+      public static final int REAR_LEFT_TURNING_ABSOLUTE_ENCODER = 2;
+      public static final int FRONT_RIGHT_TURNING_ABSOLUTE_ENCODER = 1;
+      public static final int REAR_RIGHT_TURNING_ABSOLUTE_ENCODER = 3;
     }
 
 

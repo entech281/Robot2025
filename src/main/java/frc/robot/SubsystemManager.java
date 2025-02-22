@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.subsystems.SubsystemInput;
 import frc.entech.subsystems.SubsystemOutput;
@@ -67,10 +68,10 @@ public class SubsystemManager {
     return r;
   }
 
-  public void periodic() {
+  public final void periodic() {
     RobotIO outputs = RobotIO.getInstance();
 
-      outputs.updateDrive(driveSubsystem.getOutputs());
+    outputs.updateDrive(driveSubsystem.getOutputs());
 
     outputs.updateNavx(navXSubsystem.getOutputs());
 
