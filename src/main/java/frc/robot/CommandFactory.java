@@ -93,7 +93,7 @@ public class CommandFactory {
 
   public Command getSafeElevatorPivotMoveCommand(Position pos) {
     return new InstantCommand(() -> {
-
+      formSafeMovementCommand(pos).schedule();
     });
   }
 

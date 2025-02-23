@@ -117,6 +117,8 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
           elevatorOutput.getCurrentPosition(), currentInput.getRequestedPosition()));
       elevatorOutput.setAtLowerLimit(
           leftElevator.getReverseLimitSwitch().isPressed());
+      elevatorOutput.setAtUpperLimit(
+          leftElevator.getForwardLimitSwitch().isPressed());
       elevatorOutput.setRequestedPosition(currentInput.getRequestedPosition());
     }
     return elevatorOutput;
