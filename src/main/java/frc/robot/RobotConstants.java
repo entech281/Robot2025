@@ -223,7 +223,7 @@ public final class RobotConstants {
       public static final int ELEVATOR_A = 35;
       public static final int ELEVATOR_B = 35;
 
-      public static final int CORAL_MOTOR = 15; 
+      public static final int CORAL_MOTOR = 38; 
 
       public static final int PIVOT_MOTOR = 38;
 

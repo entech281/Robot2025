@@ -19,6 +19,7 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ElevatorUpCommand;
 import frc.robot.commands.ElevatorDownCommand;
 import frc.robot.commands.GyroReset;
+import frc.robot.commands.IntakeCoralCommand;
 import frc.robot.commands.PivotDownCommand;
 import frc.robot.commands.PivotUpCommand;
 import frc.robot.commands.ResetOdometryCommand;
@@ -130,6 +131,9 @@ public class OperatorInterface
 
     xboxController.button(1)
       .onTrue(new ElevatorDownCommand(subsystemManager.getElevatorSubsystem()));
+
+    xboxController.button(2)
+      .whileTrue(new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem()));
 
     xboxController.button(6)
         .whileTrue(commandFactory.getAlignmentCommand());

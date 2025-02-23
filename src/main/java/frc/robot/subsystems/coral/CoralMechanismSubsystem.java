@@ -1,5 +1,7 @@
 package frc.robot.subsystems.coral;
 
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -11,8 +13,8 @@ import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
 
 public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput, CoralMechanismOutput> {
-    private static final boolean ENABLED = false;
-    private static final boolean IS_INVERTED = false;
+    private static final boolean ENABLED = true;
+    private static final boolean IS_INVERTED = true;
 
     private CoralMechanismInput currentInput = new CoralMechanismInput();
     private SparkMax coralMotor;
@@ -32,6 +34,8 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
             coralConfig.inverted(IS_INVERTED);
             coralConfig.idleMode(IdleMode.kBrake);
             mode = IdleMode.kBrake;
+
+            coralMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         }
     }
 
