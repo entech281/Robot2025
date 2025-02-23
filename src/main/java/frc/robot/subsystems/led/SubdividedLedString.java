@@ -28,6 +28,18 @@ public class SubdividedLedString {
       return s;
   }
 
+  public void removeSection(LedSection s) {
+    sections.remove(s);
+  }
+
+  public LedSection removeSection(int i) {
+    return sections.remove(i);
+  }
+
+  public void clearAllSections() {
+    sections.clear();
+  }
+
   /**
    * Returns the list of LED sections.
    *
