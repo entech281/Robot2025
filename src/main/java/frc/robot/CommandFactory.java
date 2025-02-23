@@ -1,5 +1,6 @@
 package frc.robot;
 
+import java.io.IOException;
 import java.util.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -97,11 +98,27 @@ public class CommandFactory {
   }
 
   public Command safeElevatorAndPivotMove(double targetElevator, double targetPivot) {
-    List<String> moves = planner.planMovesNames(RobotIO.getInstance().getElevatorOutput().getCurrentPosition(), RobotIO.getInstance().getPivotOutput().getCurrentPosition(), targetElevator, targetPivot);
+    Map<ElevatorInput.Position, Double> elePosMap = new HashMap<>();
+    Map<PivotInput.Position, Double> pivPosMap = new HashMap<>();
+    for (ElevatorInput.Position pos : ElevatorInput.Position.values()) {
+      elePosMap.put(pos, LiveTuningHandler.getInstance().getValue(pos.label));
+    }
+    for (PivotInput.Position pos : PivotInput.Position.values()) {
+      pivPosMap.put(pos, LiveTuningHandler.getInstance().getValue(pos.label));
+    }
+    List<Object> moves = planner.planMovesNames(RobotIO.getInstance().getElevatorOutput().getCurrentPosition(), RobotIO.getInstance().getPivotOutput().getCurrentPosition(), targetElevator, targetPivot, elePosMap, pivPosMap);
     SequentialCommandGroup commands = new SequentialCommandGroup();
+    DriverStation.reportWarning(moves.size() + "", false);
+    DriverStation.reportWarning(moves + "", false);
+    DriverStation.reportWarning(moves.get(0).getClass() + "", false);
+    for (Object move : moves) {
+      if (move instanceof ElevatorInput.Position) {
+        commands.addCommands(new ElevatorMoveCommand(elevatorSubsystem, (ElevatorInput.Position) move));
+      }
 
-    for (String move : moves) {
-      commands.addCommands(new ElevatorMoveCommand(elevatorSubsystem, ElevatorInput.Position.valueOf(move)), new PivotMoveCommand(pivotSubsystem, PivotInput.Position.valueOf(move)));
+      if (move instanceof PivotInput.Position) {
+        commands.addCommands(new PivotMoveCommand (pivotSubsystem, (PivotInput.Position) move));
+      }
     }
 
     return commands;

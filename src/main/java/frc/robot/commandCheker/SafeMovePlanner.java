@@ -3,6 +3,7 @@ package frc.robot.commandCheker;
 import java.util.*;
 import java.util.Map.Entry;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.LiveTuning;
 import frc.robot.livetuning.LiveTuningHandler;
@@ -18,7 +19,7 @@ import frc.robot.subsystems.elevator.ElevatorInput;
  */
 public class SafeMovePlanner {
 
-  private static final int MAX_RECURSION_DEPTH = 20;
+  private static final int MAX_RECURSION_DEPTH = 100;
   private static final double POSITION_TOLERANCE = 0.01;
   private static final double EPSILON = 0.001;
   private final SafeCommandChecker checker;
@@ -44,16 +45,17 @@ public class SafeMovePlanner {
     if (!checker.isSafe(command)) {
       //since we have preset locations
       //this should never be thrown
-      throw new IllegalStateException("Target move is unsafe.");
+      throw new IllegalArgumentException("Target move is unsafe.");
     }
-    return planSegment(currentElevator, currentPivot, command, 100);
+    List<Move> moves = planSegment(currentElevator, currentPivot, command, 100);
+    return moves;
   }
 
-  public List<String> planMovesNames(double currentElevator, double currentPivot, Move command, Map<ElevatorInput.Position, Double> elevatorPos, Map<PivotInput.Position, Double> pivotPos) {
+  public List<Object> planMovesNames(double currentElevator, double currentPivot, Move command, Map<ElevatorInput.Position, Double> elevatorPos, Map<PivotInput.Position, Double> pivotPos) {
     return convertMovesToKnownPositions(planMoves(currentElevator, currentPivot, command, elevatorPos, pivotPos), elevatorPos, pivotPos);
   }
 
-  public List<String> planMovesNames(double currentElevator, double currentPivot, double targetElevator, double targetPivot, Map<ElevatorInput.Position, Double> elevatorPos, Map<PivotInput.Position, Double> pivotPos) {
+  public List<Object> planMovesNames(double currentElevator, double currentPivot, double targetElevator, double targetPivot, Map<ElevatorInput.Position, Double> elevatorPos, Map<PivotInput.Position, Double> pivotPos) {
     return planMovesNames(currentElevator, currentPivot, new Move(targetElevator, targetPivot), elevatorPos, pivotPos);
   }
 
@@ -93,6 +95,7 @@ public class SafeMovePlanner {
     Move midMove = new Move(midElevator, midPivot);
     
     // Recursively plan from current to midpoint.
+
     moves.addAll(planSegment(curElevator, curPivot, midMove, depth + 1));
     // Recursively plan from midpoint to target.
     moves.addAll(planSegment(midElevator, midPivot, target, depth + 1));
@@ -100,45 +103,40 @@ public class SafeMovePlanner {
     return moves;
   }
 
-  private List<String> getKnownPositions() {
+  private List<Object> getKnownPositions() {
 
-    List<String> knownMoves = new ArrayList<String>();
+    List<Object> knownMoves = new ArrayList<>();
     for (int i = 0; i < PivotInput.Position.values().length; i++) {
-      knownMoves.add(PivotInput.Position.values()[i].label);
+      knownMoves.add(PivotInput.Position.values()[i]);
+    }
+
+    for (int i = 0; i < ElevatorInput.Position.values().length; i++) {
+      knownMoves.add(ElevatorInput.Position.values()[i]);
     }
     
     return knownMoves;
   }
 
 
-  public List<String> convertMovesToKnownPositions (List<Move> moves, Map<ElevatorInput.Position, Double> elevatorPos, Map<PivotInput.Position, Double> pivotPos) {
+  public List<Object> convertMovesToKnownPositions (List<Move> moves, Map<ElevatorInput.Position, Double> elevatorPos, Map<PivotInput.Position, Double> pivotPos) {
     
-    List<String> knownMoves = getKnownPositions();
-    List<String> convertedMoves = new ArrayList<>();
+    List<Object> knownMoves = getKnownPositions();
+    List<Object> convertedMoves = new ArrayList<>();
 
     for (Move move : moves) {
-      String closestPos = getClosestMove(knownMoves, move, elevatorPos, pivotPos);
+      Object closestPos = getClosestMove(knownMoves, move, elevatorPos, pivotPos);
       convertedMoves.add(closestPos);
     }
     
     return convertedMoves;
   }
 
-  private String getClosestMove(List<String> str_moves, Move target, Map<ElevatorInput.Position, Double> elevatorPos, Map<PivotInput.Position, Double> pivotPos) {
+  private Object getClosestMove(List<Object> str_moves, Move target, Map<ElevatorInput.Position, Double> elevatorPos, Map<PivotInput.Position, Double> pivotPos) {
     
-    List<Move> moves = new ArrayList<Move>();
-    for (String moveName : str_moves) {
-      for (Entry<ElevatorInput.Position, Double> pos : elevatorPos.entrySet()) {
-        if (pos.getKey().label.equals(moveName)) {
-          for (Entry <PivotInput.Position, Double> pos2 : pivotPos.entrySet()) {
-            if (pos2.getKey().label.equals(moveName)) {
-              moves.add(new Move(pos.getValue(), pos2.getValue()));
-            }
-          }
-        }
-      }
+    List<Move> moves = new ArrayList<>();
+    for (int i = 0; i < elevatorPos.entrySet().size(); i++) {
+      moves.add(new Move(elevatorPos.get(elevatorPos.keySet().toArray()[i]), pivotPos.get(pivotPos.keySet().toArray()[i])));
     }
-
     Move closestMove = moves.get(0);
     
     double closestDistance = Double.MAX_VALUE;

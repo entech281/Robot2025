@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -16,6 +17,8 @@ import frc.robot.CommandFactory;
 import frc.robot.RobotConstants;
 import frc.robot.SubsystemManager;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.ElevatorUpCommand;
+import frc.robot.commands.ElevatorDownCommand;
 import frc.robot.commands.GyroReset;
 import frc.robot.commands.PivotDownCommand;
 import frc.robot.commands.PivotUpCommand;
@@ -123,10 +126,10 @@ public class OperatorInterface
         .onTrue(new RunTestCommand(testChooser));
 
     xboxController.button(4)
-      .onTrue(new PivotUpCommand(subsystemManager.getPivotSubsystem()));
+      .whileTrue(new InstantCommand(() -> {commandFactory.safeElevatorAndPivotMove(11.0, 30.0).schedule();}));
 
     xboxController.button(1)
-      .onTrue(new PivotDownCommand(subsystemManager.getPivotSubsystem()));
+      .whileTrue(new ElevatorDownCommand(subsystemManager.getElevatorSubsystem()));
 
     xboxController.button(6)
         .whileTrue(commandFactory.getAlignmentCommand());

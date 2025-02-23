@@ -60,9 +60,10 @@ public final class RobotConstants {
 
   public static interface SafeZones {
     public static final SafeZone[] safeZones = new SafeZone[] {
-      new SafeZone(10, 50, 0, 30),
-      new SafeZone(20, 70, 31, 60),
-      new SafeZone(30, 90, 61, 90)
+      new SafeZone(-1, 23, 29, 36),
+      new SafeZone(0, 3, 0, 166),
+      new SafeZone(2, 4, 30, 41),
+      new SafeZone(-23, 1, 0, 360)
     };
   }
 
@@ -141,25 +142,26 @@ public final class RobotConstants {
 
   public static interface LiveTuning {
     public static final Map<String, Double> VALUES = Map.ofEntries(
+      Map.entry("ElevatorSubsystem/NudgeAmount", 5.0),
       Map.entry("PivotSubsystem/NudgeAmount", 5.0),
-      Map.entry(ElevatorInput.Position.L1.label, 5.0),
-      Map.entry(ElevatorInput.Position.L2.label, 5.0),
-      Map.entry(ElevatorInput.Position.L3.label, 5.0),
-      Map.entry(ElevatorInput.Position.L4.label, 5.0),
-      Map.entry(ElevatorInput.Position.ALGAE_L2.label, 5.0),
-      Map.entry(ElevatorInput.Position.ALGAE_L3.label, 5.0),
-      Map.entry(ElevatorInput.Position.ALGAE_GROUND.label, 5.0),
-      Map.entry(ElevatorInput.Position.BARGE.label, 5.0),
-      Map.entry(ElevatorInput.Position.HOME.label, 5.0),
-      Map.entry(PivotInput.Position.L1.label, 5.0),
-      Map.entry(PivotInput.Position.L2.label, 5.0),
-      Map.entry(PivotInput.Position.L3.label, 5.0),
-      Map.entry(PivotInput.Position.L4.label, 5.0),
-      Map.entry(PivotInput.Position.ALGAE_L2.label, 5.0),
-      Map.entry(PivotInput.Position.ALGAE_L3.label, 5.0),
-      Map.entry(PivotInput.Position.ALGAE_GROUND.label, 5.0),
-      Map.entry(PivotInput.Position.BARGE.label, 5.0),
-      Map.entry(PivotInput.Position.HOME.label, 5.0)
+      Map.entry(ElevatorInput.Position.L1.label, 0.0),
+      Map.entry(ElevatorInput.Position.L2.label, 3.2),
+      Map.entry(ElevatorInput.Position.L3.label, 8.5),
+      Map.entry(ElevatorInput.Position.L4.label, 18.7),
+      Map.entry(ElevatorInput.Position.ALGAE_L2.label, 6.3),
+      Map.entry(ElevatorInput.Position.ALGAE_L3.label, 11.0),
+      Map.entry(ElevatorInput.Position.ALGAE_GROUND.label, 0.0),
+      Map.entry(ElevatorInput.Position.BARGE.label, 22.0),
+      Map.entry(ElevatorInput.Position.HOME.label, 0.0),
+      Map.entry(PivotInput.Position.L1.label, 35.0),
+      Map.entry(PivotInput.Position.L2.label, 40.0),
+      Map.entry(PivotInput.Position.L3.label, 40.0),
+      Map.entry(PivotInput.Position.L4.label, 80.0),
+      Map.entry(PivotInput.Position.ALGAE_L2.label, 165.0),
+      Map.entry(PivotInput.Position.ALGAE_L3.label, 165.0),
+      Map.entry(PivotInput.Position.ALGAE_GROUND.label, 165.0),
+      Map.entry(PivotInput.Position.BARGE.label, 80.0),
+      Map.entry(PivotInput.Position.HOME.label, 35.0)
     );
   }
 
@@ -235,12 +237,12 @@ public final class RobotConstants {
       public static final int REAR_LEFT_TURNING = 31;
       public static final int REAR_RIGHT_TURNING = 41;
 
-      public static final int ELEVATOR_A = 13;
-      public static final int ELEVATOR_B = 14;
+      public static final int ELEVATOR_A = 35;
+      public static final int ELEVATOR_B = 35;
 
       public static final int CORAL_MOTOR = 15; 
 
-      public static final int PIVOT_MOTOR = 35;
+      public static final int PIVOT_MOTOR = 38;
 
 
     }
