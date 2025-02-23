@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.AutonomousException;
+import frc.robot.commands.ElevatorMoveCommand;
+import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
 import frc.robot.io.RobotIO;
 import frc.robot.livetuning.LiveTuningHandler;
@@ -28,8 +30,6 @@ import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
-import frc.robot.commands.PivotMoveCommand;
-import frc.robot.commands.ElevatorMoveCommand;
 
 @SuppressWarnings("unused")
 public class CommandFactory {
@@ -111,9 +111,9 @@ public class CommandFactory {
   }
 
   public Command getSafeElevatorPivotMoveCommand(Position pos) {
-    return new InstantCommand(() -> {
-      formSafeMovementCommand(pos).schedule();
-    });
+    return new InstantCommand(() -> 
+      formSafeMovementCommand(pos).schedule()
+    );
   }
 
   public static final double ELEVATOR_PIVOT_LIMBO = 1.6;

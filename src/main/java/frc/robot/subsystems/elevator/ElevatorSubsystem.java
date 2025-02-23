@@ -59,7 +59,7 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
           .maxVelocity(500,ClosedLoopSlot.kSlot1 )
           .allowedClosedLoopError(1,ClosedLoopSlot.kSlot1);
 
-    leftElevator.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      leftElevator.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
   }
   private double clampRequestedPosition(double position) {

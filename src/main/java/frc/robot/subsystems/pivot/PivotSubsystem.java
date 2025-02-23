@@ -32,7 +32,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
             SparkMaxConfig pivotConfig = new SparkMaxConfig();
             pivotMotor = new SparkMax(RobotConstants.PORTS.CAN.PIVOT_MOTOR, MotorType.kBrushless);
 
-            // pivotMotor.getEncoder().setPosition(0.0);
+            pivotMotor.getEncoder().setPosition(0.0);
             pivotConfig.inverted(IS_INVERTED);
             pivotConfig.idleMode(IdleMode.kBrake);
             mode = IdleMode.kBrake;
