@@ -31,6 +31,6 @@ public class PivotMoveCommand extends EntechCommand {
 
   @Override
   public boolean isFinished() {
-    return RobotIO.getInstance().getPivotOutput().atRequestedPosition();
+    return RobotIO.getInstance().getPivotOutput().isAtRequestedPosition();
   }
 }

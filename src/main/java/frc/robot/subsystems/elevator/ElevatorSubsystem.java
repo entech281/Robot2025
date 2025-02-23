@@ -35,29 +35,31 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   public void initialize() {
     if (ENABLED) {
       
-      SparkMaxConfig lelevator = new SparkMaxConfig();
-      // SparkMaxConfig relevator = new SparkMaxConfig();
+      SparkMaxConfig motorConfig = new SparkMaxConfig();
 
       leftElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_A, MotorType.kBrushless);
-      // rightElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_B, MotorType.kBrushless);
-
-      // relevator.follow(leftElevator);
       leftElevator.getEncoder().setPosition(0.0);
 
-      lelevator.inverted(IS_INVERTED);
-      // relevator.inverted(IS_INVERTED);
+      motorConfig.inverted(IS_INVERTED);
 
-      lelevator.idleMode(IdleMode.kBrake);
-      // relevator.idleMode(IdleMode.kBrake);
+      motorConfig.idleMode(IdleMode.kBrake);
 
-      lelevator.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-      lelevator.closedLoop.pid(0.2, 0, 0, ClosedLoopSlot.kSlot0);
-      lelevator.closedLoop.pid(0.2, 0, 0, ClosedLoopSlot.kSlot1);
-      lelevator.closedLoop.outputRange(-0.2, 0.2, ClosedLoopSlot.kSlot0);
-      lelevator.closedLoop.outputRange(-0.2, 0.2, ClosedLoopSlot.kSlot1);
+      motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+      .pid(0.2, 0, 0, ClosedLoopSlot.kSlot0)
+      .pid(0.2, 0, 0, ClosedLoopSlot.kSlot1)
+      .outputRange(-0.2, 0.2, ClosedLoopSlot.kSlot0)
+      .outputRange(-0.2, 0.2, ClosedLoopSlot.kSlot1);
 
-      leftElevator.configure(lelevator, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-      // rightElevator.configure(relevator, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      motorConfig.closedLoop.maxMotion
+          .maxVelocity(1000,ClosedLoopSlot.kSlot0)
+          .maxAcceleration(1000,ClosedLoopSlot.kSlot0)
+          .allowedClosedLoopError(1,ClosedLoopSlot.kSlot0)
+
+          .maxAcceleration(500,ClosedLoopSlot.kSlot1)
+          .maxVelocity(500,ClosedLoopSlot.kSlot1 )
+          .allowedClosedLoopError(1,ClosedLoopSlot.kSlot1);
+
+    leftElevator.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
   }
   private double clampRequestedPosition(double position) {
@@ -82,10 +84,10 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
     if (ENABLED) {
       if (currentInput.getActivate()) {
         if ((-leftElevator.getEncoder().getPosition() * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR) - clampedPosition <= 0) {
-          leftElevator.getClosedLoopController().setReference(-calculateMotorPositionFromDegrees(clampedPosition), ControlType.kPosition, ClosedLoopSlot.kSlot0);
+          leftElevator.getClosedLoopController().setReference(-calculateMotorPositionFromDegrees(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
         } 
         else {
-          leftElevator.getClosedLoopController().setReference(-calculateMotorPositionFromDegrees(clampedPosition), ControlType.kPosition, ClosedLoopSlot.kSlot1);
+          leftElevator.getClosedLoopController().setReference(-calculateMotorPositionFromDegrees(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
         }
       } 
       else {
