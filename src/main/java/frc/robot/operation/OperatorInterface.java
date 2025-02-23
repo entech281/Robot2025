@@ -16,6 +16,8 @@ import frc.robot.CommandFactory;
 import frc.robot.RobotConstants;
 import frc.robot.SubsystemManager;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.ElevatorUpCommand;
+import frc.robot.commands.ElevatorDownCommand;
 import frc.robot.commands.GyroReset;
 import frc.robot.commands.PivotDownCommand;
 import frc.robot.commands.PivotUpCommand;
@@ -124,10 +126,10 @@ public class OperatorInterface
         .onTrue(new RunTestCommand(testChooser));
 
     xboxController.button(4)
-      .onTrue(new PivotUpCommand(subsystemManager.getPivotSubsystem()));
+      .onTrue(new ElevatorUpCommand(subsystemManager.getElevatorSubsystem()));
 
     xboxController.button(1)
-      .onTrue(new PivotDownCommand(subsystemManager.getPivotSubsystem()));
+      .onTrue(new ElevatorDownCommand(subsystemManager.getElevatorSubsystem()));
 
     xboxController.button(6)
         .whileTrue(commandFactory.getAlignmentCommand());

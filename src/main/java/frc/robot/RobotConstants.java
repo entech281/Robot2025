@@ -17,8 +17,6 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.entech.util.AprilTagDistanceCalibration;
-import frc.robot.subsystems.elevator.ElevatorInput;
-import frc.robot.subsystems.pivot.PivotInput;
 
 public final class RobotConstants {
   public static final double TIME_PER_PERIODICAL_LOOP_SECONDS = 0.00;
@@ -132,24 +130,26 @@ public final class RobotConstants {
   public static interface LiveTuning {
     public static final Map<String, Double> VALUES = Map.ofEntries(
       Map.entry("PivotSubsystem/NudgeAmount", 5.0),
-      Map.entry(ElevatorInput.Position.L1.label, 5.0),
-      Map.entry(ElevatorInput.Position.L2.label, 5.0),
-      Map.entry(ElevatorInput.Position.L3.label, 5.0),
-      Map.entry(ElevatorInput.Position.L4.label, 5.0),
-      Map.entry(ElevatorInput.Position.ALGAE_L2.label, 5.0),
-      Map.entry(ElevatorInput.Position.ALGAE_L3.label, 5.0),
-      Map.entry(ElevatorInput.Position.ALGAE_GROUND.label, 5.0),
-      Map.entry(ElevatorInput.Position.BARGE.label, 5.0),
-      Map.entry(ElevatorInput.Position.HOME.label, 5.0),
-      Map.entry(PivotInput.Position.L1.label, 5.0),
-      Map.entry(PivotInput.Position.L2.label, 5.0),
-      Map.entry(PivotInput.Position.L3.label, 5.0),
-      Map.entry(PivotInput.Position.L4.label, 5.0),
-      Map.entry(PivotInput.Position.ALGAE_L2.label, 5.0),
-      Map.entry(PivotInput.Position.ALGAE_L3.label, 5.0),
-      Map.entry(PivotInput.Position.ALGAE_GROUND.label, 5.0),
-      Map.entry(PivotInput.Position.BARGE.label, 5.0),
-      Map.entry(PivotInput.Position.HOME.label, 5.0)
+      Map.entry(Position.ALGAE_GROUND.getElevatorKey(), 5.0),
+      Map.entry(Position.ALGAE_L2.getElevatorKey(), 5.0),
+      Map.entry(Position.ALGAE_L3.getElevatorKey(), 5.0),
+      Map.entry(Position.L1.getElevatorKey(), 5.0),
+      Map.entry(Position.L2.getElevatorKey(), 5.0),
+      Map.entry(Position.L3.getElevatorKey(), 5.0),
+      Map.entry(Position.L4.getElevatorKey(), 5.0),
+      Map.entry(Position.BARGE.getElevatorKey(), 5.0),
+      Map.entry(Position.HOME.getElevatorKey(), 5.0),
+      Map.entry(Position.SAFE_EXTEND.getElevatorKey(), -999.0),
+      Map.entry(Position.ALGAE_GROUND.getPivotKey(), 5.0),
+      Map.entry(Position.ALGAE_L2.getPivotKey(), 5.0),
+      Map.entry(Position.ALGAE_L3.getPivotKey(), 5.0),
+      Map.entry(Position.L1.getPivotKey(), 5.0),
+      Map.entry(Position.L2.getPivotKey(), 5.0),
+      Map.entry(Position.L3.getPivotKey(), 5.0),
+      Map.entry(Position.L4.getPivotKey(), 5.0),
+      Map.entry(Position.BARGE.getPivotKey(), 5.0),
+      Map.entry(Position.HOME.getPivotKey(), 5.0),
+      Map.entry(Position.SAFE_EXTEND.getPivotKey(), 5.0)
     );
   }
 
@@ -157,7 +157,7 @@ public final class RobotConstants {
     public static final double INITIAL_POSITION = 0.0;
     public static final double UPPER_SOFT_LIMIT_DEG = 85.5;
     public static final double LOWER_SOFT_LIMIT_DEG = 1;
-    public static final double ELEVATOR_CONVERSION_FACTOR = 2.4;
+    public static final double ELEVATOR_CONVERSION_FACTOR = 1.0;
     public static final double POSITION_TOLERANCE_DEG = 2;
 
     public static final double HOME_POSITION = 0.0;
@@ -219,12 +219,12 @@ public final class RobotConstants {
       public static final int REAR_LEFT_TURNING = 31;
       public static final int REAR_RIGHT_TURNING = 41;
 
-      public static final int ELEVATOR_A = 13;
-      public static final int ELEVATOR_B = 14;
+      public static final int ELEVATOR_A = 35;
+      public static final int ELEVATOR_B = 35;
 
       public static final int CORAL_MOTOR = 15; 
 
-      public static final int PIVOT_MOTOR = 35;
+      public static final int PIVOT_MOTOR = 38;
 
 
     }
