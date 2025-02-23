@@ -55,16 +55,19 @@ public class DefaultLEDStringCreator {
                 subdivided.removeSection(driver_section);
                 //TODO: Find out what getTargetAngle() actually returns
                 //I assumed it returned radians and we can only see 180 deg
+                //TODO: clean out magic numbers
                 int redIndex = (int) targetAngle;
-                redIndex = (int) ((redIndex * (180/ Math.PI)) / MAX_DEG_CAMERA_CAN_SEE * ledCount);
-                if (redIndex > 0) {
-                    subdivided.addSection(Color.kGreen, Color.kGreen, 0, redIndex);
+                redIndex = (int) ((redIndex * (180 / Math.PI)) / MAX_DEG_CAMERA_CAN_SEE * ledCount);
+                if (redIndex - 6 > 0) {
+                    subdivided.addSection(Color.kGreen, Color.kGreen, 0, redIndex - 6);
                 }
                 // Single LED marked red at the target.
+                subdivided.addSection(Color.kYellow, Color.kYellow, redIndex - 6, Math.max(redIndex - 6, 0));
                 subdivided.addSection(Color.kRed, Color.kRed, redIndex, redIndex + 1);
+                subdivided.addSection(Color.kYellow, Color.kYellow, redIndex, Math.min(redIndex + 6, ledCount - 1));
                 // From redIndex+1 to ledCount: green segment.
-                if (redIndex < ledCount - 1) {
-                    subdivided.addSection(Color.kGreen, Color.kGreen, redIndex + 1, ledCount);
+                if (redIndex + 6 < ledCount - 1) {
+                    subdivided.addSection(Color.kGreen, Color.kGreen, redIndex + 6, ledCount);
                 }
             }
 

@@ -78,6 +78,7 @@ public class TestDefaultLEDStringCreator {
         SubdividedLedString subdivided = creator.createLEDString(true, false, false, 1.6);
 
         boolean redOnce = false;
+        int numYellows = 0;
         boolean passedTest = true;
         for (LedSection section : subdivided.getSections().subList(1, subdivided.getSections().size())) {
             if (section.getFgColor().equals(Color.kRed)) {
@@ -86,6 +87,12 @@ public class TestDefaultLEDStringCreator {
                     break;
                 }
                 redOnce = true;
+            } else if (section.getFgColor().equals(Color.kYellow)) {
+                numYellows++;
+                if (numYellows > 2) {
+                    passedTest = false;
+                    break;
+                }
             } else if (!section.getFgColor().equals(Color.kGreen)) {
                 passedTest = false;
                 break;
@@ -93,6 +100,10 @@ public class TestDefaultLEDStringCreator {
         }
 
         if (!redOnce) {
+            passedTest = false;
+        }
+
+        if (numYellows != 2) {
             passedTest = false;
         }
 
