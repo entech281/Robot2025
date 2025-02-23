@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.time.Instant;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.PIDConstants;
@@ -17,12 +19,17 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.AutonomousException;
+import frc.robot.CommandFactory.Position;
+import frc.robot.commands.ElevatorMoveCommand;
+import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
 import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.elevator.ElevatorInput;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
+import frc.robot.subsystems.pivot.PivotInput;
 
 @SuppressWarnings("unused")
 public class CommandFactory {
@@ -89,5 +96,45 @@ public class CommandFactory {
 
   public Command getAlignmentCommand() {
     return new RelativeVisionAlignmentCommand();
+  }
+
+  public enum Position {
+    HOME,
+    L1,
+    L2,
+    L3,
+    L4,
+    ALGAE_L2,
+    ALGAE_L3,
+    ALGAE_GROUND,
+    BARGE
+  }
+
+  private Command getElevatorVersionOfPosition(Position pos) {
+    for (ElevatorInput.Position y : ElevatorInput.Position.values()) {
+      if (pos.toString().equals(y.toString())) {
+        return new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), y);
+      }
+    }
+    return Commands.none();
+  }
+
+  private Command getPivotVersionOfPosition(Position pos) {
+    for (PivotInput.Position y : PivotInput.Position.values()) {
+      if (pos.toString().equals(y.toString())) {
+        return new PivotMoveCommand(subsystemManager.getPivotSubsystem(), y);
+      }
+    }
+    return Commands.none();
+  }
+
+  public Command getSafeElevatorPivotMoveCommand(Position pos) {
+    return new InstantCommand(() -> {
+
+    });
+  }
+
+  private Command formSafeMovementCommand(Position pos) {
+    
   }
 }
