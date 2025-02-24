@@ -16,7 +16,7 @@ class TestLEDSubsystem {
 
   @BeforeEach
   void setup() {
-    ledSubsystem = new LEDSubsystem();
+    ledSubsystem = new LEDSubsystem(true);
     input = new LEDInput();
   }
 
@@ -69,6 +69,7 @@ class TestLEDSubsystem {
 
     ledSubsystem.updateInputs(input);
     ledSubsystem.initialize();
+
 
     // Record the initial color (should be BLUE)
     LEDOutput output = ledSubsystem.toOutputs();
