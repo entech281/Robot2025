@@ -24,11 +24,6 @@ public class TestInternalCoralDetectorCommand extends EntechCommand {
   }
 
   @Override
-  public void initialize() {
-    //required comment so that sonar will be fine
-  }
-
-  @Override
   public boolean isFinished() {
     return detector.getOutputs().sensorHasCoral();
   }
