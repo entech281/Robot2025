@@ -27,14 +27,6 @@ public class TestInternalCoralDetectorCommand extends EntechCommand {
               "Trigger the forward sensor.");
         }
       }
-      case 1 -> {
-        if (detector.getOutputs().rearSensorHasCoral()) {
-          stage++;
-        } else {
-          Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST,
-              "Trigger the rear sensor.");
-        }
-      }
       default -> { break; }
     }
   }

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.coral;
+package frc.robot.subsystems.coralmechanism;
 
 import org.littletonrobotics.junction.LogTable;
 
