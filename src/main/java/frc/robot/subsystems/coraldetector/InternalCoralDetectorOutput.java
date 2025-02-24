@@ -8,7 +8,7 @@ public class InternalCoralDetectorOutput extends SubsystemOutput {
 
   private boolean coralSensor = false;
 
-  public boolean forwardSensorHasCoral() {
+  public boolean sensorHasCoral() {
     return coralSensor;
   }
 

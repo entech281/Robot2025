@@ -8,8 +8,6 @@ import frc.robot.RobotConstants;
 public class TestInternalCoralDetectorCommand extends EntechCommand {
   private final InternalCoralDetectorSubsystem detector;
 
-  private int stage = 0;
-
   public TestInternalCoralDetectorCommand(
       InternalCoralDetectorSubsystem internalCoralDetectorSubsystem) {
     super(internalCoralDetectorSubsystem);
@@ -18,27 +16,20 @@ public class TestInternalCoralDetectorCommand extends EntechCommand {
 
   @Override
   public void execute() {
-    switch (stage) {
-      case 0 -> {
-        if (detector.getOutputs().forwardSensorHasCoral()) {
-          stage++;
+        if (detector.getOutputs().sensorHasCoral()) {
         } else {
           Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST,
               "Trigger the forward sensor.");
         }
-      }
-      default -> { break; }
-    }
   }
 
   @Override
   public void initialize() {
-    stage = 0;
   }
 
   @Override
   public boolean isFinished() {
-    return stage > 1;
+    return detector.getOutputs().sensorHasCoral();
   }
 
   @Override
