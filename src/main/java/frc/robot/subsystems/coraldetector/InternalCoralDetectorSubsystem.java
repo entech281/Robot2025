@@ -9,7 +9,7 @@ import frc.robot.io.RobotIO;
 public class InternalCoralDetectorSubsystem
     extends EntechSubsystem<InternalCoralDetectorInput, InternalCoralDetectorOutput> {
 
-  private static final boolean ENABLED = true;
+  private static final boolean ENABLED = false;
 
   private DigitalInput internalSensorF;
   private DigitalInput internalSensorR;

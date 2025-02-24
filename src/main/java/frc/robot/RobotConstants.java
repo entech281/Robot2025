@@ -158,7 +158,7 @@ public final class RobotConstants {
     public static final double INITIAL_POSITION = 0.0;
     public static final double UPPER_SOFT_LIMIT_DEG = 85.5;
     public static final double LOWER_SOFT_LIMIT_DEG = 1;
-    public static final double ELEVATOR_CONVERSION_FACTOR = 1.0;
+    public static final double ELEVATOR_CONVERSION_FACTOR = 8.0;
     public static final double POSITION_TOLERANCE_DEG = 2;
 
     public static final double HOME_POSITION = 0.0;
@@ -220,8 +220,8 @@ public final class RobotConstants {
       public static final int REAR_LEFT_TURNING = 31;
       public static final int REAR_RIGHT_TURNING = 41;
 
-      public static final int ELEVATOR_A = 35;
-      public static final int ELEVATOR_B = 35;
+      public static final int ELEVATOR_A = 13;
+      public static final int ELEVATOR_B = 14;
 
       public static final int CORAL_MOTOR = 38; 
 
