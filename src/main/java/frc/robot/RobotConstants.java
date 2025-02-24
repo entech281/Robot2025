@@ -132,8 +132,8 @@ public final class RobotConstants {
       Map.entry("PivotSubsystem/NudgeAmount", 5.0),
       Map.entry("ElevatorSubsystem/NudgeAmount", 5.0),
       Map.entry(Position.ALGAE_GROUND.getElevatorKey(), 0.0),
-      Map.entry(Position.ALGAE_L2.getElevatorKey(), 5.0),
-      Map.entry(Position.ALGAE_L3.getElevatorKey(), 5.0),
+      Map.entry(Position.ALGAE_L2.getElevatorKey(), 11.0),
+      Map.entry(Position.ALGAE_L3.getElevatorKey(), 6.3),
       Map.entry(Position.L1.getElevatorKey(), 0.0),
       Map.entry(Position.L2.getElevatorKey(), 3.2),
       Map.entry(Position.L3.getElevatorKey(), 8.5),
@@ -156,20 +156,10 @@ public final class RobotConstants {
 
   public static interface ELEVATOR {
     public static final double INITIAL_POSITION = 0.0;
-    public static final double UPPER_SOFT_LIMIT_DEG = 85.5;
+    public static final double UPPER_SOFT_LIMIT_DEG = 22.5;
     public static final double LOWER_SOFT_LIMIT_DEG = 1;
     public static final double ELEVATOR_CONVERSION_FACTOR = 8.0;
     public static final double POSITION_TOLERANCE_DEG = 2;
-
-    public static final double HOME_POSITION = 0.0;
-    public static final double L1_POSITION = 0.0;
-    public static final double L2_POSITION = 0.0;
-    public static final double L3_POSITION = 0.0;
-    public static final double L4_POSITION = 0.0;
-    public static final double ALGAE_L2_POSITION = 0.0;
-    public static final double ALGAE_L3_POSITION = 0.0;
-    public static final double ALGAE_GROUND_POSITION = 0.0;
-    public static final double BARGE_POSITION = 0.0;
   }
 
   public static interface CORAL{
@@ -180,16 +170,6 @@ public final class RobotConstants {
   public static interface PIVOT {
     public static final double PIVOT_CONVERSION_FACTOR = 2.4;
     public static final double POSITION_TOLERANCE_DEG = 2;
-
-    public static final double HOME_POSITION = 0.0;
-    public static final double L1_POSITION = 0.0;
-    public static final double L2_POSITION = 0.0;
-    public static final double L3_POSITION = 0.0;
-    public static final double L4_POSITION = 0.0;
-    public static final double ALGAE_L2_POSITION = 0.0;
-    public static final double ALGAE_L3_POSITION = 0.0;
-    public static final double ALGAE_GROUND_POSITION = 0.0;
-    public static final double BARGE_POSITION = 0.0;
   }
 
     public static interface LED {

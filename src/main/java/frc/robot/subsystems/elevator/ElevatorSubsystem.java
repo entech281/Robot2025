@@ -27,8 +27,12 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   private SparkMax leftElevator;
   private SparkMax rightElevator;
 
-  public static double calculateMotorPositionFromDegrees(double degrees) {
-    return degrees;
+  public static double calculateMotorPositionFromInches(double inches) {
+    return -inches * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
+  }
+
+  public static double calculateInchesFromMotorPosition(double motorPosition) {
+    return -motorPosition / RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
   }
 
   @Override
@@ -90,15 +94,15 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
     double clampedPosition = clampRequestedPosition(currentInput.getRequestedPosition());
     if (ENABLED) {
       if (currentInput.getActivate()) {
-        if ((-leftElevator.getEncoder().getPosition() * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR) - clampedPosition <= 0) {
-          leftElevator.getClosedLoopController().setReference(-calculateMotorPositionFromDegrees(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        if ((calculateInchesFromMotorPosition(leftElevator.getEncoder().getPosition())) - clampedPosition <= 0) {
+          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
         } 
         else {
-          leftElevator.getClosedLoopController().setReference(-calculateMotorPositionFromDegrees(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
+          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
         }
       } 
       else {
-        leftElevator.getClosedLoopController().setReference(-calculateMotorPositionFromDegrees(RobotConstants.ELEVATOR.LOWER_SOFT_LIMIT_DEG), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
+        leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(RobotConstants.ELEVATOR.LOWER_SOFT_LIMIT_DEG), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
       }
     }
   }
@@ -120,8 +124,7 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       elevatorOutput.setMoving(leftElevator.getEncoder().getVelocity() != 0);
       elevatorOutput.setLeftBrakeModeEnabled(true);
       elevatorOutput.setRightBrakeModeEnabled(true);
-      elevatorOutput.setCurrentPosition(
-          -leftElevator.getEncoder().getPosition());
+      elevatorOutput.setCurrentPosition(calculateInchesFromMotorPosition(leftElevator.getEncoder().getPosition()));
       elevatorOutput.setAtRequestedPosition(EntechUtils.isWithinTolerance(2,
           elevatorOutput.getCurrentPosition(), currentInput.getRequestedPosition()));
       elevatorOutput.setAtLowerLimit(

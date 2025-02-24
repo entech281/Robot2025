@@ -3,7 +3,7 @@ package frc.robot.operation;
 import org.littletonrobotics.junction.Logger;
 
 public class UserPolicy {
-  private static UserPolicy instance = new UserPolicy();
+  private static final UserPolicy instance = new UserPolicy();
 
   private boolean twistable = false;
   private boolean aligningToAngle = false;
