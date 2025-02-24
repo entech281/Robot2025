@@ -9,6 +9,5 @@ public class SimulatedAddressableLEDBuffer extends AddressableLEDBuffer {
 
   public SimulatedAddressableLEDBuffer(int length) {
     super(length);
-    System.out.println("SimulatedAddressableLEDBuffer created with length " + length);
   }
 }

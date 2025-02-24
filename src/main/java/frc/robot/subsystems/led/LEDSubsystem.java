@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
-
+import frc.robot.simulation.MockTimer;
 // If in simulation, use the simulated classes.
 import frc.robot.simulation.SimulatedAddressableLED;
 import edu.wpi.first.wpilibj.AddressableLED;
@@ -27,6 +27,8 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   private AddressableLEDBuffer buffer;
   private LEDInput currentInput = new LEDInput();
   private Timer blinkTimer = new Timer();
+  private MockTimer simulatedBlinkTimer = new MockTimer();
+  private boolean isSimulated;
 
   /**
    * Constructs the LEDSubsystem.
@@ -37,6 +39,7 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   }
 
   public LEDSubsystem(boolean isSimulated) {
+    this.isSimulated = isSimulated;
     if (ENABLED) {
       if (isSimulated) {
         // Use simulated implementation in test/CI environments.
@@ -58,7 +61,11 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   @Override
   public void initialize() {
     updateLEDs();
-    blinkTimer.start();
+    if (isSimulated) {
+      simulatedBlinkTimer.start();
+    } else {
+      blinkTimer.start();
+    }
   }
 
   /**
@@ -69,11 +76,19 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   @Override
   public void periodic() {
     if (ENABLED) {
-      if (blinkTimer.hasElapsed(0.25)) {
-        toggleBlinkingSections();
-        blinkTimer.restart();
+      if (isSimulated) {
+        simulatedBlinkTimer.advanceTime(0.25);
+        if (simulatedBlinkTimer.hasElapsed(0.25)) {
+          toggleBlinkingSections();
+          simulatedBlinkTimer.restart();
+        }
+      } else {
+        if (blinkTimer.hasElapsed(0.25)) {
+          toggleBlinkingSections();
+          blinkTimer.restart();
+        }
+        updateLEDs();
       }
-      updateLEDs();
     }
   }
 
