@@ -24,6 +24,7 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   private static final boolean ENABLED = true;
 
   private AddressableLED leds;
+  private SimulatedAddressableLED simulatedLeds;
   private AddressableLEDBuffer buffer;
   private LEDInput currentInput = new LEDInput();
   private Timer blinkTimer = new Timer();
@@ -43,7 +44,7 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
     if (ENABLED) {
       if (isSimulated) {
         // Use simulated implementation in test/CI environments.
-        leds = new SimulatedAddressableLED(RobotConstants.LED.PORT);
+        simulatedLeds = new SimulatedAddressableLED(RobotConstants.LED.PORT);
       } else {
         // Use actual hardware implementation.
         leds = new AddressableLED(RobotConstants.LED.PORT);

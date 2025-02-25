@@ -1,28 +1,26 @@
 package frc.robot.simulation;
 
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
 /**
  * Simulated implementation of AddressableLED for environments where hardware is unavailable.
  */
-public class SimulatedAddressableLED extends AddressableLED {
+public class SimulatedAddressableLED {
 
-  private AddressableLEDBuffer buffer;
+  private SimulatedAddressableLEDBuffer buffer;
 
   public SimulatedAddressableLED(int port) {
-    super(port);
+    
   }
 
 
-  @Override
+
   public void setLength(int length) {
     // Create a simulated buffer.
     this.buffer = new SimulatedAddressableLEDBuffer(length);
   }
 
-  @Override
-  public void setData(AddressableLEDBuffer buffer) {
+
+  public void setData(SimulatedAddressableLEDBuffer buffer) {
     // In a simulation, store the buffer or print the data for debugging.
     this.buffer = buffer;
   }

@@ -16,8 +16,9 @@ class TestLEDSubsystem {
 
   @BeforeEach
   void setup() {
-    ledSubsystem = new LEDSubsystem(true);
+    ledSubsystem = new LEDSubsystem(false);
     input = new LEDInput();
+    ledSubsystem.initialize();
   }
 
   @AfterEach
@@ -40,7 +41,6 @@ class TestLEDSubsystem {
     input.setBlinking(false); // Global flag false; should propagate to section
 
     ledSubsystem.updateInputs(input);
-    ledSubsystem.initialize();
 
     // Run several cycles so no blinking effect occurs.
     for (int i = 0; i < 5; i++) {
@@ -68,7 +68,7 @@ class TestLEDSubsystem {
     input.setBlinking(true); // Global flag true; propagates toggling
 
     ledSubsystem.updateInputs(input);
-    ledSubsystem.initialize();
+
 
 
     // Record the initial color (should be BLUE)
@@ -110,7 +110,6 @@ class TestLEDSubsystem {
 
 
     ledSubsystem.updateInputs(input);
-    ledSubsystem.initialize();
     
     // Let time pass so that any blinking sections could toggle.
     try {
@@ -157,7 +156,7 @@ class TestLEDSubsystem {
     assertTrue(section2.isBlinking(), "Section2 remains blinking.");
     
     ledSubsystem.updateInputs(input);
-    ledSubsystem.initialize();
+
     
     // Wait and toggle blinking.
     try {
