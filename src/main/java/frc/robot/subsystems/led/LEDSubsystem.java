@@ -42,13 +42,13 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   public LEDSubsystem(boolean isSimulated) {
     this.isSimulated = isSimulated;
     if (ENABLED) {
-      if (isSimulated) {
+      //if (isSimulated) {
         // Use simulated implementation in test/CI environments.
-        simulatedLeds = new SimulatedAddressableLED(RobotConstants.LED.PORT);
-      } else {
+      //  simulatedLeds = new SimulatedAddressableLED(RobotConstants.LED.PORT);
+      //} else {
         // Use actual hardware implementation.
         leds = new AddressableLED(RobotConstants.LED.PORT);
-      }
+      //}
       buffer = new AddressableLEDBuffer(RobotConstants.LED.NUM_LEDS);
       leds.setLength(buffer.getLength());
       leds.start();
@@ -62,11 +62,11 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   @Override
   public void initialize() {
     updateLEDs();
-    if (isSimulated) {
-      simulatedBlinkTimer.start();
-    } else {
+    //if (isSimulated) {
+    //  simulatedBlinkTimer.start();
+    //} else {
       blinkTimer.start();
-    }
+    //}
   }
 
   /**
@@ -77,19 +77,19 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   @Override
   public void periodic() {
     if (ENABLED) {
-      if (isSimulated) {
-        simulatedBlinkTimer.advanceTime(0.25);
-        if (simulatedBlinkTimer.hasElapsed(0.25)) {
-          toggleBlinkingSections();
-          simulatedBlinkTimer.restart();
-        }
-      } else {
+     // if (isSimulated) {
+     //   simulatedBlinkTimer.advanceTime(0.25);
+     //   if (simulatedBlinkTimer.hasElapsed(0.25)) {
+     //     toggleBlinkingSections();
+     //     simulatedBlinkTimer.restart();
+     //   }
+     // } else {
         if (blinkTimer.hasElapsed(0.25)) {
           toggleBlinkingSections();
           blinkTimer.restart();
         }
         updateLEDs();
-      }
+    //  }
     }
   }
 
