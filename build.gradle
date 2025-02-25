@@ -139,6 +139,9 @@ test {
     useJUnitPlatform()
     systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
 
+    // Optional: Set parallel execution mode for JUnit
+    systemProperty 'junit.jupiter.execution.parallel.enabled', 'false'
+    systemProperty 'junit.jupiter.execution.parallel.mode.default', 'same_thread'
 
     testLogging {
         exceptionFormat = 'full'  // Ensures full stack trace
