@@ -34,23 +34,23 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   public void initialize() {
     if (ENABLED) {
       
-      SparkMaxConfig lelevator = new SparkMaxConfig();
-      SparkMaxConfig relevator = new SparkMaxConfig();
+      SparkMaxConfig leftElevatorConfig = new SparkMaxConfig();
+      SparkMaxConfig rightElevatorConfig = new SparkMaxConfig();
 
       leftElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_A, MotorType.kBrushless);
       rightElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_B, MotorType.kBrushless);
 
-      relevator.follow(leftElevator);
+      rightElevatorConfig.follow(leftElevator);
       leftElevator.getEncoder().setPosition(0.0);
 
-      lelevator.inverted(IS_INVERTED);
-      relevator.inverted(IS_INVERTED);
+      leftElevatorConfig.inverted(IS_INVERTED);
+      rightElevatorConfig.inverted(IS_INVERTED);
 
-      lelevator.idleMode(IdleMode.kBrake);
-      relevator.idleMode(IdleMode.kBrake);
+      leftElevatorConfig.idleMode(IdleMode.kBrake);
+      rightElevatorConfig.idleMode(IdleMode.kBrake);
 
-      leftElevator.configure(lelevator, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-      rightElevator.configure(relevator, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      leftElevator.configure(leftElevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      rightElevator.configure(rightElevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
   }
   private double clampRequestedPosition(double position) {
