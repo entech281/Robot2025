@@ -5,7 +5,6 @@ import frc.entech.commands.EntechCommand;
 import frc.entech.util.StoppingCounter;
 import frc.robot.RobotConstants;
 
-
 public class TestLEDCommand extends EntechCommand {
   private final LEDSubsystem ledSubsystem;
   private final StoppingCounter counter =
@@ -25,23 +24,18 @@ public class TestLEDCommand extends EntechCommand {
   @Override
   public void execute() {
     LEDInput input = new LEDInput();
-    // Create a new subdivided LED string that spans the entire LED strip.
-    SubdividedLedString subdivided = new SubdividedLedString();
-    int ledCount = RobotConstants.LED.NUM_LEDS;
-    
     switch (stage) {
-      case 0 -> subdivided.addSection(Color.kWhite, Color.kBlack, 0, ledCount);
-      case 1 -> subdivided.addSection(Color.kRed, Color.kBlack, 0, ledCount);
-      case 2 -> subdivided.addSection(Color.kBlue, Color.kBlack, 0, ledCount);
+      case 0 -> input.setColor(Color.kWhite);
+      case 1 -> input.setColor(Color.kRed);
+      case 2 -> input.setColor(Color.kBlue);
       case 3 -> {
-        subdivided.addSection(Color.kGreen, Color.kBlack, 0, ledCount);
+        input.setColor(Color.kGreen);
         input.setBlinking(true);
       }
-      default -> subdivided.addSection(Color.kBlack, Color.kBlack, 0, ledCount);
+      default -> input.setColor(Color.kBlack);
     }
-    input.setSubdividedString(subdivided);
     ledSubsystem.updateInputs(input);
-    
+
     if (counter.isFinished(true)) {
       counter.reset();
       stage++;
