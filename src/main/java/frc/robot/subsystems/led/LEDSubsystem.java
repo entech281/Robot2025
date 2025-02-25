@@ -145,7 +145,7 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
    */
   @Override
   public void updateInputs(LEDInput input) {
-    RobotIO.processInput(input);
+    //RobotIO.processInput(input);
     this.currentInput = input;
   }
 
