@@ -48,6 +48,9 @@ class TestLEDSubsystem {
     }
 
     LEDOutput output = ledSubsystem.toOutputs();
+
+    System.out.println("Output String: " + output.getSubdividedString());
+    System.out.println("Actual String: " + subdivided);
     assertNotNull(output.getSubdividedString(), "Subdivided LED string should not be null.");
     SubdividedLedString.LedSection outSection = output.getSubdividedString().getSections().get(0);
     assertEquals(Color.kRed, outSection.getCurrentColor(), "Non-blinking section should maintain foreground RED.");
