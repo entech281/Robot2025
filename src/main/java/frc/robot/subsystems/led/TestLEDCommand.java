@@ -24,9 +24,10 @@ public class TestLEDCommand extends EntechCommand {
 
   @Override
   public void execute() {
-    LEDInput input = new LEDInput();
+
     // Create a new subdivided LED string that spans the entire LED strip.
     SubdividedLedString subdivided = new SubdividedLedString();
+    LEDInput input = new LEDInput(subdivided);
     int ledCount = RobotConstants.LED.NUM_LEDS;
     
     switch (stage) {
@@ -40,7 +41,7 @@ public class TestLEDCommand extends EntechCommand {
       default -> subdivided.addSection(Color.kBlack, Color.kBlack, 0, ledCount);
 
     }
-    input.setSubdividedString(subdivided);
+    //input.setSubdividedString(subdivided);
     ledSubsystem.updateInputs(input);
     
     if (counter.isFinished(true)) {

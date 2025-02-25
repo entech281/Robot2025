@@ -10,14 +10,14 @@ import org.junit.jupiter.api.Test;
 class TestLEDSubsystem {
 
   private LEDSubsystem ledSubsystem;
-  private LEDInput input;
+  //private LEDInput input;
   // Test LED count value
   private final int testNumLEDs = 100;
 
   @BeforeEach
   void setup() {
     ledSubsystem = new LEDSubsystem(false);
-    input = new LEDInput();
+    //input = new LEDInput();
     ledSubsystem.initialize();
   }
 
@@ -38,7 +38,7 @@ class TestLEDSubsystem {
     section.setBlinking(false);
     section.on(); // Set to foreground
 
-    input.setSubdividedString(subdivided);
+    LEDInput input = new LEDInput( subdivided);
     input.setBlinking(false); // Global flag false; should propagate to section
 
     ledSubsystem.updateInputs(input);
@@ -69,11 +69,10 @@ class TestLEDSubsystem {
     section.setBlinking(true);
     section.on(); // Start with foreground (BLUE)
 
-    input.setSubdividedString(subdivided);
+    LEDInput input = new LEDInput( subdivided);
     input.setBlinking(true); // Global flag true; propagates toggling
 
     ledSubsystem.updateInputs(input);
-
 
 
     // Record the initial color (should be BLUE)
@@ -111,7 +110,8 @@ class TestLEDSubsystem {
     section2.setBlinking(true);
     section2.on();
     
-    input.setSubdividedString(subdivided);
+    //input.setSubdividedString(subdivided);
+    LEDInput input = new LEDInput( subdivided);
 
 
     ledSubsystem.updateInputs(input);
@@ -153,7 +153,8 @@ class TestLEDSubsystem {
     assertTrue(section2.isBlinking(), "Section2 should initially be blinking.");
     
     // Global call to set blinking to true.
-    input.setSubdividedString(subdivided);
+    LEDInput input = new LEDInput( subdivided);
+    //input.setSubdividedString(subdivided);
     input.setBlinking(true);
     
     // Both sections should now be blinking due to propagation.

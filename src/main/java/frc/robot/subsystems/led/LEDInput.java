@@ -11,9 +11,15 @@ import frc.entech.subsystems.SubsystemInput;
  */
 public class LEDInput implements SubsystemInput {
 
-  private SubdividedLedString subdividedString;
+  private SubdividedLedString subdividedString = new SubdividedLedString();
   private boolean blinking = false;
 
+  public LEDInput(){
+
+  }
+  public LEDInput(SubdividedLedString subdividedString){
+    this.subdividedString = subdividedString;
+  }
   /**
    * Returns the subdivided LED string configuration.
    *
@@ -28,9 +34,9 @@ public class LEDInput implements SubsystemInput {
    *
    * @param subdividedString the subdivided LED string to use
    */
-  public void setSubdividedString(SubdividedLedString subdividedString) {
-    this.subdividedString = subdividedString;
-  }
+  //public void setSubdividedString(SubdividedLedString subdividedString) {
+  //  this.subdividedString = subdividedString;
+  //}
 
   /**
    * Returns the blinking flag.

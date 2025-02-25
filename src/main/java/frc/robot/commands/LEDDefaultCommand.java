@@ -18,7 +18,7 @@ public class LEDDefaultCommand extends EntechCommand {
   private final InternalCoralDetectorSubsystem coralDetectorSubsystem;
   private final InternalCoralDetectorOutput coralDetectorOutput;
   private final LEDSubsystem ledSubsystem;
-  private final LEDInput input = new LEDInput();
+  //private final LEDInput input = new LEDInput();
 
   public LEDDefaultCommand(LEDSubsystem ledSubsystem, InternalCoralDetectorSubsystem coralDetectorSubsystem) {
     this.ledSubsystem = ledSubsystem;
@@ -32,7 +32,7 @@ public class LEDDefaultCommand extends EntechCommand {
 
     SubdividedLedString subdivided = new DefaultLEDStringCreator().createLEDString(coralDetectorOutput.hasCoral(), !UserPolicy.getInstance().isAligningToAngle(), hasError(), UserPolicy.getInstance().getTargetAngle());
     
-    input.setSubdividedString(subdivided);
+    LEDInput input = new LEDInput(subdivided);
     ledSubsystem.updateInputs(input);
   }
 
