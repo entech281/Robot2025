@@ -23,7 +23,7 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
 
   private static final boolean ENABLED = true;
 
-  private final AddressableLED leds;
+  private AddressableLED leds;
   private SimulatedAddressableLED simulatedLeds;
   private final AddressableLEDBuffer buffer;
   private LEDInput currentInput = new LEDInput();
@@ -118,15 +118,17 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
    * Each section's current color is applied to its designated indices.
    */
   private void updateLEDs() {
-    if (currentInput.getSubdividedString() != null) {
-      for (SubdividedLedString.LedSection section : currentInput.getSubdividedString().getSections()) {
-        int startIdx = Math.max(0, section.getStartIndex());
-        int endIdx = Math.min(buffer.getLength(), section.getEndIndex());
-        for (int i = startIdx; i < endIdx; i++) {
-          buffer.setLED(i, section.getCurrentColor());
+    if ( ENABLED ){
+      if (currentInput.getSubdividedString() != null) {
+        for (SubdividedLedString.LedSection section : currentInput.getSubdividedString().getSections()) {
+          int startIdx = Math.max(0, section.getStartIndex());
+          int endIdx = Math.min(buffer.getLength(), section.getEndIndex());
+          for (int i = startIdx; i < endIdx; i++) {
+            buffer.setLED(i, section.getCurrentColor());
+          }
         }
+        leds.setData(buffer);
       }
-      leds.setData(buffer);
     }
   }
 
@@ -147,8 +149,11 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
    */
   @Override
   public void updateInputs(LEDInput input) {
-    RobotIO.processInput(input);
-    this.currentInput = input;
+    if (ENABLED){
+      RobotIO.processInput(input);
+      this.currentInput = input;
+    }
+
   }
 
   /**
