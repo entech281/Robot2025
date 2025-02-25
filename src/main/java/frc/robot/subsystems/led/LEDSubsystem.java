@@ -51,7 +51,7 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
         // Use actual hardware implementation.
         //leds = new AddressableLED(RobotConstants.LED.PORT);
       //}
-      //buffer = new AddressableLEDBuffer(RobotConstants.LED.NUM_LEDS);
+      buffer = new AddressableLEDBuffer(RobotConstants.LED.NUM_LEDS);
       leds.setLength(buffer.getLength());
       leds.start();
     }
@@ -150,7 +150,7 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   @Override
   public void updateInputs(LEDInput input) {
     if (ENABLED){
-      RobotIO.processInput(input);
+      //RobotIO.processInput(input);
       this.currentInput = input;
     }
 
