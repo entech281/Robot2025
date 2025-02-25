@@ -49,9 +49,7 @@ class TestLEDSubsystem {
     }
 
     LEDOutput output = ledSubsystem.toOutputs();
-    if ( true ){
-      throw new RuntimeException("this shoudl fail");
-    }
+
 
     System.out.println("Output String: " + output.getSubdividedString());
     System.out.println("Actual String: " + subdivided);
