@@ -23,9 +23,9 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
 
   private static final boolean ENABLED = true;
 
-  private AddressableLED leds;
+  private AddressableLED leds = new AddressableLED(RobotConstants.LED.PORT);
   private SimulatedAddressableLED simulatedLeds;
-  private final AddressableLEDBuffer buffer;
+  private  AddressableLEDBuffer buffer= new AddressableLEDBuffer(RobotConstants.LED.NUM_LEDS);;
   private LEDInput currentInput = new LEDInput();
   private Timer blinkTimer = new Timer();
   private MockTimer simulatedBlinkTimer = new MockTimer();
@@ -49,9 +49,9 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
       //  simulatedLeds = new SimulatedAddressableLED(RobotConstants.LED.PORT);
       //} else {
         // Use actual hardware implementation.
-        leds = new AddressableLED(RobotConstants.LED.PORT);
+        //leds = new AddressableLED(RobotConstants.LED.PORT);
       //}
-      buffer = new AddressableLEDBuffer(RobotConstants.LED.NUM_LEDS);
+      //buffer = new AddressableLEDBuffer(RobotConstants.LED.NUM_LEDS);
       leds.setLength(buffer.getLength());
       leds.start();
     }
