@@ -8,10 +8,6 @@ public class InternalCoralDetectorOutput extends SubsystemOutput {
 
   private boolean coralSensor = false;
 
-  public boolean sensorHasCoral() {
-    return coralSensor;
-  }
-
   public void setCoralSensor(boolean coralSensor) {
     this.coralSensor = coralSensor;
   }

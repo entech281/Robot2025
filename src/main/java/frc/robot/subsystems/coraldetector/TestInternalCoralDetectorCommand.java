@@ -16,7 +16,7 @@ public class TestInternalCoralDetectorCommand extends EntechCommand {
 
   @Override
   public void execute() {
-        if (detector.getOutputs().sensorHasCoral()) {
+        if (detector.getOutputs().hasCoral()) {
           Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST,
               "The forward sensor has coral.");
         } else {
@@ -27,7 +27,7 @@ public class TestInternalCoralDetectorCommand extends EntechCommand {
 
   @Override
   public boolean isFinished() {
-    return detector.getOutputs().sensorHasCoral();
+    return detector.getOutputs().hasCoral();
   }
 
   @Override

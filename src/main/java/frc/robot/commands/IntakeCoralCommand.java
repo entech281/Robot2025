@@ -24,7 +24,7 @@ public class IntakeCoralCommand extends EntechCommand {
 
 	@Override
 	public void execute() {
-		if (RobotIO.getInstance().getInternalCoralDetectorOutput().sensorHasCoral()) {
+		if (RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()) {
 			input.setRequestedSpeed(0.1);
 			intake.updateInputs(input);
 		}
@@ -39,6 +39,6 @@ public class IntakeCoralCommand extends EntechCommand {
 
 	@Override
 	public boolean isFinished() {
-		return counter.isFinished(RobotIO.getInstance().getInternalCoralDetectorOutput().sensorHasCoral());
+		return counter.isFinished(RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral());
 	}
 }
