@@ -37,10 +37,12 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
    */
   public LEDSubsystem() {
     this(false);
+
   }
 
   public LEDSubsystem(boolean isSimulated) {
     this.isSimulated = isSimulated;
+    new Throwable("making new LEDSubsystem").printStackTrace();
     if (ENABLED) {
       //if (isSimulated) {
         // Use simulated implementation in test/CI environments.
