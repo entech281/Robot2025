@@ -1,6 +1,7 @@
 package frc.robot.subsystems.navx;
 
 import org.ejml.simple.UnsupportedOperation;
+
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
