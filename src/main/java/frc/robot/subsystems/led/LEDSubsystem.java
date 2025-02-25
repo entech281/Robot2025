@@ -23,9 +23,9 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
 
   private static final boolean ENABLED = true;
 
-  private AddressableLED leds;
+  private final AddressableLED leds;
   private SimulatedAddressableLED simulatedLeds;
-  private AddressableLEDBuffer buffer;
+  private final AddressableLEDBuffer buffer;
   private LEDInput currentInput = new LEDInput();
   private Timer blinkTimer = new Timer();
   private MockTimer simulatedBlinkTimer = new MockTimer();
