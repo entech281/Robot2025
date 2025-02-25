@@ -2,8 +2,8 @@ package frc.robot.commands;
 
 import frc.entech.commands.EntechCommand;
 import frc.entech.util.StoppingCounter;
-import frc.robot.subsystems.coral.CoralMechanismInput;
-import frc.robot.subsystems.coral.CoralMechanismSubsystem;
+import frc.robot.subsystems.coralmechanism.CoralMechanismInput;
+import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 
 public class FireCoralCommand extends EntechCommand {
     private final CoralMechanismInput input = new CoralMechanismInput();

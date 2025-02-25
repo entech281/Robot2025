@@ -3,8 +3,8 @@ package frc.robot.commands;
 import frc.entech.commands.EntechCommand;
 import frc.entech.util.StoppingCounter;
 import frc.robot.io.RobotIO;
-import frc.robot.subsystems.coral.CoralMechanismInput;
-import frc.robot.subsystems.coral.CoralMechanismSubsystem;
+import frc.robot.subsystems.coralmechanism.CoralMechanismInput;
+import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 
 public class IntakeCoralCommand extends EntechCommand {
     private final CoralMechanismInput input = new CoralMechanismInput();
@@ -24,7 +24,7 @@ public class IntakeCoralCommand extends EntechCommand {
 
 	@Override
 	public void execute() {
-		if (RobotIO.getInstance().getInternalCoralDetectorOutput().forwardSensorHasCoral()) {
+		if (RobotIO.getInstance().getInternalCoralDetectorOutput().sensorHasCoral()) {
 			input.setRequestedSpeed(0.1);
 			intake.updateInputs(input);
 		}
@@ -39,6 +39,6 @@ public class IntakeCoralCommand extends EntechCommand {
 
 	@Override
 	public boolean isFinished() {
-		return counter.isFinished(RobotIO.getInstance().getInternalCoralDetectorOutput().forwardSensorHasCoral());
+		return counter.isFinished(RobotIO.getInstance().getInternalCoralDetectorOutput().sensorHasCoral());
 	}
 }
