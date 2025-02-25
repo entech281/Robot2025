@@ -1,5 +1,7 @@
 package frc.robot.subsystems.coralmechanism;
 
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -12,11 +14,12 @@ import frc.robot.io.RobotIO;
 
 public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput, CoralMechanismOutput> {
     private static final boolean ENABLED = false;
-    private static final boolean IS_INVERTED = false;
+    private static final boolean IS_INVERTED = true;
 
     private CoralMechanismInput currentInput = new CoralMechanismInput();
     private SparkMax coralIntakeMotor;
     private IdleMode mode;
+    private SparkMaxConfig coralConfig;
 
     public static double calculateMotorSpeedFromInput(double inputSpeed) {
         return inputSpeed * RobotConstants.CORAL.CORAL_CONVERSION_FACTOR;
@@ -32,6 +35,8 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
             coralConfig.inverted(IS_INVERTED);
             coralConfig.idleMode(IdleMode.kBrake);
             mode = IdleMode.kBrake;
+
+            coralIntakeMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         }
     }
 
@@ -72,6 +77,26 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
                 coralIntakeMotor.set(targetSpeed);
             } else {
                 coralIntakeMotor.set(0);
+            }
+
+            if (!currentInput.getBrakeMode() && mode != IdleMode.kCoast) {
+                coralConfig.idleMode(IdleMode.kCoast);
+                mode = IdleMode.kCoast;
+                coralIntakeMotor.configure(coralConfig, null, null);
+            } else if (currentInput.getBrakeMode() && mode != IdleMode.kBrake) {
+                coralConfig.idleMode(IdleMode.kBrake);
+                mode = IdleMode.kBrake;
+                coralIntakeMotor.configure(coralConfig, null, null);
+            }
+
+            if (!currentInput.getBrakeMode() && mode != IdleMode.kCoast) {
+                coralConfig.idleMode(IdleMode.kCoast);
+                mode = IdleMode.kCoast;
+                coralIntakeMotor.configure(coralConfig, null, null);
+            } else if (currentInput.getBrakeMode() && mode != IdleMode.kBrake) {
+                coralConfig.idleMode(IdleMode.kBrake);
+                mode = IdleMode.kBrake;
+                coralIntakeMotor.configure(coralConfig, null, null);
             }
 
             CoralMechanismOutput output = toOutputs();

@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -18,7 +19,7 @@ import frc.robot.io.RobotIO;
 
 public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOutput> {
 
-  private static final boolean ENABLED = false;
+  private static final boolean ENABLED = true;
   private static final boolean IS_INVERTED = false;
   
   private ElevatorInput currentInput = new ElevatorInput();
@@ -26,31 +27,50 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   private SparkMax leftElevator;
   private SparkMax rightElevator;
 
-  public static double calculateMotorPositionFromDegrees(double degrees) {
-    return degrees / RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
+  public static double calculateMotorPositionFromInches(double inches) {
+    return -inches * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
+  }
+
+  public static double calculateInchesFromMotorPosition(double motorPosition) {
+    return -motorPosition / RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
   }
 
   @Override
   public void initialize() {
     if (ENABLED) {
       
-      SparkMaxConfig lelevator = new SparkMaxConfig();
-      SparkMaxConfig relevator = new SparkMaxConfig();
+      SparkMaxConfig motorConfig = new SparkMaxConfig();
 
       leftElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_A, MotorType.kBrushless);
       rightElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_B, MotorType.kBrushless);
-
-      relevator.follow(leftElevator);
       leftElevator.getEncoder().setPosition(0.0);
+      rightElevator.getEncoder().setPosition(0.0);
 
-      lelevator.inverted(IS_INVERTED);
-      relevator.inverted(IS_INVERTED);
+      motorConfig.inverted(IS_INVERTED);
 
-      lelevator.idleMode(IdleMode.kBrake);
-      relevator.idleMode(IdleMode.kBrake);
+      motorConfig.idleMode(IdleMode.kBrake);
 
-      leftElevator.configure(lelevator, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-      rightElevator.configure(relevator, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+      .pid(5, 0, 0, ClosedLoopSlot.kSlot0)
+      .pid(5, 0, 0, ClosedLoopSlot.kSlot1)
+      .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot0)
+      .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot1);
+
+      motorConfig.closedLoop.maxMotion
+          .maxVelocity(1000,ClosedLoopSlot.kSlot0)
+          .maxAcceleration(1000,ClosedLoopSlot.kSlot0)
+          .allowedClosedLoopError(1,ClosedLoopSlot.kSlot0)
+
+          .maxAcceleration(500,ClosedLoopSlot.kSlot1)
+          .maxVelocity(500,ClosedLoopSlot.kSlot1 )
+          .allowedClosedLoopError(1,ClosedLoopSlot.kSlot1);
+
+      SparkMaxConfig followerConfig = new SparkMaxConfig();
+      followerConfig.apply(motorConfig).follow(leftElevator);
+
+
+      leftElevator.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      rightElevator.configure(followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
   }
   private double clampRequestedPosition(double position) {
@@ -74,15 +94,15 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
     double clampedPosition = clampRequestedPosition(currentInput.getRequestedPosition());
     if (ENABLED) {
       if (currentInput.getActivate()) {
-        if ((leftElevator.getEncoder().getPosition() * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR) - clampedPosition <= 0) {
-          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromDegrees(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        if ((calculateInchesFromMotorPosition(leftElevator.getEncoder().getPosition())) - clampedPosition <= 0) {
+          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
         } 
         else {
-          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromDegrees(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
+          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
         }
       } 
       else {
-        leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromDegrees(RobotConstants.ELEVATOR.LOWER_SOFT_LIMIT_DEG), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
+        leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(RobotConstants.ELEVATOR.LOWER_SOFT_LIMIT_DEG), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
       }
     }
   }
@@ -104,12 +124,13 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       elevatorOutput.setMoving(leftElevator.getEncoder().getVelocity() != 0);
       elevatorOutput.setLeftBrakeModeEnabled(true);
       elevatorOutput.setRightBrakeModeEnabled(true);
-      elevatorOutput.setCurrentPosition(
-          leftElevator.getEncoder().getPosition() * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR);
+      elevatorOutput.setCurrentPosition(calculateInchesFromMotorPosition(leftElevator.getEncoder().getPosition()));
       elevatorOutput.setAtRequestedPosition(EntechUtils.isWithinTolerance(2,
           elevatorOutput.getCurrentPosition(), currentInput.getRequestedPosition()));
       elevatorOutput.setAtLowerLimit(
           leftElevator.getReverseLimitSwitch().isPressed());
+      elevatorOutput.setAtUpperLimit(
+          leftElevator.getForwardLimitSwitch().isPressed());
       elevatorOutput.setRequestedPosition(currentInput.getRequestedPosition());
     }
     return elevatorOutput;
