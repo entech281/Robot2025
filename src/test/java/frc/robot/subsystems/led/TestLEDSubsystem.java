@@ -9,21 +9,21 @@ import org.junit.jupiter.api.Test;
 
 class TestLEDSubsystem {
 
-  private LEDSubsystem ledSubsystem;
+  //private LEDSubsystem ledSubsystem;
   //private LEDInput input;
   // Test LED count value
   private final int testNumLEDs = 100;
 
   @BeforeEach
   void setup() {
-    ledSubsystem = new LEDSubsystem(false);
+    //ledSubsystem = new LEDSubsystem(false);
     //input = new LEDInput();
-    ledSubsystem.initialize();
+    //ledSubsystem.initialize();
   }
 
   @AfterEach
   void tearDown() {
-    ledSubsystem.close();
+    //ledSubsystem.close();
   }
 
   /**
@@ -41,6 +41,8 @@ class TestLEDSubsystem {
     LEDInput input = new LEDInput( subdivided);
     input.setBlinking(false); // Global flag false; should propagate to section
 
+    LEDSubsystem ledSubsystem = new LEDSubsystem(false);
+    ledSubsystem.initialize();
     ledSubsystem.updateInputs(input);
 
     // Run several cycles so no blinking effect occurs.
@@ -56,6 +58,7 @@ class TestLEDSubsystem {
     assertNotNull(output.getSubdividedString(), "Subdivided LED string should not be null.");
     SubdividedLedString.LedSection outSection = output.getSubdividedString().getSections().get(0);
     assertEquals(Color.kRed, outSection.getCurrentColor(), "Non-blinking section should maintain foreground RED.");
+    ledSubsystem.close();
   }
 
   /**
@@ -72,6 +75,8 @@ class TestLEDSubsystem {
     LEDInput input = new LEDInput( subdivided);
     input.setBlinking(true); // Global flag true; propagates toggling
 
+    LEDSubsystem ledSubsystem = new LEDSubsystem(false);
+    ledSubsystem.initialize();
     ledSubsystem.updateInputs(input);
 
 
@@ -92,6 +97,7 @@ class TestLEDSubsystem {
     SubdividedLedString.LedSection sectionAfter = outputAfter.getSubdividedString().getSections().get(0);
     // Expect toggled color
     assertNotEquals(initialColor, sectionAfter.getCurrentColor(), "Blinking section should toggle its color.");
+    ledSubsystem.close();
   }
 
   /**
@@ -113,7 +119,8 @@ class TestLEDSubsystem {
     //input.setSubdividedString(subdivided);
     LEDInput input = new LEDInput( subdivided);
 
-
+    LEDSubsystem ledSubsystem = new LEDSubsystem(false);
+    ledSubsystem.initialize();
     ledSubsystem.updateInputs(input);
     
     // Let time pass so that any blinking sections could toggle.
@@ -132,6 +139,7 @@ class TestLEDSubsystem {
     assertEquals(Color.kMagenta, outSection1.getCurrentColor(), "Non-blinking Section1 should remain MAGENTA.");
     // Section2 (blinking) should have toggled to background (GRAY) after one toggle event.
     assertEquals(Color.kGray, outSection2.getCurrentColor(), "Blinking Section2 should toggle to GRAY (background) after blinking.");
+    ledSubsystem.close();
   }
   
   /**
@@ -160,7 +168,9 @@ class TestLEDSubsystem {
     // Both sections should now be blinking due to propagation.
     assertTrue(section1.isBlinking(), "Section1 should be overridden to blinking.");
     assertTrue(section2.isBlinking(), "Section2 remains blinking.");
-    
+
+    LEDSubsystem ledSubsystem = new LEDSubsystem(false);
+    ledSubsystem.initialize();
     ledSubsystem.updateInputs(input);
 
     
@@ -182,5 +192,6 @@ class TestLEDSubsystem {
     // They should have toggled after blinking.
     assertNotEquals(Color.kWhite, outSection1.getCurrentColor(), "Section1's color should have toggled due to global blinking override.");
     assertNotEquals(Color.kBlue, outSection2.getCurrentColor(), "Section2's color should have toggled due to blinking.");
+    ledSubsystem.close();
   }
 }
