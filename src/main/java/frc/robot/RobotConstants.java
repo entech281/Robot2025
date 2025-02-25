@@ -162,7 +162,7 @@ public final class RobotConstants {
       Map.entry(PivotInput.Position.ALGAE_L3.label, 165.0),
       Map.entry(PivotInput.Position.ALGAE_GROUND.label, 165.0),
       Map.entry(PivotInput.Position.BARGE.label, 80.0),
-      Map.entry(PivotInput.Position.HOME.label, 35.0)
+      Map.entry(PivotInput.Position.HOME.label, 35.0),
       Map.entry("ElevatorSubsystem/NudgeAmount", 5.0),
       Map.entry(Position.ALGAE_GROUND.getElevatorKey(), 0.0),
       Map.entry(Position.ALGAE_L2.getElevatorKey(), 11.0),

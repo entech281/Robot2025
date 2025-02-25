@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.AutonomousException;
+import frc.robot.commandCheker.SafeMovePlanner;
 import frc.robot.commands.ElevatorMoveCommand;
 import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
@@ -107,16 +108,6 @@ public class CommandFactory {
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
-  }
-
-  
-
-  public Command safeElevatorMove(double target) {
-    return safeElevatorAndPivotMove(target, RobotIO.getInstance().getPivotOutput().getCurrentPosition());
-  }
-
-  public Command safePivotMove(double target) {
-    return safeElevatorAndPivotMove(RobotIO.getInstance().getElevatorOutput().getCurrentPosition(), target);
   }
 
   public Command getAutoCommand() {

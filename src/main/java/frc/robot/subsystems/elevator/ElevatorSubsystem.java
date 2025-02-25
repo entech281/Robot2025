@@ -16,7 +16,6 @@ import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.util.EntechUtils;
 import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
-import jdk.jfr.Enabled;
 
 public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOutput> {
 
@@ -106,10 +105,6 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
         leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(RobotConstants.ELEVATOR.LOWER_SOFT_LIMIT_DEG), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
       }
     }
-  }
-  @Override
-  public boolean isEnabled() {
-    return ENABLED;
   }
   
 
