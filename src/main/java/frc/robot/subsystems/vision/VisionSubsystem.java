@@ -14,11 +14,11 @@ import frc.robot.RobotConstants;
 
 public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> {
   // NetworkTable instance
-  private final NetworkTable table;
+  private final NetworkTable networkTable;
 
   public VisionSubsystem() {
     // Initialize the NetworkTable instance
-    table = NetworkTableInstance.getDefault().getTable("vision");
+    networkTable = NetworkTableInstance.getDefault().getTable("vision");
   }
 
   @Override
@@ -26,16 +26,16 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     VisionOutput output = new VisionOutput();
 
     // Retrieve values from NetworkTables
-    NetworkTableEntry hasTargetEntry = table.getEntry("hasTarget");
-    NetworkTableEntry idTagEntry = table.getEntry("idTag");
-    NetworkTableEntry tagHeightEntry = table.getEntry("tagHeight");
-    NetworkTableEntry tagWidthEntry = table.getEntry("tagWidth");
-    NetworkTableEntry tagXEntry = table.getEntry("tagX");
-    NetworkTableEntry tagYEntry = table.getEntry("tagY");
-    NetworkTableEntry timestampEntry = table.getEntry("timestamp");
-    NetworkTableEntry tagXWEntry = table.getEntry("tagXWidths");
-    NetworkTableEntry cameraUsedEntry = table.getEntry("cameraUsed");
-    NetworkTableEntry numberOfTargetsEntry = table.getEntry("numberOfTargets");
+    NetworkTableEntry hasTargetEntry = networkTable.getEntry("hasTarget");
+    NetworkTableEntry idTagEntry = networkTable.getEntry("idTag");
+    NetworkTableEntry tagHeightEntry = networkTable.getEntry("tagHeight");
+    NetworkTableEntry tagWidthEntry = networkTable.getEntry("tagWidth");
+    NetworkTableEntry tagXEntry = networkTable.getEntry("tagX");
+    NetworkTableEntry tagYEntry = networkTable.getEntry("tagY");
+    NetworkTableEntry timestampEntry = networkTable.getEntry("timestamp");
+    NetworkTableEntry tagXWEntry = networkTable.getEntry("tagXWidths");
+    NetworkTableEntry cameraUsedEntry = networkTable.getEntry("cameraUsed");
+    NetworkTableEntry numberOfTargetsEntry = networkTable.getEntry("numberOfTargets");
 
     ArrayList<VisionTarget> targetList = new ArrayList<>();
     
@@ -105,7 +105,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
   public void updateInputs(VisionInput input) {
     try (NetworkTableEntry entry = new NetworkTableEntry(NetworkTableInstance.getDefault(), 0)) {
       entry.setString(input.getCamera());
-      table.putValue("camera", entry.getValue());
+      networkTable.putValue("camera", entry.getValue());
     }
   }
 

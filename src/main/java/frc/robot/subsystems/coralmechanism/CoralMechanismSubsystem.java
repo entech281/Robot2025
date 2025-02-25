@@ -1,4 +1,4 @@
-package frc.robot.subsystems.coral;
+package frc.robot.subsystems.coralmechanism;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -17,7 +17,7 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
     private static final boolean IS_INVERTED = true;
 
     private CoralMechanismInput currentInput = new CoralMechanismInput();
-    private SparkMax coralMotor;
+    private SparkMax coralIntakeMotor;
     private IdleMode mode;
     private SparkMaxConfig coralConfig;
 
@@ -28,15 +28,14 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
     @Override
     public void initialize() {
         if (ENABLED) {
-            coralConfig = new SparkMaxConfig();
-            coralMotor = new SparkMax(RobotConstants.PORTS.CAN.CORAL_MOTOR, MotorType.kBrushless);
+            coralIntakeMotor = new SparkMax(RobotConstants.PORTS.CAN.CORAL_MOTOR, MotorType.kBrushless);
 
-            coralMotor.getEncoder().setPosition(0.0);
+            coralIntakeMotor.getEncoder().setPosition(0.0);
             coralConfig.inverted(IS_INVERTED);
             coralConfig.idleMode(IdleMode.kBrake);
             mode = IdleMode.kBrake;
 
-            coralMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+            coralIntakeMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         }
     }
 
@@ -56,7 +55,7 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
         CoralMechanismOutput output = new CoralMechanismOutput();
         if (ENABLED) {
             output.setRunning(currentInput.getActivate());
-            output.setCurrentSpeed(coralMotor.getEncoder().getVelocity());
+            output.setCurrentSpeed(coralIntakeMotor.getEncoder().getVelocity());
             output.setBrakeModeEnabled(IdleMode.kBrake == mode);
         }
         return output;
@@ -74,19 +73,29 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
 
             if (currentInput.getActivate()) {
                 double targetSpeed = calculateMotorSpeedFromInput(currentInput.getRequestedSpeed());
-                coralMotor.set(targetSpeed);
+                coralIntakeMotor.set(targetSpeed);
             } else {
-                coralMotor.set(0);
+                coralIntakeMotor.set(0);
             }
 
             if (!currentInput.getBrakeMode() && mode != IdleMode.kCoast) {
                 coralConfig.idleMode(IdleMode.kCoast);
                 mode = IdleMode.kCoast;
-                coralMotor.configure(coralConfig, null, null);
+                coralIntakeMotor.configure(coralConfig, null, null);
             } else if (currentInput.getBrakeMode() && mode != IdleMode.kBrake) {
                 coralConfig.idleMode(IdleMode.kBrake);
                 mode = IdleMode.kBrake;
-                coralMotor.configure(coralConfig, null, null);
+                coralIntakeMotor.configure(coralConfig, null, null);
+            }
+
+            if (!currentInput.getBrakeMode() && mode != IdleMode.kCoast) {
+                coralConfig.idleMode(IdleMode.kCoast);
+                mode = IdleMode.kCoast;
+                coralIntakeMotor.configure(coralConfig, null, null);
+            } else if (currentInput.getBrakeMode() && mode != IdleMode.kBrake) {
+                coralConfig.idleMode(IdleMode.kBrake);
+                mode = IdleMode.kBrake;
+                coralIntakeMotor.configure(coralConfig, null, null);
             }
 
             CoralMechanismOutput output = toOutputs();
