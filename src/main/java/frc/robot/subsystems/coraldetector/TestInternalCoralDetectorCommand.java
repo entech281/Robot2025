@@ -32,4 +32,7 @@ public class TestInternalCoralDetectorCommand extends EntechCommand {
   public void end(boolean interrupted) {
     Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST, "No Current Test.");
   }
+
+  //removed initialize but can be readded for purpose
+  
 }
