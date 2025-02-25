@@ -31,7 +31,7 @@ class TestLEDSubsystem {
    */
   @Test
   void testNonBlinkingOutput() {
-
+    System.out.println("testNonBlinkingOutput--start");
     SubdividedLedString subdivided = new SubdividedLedString();
     // One section: entire range with foreground RED and background BLACK.
     SubdividedLedString.LedSection section = subdivided.addSection(Color.kRed, Color.kBlack, 0, testNumLEDs);
@@ -59,6 +59,7 @@ class TestLEDSubsystem {
     SubdividedLedString.LedSection outSection = output.getSubdividedString().getSections().get(0);
     assertEquals(Color.kRed, outSection.getCurrentColor(), "Non-blinking section should maintain foreground RED.");
     ledSubsystem.close();
+    System.out.println("testNonBlinkingOutput--end");
   }
 
   /**
@@ -66,6 +67,7 @@ class TestLEDSubsystem {
    */
   @Test
   void testBlinkingOutputToggles() {
+    System.out.println("testBlinkingOutputToggles--start");
     SubdividedLedString subdivided = new SubdividedLedString();
     // One section: entire range with foreground BLUE and background GREEN.
     SubdividedLedString.LedSection section = subdivided.addSection(Color.kBlue, Color.kGreen, 0, testNumLEDs);
@@ -98,6 +100,7 @@ class TestLEDSubsystem {
     // Expect toggled color
     assertNotEquals(initialColor, sectionAfter.getCurrentColor(), "Blinking section should toggle its color.");
     ledSubsystem.close();
+    System.out.println("testBlinkingOutputToggles--end");
   }
 
   /**
@@ -106,6 +109,7 @@ class TestLEDSubsystem {
    */
   @Test
   void testMultipleSectionsIndependentBlinking() {
+    System.out.println("testMultipleSectionsIndependentBlinking--start");
     SubdividedLedString subdivided = new SubdividedLedString();
     // Section 1: entire range (0 to 50): Foreground MAGENTA, non-blinking.
     SubdividedLedString.LedSection section1 = subdivided.addSection(Color.kMagenta, Color.kBlack, 0, 50);
@@ -140,6 +144,7 @@ class TestLEDSubsystem {
     // Section2 (blinking) should have toggled to background (GRAY) after one toggle event.
     assertEquals(Color.kGray, outSection2.getCurrentColor(), "Blinking Section2 should toggle to GRAY (background) after blinking.");
     ledSubsystem.close();
+    System.out.println("testMultipleSectionsIndependentBlinking--end");
   }
   
   /**
@@ -147,6 +152,7 @@ class TestLEDSubsystem {
    */
   @Test
   void testGlobalBlinkingOverride() {
+    System.out.println("testGlobalBlinkingOverride--start");
     SubdividedLedString subdivided = new SubdividedLedString();
     // Create two sections with different individual blinking settings.
     SubdividedLedString.LedSection section1 = subdivided.addSection(Color.kWhite, Color.kBlack, 0, 50);
@@ -193,5 +199,6 @@ class TestLEDSubsystem {
     assertNotEquals(Color.kWhite, outSection1.getCurrentColor(), "Section1's color should have toggled due to global blinking override.");
     assertNotEquals(Color.kBlue, outSection2.getCurrentColor(), "Section2's color should have toggled due to blinking.");
     ledSubsystem.close();
+    System.out.println("testGlobalBlinkingOverride--end");
   }
 }
