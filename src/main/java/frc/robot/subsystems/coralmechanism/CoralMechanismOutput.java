@@ -1,4 +1,4 @@
-package frc.robot.subsystems.coral;
+package frc.robot.subsystems.coralmechanism;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -56,7 +56,7 @@ public class CoralMechanismOutput extends SubsystemOutput {
     return this.brakeModeEnabled;
   }
 
-    public void setBrakeModeEnabled(boolean brakeModeEnabled) {
+  public void setBrakeModeEnabled(boolean brakeModeEnabled) {
         this.brakeModeEnabled = brakeModeEnabled;
-    }
+   }
 }

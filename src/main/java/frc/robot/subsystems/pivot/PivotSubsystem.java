@@ -23,7 +23,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
     private IdleMode mode;
 
     public static double calculateMotorPositionFromDegrees(double degrees) {
-        return degrees / RobotConstants.PIVOT.PIVOT_CONVERSION_FACTOR;
+        return degrees / 360;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
             pivotConfig.idleMode(IdleMode.kBrake);
             mode = IdleMode.kBrake;
             pivotConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-            pivotConfig.closedLoop.pidf(0.2, 0, 0, 0);
+            pivotConfig.closedLoop.pidf(0.5, 0, 0, 0);
             pivotConfig.closedLoop.outputRange(-0.2, 0.2);
             pivotConfig.closedLoop.positionWrappingEnabled(true);
             pivotConfig.closedLoop.positionWrappingInputRange(0, 1);
