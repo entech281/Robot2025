@@ -31,6 +31,7 @@ class TestLEDSubsystem {
    */
   @Test
   void testNonBlinkingOutput() {
+
     SubdividedLedString subdivided = new SubdividedLedString();
     // One section: entire range with foreground RED and background BLACK.
     SubdividedLedString.LedSection section = subdivided.addSection(Color.kRed, Color.kBlack, 0, testNumLEDs);
@@ -48,6 +49,9 @@ class TestLEDSubsystem {
     }
 
     LEDOutput output = ledSubsystem.toOutputs();
+    if ( true ){
+      throw new RuntimeException("this shoudl fail");
+    }
 
     System.out.println("Output String: " + output.getSubdividedString());
     System.out.println("Actual String: " + subdivided);
