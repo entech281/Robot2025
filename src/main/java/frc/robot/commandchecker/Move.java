@@ -1,4 +1,4 @@
-package frc.robot.commandCheker;
+package frc.robot.commandcheker;
 
 public class Move {
     
