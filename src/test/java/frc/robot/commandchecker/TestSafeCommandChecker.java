@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import frc.robot.commandchecker.Move;
-import frc.robot.commandchecker.SafeCommandChecker;
-import frc.robot.commandchecker.SafeMovementChecker;
+import frc.robot.aaaaaaaaaaaaa.Move;
+import frc.robot.aaaaaaaaaaaaa.SafeCommandChecker;
+import frc.robot.aaaaaaaaaaaaa.SafeMovementChecker;
 
 public class TestSafeCommandChecker {
 

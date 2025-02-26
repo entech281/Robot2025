@@ -1,4 +1,4 @@
-package frc.robot.commandchecker;
+package frc.robot.aaaaaaaaaaaaa;
 
 import frc.robot.RobotConstants;
 
@@ -12,8 +12,6 @@ public class SafeCommandChecker {
 
     public boolean isSafe(Move command) {
         for (SafeZone zone : safeZones) {
-            System.out.println(zone);
-            System.out.println(command);
             if (command.getTargetElevator() < zone.getElevatorEnd() && command.getTargetElevator() > zone.getElevatorStart() &&
                 command.getTargetPivot() < zone.getPivotEnd() && command.getTargetPivot() > zone.getPivotStart()) {
                 return true;
