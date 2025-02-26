@@ -53,7 +53,7 @@ class TestLEDSubsystem {
     System.out.println("Output String: " + output.getSubdividedString());
     System.out.println("Actual String: " + subdivided);
     assertNotNull(output.getSubdividedString(), "Subdivided LED string should not be null.");
-    SubdividedLedString.LedSection outSection = output.getSubdividedString().getSections().get(0);
+    SubdividedLedString.LedSection outSection =subdivided.getSections().get(0);
     assertEquals(Color.kRed, outSection.getCurrentColor(), "Non-blinking section should maintain foreground RED.");
 
     System.out.println("testNonBlinkingOutput--end");
@@ -79,7 +79,7 @@ class TestLEDSubsystem {
 
     // Record the initial color (should be BLUE)
     LEDOutput output = ledSubsystem.toOutputs();
-    SubdividedLedString.LedSection outSection = output.getSubdividedString().getSections().get(0);
+    SubdividedLedString.LedSection outSection =subdivided.getSections().get(0);
     Color initialColor = outSection.getCurrentColor();
 
     // Wait for blink timer to elapse (blink cycle threshold is 0.25 sec)
@@ -129,8 +129,8 @@ class TestLEDSubsystem {
     ledSubsystem.periodic();
     
     LEDOutput output = ledSubsystem.toOutputs();
-    SubdividedLedString.LedSection outSection1 = output.getSubdividedString().getSections().get(0);
-    SubdividedLedString.LedSection outSection2 = output.getSubdividedString().getSections().get(1);
+    SubdividedLedString.LedSection outSection1 = subdivided.getSections().get(0);
+    SubdividedLedString.LedSection outSection2 = subdivided.getSections().get(1);
     
     // Section1 should remain unchanged (still MAGENTA)
     assertEquals(Color.kMagenta, outSection1.getCurrentColor(), "Non-blinking Section1 should remain MAGENTA.");
@@ -180,8 +180,8 @@ class TestLEDSubsystem {
     ledSubsystem.periodic();
     
     LEDOutput output = ledSubsystem.toOutputs();
-    SubdividedLedString.LedSection outSection1 = output.getSubdividedString().getSections().get(0);
-    SubdividedLedString.LedSection outSection2 = output.getSubdividedString().getSections().get(1);
+    SubdividedLedString.LedSection outSection1 = subdivided.getSections().get(0);
+    SubdividedLedString.LedSection outSection2 = subdivided.getSections().get(1);
 
     // Check that at least one blink occurred (colors toggled from initial state).
     // For section1, initial color was White.

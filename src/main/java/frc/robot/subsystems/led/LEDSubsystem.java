@@ -24,7 +24,6 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
 
 
   public LEDSubsystem() {
-    new Throwable("making new LEDSubsystem").printStackTrace();
     if (ENABLED) {
       buffer = new AddressableLEDBuffer(RobotConstants.LED.NUM_LEDS);
       leds.setLength(buffer.getLength());
