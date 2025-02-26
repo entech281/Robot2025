@@ -14,16 +14,16 @@ class TestDefaultLEDStringCreator {
     @Test
     void testHasError() {
         DefaultLEDStringCreator creator = new DefaultLEDStringCreator();
-        int operator_leds_start = RobotConstants.LED.OPERATOR_LEDS_START_INDEX;
-        int driver_leds_start = RobotConstants.LED.DRIVER_LEDS_START_INDEX;
-        int operator_leds_end = RobotConstants.LED.OPERATOR_LEDS_END_INDEX;
-        int driver_leds_end = RobotConstants.LED.DRIVER_LEDS_END_INDEX;
+        int operatorLedsStart = RobotConstants.LED.OPERATOR_LEDS_START_INDEX;
+        int driverLedsStart = RobotConstants.LED.DRIVER_LEDS_START_INDEX;
+        int operatorLedsEnd = RobotConstants.LED.OPERATOR_LEDS_END_INDEX;
+        int driverLedsEnd = RobotConstants.LED.DRIVER_LEDS_END_INDEX;
         
         SubdividedLedString subdivided = creator.createLEDString(true, false, true, 0);
 
         SubdividedLedString correctString = new SubdividedLedString();
-        correctString.addSection(Color.kRed, Color.kBlack, operator_leds_start, operator_leds_end);
-        correctString.addSection(Color.kRed, Color.kBlack, driver_leds_start, driver_leds_end);
+        correctString.addSection(Color.kRed, Color.kBlack, operatorLedsStart, operatorLedsEnd);
+        correctString.addSection(Color.kRed, Color.kBlack, driverLedsStart, driverLedsEnd);
 
         assertArrayEquals(correctString.toColorList().toArray(), subdivided.toColorList().toArray());
         assertTrue(subdivided.getSections().get(0).isBlinking());
@@ -33,16 +33,16 @@ class TestDefaultLEDStringCreator {
     @Test
     void testHasCoralAndAligned() {
         DefaultLEDStringCreator creator = new DefaultLEDStringCreator();
-        int operator_leds_start = RobotConstants.LED.OPERATOR_LEDS_START_INDEX;
-        int driver_leds_start = RobotConstants.LED.DRIVER_LEDS_START_INDEX;
-        int operator_leds_end = RobotConstants.LED.OPERATOR_LEDS_END_INDEX;
-        int driver_leds_end = RobotConstants.LED.DRIVER_LEDS_END_INDEX;
+        int operatorLedsStart = RobotConstants.LED.OPERATOR_LEDS_START_INDEX;
+        int driverLedsStart = RobotConstants.LED.DRIVER_LEDS_START_INDEX;
+        int operatorLedsEnd = RobotConstants.LED.OPERATOR_LEDS_END_INDEX;
+        int driverLedsEnd = RobotConstants.LED.DRIVER_LEDS_END_INDEX;
         
         SubdividedLedString subdivided = creator.createLEDString(true, true, false, 0);
 
         SubdividedLedString correctString = new SubdividedLedString();
-        correctString.addSection(Color.kPurple, Color.kBlack, operator_leds_start, operator_leds_end);
-        correctString.addSection(Color.kGreen, Color.kBlack, driver_leds_start, driver_leds_end);
+        correctString.addSection(Color.kPurple, Color.kBlack, operatorLedsStart, operatorLedsEnd);
+        correctString.addSection(Color.kGreen, Color.kBlack, driverLedsStart, driverLedsEnd);
 
         assertArrayEquals(correctString.toColorList().toArray(), subdivided.toColorList().toArray());
         assertTrue(!subdivided.getSections().get(0).isBlinking());
@@ -54,16 +54,16 @@ class TestDefaultLEDStringCreator {
     @Test
     void testNoCoralAndAligned() {
         DefaultLEDStringCreator creator = new DefaultLEDStringCreator();
-        int operator_leds_start = RobotConstants.LED.OPERATOR_LEDS_START_INDEX;
-        int driver_leds_start = RobotConstants.LED.DRIVER_LEDS_START_INDEX;
-        int operator_leds_end = RobotConstants.LED.OPERATOR_LEDS_END_INDEX;
-        int driver_leds_end = RobotConstants.LED.DRIVER_LEDS_END_INDEX;
+        int operatorLedsStart = RobotConstants.LED.OPERATOR_LEDS_START_INDEX;
+        int driverLedsStart = RobotConstants.LED.DRIVER_LEDS_START_INDEX;
+        int operatorLedsEnd = RobotConstants.LED.OPERATOR_LEDS_END_INDEX;
+        int driverLedsEnd = RobotConstants.LED.DRIVER_LEDS_END_INDEX;
         
         SubdividedLedString subdivided = creator.createLEDString(false, true, false, 0);
 
         SubdividedLedString correctString = new SubdividedLedString();
-        correctString.addSection(Color.kPurple, Color.kBlack, operator_leds_start, operator_leds_end);
-        correctString.addSection(Color.kGreen, Color.kBlack, driver_leds_start, driver_leds_end);
+        correctString.addSection(Color.kPurple, Color.kBlack, operatorLedsStart, operatorLedsEnd);
+        correctString.addSection(Color.kGreen, Color.kBlack, driverLedsStart, driverLedsEnd);
 
         assertArrayEquals(correctString.toColorList().toArray(), subdivided.toColorList().toArray());
         assertTrue(subdivided.getSections().get(0).isBlinking());
