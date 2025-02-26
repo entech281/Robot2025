@@ -81,17 +81,15 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
    * Each section's current color is applied to its designated indices.
    */
   private void updateLEDs() {
-    if ( ENABLED ){
-      if (currentInput.getSubdividedString() != null) {
-        for (SubdividedLedString.LedSection section : currentInput.getSubdividedString().getSections()) {
-          int startIdx = Math.max(0, section.getStartIndex());
-          int endIdx = Math.min(buffer.getLength(), section.getEndIndex());
-          for (int i = startIdx; i < endIdx; i++) {
-            buffer.setLED(i, section.getCurrentColor());
-          }
+    if (ENABLED && currentInput.getSubdividedString() != null) {
+      for (SubdividedLedString.LedSection section : currentInput.getSubdividedString().getSections()) {
+        int startIdx = Math.max(0, section.getStartIndex());
+        int endIdx = Math.min(buffer.getLength(), section.getEndIndex());
+        for (int i = startIdx; i < endIdx; i++) {
+          buffer.setLED(i, section.getCurrentColor());
         }
-        leds.setData(buffer);
       }
+      leds.setData(buffer);
     }
   }
 
