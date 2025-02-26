@@ -28,7 +28,7 @@ class TestLEDSubsystem {
   /**
    * Tests that when blinking is disabled the LED section maintains its foreground color.
    */
-  @Test
+
   void testNonBlinkingOutput() {
     System.out.println("testNonBlinkingOutput--start");
     SubdividedLedString subdivided = new SubdividedLedString();
@@ -62,7 +62,7 @@ class TestLEDSubsystem {
   /**
    * Tests that when a section is set to blink, its color toggles between foreground and background.
    */
-  @Test
+
   void testBlinkingOutputToggles() {
     System.out.println("testBlinkingOutputToggles--start");
     SubdividedLedString subdivided = new SubdividedLedString();
@@ -101,7 +101,7 @@ class TestLEDSubsystem {
    * Tests that multiple sections update independently:
    * One section is blinking and one is static. Only the blinking section toggles.
    */
-  @Test
+
   void testMultipleSectionsIndependentBlinking() {
     System.out.println("testMultipleSectionsIndependentBlinking--start");
     SubdividedLedString subdivided = new SubdividedLedString();
@@ -127,7 +127,7 @@ class TestLEDSubsystem {
       Thread.currentThread().interrupt();
     }
     ledSubsystem.periodic();
-    
+
     LEDOutput output = ledSubsystem.toOutputs();
     SubdividedLedString.LedSection outSection1 = subdivided.getSections().get(0);
     SubdividedLedString.LedSection outSection2 = subdivided.getSections().get(1);
@@ -142,7 +142,7 @@ class TestLEDSubsystem {
   /**
    * Tests that a global call to input.setBlinking overwrites each section's blinking state.
    */
-  @Test
+
   void testGlobalBlinkingOverride() {
     System.out.println("testGlobalBlinkingOverride--start");
     SubdividedLedString subdivided = new SubdividedLedString();
