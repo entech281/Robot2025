@@ -16,8 +16,7 @@ class TestLEDSubsystem {
 
   @BeforeEach
   void setup() {
-    ledSubsystem = new LEDSubsystem(false);
-    LEDInput input = new LEDInput();
+    ledSubsystem = new LEDSubsystem();
     ledSubsystem.initialize();
   }
 

@@ -2,14 +2,9 @@ package frc.robot.subsystems.led;
 
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.RobotConstants;
-import frc.robot.io.RobotIO;
-import frc.robot.simulation.MockTimer;
-// If in simulation, use the simulated classes.
-import frc.robot.simulation.SimulatedAddressableLED;
 import edu.wpi.first.wpilibj.AddressableLED;
 
 /**
@@ -17,40 +12,20 @@ import edu.wpi.first.wpilibj.AddressableLED;
  * The configuration is provided via LEDInput that encapsulates a SubdividedLedString,
  * which defines individual LED segments and their colors. Each segment may be configured
  * to blink independently by setting its own blinking flag.
- * Uses either real hardware or simulated implementations based on RobotConstants.SIMULATION.
  */
 public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
 
   private static final boolean ENABLED = true;
 
   private AddressableLED leds = new AddressableLED(RobotConstants.LED.PORT);
-  private SimulatedAddressableLED simulatedLeds;
   private  AddressableLEDBuffer buffer= new AddressableLEDBuffer(RobotConstants.LED.NUM_LEDS);;
   private LEDInput currentInput = new LEDInput();
   private Timer blinkTimer = new Timer();
-  private MockTimer simulatedBlinkTimer = new MockTimer();
-  private boolean isSimulated;
 
-  /**
-   * Constructs the LEDSubsystem.
-   * If enabled, initializes the AddressableLED with the configured port and number of LEDs.
-   */
+
   public LEDSubsystem() {
-    this(false);
-
-  }
-
-  public LEDSubsystem(boolean isSimulated) {
-    this.isSimulated = isSimulated;
     new Throwable("making new LEDSubsystem").printStackTrace();
     if (ENABLED) {
-      //if (isSimulated) {
-        // Use simulated implementation in test/CI environments.
-      //  simulatedLeds = new SimulatedAddressableLED(RobotConstants.LED.PORT);
-      //} else {
-        // Use actual hardware implementation.
-        //leds = new AddressableLED(RobotConstants.LED.PORT);
-      //}
       buffer = new AddressableLEDBuffer(RobotConstants.LED.NUM_LEDS);
       leds.setLength(buffer.getLength());
       leds.start();
@@ -64,11 +39,7 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   @Override
   public void initialize() {
     updateLEDs();
-    //if (isSimulated) {
-    //  simulatedBlinkTimer.start();
-    //} else {
       blinkTimer.start();
-    //}
   }
 
   /**
@@ -79,19 +50,11 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   @Override
   public void periodic() {
     if (ENABLED) {
-     // if (isSimulated) {
-     //   simulatedBlinkTimer.advanceTime(0.25);
-     //   if (simulatedBlinkTimer.hasElapsed(0.25)) {
-     //     toggleBlinkingSections();
-     //     simulatedBlinkTimer.restart();
-     //   }
-     // } else {
         if (blinkTimer.hasElapsed(0.25)) {
           toggleBlinkingSections();
           blinkTimer.restart();
         }
         updateLEDs();
-    //  }
     }
   }
 
