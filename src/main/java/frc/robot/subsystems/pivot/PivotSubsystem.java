@@ -14,8 +14,8 @@ import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
 
 public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
-    private static final boolean ENABLED = false;
-    private static final boolean IS_INVERTED = false;
+    private static final boolean ENABLED = true;
+    private static final boolean IS_INVERTED = true;
 
     private PivotInput currentInput = new PivotInput();
     private SparkMax pivotMotor;
@@ -32,7 +32,6 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
             SparkMaxConfig pivotConfig = new SparkMaxConfig();
             pivotMotor = new SparkMax(RobotConstants.PORTS.CAN.PIVOT_MOTOR, MotorType.kBrushless);
 
-            pivotMotor.getEncoder().setPosition(0.0);
             pivotConfig.inverted(IS_INVERTED);
             pivotConfig.idleMode(IdleMode.kBrake);
             mode = IdleMode.kBrake;
@@ -80,7 +79,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
     public void periodic() {
         if (ENABLED) {
             if (currentInput.getActivate()) {
-                double targetPosition = calculateMotorPositionFromDegrees(currentInput.getRequestedPosition());
+                double targetPosition = calculateMotorPositionFromDegrees((currentInput.getRequestedPosition()/180)+0.5);
                 pidController.setReference(targetPosition, ControlType.kPosition);
             } else {
                 pivotMotor.set(0);

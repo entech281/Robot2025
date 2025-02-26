@@ -28,13 +28,18 @@ import frc.robot.io.RobotIO;
 import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.elevator.ElevatorInput;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
-
+import frc.robot.subsystems.pivot.PivotInput;
+import frc.robot.subsystems.pivot.PivotSubsystem;
 @SuppressWarnings("unused")
 public class CommandFactory {
   private final DriveSubsystem driveSubsystem;
   private final NavXSubsystem navXSubsystem;
+  private final PivotSubsystem pivotSubsystem;
+  private final ElevatorSubsystem elevatorSubsystem;
   private final OdometryProcessor odometry;
   private final SubsystemManager subsystemManager;
   private final LEDSubsystem ledSubsystem;
@@ -45,6 +50,8 @@ public class CommandFactory {
     this.driveSubsystem = subsystemManager.getDriveSubsystem();
     this.navXSubsystem = subsystemManager.getNavXSubsystem();
     this.ledSubsystem = subsystemManager.getLEDSubsystem();
+    this.elevatorSubsystem = subsystemManager.getElevatorSubsystem();
+    this.pivotSubsystem = subsystemManager.getPivotSubsystem();
     this.odometry = odometry;
     this.subsystemManager = subsystemManager;
 

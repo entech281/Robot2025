@@ -17,6 +17,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.entech.util.AprilTagDistanceCalibration;
+import frc.robot.commandchecker.SafeZone;
+
 
 public final class RobotConstants {
   public static final double TIME_PER_PERIODICAL_LOOP_SECONDS = 0.00;
@@ -52,6 +54,16 @@ public final class RobotConstants {
 
     public static final boolean GYRO_REVERSED = false;
     public static final boolean RATE_LIMITING = true;
+  }
+
+  public static interface SafeZones {
+    public static final SafeZone[] SAFE_ZONES = new SafeZone[] {
+      new SafeZone(0, 23, 29, 36),
+      new SafeZone(3.2, 23, 30, 40),
+      new SafeZone(11, 23, 30, 60),
+      new SafeZone(18.7, 23, 30, 80),
+      new SafeZone(20, 23, 30, 170)
+    };
   }
 
 
@@ -129,8 +141,8 @@ public final class RobotConstants {
 
   public static interface LiveTuning {
     public static final Map<String, Double> VALUES = Map.ofEntries(
-      Map.entry("PivotSubsystem/NudgeAmount", 5.0),
       Map.entry("ElevatorSubsystem/NudgeAmount", 5.0),
+      Map.entry("PivotSubsystem/NudgeAmount", 5.0),
       Map.entry(Position.ALGAE_GROUND.getElevatorKey(), 0.0),
       Map.entry(Position.ALGAE_L2.getElevatorKey(), 11.0),
       Map.entry(Position.ALGAE_L3.getElevatorKey(), 6.3),
@@ -174,8 +186,14 @@ public final class RobotConstants {
 
     public static interface LED {
     public static final int PORT = 0;
+
     public static final int NUM_LEDS = 10;
+
     public static final double BLINK_INTERVAL = 0.25;
+    public static final int OPERATOR_LEDS_START_INDEX = 0;
+    public static final int OPERATOR_LEDS_END_INDEX = 67;
+    public static final int DRIVER_LEDS_START_INDEX = 68;
+    public static final int DRIVER_LEDS_END_INDEX = NUM_LEDS;
   }
 
 
@@ -200,8 +218,8 @@ public final class RobotConstants {
       public static final int REAR_LEFT_TURNING = 31;
       public static final int REAR_RIGHT_TURNING = 41;
 
-      public static final int ELEVATOR_A = 13;
-      public static final int ELEVATOR_B = 14;
+      public static final int ELEVATOR_A = 35;
+      public static final int ELEVATOR_B = 35;
 
       public static final int CORAL_MOTOR = 38; 
 

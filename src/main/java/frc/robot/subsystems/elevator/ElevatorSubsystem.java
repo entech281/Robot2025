@@ -75,12 +75,12 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   }
   private double clampRequestedPosition(double position) {
     if (position < 0) {
-      DriverStation.reportWarning("Pivot tried to go to " + currentInput.getRequestedPosition()
+      DriverStation.reportWarning("Lelevator tried to go to " + currentInput.getRequestedPosition()
         + " value was changed to " + RobotConstants.ELEVATOR.LOWER_SOFT_LIMIT_DEG, false);
           return RobotConstants.ELEVATOR.LOWER_SOFT_LIMIT_DEG;
     } 
     else if (position > RobotConstants.ELEVATOR.UPPER_SOFT_LIMIT_DEG) {
-      DriverStation.reportWarning("Pivot tried to go to " + currentInput.getRequestedPosition()
+      DriverStation.reportWarning("Lelevator tried to go to " + currentInput.getRequestedPosition()
           + " value was changed to " + RobotConstants.ELEVATOR.UPPER_SOFT_LIMIT_DEG, false);
       return RobotConstants.ELEVATOR.UPPER_SOFT_LIMIT_DEG;
     } 
@@ -106,10 +106,7 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       }
     }
   }
-  @Override
-  public boolean isEnabled() {
-    return ENABLED;
-  }
+  
 
   @Override
   public void updateInputs(ElevatorInput input) {
@@ -140,6 +137,11 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   public Command getTestCommand() {
     // return new TestPivotCommand(this);
     return null;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return ENABLED;
   }
 
 }
