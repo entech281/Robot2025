@@ -17,7 +17,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.entech.util.AprilTagDistanceCalibration;
-import frc.robot.aaaaaaaaaaaaa.SafeZone;
+import frc.robot.commandchecker.SafeZone;
 
 
 public final class RobotConstants {
