@@ -1,35 +1,41 @@
 package frc.robot.subsystems.led;
 
 import org.littletonrobotics.junction.Logger;
-import edu.wpi.first.wpilibj.util.Color;
 import frc.entech.subsystems.SubsystemOutput;
 
+/**
+ * LEDOutput captures the current state of the LED subsystem.
+ * It reflects the state of the subdivided LED string.
+ * Note: The global blinking flag is no longer used for output,
+ * as each LED segment controls its own blinking.
+ */
 public class LEDOutput extends SubsystemOutput {
 
-  private Color color = Color.kWhite;
-  private boolean blinking;
-  private Color secondaryColor = Color.kBlack;
+  private SubdividedLedString subdividedString;
+  private boolean blinking;   // retained for logging, but not actively used
 
-  public Color getSecondaryColor() {
-    return secondaryColor;
+  /**
+   * Returns the current subdivided LED string state.
+   *
+   * @return the current subdivided LED string state
+   */
+  public SubdividedLedString getSubdividedString() {
+    return subdividedString;
   }
 
-  public void setSecondaryColor(Color secondaryColor) {
-    this.secondaryColor = secondaryColor;
+  /**
+   * Sets the current subdivided LED string state.
+   *
+   * @param subdividedString the new subdivided LED string state
+   */
+  public void setSubdividedString(SubdividedLedString subdividedString) {
+    this.subdividedString = subdividedString;
   }
 
   @Override
   public void toLog() {
-    Logger.recordOutput("LEDOutput/CurrentColor", color + "");
+    Logger.recordOutput("LEDOutput/SubdividedString", subdividedString != null ? subdividedString.getSections().toString() : "null");
     Logger.recordOutput("LEDOutput/Blinking", blinking);
-  }
-
-  public Color getColor() {
-    return this.color;
-  }
-
-  public void setColor(Color color) {
-    this.color = color;
   }
 
   public boolean isBlinking() {
@@ -39,5 +45,4 @@ public class LEDOutput extends SubsystemOutput {
   public void setBlinking(boolean blinking) {
     this.blinking = blinking;
   }
-
 }

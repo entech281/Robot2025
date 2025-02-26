@@ -1,45 +1,39 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.util.Color;
+
+
 import frc.entech.commands.EntechCommand;
-import frc.robot.io.RobotIO;
+import frc.robot.subsystems.coraldetector.InternalCoralDetectorOutput;
+import frc.robot.subsystems.coraldetector.InternalCoralDetectorSubsystem;
 import frc.robot.subsystems.led.LEDInput;
 import frc.robot.subsystems.led.LEDSubsystem;
+import frc.robot.subsystems.led.SubdividedLedString;
+import frc.robot.DefaultLEDStringCreator;
+import frc.robot.operation.UserPolicy;
+
 
 public class LEDDefaultCommand extends EntechCommand {
+  private final InternalCoralDetectorOutput coralDetectorOutput;
   private final LEDSubsystem ledSubsystem;
-  private LEDInput input = new LEDInput();
 
-  public LEDDefaultCommand(LEDSubsystem ledSubsystem) {
-    super(ledSubsystem);
+  public LEDDefaultCommand(LEDSubsystem ledSubsystem, InternalCoralDetectorSubsystem coralDetectorSubsystem) {
     this.ledSubsystem = ledSubsystem;
-  }
-
-  private boolean hasError() {
-    return RobotIO.getInstance().getNavXOutput().isFaultDetected();
+    coralDetectorOutput = coralDetectorSubsystem.toOutputs();
+    addRequirements(ledSubsystem);
   }
 
   @Override
   public void execute() {
-    if (hasError()) {
-      input.setBlinking(true);
-      input.setColor(Color.kRed);
-      input.setSecondaryColor(Color.kBlack);
-     } else {
-      input.setBlinking(false);
-      input.setColor(Color.kGreen);
-    }
 
+    SubdividedLedString subdivided = new DefaultLEDStringCreator().createLEDString(coralDetectorOutput.hasCoral(), !UserPolicy.getInstance().isAligningToAngle(), hasError(), UserPolicy.getInstance().getTargetAngle());
+    
+    LEDInput input = new LEDInput(subdivided);
     ledSubsystem.updateInputs(input);
   }
 
-  @Override
-  public boolean isFinished() {
-    return false;
+  //TODO: Actual error checking
+  private boolean hasError() {
+      return false;
   }
 
-  @Override
-  public boolean runsWhenDisabled() {
-    return true;
-  }
 }

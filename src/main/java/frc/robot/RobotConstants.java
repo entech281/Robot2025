@@ -186,9 +186,7 @@ public final class RobotConstants {
 
     public static interface LED {
     public static final int PORT = 0;
-
-    public static final int NUM_LEDS = 10;
-
+    public static final int NUM_LEDS = 100;
     public static final double BLINK_INTERVAL = 0.25;
     public static final int OPERATOR_LEDS_START_INDEX = 0;
     public static final int OPERATOR_LEDS_END_INDEX = 67;

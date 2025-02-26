@@ -42,4 +42,5 @@ jobs:
           -Dsonar.organization=entech281
           -Dsonar.host.url=http://sonarcloud.io
           simulateJava
+          --stacktrace
 
