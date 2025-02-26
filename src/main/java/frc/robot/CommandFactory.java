@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.AutonomousException;
-import frc.robot.commandCheker.SafeMovePlanner;
 import frc.robot.commands.ElevatorMoveCommand;
 import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
@@ -45,7 +44,6 @@ public class CommandFactory {
   private final SubsystemManager subsystemManager;
   private final LEDSubsystem ledSubsystem;
   private final SendableChooser<Command> autoChooser;
-  private final SafeMovePlanner planner;
 
 
   public CommandFactory(SubsystemManager subsystemManager, OdometryProcessor odometry) {
@@ -56,7 +54,6 @@ public class CommandFactory {
     this.pivotSubsystem = subsystemManager.getPivotSubsystem();
     this.odometry = odometry;
     this.subsystemManager = subsystemManager;
-    this.planner = new SafeMovePlanner();
 
     RobotConfig config;
     try{

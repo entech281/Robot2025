@@ -18,8 +18,6 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.entech.util.AprilTagDistanceCalibration;
 import frc.robot.commandCheker.SafeZone;
-import frc.robot.subsystems.elevator.ElevatorInput;
-import frc.robot.subsystems.pivot.PivotInput;
 
 
 public final class RobotConstants {
@@ -145,25 +143,6 @@ public final class RobotConstants {
     public static final Map<String, Double> VALUES = Map.ofEntries(
       Map.entry("ElevatorSubsystem/NudgeAmount", 5.0),
       Map.entry("PivotSubsystem/NudgeAmount", 5.0),
-      Map.entry(ElevatorInput.Position.L1.label, 0.0),
-      Map.entry(ElevatorInput.Position.L2.label, 3.2),
-      Map.entry(ElevatorInput.Position.L3.label, 8.5),
-      Map.entry(ElevatorInput.Position.L4.label, 18.7),
-      Map.entry(ElevatorInput.Position.ALGAE_L2.label, 6.3),
-      Map.entry(ElevatorInput.Position.ALGAE_L3.label, 11.0),
-      Map.entry(ElevatorInput.Position.ALGAE_GROUND.label, 0.0),
-      Map.entry(ElevatorInput.Position.BARGE.label, 22.0),
-      Map.entry(ElevatorInput.Position.HOME.label, 0.0),
-      Map.entry(PivotInput.Position.L1.label, 35.0),
-      Map.entry(PivotInput.Position.L2.label, 40.0),
-      Map.entry(PivotInput.Position.L3.label, 40.0),
-      Map.entry(PivotInput.Position.L4.label, 80.0),
-      Map.entry(PivotInput.Position.ALGAE_L2.label, 165.0),
-      Map.entry(PivotInput.Position.ALGAE_L3.label, 165.0),
-      Map.entry(PivotInput.Position.ALGAE_GROUND.label, 165.0),
-      Map.entry(PivotInput.Position.BARGE.label, 80.0),
-      Map.entry(PivotInput.Position.HOME.label, 35.0),
-      Map.entry("ElevatorSubsystem/NudgeAmount", 5.0),
       Map.entry(Position.ALGAE_GROUND.getElevatorKey(), 0.0),
       Map.entry(Position.ALGAE_L2.getElevatorKey(), 11.0),
       Map.entry(Position.ALGAE_L3.getElevatorKey(), 6.3),
