@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 class TestLEDSubsystem {
 
   private LEDSubsystem ledSubsystem;
-  //private LEDInput input;
   // Test LED count value
   private final int testNumLEDs = 100;
 
@@ -113,7 +112,6 @@ class TestLEDSubsystem {
     section2.setBlinking(true);
     section2.on();
     
-    //input.setSubdividedString(subdivided);
     LEDInput input = new LEDInput( subdivided);
 
 
@@ -158,7 +156,6 @@ class TestLEDSubsystem {
     
     // Global call to set blinking to true.
     LEDInput input = new LEDInput( subdivided);
-    //input.setSubdividedString(subdivided);
     input.setBlinking(true);
     
     // Both sections should now be blinking due to propagation.

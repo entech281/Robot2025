@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.RobotConstants;
+import frc.robot.io.RobotIO;
 import edu.wpi.first.wpilibj.AddressableLED;
 
 /**
@@ -18,8 +19,8 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   private static final boolean ENABLED = true;
 
   private AddressableLED leds = new AddressableLED(RobotConstants.LED.PORT);
-  private  AddressableLEDBuffer buffer= new AddressableLEDBuffer(RobotConstants.LED.NUM_LEDS);;
-  private LEDInput currentInput = new LEDInput();
+  private  AddressableLEDBuffer buffer= new AddressableLEDBuffer(RobotConstants.LED.NUM_LEDS);
+  private LEDInput currentInput = new LEDInput(new SubdividedLedString());
   private Timer blinkTimer = new Timer();
 
 
@@ -112,7 +113,7 @@ public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
   @Override
   public void updateInputs(LEDInput input) {
     if (ENABLED){
-      //RobotIO.processInput(input);
+      RobotIO.processInput(input);
       this.currentInput = input;
     }
 

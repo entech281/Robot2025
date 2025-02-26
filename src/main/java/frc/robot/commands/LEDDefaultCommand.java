@@ -15,7 +15,6 @@ import frc.robot.operation.UserPolicy;
 public class LEDDefaultCommand extends EntechCommand {
   private final InternalCoralDetectorOutput coralDetectorOutput;
   private final LEDSubsystem ledSubsystem;
-  //private final LEDInput input = new LEDInput();
 
   public LEDDefaultCommand(LEDSubsystem ledSubsystem, InternalCoralDetectorSubsystem coralDetectorSubsystem) {
     this.ledSubsystem = ledSubsystem;
@@ -32,9 +31,8 @@ public class LEDDefaultCommand extends EntechCommand {
     ledSubsystem.updateInputs(input);
   }
 
-    // Replace this with your actual error checking
+  //TODO: Actual error checking
   private boolean hasError() {
-      // Example: return true if there is an error detected.
       return false;
   }
 

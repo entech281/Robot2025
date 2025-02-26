@@ -14,9 +14,9 @@ public class LEDInput implements SubsystemInput {
   private SubdividedLedString subdividedString = new SubdividedLedString();
   private boolean blinking = false;
 
-  public LEDInput(){
+  // public LEDInput(){
 
-  }
+  // }
   public LEDInput(SubdividedLedString subdividedString){
     this.subdividedString = subdividedString;
   }
@@ -29,14 +29,6 @@ public class LEDInput implements SubsystemInput {
     return subdividedString;
   }
 
-  /**
-   * Sets the subdivided LED string configuration.
-   *
-   * @param subdividedString the subdivided LED string to use
-   */
-  //public void setSubdividedString(SubdividedLedString subdividedString) {
-  //  this.subdividedString = subdividedString;
-  //}
 
   /**
    * Returns the blinking flag.

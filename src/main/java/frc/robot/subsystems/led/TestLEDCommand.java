@@ -41,7 +41,6 @@ public class TestLEDCommand extends EntechCommand {
       default -> subdivided.addSection(Color.kBlack, Color.kBlack, 0, ledCount);
 
     }
-    //input.setSubdividedString(subdivided);
     ledSubsystem.updateInputs(input);
     
     if (counter.isFinished(true)) {

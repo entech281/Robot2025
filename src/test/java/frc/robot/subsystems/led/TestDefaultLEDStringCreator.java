@@ -9,10 +9,10 @@ import frc.robot.DefaultLEDStringCreator;
 import frc.robot.RobotConstants;
 import frc.robot.subsystems.led.SubdividedLedString.LedSection;
 
-public class TestDefaultLEDStringCreator {
+class TestDefaultLEDStringCreator {
 
     @Test
-    public void testHasError() {
+    void testHasError() {
         DefaultLEDStringCreator creator = new DefaultLEDStringCreator();
         int operator_leds_start = RobotConstants.LED.OPERATOR_LEDS_START_INDEX;
         int driver_leds_start = RobotConstants.LED.DRIVER_LEDS_START_INDEX;
@@ -31,7 +31,7 @@ public class TestDefaultLEDStringCreator {
     }
 
     @Test
-    public void testHasCoralAndAligned() {
+    void testHasCoralAndAligned() {
         DefaultLEDStringCreator creator = new DefaultLEDStringCreator();
         int operator_leds_start = RobotConstants.LED.OPERATOR_LEDS_START_INDEX;
         int driver_leds_start = RobotConstants.LED.DRIVER_LEDS_START_INDEX;
@@ -52,7 +52,7 @@ public class TestDefaultLEDStringCreator {
 
 
     @Test
-    public void testNoCoralAndAligned() {
+    void testNoCoralAndAligned() {
         DefaultLEDStringCreator creator = new DefaultLEDStringCreator();
         int operator_leds_start = RobotConstants.LED.OPERATOR_LEDS_START_INDEX;
         int driver_leds_start = RobotConstants.LED.DRIVER_LEDS_START_INDEX;
@@ -72,7 +72,7 @@ public class TestDefaultLEDStringCreator {
     }
 
     @Test
-    public void testNotAligned() {
+    void testNotAligned() {
         DefaultLEDStringCreator creator = new DefaultLEDStringCreator();
 
         SubdividedLedString subdivided = creator.createLEDString(true, false, false, 1.6);
@@ -112,7 +112,7 @@ public class TestDefaultLEDStringCreator {
     }
 
     //helper test
-    public void testSubdividedLedStringDoesNotExceedBoundaries(SubdividedLedString subdivided) {
+    void testSubdividedLedStringDoesNotExceedBoundaries(SubdividedLedString subdivided) {
         for (LedSection section : subdivided.getSections()) {
             assertTrue(section.getEndIndex() <= RobotConstants.LED.NUM_LEDS);
         }

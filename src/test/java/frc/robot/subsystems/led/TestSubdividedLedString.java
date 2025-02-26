@@ -6,11 +6,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 
-public class TestSubdividedLedString {
+class TestSubdividedLedString {
 
 
     @Test
-    public void testTwoSegments(){
+    void testTwoSegments(){
         SubdividedLedString sls = new SubdividedLedString();
         SubdividedLedString.LedSection section1 = sls.addSection(Color.kAqua,Color.kBlack,0,5);
         SubdividedLedString.LedSection section2 = sls.addSection(Color.kAliceBlue,Color.kBlack,5,10);
