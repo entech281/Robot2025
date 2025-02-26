@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import edu.wpi.first.wpilibj.util.Color;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+
 
 class TestLEDSubsystem {
 
@@ -78,7 +78,6 @@ class TestLEDSubsystem {
 
 
     // Record the initial color (should be BLUE)
-    LEDOutput output = ledSubsystem.toOutputs();
     SubdividedLedString.LedSection outSection =subdivided.getSections().get(0);
     Color initialColor = outSection.getCurrentColor();
 
@@ -128,7 +127,6 @@ class TestLEDSubsystem {
     }
     ledSubsystem.periodic();
 
-    LEDOutput output = ledSubsystem.toOutputs();
     SubdividedLedString.LedSection outSection1 = subdivided.getSections().get(0);
     SubdividedLedString.LedSection outSection2 = subdivided.getSections().get(1);
     
@@ -179,7 +177,6 @@ class TestLEDSubsystem {
     }
     ledSubsystem.periodic();
     
-    LEDOutput output = ledSubsystem.toOutputs();
     SubdividedLedString.LedSection outSection1 = subdivided.getSections().get(0);
     SubdividedLedString.LedSection outSection2 = subdivided.getSections().get(1);
 
