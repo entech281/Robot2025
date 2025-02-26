@@ -6,7 +6,6 @@ import frc.entech.subsystems.SubsystemInput;
 import frc.robot.RobotConstants;
 
 public class ElevatorInput implements SubsystemInput {
-
   private boolean activate = true;
   private double requestedPosition = RobotConstants.ELEVATOR.INITIAL_POSITION;
 

@@ -1,6 +1,7 @@
 package frc.robot.operation;
 
 import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -15,12 +16,15 @@ import frc.robot.CommandFactory;
 import frc.robot.RobotConstants;
 import frc.robot.SubsystemManager;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.ElevatorUpCommand;
+import frc.robot.commands.ElevatorDownCommand;
+import frc.robot.commands.FireCoralCommand;
 import frc.robot.commands.GyroReset;
-import frc.robot.commands.PivotDownCommand;
-import frc.robot.commands.PivotUpCommand;
+import frc.robot.commands.IntakeCoralCommand;
 import frc.robot.commands.ResetOdometryCommand;
 import frc.robot.commands.RunTestCommand;
 import frc.robot.commands.TwistCommand;
+import frc.robot.commands.VisionCameraSwitchingCommand;
 import frc.robot.commands.XDriveCommand;
 import frc.robot.io.DebugInput;
 import frc.robot.io.DebugInputSupplier;
@@ -122,10 +126,16 @@ public class OperatorInterface
         .onTrue(new RunTestCommand(testChooser));
 
     xboxController.button(4)
-      .onTrue(new PivotUpCommand(subsystemManager.getPivotSubsystem()));
+      .onTrue(new ElevatorUpCommand(subsystemManager.getElevatorSubsystem()));
 
     xboxController.button(1)
-      .onTrue(new PivotDownCommand(subsystemManager.getPivotSubsystem()));
+      .onTrue(new ElevatorDownCommand(subsystemManager.getElevatorSubsystem()));
+
+    xboxController.button(2)
+      .whileTrue(new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem()));
+
+    xboxController.button(10)
+      .whileTrue(new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), 1.1));
 
     xboxController.button(6)
         .whileTrue(commandFactory.getAlignmentCommand());
@@ -135,6 +145,8 @@ public class OperatorInterface
     
     xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.RESET_ODOMETRY)
         .onTrue(new ResetOdometryCommand(odometry));
+
+    subsystemManager.getVisionSubsystem().setDefaultCommand(new VisionCameraSwitchingCommand(subsystemManager.getVisionSubsystem(), xboxController::getRightY));
   }
 
   public void operatorBindings() {

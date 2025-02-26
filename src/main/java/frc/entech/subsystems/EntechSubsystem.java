@@ -15,7 +15,7 @@ public abstract class EntechSubsystem<I extends SubsystemInput, R extends Subsys
   protected EntechSubsystem() {}
 
   public abstract void initialize();
-  //
+  
   public abstract boolean isEnabled();
 
   public abstract void updateInputs(I input);

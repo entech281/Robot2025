@@ -16,10 +16,10 @@ public class PivotOutput extends SubsystemOutput {
 
     @Override
     public void toLog() {
-        Logger.recordOutput("ElevatorOutput/absoluteEncoder", absoluteEncoder);
-        Logger.recordOutput("ElevatorOutput/motorEncoder", motorEncoder);
-        Logger.recordOutput("ElevatorOutput/speed", speed);
-        Logger.recordOutput("ElevatorOutput/isAtRequestedPosition", atRequestedPosition);
+        Logger.recordOutput("PivotOutput/absoluteEncoder", absoluteEncoder);
+        Logger.recordOutput("PivotOutput/motorEncoder", motorEncoder);
+        Logger.recordOutput("PivotOutput/speed", speed);
+        Logger.recordOutput("PivotOutput/isAtRequestedPosition", atRequestedPosition);
         Logger.recordOutput("PivotOutput/moving", moving);
         Logger.recordOutput("PivotOutput/brakeModeEnabled", brakeModeEnabled);
         Logger.recordOutput("PivotOutput/requestedPosition", requestedPosition);
@@ -50,7 +50,7 @@ public class PivotOutput extends SubsystemOutput {
         this.speed = speed;
     }
 
-    public boolean atRequestedPosition() {
+    public boolean isAtRequestedPosition() {
         return this.atRequestedPosition;
     }
 
