@@ -31,4 +31,16 @@ public class VisionInput implements SubsystemInput {
   public void setCamera(String camera) {
     this.camera = camera;
   }
+
+  public enum Camera {
+    TOP("top"),
+    BOTTOM("bottom"),
+    SIDE("side");
+
+    public final String label;
+
+    private Camera(String label) {
+        this.label = label;
+    }
+  }
 }

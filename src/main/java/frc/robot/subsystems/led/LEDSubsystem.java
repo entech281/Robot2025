@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.AddressableLED;
  */
 public class LEDSubsystem extends EntechSubsystem<LEDInput, LEDOutput> {
 
-  private static final boolean ENABLED = true;
+  private static final boolean ENABLED = false;
 
   private AddressableLED leds = new AddressableLED(RobotConstants.LED.PORT);
   private  AddressableLEDBuffer buffer= new AddressableLEDBuffer(RobotConstants.LED.NUM_LEDS);

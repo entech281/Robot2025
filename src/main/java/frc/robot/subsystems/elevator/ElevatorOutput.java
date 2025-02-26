@@ -15,14 +15,14 @@ public class ElevatorOutput extends SubsystemOutput {
 
   @Override
   public void toLog() {
-    Logger.recordOutput("PivotOutput/moving", moving);
-    Logger.recordOutput("PivotOutput/leftBrakeModeEnabled", leftBrakeModeEnabled);
-    Logger.recordOutput("PivotOutput/rightBrakeModeEnabled", rightBrakeModeEnabled);
-    Logger.recordOutput("PivotOutput/requestedPosition", requestedPosition);
-    Logger.recordOutput("PivotOutput/currentPosition", currentPosition);
-    Logger.recordOutput("PivotOutput/isAtUpperLimit", isAtUpperLimit);
-    Logger.recordOutput("PivotOutput/isAtLowerLimit", isAtLowerLimit);
-    Logger.recordOutput("PivotOutput/isAtRequestedPosition", isAtRequestedPosition);
+    Logger.recordOutput("ElevatorOutput/moving", moving);
+    Logger.recordOutput("ElevatorOutput/leftBrakeModeEnabled", leftBrakeModeEnabled);
+    Logger.recordOutput("ElevatorOutput/rightBrakeModeEnabled", rightBrakeModeEnabled);
+    Logger.recordOutput("ElevatorOutput/requestedPosition", requestedPosition);
+    Logger.recordOutput("ElevatorOutput/currentPosition", currentPosition);
+    Logger.recordOutput("ElevatorOutput/isAtUpperLimit", isAtUpperLimit);
+    Logger.recordOutput("ElevatorOutput/isAtLowerLimit", isAtLowerLimit);
+    Logger.recordOutput("ElevatorOutput/isAtRequestedPosition", isAtRequestedPosition);
   }
 
   public boolean isMoving() {

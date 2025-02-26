@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ResetTurningEncoderCommand;
+import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.operation.OperatorInterface;
 import frc.robot.processors.OdometryProcessor;
 
@@ -36,6 +37,7 @@ public class Robot extends LoggedRobot {
   private OperatorInterface operatorInterface;
   private PowerDistribution powerDistribution;
   private long robotStartTime = 0;
+
   public void loggerInit() {
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
     Logger.recordMetadata("Version", BuildConstants.VERSION);
@@ -72,6 +74,7 @@ public class Robot extends LoggedRobot {
     odometry = new OdometryProcessor();
     commandFactory = new CommandFactory(subsystemManager, odometry);
     operatorInterface = new OperatorInterface(commandFactory, subsystemManager, odometry);
+    LiveTuningHandler.getInstance().init();
     operatorInterface.create();
     odometry.createEstimator();
   }

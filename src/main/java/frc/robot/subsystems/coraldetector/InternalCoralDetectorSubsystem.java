@@ -9,16 +9,14 @@ import frc.robot.io.RobotIO;
 public class InternalCoralDetectorSubsystem
     extends EntechSubsystem<InternalCoralDetectorInput, InternalCoralDetectorOutput> {
 
-  private static final boolean ENABLED = true;
+  private static final boolean ENABLED = false;
 
-  private DigitalInput internalSensorF;
-  private DigitalInput internalSensorR;
+  private DigitalInput internalSensor;
 
   @Override
   public void initialize() {
     if (ENABLED) {
-      internalSensorF = new DigitalInput(RobotConstants.PORTS.HAS_CORAL.INTERNAL_SENSOR_FORWARD);
-      internalSensorR = new DigitalInput(RobotConstants.PORTS.HAS_CORAL.INTERNAL_SENSOR_REAR);
+      internalSensor = new DigitalInput(RobotConstants.PORTS.HAS_CORAL.INTERNAL_SENSOR_FORWARD);
     }
   }
 
@@ -41,8 +39,7 @@ public class InternalCoralDetectorSubsystem
   public InternalCoralDetectorOutput toOutputs() {
     InternalCoralDetectorOutput output = new InternalCoralDetectorOutput();
     if (ENABLED) {
-      output.setForwardCoralSensor(internalSensorF.get());
-      output.setRearCorealSensor(internalSensorR.get());
+      output.setCoralSensor(internalSensor.get());
     }
     return output;
   }

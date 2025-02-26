@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import frc.entech.commands.EntechCommand;
 import frc.robot.io.RobotIO;
+import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.subsystems.pivot.PivotInput;
 import frc.robot.subsystems.pivot.PivotSubsystem;
 
@@ -22,7 +23,7 @@ public class PivotDownCommand extends EntechCommand {
 
   @Override
   public void initialize() {
-    pivotInput.setRequestedPosition(RobotIO.getInstance().getPivotOutput().getCurrentPosition() + 5);
+    pivotInput.setRequestedPosition(RobotIO.getInstance().getPivotOutput().getCurrentPosition() + LiveTuningHandler.getInstance().getValue("PivotSubsystem/NudgeAmount"));
   }
 
   @Override
@@ -37,6 +38,6 @@ public class PivotDownCommand extends EntechCommand {
 
   @Override
   public boolean isFinished() {
-    return RobotIO.getInstance().getPivotOutput().atRequestedPosition();
+    return RobotIO.getInstance().getPivotOutput().isAtRequestedPosition();
   }
 }
