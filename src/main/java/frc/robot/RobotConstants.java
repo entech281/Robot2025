@@ -17,7 +17,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.entech.util.AprilTagDistanceCalibration;
-import frc.robot.commandCheker.SafeZone;
+import frc.robot.commandcheker.SafeZone;
 
 
 public final class RobotConstants {
@@ -57,7 +57,7 @@ public final class RobotConstants {
   }
 
   public static interface SafeZones {
-    public static final SafeZone[] safeZones = new SafeZone[] {
+    public static final SafeZone[] SAFE_ZONES = new SafeZone[] {
       new SafeZone(0, 23, 29, 36),
       new SafeZone(3.2, 23, 30, 40),
       new SafeZone(11, 23, 30, 60),

@@ -1,4 +1,4 @@
-package frc.robot.commandcheker;
+package frc.robot.commandchecker;
 
 import frc.robot.RobotConstants;
 
@@ -7,7 +7,7 @@ public class SafeCommandChecker {
     private SafeZone[] safeZones;
 
     public SafeCommandChecker() {
-        this.safeZones = RobotConstants.SafeZones.safeZones;
+        this.safeZones = RobotConstants.SafeZones.SAFE_ZONES;
     }
 
     public boolean isSafe(Move command) {
@@ -23,6 +23,3 @@ public class SafeCommandChecker {
     }
 
 }
-
-
-

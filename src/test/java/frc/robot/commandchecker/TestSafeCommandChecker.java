@@ -1,9 +1,13 @@
-package frc.robot.commandCheker;
+package frc.robot.commandchecker;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import frc.robot.commandchecker.Move;
+import frc.robot.commandchecker.SafeCommandChecker;
+import frc.robot.commandchecker.SafeMovementChecker;
 
 public class TestSafeCommandChecker {
 
