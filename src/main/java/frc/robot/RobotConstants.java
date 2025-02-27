@@ -160,6 +160,8 @@ public final class RobotConstants {
     public static final double LOWER_SOFT_LIMIT_DEG = 1;
     public static final double ELEVATOR_CONVERSION_FACTOR = 8.0;
     public static final double POSITION_TOLERANCE_DEG = 2;
+    public static final double MOTOR_MAX_VELOCITY = 1000;
+    public static final double MOTOR_MAX_ACCELERATION = 1000;
   }
 
   public static interface CORAL{

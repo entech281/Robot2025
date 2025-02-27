@@ -57,8 +57,8 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot1);
 
       motorConfig.closedLoop.maxMotion
-          .maxVelocity(1000,ClosedLoopSlot.kSlot0)
-          .maxAcceleration(1000,ClosedLoopSlot.kSlot0)
+          .maxVelocity(RobotConstants.ELEVATOR.MOTOR_MAX_VELOCITY, ClosedLoopSlot.kSlot0)
+          .maxAcceleration(RobotConstants.ELEVATOR.MOTOR_MAX_ACCELERATION, ClosedLoopSlot.kSlot0)
           .allowedClosedLoopError(1,ClosedLoopSlot.kSlot0)
 
           .maxAcceleration(500,ClosedLoopSlot.kSlot1)
