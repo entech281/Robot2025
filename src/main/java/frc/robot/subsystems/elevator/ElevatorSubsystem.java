@@ -57,13 +57,13 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot1);
 
       motorConfig.closedLoop.maxMotion
-          .maxVelocity(RobotConstants.ELEVATOR.MOTOR_MAX_VELOCITY, ClosedLoopSlot.kSlot0)
-          .maxAcceleration(RobotConstants.ELEVATOR.MOTOR_MAX_ACCELERATION, ClosedLoopSlot.kSlot0)
-          .allowedClosedLoopError(1,ClosedLoopSlot.kSlot0)
+          .maxVelocity(RobotConstants.ELEVATOR.SLOT0_MAX_VELOCITY, ClosedLoopSlot.kSlot0)
+          .maxAcceleration(RobotConstants.ELEVATOR.SLOT0_MAX_ACCELERATION, ClosedLoopSlot.kSlot0)
+          .allowedClosedLoopError(RobotConstants.ELEVATOR.ALLOWED_ERROR, ClosedLoopSlot.kSlot0)
 
-          .maxAcceleration(500,ClosedLoopSlot.kSlot1)
-          .maxVelocity(500,ClosedLoopSlot.kSlot1 )
-          .allowedClosedLoopError(1,ClosedLoopSlot.kSlot1);
+          .maxAcceleration(RobotConstants.ELEVATOR.SLOT1_MAX_VELOCITY,ClosedLoopSlot.kSlot1)
+          .maxVelocity(RobotConstants.ELEVATOR.SLOT1_MAX_ACCELERATION,ClosedLoopSlot.kSlot1 )
+          .allowedClosedLoopError(RobotConstants.ELEVATOR.ALLOWED_ERROR,ClosedLoopSlot.kSlot1);
 
       SparkMaxConfig followerConfig = new SparkMaxConfig();
       followerConfig.apply(motorConfig).follow(leftElevator);
