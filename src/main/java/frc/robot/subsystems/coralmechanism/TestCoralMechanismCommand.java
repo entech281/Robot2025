@@ -34,7 +34,7 @@ public class TestCoralMechanismCommand extends EntechCommand{
       stage++;
     }
 
-    if (stage != 9)
+    if (stage != 1)
       mechanism.updateInputs(input);
   }
 
@@ -52,7 +52,7 @@ public class TestCoralMechanismCommand extends EntechCommand{
 
   @Override
   public boolean isFinished() {
-    return stage > 9;
+    return stage > 1;
   }
 
   @Override
