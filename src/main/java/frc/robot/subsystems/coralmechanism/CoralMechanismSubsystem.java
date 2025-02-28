@@ -63,7 +63,7 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
 
     @Override
     public Command getTestCommand() {
-        return null;
+        return new TestCoralMechanismCommand(this);
     }
 
     @Override
