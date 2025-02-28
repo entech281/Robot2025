@@ -23,14 +23,13 @@ public class TestVisionCommand extends EntechCommand {
             case 0 -> input.setCamera(VisionInput.Camera.TOP);
             case 1 -> input.setCamera(VisionInput.Camera.BOTTOM);
             case 2 -> input.setCamera(VisionInput.Camera.SIDE);
+            default -> input.setCamera(VisionInput.Camera.TOP);
         }
 
         List<VisionTarget> targets = RobotIO.getInstance().getVisionOutput().getTargets();
-        if (!targets.isEmpty()) {
-            if (counter.isFinished(targets.get(0).getTagID() == 1)) {
-                stage++;
-                counter.reset();
-            }
+        if (!targets.isEmpty() && counter.isFinished(targets.get(0).getTagID() == 1)) {
+            stage++;
+            counter.reset();
         }
 
         vision.updateInputs(input);
