@@ -11,7 +11,6 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ElevatorUpCommand extends EntechCommand {
-  /** Creates a new PivotCommand. */
   private final ElevatorInput elevatorInput = new ElevatorInput();
   private final ElevatorSubsystem elevatorSS;
 

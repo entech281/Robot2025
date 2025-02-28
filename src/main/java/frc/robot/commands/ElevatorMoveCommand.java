@@ -8,8 +8,7 @@ import frc.robot.subsystems.elevator.ElevatorInput;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 
 public class ElevatorMoveCommand extends EntechCommand {
-  /** Creates a new PivotCommand. */
-  private final ElevatorInput pivotInput = new ElevatorInput();
+  private final ElevatorInput elevatorInput = new ElevatorInput();
   private final ElevatorSubsystem elevatorSS;
   private final Position position;
 
@@ -21,12 +20,12 @@ public class ElevatorMoveCommand extends EntechCommand {
 
   @Override
   public void initialize() {
-    pivotInput.setRequestedPosition(LiveTuningHandler.getInstance().getValue(position.getElevatorKey()));
+    elevatorInput.setRequestedPosition(LiveTuningHandler.getInstance().getValue(position.getElevatorKey()));
   }
 
   @Override
   public void execute() {
-    elevatorSS.updateInputs(pivotInput);
+    elevatorSS.updateInputs(elevatorInput);
   }
 
   @Override
