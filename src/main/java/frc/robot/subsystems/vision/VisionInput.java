@@ -28,8 +28,8 @@ public class VisionInput implements SubsystemInput {
     return camera;
   }
 
-  public void setCamera(String camera) {
-    this.camera = camera;
+  public void setCamera(Camera camera) {
+    this.camera = camera.label;
   }
 
   public enum Camera {
