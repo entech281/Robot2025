@@ -72,7 +72,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
 
     @Override
     public Command getTestCommand() {
-        return null;
+        return new TestPivotCommand(this);
     }
 
     @Override

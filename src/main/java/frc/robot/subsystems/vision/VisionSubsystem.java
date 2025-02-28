@@ -7,7 +7,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.util.AprilTagDistanceCalculator;
 import frc.robot.RobotConstants;
@@ -111,6 +110,6 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
 
    @Override
     public Command getTestCommand() {
-    return Commands.none();
+    return new TestVisionCommand(this);
   }
 }
