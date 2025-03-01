@@ -170,7 +170,7 @@ public final class RobotConstants {
     public static final double INITIAL_POSITION = 0.0;
     public static final double UPPER_SOFT_LIMIT_DEG = 22.5;
     public static final double LOWER_SOFT_LIMIT_DEG = 1;
-    public static final double ELEVATOR_CONVERSION_FACTOR = 8.0;
+    public static final double ELEVATOR_CONVERSION_FACTOR = 0.525;
     public static final double POSITION_TOLERANCE_DEG = 2;
   }
 
