@@ -136,7 +136,7 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   @Override
   public Command getTestCommand() {
     // return new TestPivotCommand(this);
-    return null;
+    return new TestElevatorCommand(this);
   }
 
   @Override

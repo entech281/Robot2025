@@ -1,6 +1,8 @@
 package frc.robot.subsystems.pivot;
 
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -36,11 +38,11 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
             pivotConfig.idleMode(IdleMode.kBrake);
             mode = IdleMode.kBrake;
             pivotConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-            pivotConfig.closedLoop.pidf(0.5, 0, 0, 0);
-            pivotConfig.closedLoop.outputRange(-0.2, 0.2);
+            pivotConfig.closedLoop.pidf(3.0, 0, 0, 0);
+            pivotConfig.closedLoop.outputRange(-1.0, 1.0);
             pivotConfig.closedLoop.positionWrappingEnabled(true);
             pivotConfig.closedLoop.positionWrappingInputRange(0, 1);
-            pivotMotor.configure(pivotConfig, null, null);
+            pivotMotor.configure(pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
             pidController = pivotMotor.getClosedLoopController();
         }
     }
@@ -66,20 +68,21 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
             output.setAtRequestedPosition(Math.abs(output.getCurrentPosition()
                     - currentInput.getRequestedPosition()) < RobotConstants.PIVOT.POSITION_TOLERANCE_DEG);
             output.setRequestedPosition(currentInput.getRequestedPosition());
+            output.setSpeed(pivotMotor.get());
         }
         return output;
     }
 
     @Override
     public Command getTestCommand() {
-        return null;
+        return new TestPivotCommand(this);
     }
 
     @Override
     public void periodic() {
         if (ENABLED) {
             if (currentInput.getActivate()) {
-                double targetPosition = calculateMotorPositionFromDegrees((currentInput.getRequestedPosition()/180)+0.5);
+                double targetPosition = calculateMotorPositionFromDegrees((currentInput.getRequestedPosition()));
                 pidController.setReference(targetPosition, ControlType.kPosition);
             } else {
                 pivotMotor.set(0);

@@ -7,7 +7,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.util.AprilTagDistanceCalculator;
 import frc.robot.RobotConstants;
@@ -27,7 +26,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
 
     // Retrieve values from NetworkTables
     NetworkTableEntry hasTargetEntry = networkTable.getEntry("hasTarget");
-    NetworkTableEntry idTagEntry = networkTable.getEntry("idTag");
+    NetworkTableEntry idTagEntry = networkTable.getEntry("tagID");
     NetworkTableEntry tagHeightEntry = networkTable.getEntry("tagHeight");
     NetworkTableEntry tagWidthEntry = networkTable.getEntry("tagWidth");
     NetworkTableEntry tagXEntry = networkTable.getEntry("tagX");
@@ -40,24 +39,24 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     ArrayList<VisionTarget> targetList = new ArrayList<>();
     
     long timestamp = timestampEntry.getInteger(0);
-    long[] ids = idTagEntry.getIntegerArray(new long[] {});
-    long[] heights = tagHeightEntry.getIntegerArray(new long[] {});
-    long[] widths = tagWidthEntry.getIntegerArray(new long[] {});
-    double[] xs = tagXEntry.getDoubleArray(new double[] {});
-    double[] ys = tagYEntry.getDoubleArray(new double[] {});
-    double[] tagXWs = tagXWEntry.getDoubleArray(new double[] {});
+    Number[] ids = idTagEntry.getNumberArray(new Number[] {});
+    Number[] heights = tagHeightEntry.getNumberArray(new Number[] {});
+    Number[] widths = tagWidthEntry.getNumberArray(new Number[] {});
+    Number[] xs = tagXEntry.getNumberArray(new Number[] {});
+    Number[] ys = tagYEntry.getNumberArray(new Number[] {});
+    Number[] tagXWs = tagXWEntry.getNumberArray(new Number[] {});
     String[] cameraUsed = cameraUsedEntry.getStringArray(new String[] {});
     long numberOfTargets = numberOfTargetsEntry.getInteger(0);
 
     for (int i = 0; i < numberOfTargets; i++) {
       VisionTarget target = new VisionTarget();
-      target.setTagID((int) ids[i]);
-      target.setTagHeight((int) heights[i]);
-      target.setTagWidth((int) widths[i]);
-      target.setTagX(xs[i]);
-      target.setTagY(ys[i]);
-      target.setDistance(AprilTagDistanceCalculator.calculateCurrentDistanceInches(RobotConstants.APRIL_TAG_DATA.CALIBRATION, widths[i]));
-      target.setTagXW(tagXWs[i]);
+      target.setTagID((int) ids[i].intValue());
+      target.setTagHeight((int) heights[i].intValue());
+      target.setTagWidth((int) widths[i].intValue());
+      target.setTagX(xs[i].doubleValue());
+      target.setTagY(ys[i].doubleValue());
+      target.setDistance(AprilTagDistanceCalculator.calculateCurrentDistanceInches(RobotConstants.APRIL_TAG_DATA.CALIBRATION, widths[i].intValue()));
+      target.setTagXW(tagXWs[i].doubleValue());
       target.setTimestamp(timestamp);
       target.setCameraName(cameraUsed[i]);
       targetList.add(target);
@@ -111,6 +110,6 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
 
    @Override
     public Command getTestCommand() {
-    return Commands.none();
+    return new TestVisionCommand(this);
   }
 }

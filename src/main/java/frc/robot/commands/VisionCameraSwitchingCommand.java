@@ -26,10 +26,10 @@ public class VisionCameraSwitchingCommand extends EntechCommand {
     @Override
     public void execute() {
         if (RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()) {
-            vi.setCamera(VisionInput.Camera.SIDE);
+            vi.setCamera(VisionInput.Camera.TOP);
         } else {
             if (axis.getAsDouble() <= -0.1) {
-                vi.setCamera(VisionInput.Camera.BOTTOM);
+                vi.setCamera(VisionInput.Camera.TOP);
             } else {
                 vi.setCamera(VisionInput.Camera.TOP);
             }
