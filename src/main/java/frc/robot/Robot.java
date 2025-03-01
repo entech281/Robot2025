@@ -39,14 +39,6 @@ public class Robot extends LoggedRobot {
   private long robotStartTime = 0;
 
   public void loggerInit() {
-    Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
-    Logger.recordMetadata("Version", BuildConstants.VERSION);
-    Logger.recordMetadata("GITRevision", BuildConstants.GIT_REVISION + "");
-    Logger.recordMetadata("GIT_SHA", BuildConstants.GIT_SHA);
-    Logger.recordMetadata("GIT_Date", BuildConstants.GIT_DATE);
-    Logger.recordMetadata("GIT_Branch", BuildConstants.GIT_BRANCH);
-    Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
-    Logger.recordMetadata("BuildUnixTime", BuildConstants.BUILD_UNIX_TIME + "");
 
     if (isReal()) {
       Logger.addDataReceiver(new WPILOGWriter());
