@@ -124,7 +124,7 @@ public class OperatorInterface
 
     xboxController.button(9)
         .onTrue(new RunTestCommand(testChooser));
-
+        
     xboxController.button(4)
       .onTrue(new ElevatorUpCommand(subsystemManager.getElevatorSubsystem()));
 
@@ -134,7 +134,7 @@ public class OperatorInterface
     xboxController.button(2)
       .whileTrue(new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem()));
 
-    xboxController.button(10)
+    xboxController.button(0)
       .whileTrue(new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), 1.1));
 
     xboxController.button(6)

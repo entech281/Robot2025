@@ -264,6 +264,15 @@ public final class RobotConstants {
   public interface OPERATOR_PANEL {
     public static interface BUTTONS {
       public static final int RUN_TEST = 9;
+      public static final int L1 = 7;
+      public static final int L2 = 6;
+      public static final int L3 = 5;
+      public static final int L4 = 4;
+      public static final int ALGAE_L2 = 1;
+      public static final int ALGAE_L3 = 2;
+      public static final int ALGAE_GROUND = 8;
+      public static final int BARGE = 3;
+      public static final int FIRE = 0;      
     }
 
     public static interface SWITCHES {
