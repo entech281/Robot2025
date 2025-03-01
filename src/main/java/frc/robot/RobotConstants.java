@@ -170,13 +170,14 @@ public final class RobotConstants {
     public static final double INITIAL_POSITION = 0.0;
     public static final double UPPER_SOFT_LIMIT_DEG = 22.5;
     public static final double LOWER_SOFT_LIMIT_DEG = 1;
-    public static final double ELEVATOR_CONVERSION_FACTOR = 8.0;
+    public static final double ELEVATOR_CONVERSION_FACTOR = 0.525;
     public static final double POSITION_TOLERANCE_DEG = 2;
-    public static final double SLOT0_MAX_VELOCITY = 1000;
-    public static final double SLOT0_MAX_ACCELERATION = 1000;
-    public static final double SLOT1_MAX_VELOCITY = 500;
+    public static final double SLOT0_MAX_VELOCITY = 700;
+    public static final double SLOT0_MAX_ACCELERATION = 500;
+    public static final double SLOT1_MAX_VELOCITY = 700;
     public static final double SLOT1_MAX_ACCELERATION = 500;
-    public static final double ALLOWED_ERROR = 1;
+    public static final double SLOT0_ALLOWED_ERROR = 1;
+    public static final double SLOT1_ALLOWED_ERROR = 0.2;
   }
 
   public static interface CORAL{
@@ -269,6 +270,15 @@ public final class RobotConstants {
   public interface OPERATOR_PANEL {
     public static interface BUTTONS {
       public static final int RUN_TEST = 9;
+      public static final int L1 = 7;
+      public static final int L2 = 6;
+      public static final int L3 = 5;
+      public static final int L4 = 4;
+      public static final int ALGAE_L2 = 1;
+      public static final int ALGAE_L3 = 2;
+      public static final int ALGAE_GROUND = 8;
+      public static final int BARGE = 3;
+      public static final int FIRE = 0;      
     }
 
     public static interface SWITCHES {

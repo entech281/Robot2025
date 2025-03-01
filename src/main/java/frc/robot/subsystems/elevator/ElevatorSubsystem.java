@@ -28,11 +28,11 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   private SparkMax rightElevator;
 
   public static double calculateMotorPositionFromInches(double inches) {
-    return -inches * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
+    return -inches / RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
   }
 
   public static double calculateInchesFromMotorPosition(double motorPosition) {
-    return -motorPosition / RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
+    return -motorPosition * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
   }
 
   @Override
@@ -51,19 +51,19 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       motorConfig.idleMode(IdleMode.kBrake);
 
       motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-      .pid(5, 0, 0, ClosedLoopSlot.kSlot0)
-      .pid(5, 0, 0, ClosedLoopSlot.kSlot1)
+      .pid(2.5, 0, 0, ClosedLoopSlot.kSlot0)
+      .pid(2.5, 0, 0, ClosedLoopSlot.kSlot1)
       .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot0)
       .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot1);
 
       motorConfig.closedLoop.maxMotion
           .maxVelocity(RobotConstants.ELEVATOR.SLOT0_MAX_VELOCITY,ClosedLoopSlot.kSlot0)
           .maxAcceleration(RobotConstants.ELEVATOR.SLOT0_MAX_ACCELERATION,ClosedLoopSlot.kSlot0)
-          .allowedClosedLoopError(RobotConstants.ELEVATOR.ALLOWED_ERROR,ClosedLoopSlot.kSlot0)
+          .allowedClosedLoopError(RobotConstants.ELEVATOR.SLOT0_ALLOWED_ERROR,ClosedLoopSlot.kSlot0)
 
           .maxAcceleration(RobotConstants.ELEVATOR.SLOT1_MAX_ACCELERATION,ClosedLoopSlot.kSlot1)
           .maxVelocity(RobotConstants.ELEVATOR.SLOT1_MAX_VELOCITY,ClosedLoopSlot.kSlot1 )
-          .allowedClosedLoopError(RobotConstants.ELEVATOR.ALLOWED_ERROR,ClosedLoopSlot.kSlot1);
+          .allowedClosedLoopError(RobotConstants.ELEVATOR.SLOT1_ALLOWED_ERROR,ClosedLoopSlot.kSlot1);
 
       SparkMaxConfig followerConfig = new SparkMaxConfig();
       followerConfig.apply(motorConfig).follow(leftElevator);
