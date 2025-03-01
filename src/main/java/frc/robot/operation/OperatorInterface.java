@@ -13,14 +13,17 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.CommandFactory;
+import frc.robot.Position;
 import frc.robot.RobotConstants;
 import frc.robot.SubsystemManager;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ElevatorUpCommand;
 import frc.robot.commands.ElevatorDownCommand;
+import frc.robot.commands.ElevatorMoveCommand;
 import frc.robot.commands.FireCoralCommand;
 import frc.robot.commands.GyroReset;
 import frc.robot.commands.IntakeCoralCommand;
+import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.ResetOdometryCommand;
 import frc.robot.commands.RunTestCommand;
 import frc.robot.commands.TwistCommand;
@@ -34,6 +37,7 @@ import frc.robot.io.OperatorInputSupplier;
 import frc.robot.io.RobotIO;
 import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.drive.DriveInput;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.led.TestLEDCommand;
 
 public class OperatorInterface
@@ -158,6 +162,57 @@ public class OperatorInterface
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.RUN_TEST)
         .onTrue(new RunTestCommand(testChooser));
+    
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1)
+        .onTrue(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), Position.L1));
+    
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L2)
+        .onTrue(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), Position.L2));
+
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L3)
+        .onTrue(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), Position.L3));
+
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L4)
+        .onTrue(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), Position.L4));
+
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_GROUND)
+        .onTrue(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), Position.ALGAE_GROUND));
+
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L2)
+        .onTrue(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), Position.ALGAE_L2));
+
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L3)
+        .onTrue(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), Position.ALGAE_L3));
+
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.BARGE)
+        .onTrue(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), Position.BARGE));
+
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1)
+        .onTrue(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.L1));
+    
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L2)
+        .onTrue(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.L2));
+
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L3)
+        .onTrue(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.L3));
+
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L4)
+        .onTrue(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.L4));
+
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_GROUND)
+        .onTrue(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.ALGAE_GROUND));
+
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L2)
+        .onTrue(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.ALGAE_L2));
+
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L3)
+        .onTrue(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.ALGAE_L3));
+
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.BARGE)
+        .onTrue(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.BARGE));
+
+      operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.FIRE)
+        .onTrue(new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem()));
   }
 
   private SendableChooser<Command> getTestCommandChooser() {
