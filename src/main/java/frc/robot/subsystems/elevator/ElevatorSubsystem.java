@@ -28,11 +28,11 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   private SparkMax rightElevator;
 
   public static double calculateMotorPositionFromInches(double inches) {
-    return -inches / RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
+    return -inches * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
   }
 
   public static double calculateInchesFromMotorPosition(double motorPosition) {
-    return -motorPosition * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
+    return -motorPosition / RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
   }
 
   @Override
