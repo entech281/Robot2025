@@ -37,7 +37,6 @@ import frc.robot.io.OperatorInputSupplier;
 import frc.robot.io.RobotIO;
 import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.drive.DriveInput;
-import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.led.TestLEDCommand;
 
 public class OperatorInterface
