@@ -51,8 +51,8 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       motorConfig.idleMode(IdleMode.kBrake);
 
       motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-      .pid(2.5, 0, 0, ClosedLoopSlot.kSlot0)
-      .pid(2.5, 0, 0, ClosedLoopSlot.kSlot1)
+      .pid(1.5, 0, 0, ClosedLoopSlot.kSlot0)
+      .pid(0.5, 0, 0, ClosedLoopSlot.kSlot1)
       .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot0)
       .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot1);
 

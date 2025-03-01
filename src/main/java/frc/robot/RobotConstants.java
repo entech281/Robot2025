@@ -168,16 +168,16 @@ public final class RobotConstants {
 
   public static interface ELEVATOR {
     public static final double INITIAL_POSITION = 0.0;
-    public static final double UPPER_SOFT_LIMIT_DEG = 22.5;
+    public static final double UPPER_SOFT_LIMIT_DEG = 22.25;
     public static final double LOWER_SOFT_LIMIT_DEG = 1;
-    public static final double ELEVATOR_CONVERSION_FACTOR = 0.525;
+    public static final double ELEVATOR_CONVERSION_FACTOR = 5.714;
     public static final double POSITION_TOLERANCE_DEG = 2;
-    public static final double SLOT0_MAX_VELOCITY = 700;
-    public static final double SLOT0_MAX_ACCELERATION = 500;
-    public static final double SLOT1_MAX_VELOCITY = 700;
-    public static final double SLOT1_MAX_ACCELERATION = 500;
+    public static final double SLOT0_MAX_VELOCITY = 5600;
+    public static final double SLOT0_MAX_ACCELERATION = 4800;
+    public static final double SLOT1_MAX_VELOCITY = 5600;
+    public static final double SLOT1_MAX_ACCELERATION = 4800;
     public static final double SLOT0_ALLOWED_ERROR = 1;
-    public static final double SLOT1_ALLOWED_ERROR = 0.2;
+    public static final double SLOT1_ALLOWED_ERROR = 1;
   }
 
   public static interface CORAL{
@@ -190,7 +190,7 @@ public final class RobotConstants {
     public static final double POSITION_TOLERANCE_DEG = 2;
   }
 
-    public static interface LED {
+  public static interface LED {
     public static final int PORT = 0;
     public static final int NUM_LEDS = 100;
     public static final double BLINK_INTERVAL = 0.25;
@@ -222,12 +222,12 @@ public final class RobotConstants {
       public static final int REAR_LEFT_TURNING = 31;
       public static final int REAR_RIGHT_TURNING = 41;
 
-      public static final int ELEVATOR_A = 35;
-      public static final int ELEVATOR_B = 35;
+      public static final int ELEVATOR_A = 13;
+      public static final int ELEVATOR_B = 14;
 
-      public static final int CORAL_MOTOR = 38; 
+      public static final int CORAL_MOTOR = 0; 
 
-      public static final int PIVOT_MOTOR = 38;
+      public static final int PIVOT_MOTOR = 18;
 
 
     }
