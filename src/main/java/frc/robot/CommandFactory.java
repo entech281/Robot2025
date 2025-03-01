@@ -6,6 +6,7 @@ import org.json.simple.parser.ParseException;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -21,18 +22,24 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.AutonomousException;
+import frc.robot.commands.AutoAlignToScoringLocationCommand;
 import frc.robot.commands.ElevatorMoveCommand;
+import frc.robot.commands.FireCoralCommand;
+import frc.robot.commands.GyroResetByAngleCommand;
+import frc.robot.commands.IntakeCoralCommand;
 import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
 import frc.robot.io.RobotIO;
 import frc.robot.livetuning.LiveTuningHandler;
+import frc.robot.operation.UserPolicy;
 import frc.robot.processors.OdometryProcessor;
+import frc.robot.subsystems.coralmechanism.CoralMechanismInput;
+import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorInput;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
-import frc.robot.subsystems.pivot.PivotInput;
 import frc.robot.subsystems.pivot.PivotSubsystem;
 @SuppressWarnings("unused")
 public class CommandFactory {
@@ -43,6 +50,7 @@ public class CommandFactory {
   private final OdometryProcessor odometry;
   private final SubsystemManager subsystemManager;
   private final LEDSubsystem ledSubsystem;
+  private final CoralMechanismSubsystem coralMechanismSubsystem;
   private final SendableChooser<Command> autoChooser;
 
 
@@ -52,6 +60,7 @@ public class CommandFactory {
     this.ledSubsystem = subsystemManager.getLEDSubsystem();
     this.elevatorSubsystem = subsystemManager.getElevatorSubsystem();
     this.pivotSubsystem = subsystemManager.getPivotSubsystem();
+    this.coralMechanismSubsystem = subsystemManager.getCoralMechanismSubsystem();
     this.odometry = odometry;
     this.subsystemManager = subsystemManager;
 
@@ -94,14 +103,27 @@ public class CommandFactory {
           return false;
         }, driveSubsystem);
 
-    NamedCommands.registerCommand("L1", Commands.none());
-    NamedCommands.registerCommand("L2", Commands.none());
-    NamedCommands.registerCommand("L3", Commands.none());
-    NamedCommands.registerCommand("L4", Commands.none());
-    NamedCommands.registerCommand("DeAlgae", Commands.none());
-    NamedCommands.registerCommand("Home", Commands.none());
-    NamedCommands.registerCommand("AlignToFace", Commands.none());
-    NamedCommands.registerCommand("ScoreCoral", Commands.none());
+    NamedCommands.registerCommand("ElevatorL1", new ElevatorMoveCommand(elevatorSubsystem, Position.L1));
+    NamedCommands.registerCommand("PivotL1", new PivotMoveCommand(pivotSubsystem, Position.L1));
+    NamedCommands.registerCommand("ElevatorL2", new ElevatorMoveCommand(elevatorSubsystem, Position.L2));
+    NamedCommands.registerCommand("PivotL2", new PivotMoveCommand(pivotSubsystem, Position.L2));
+    NamedCommands.registerCommand("ElevatorL3", new ElevatorMoveCommand(elevatorSubsystem, Position.L3));
+    NamedCommands.registerCommand("PivotL3", new PivotMoveCommand(pivotSubsystem, Position.L3));
+    NamedCommands.registerCommand("ElevatorL4", new ElevatorMoveCommand(elevatorSubsystem, Position.L4));
+    NamedCommands.registerCommand("PivotL4", new PivotMoveCommand(pivotSubsystem, Position.L4));
+    NamedCommands.registerCommand("ElevatorDeAlgaeL2", new ElevatorMoveCommand(elevatorSubsystem, Position.ALGAE_L2));
+    NamedCommands.registerCommand("PivotDeAlgaeL2", new PivotMoveCommand(pivotSubsystem, Position.ALGAE_L2));
+    NamedCommands.registerCommand("ElevatorDeAlgaeL3", new ElevatorMoveCommand(elevatorSubsystem, Position.ALGAE_L3));
+    NamedCommands.registerCommand("PivotDeAlgaeL3", new PivotMoveCommand(pivotSubsystem, Position.ALGAE_L3));
+    NamedCommands.registerCommand("ElevatorHome", new ElevatorMoveCommand(elevatorSubsystem, Position.HOME));
+    NamedCommands.registerCommand("PivotHome", new PivotMoveCommand(pivotSubsystem, Position.HOME));
+    NamedCommands.registerCommand("AlignToReefE", new AutoAlignToScoringLocationCommand(driveSubsystem, 21));
+    NamedCommands.registerCommand("AlignToReefSW", new AutoAlignToScoringLocationCommand(driveSubsystem, 17));
+    NamedCommands.registerCommand("AlignToFeedStation", new AutoAlignToScoringLocationCommand(driveSubsystem, 12));
+    NamedCommands.registerCommand("IntakeCoral", new IntakeCoralCommand(coralMechanismSubsystem));
+
+    //TODO: Remove magic number. RobotConstants?
+    NamedCommands.registerCommand("ScoreCoral", new FireCoralCommand(coralMechanismSubsystem, 200));
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -109,7 +131,10 @@ public class CommandFactory {
 
   public Command getAutoCommand() {
     SequentialCommandGroup auto = new SequentialCommandGroup();
+    auto.addCommands(new GyroResetByAngleCommand(navXSubsystem, odometry, autoChooser.getSelected().getName()));
     auto.addCommands(new WaitCommand(0.5));
+    auto.addCommands(autoChooser.getSelected());
+    PathPlannerAuto test = new PathPlannerAuto("New Auto");
     return auto;
   }
 
