@@ -58,11 +58,12 @@ public final class RobotConstants {
 
   public static interface SafeZones {
     public static final SafeZone[] SAFE_ZONES = new SafeZone[] {
-      new SafeZone(0, 23, 29, 36),
-      new SafeZone(3.2, 23, 30, 40),
-      new SafeZone(11, 23, 30, 60),
-      new SafeZone(18.7, 23, 30, 80),
-      new SafeZone(20, 23, 30, 170)
+      new SafeZone(0, 23, 30, 38),
+      new SafeZone(6.3, 23, 30, 168),
+      new SafeZone(3.2, 23, 30, 43),
+      new SafeZone(11, 23, 30, 168),
+      new SafeZone(18.7, 23, 30, 83),
+      new SafeZone(20, 23, 30, 173)
     };
   }
 
