@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.json.simple.parser.ParseException;
 
+import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -102,21 +103,16 @@ public class CommandFactory {
           }
           return false;
         }, driveSubsystem);
-
-    NamedCommands.registerCommand("ElevatorL1", new ElevatorMoveCommand(elevatorSubsystem, Position.L1));
-    NamedCommands.registerCommand("PivotL1", new PivotMoveCommand(pivotSubsystem, Position.L1));
-    NamedCommands.registerCommand("ElevatorL2", new ElevatorMoveCommand(elevatorSubsystem, Position.L2));
-    NamedCommands.registerCommand("PivotL2", new PivotMoveCommand(pivotSubsystem, Position.L2));
-    NamedCommands.registerCommand("ElevatorL3", new ElevatorMoveCommand(elevatorSubsystem, Position.L3));
-    NamedCommands.registerCommand("PivotL3", new PivotMoveCommand(pivotSubsystem, Position.L3));
-    NamedCommands.registerCommand("ElevatorL4", new ElevatorMoveCommand(elevatorSubsystem, Position.L4));
-    NamedCommands.registerCommand("PivotL4", new PivotMoveCommand(pivotSubsystem, Position.L4));
-    NamedCommands.registerCommand("ElevatorDeAlgaeL2", new ElevatorMoveCommand(elevatorSubsystem, Position.ALGAE_L2));
-    NamedCommands.registerCommand("PivotDeAlgaeL2", new PivotMoveCommand(pivotSubsystem, Position.ALGAE_L2));
-    NamedCommands.registerCommand("ElevatorDeAlgaeL3", new ElevatorMoveCommand(elevatorSubsystem, Position.ALGAE_L3));
-    NamedCommands.registerCommand("PivotDeAlgaeL3", new PivotMoveCommand(pivotSubsystem, Position.ALGAE_L3));
-    NamedCommands.registerCommand("ElevatorHome", new ElevatorMoveCommand(elevatorSubsystem, Position.HOME));
-    NamedCommands.registerCommand("PivotHome", new PivotMoveCommand(pivotSubsystem, Position.HOME));
+    
+    NamedCommands.registerCommand("L1", formSafeMovementCommand(Position.L1));
+    NamedCommands.registerCommand("L2", formSafeMovementCommand(Position.L2));
+    NamedCommands.registerCommand("L3", formSafeMovementCommand(Position.L3));
+    NamedCommands.registerCommand("L4", formSafeMovementCommand(Position.L4));
+    NamedCommands.registerCommand("Home", formSafeMovementCommand(Position.HOME));
+    NamedCommands.registerCommand("Barge", formSafeMovementCommand(Position.BARGE));
+    NamedCommands.registerCommand("AlgaeL2", formSafeMovementCommand(Position.ALGAE_L2));
+    NamedCommands.registerCommand("AlgaeL3", formSafeMovementCommand(Position.ALGAE_L3));
+    NamedCommands.registerCommand("AlgaeGround", formSafeMovementCommand(Position.ALGAE_GROUND));
     NamedCommands.registerCommand("AlignToReefE", new AutoAlignToScoringLocationCommand(driveSubsystem, 21));
     NamedCommands.registerCommand("AlignToReefSW", new AutoAlignToScoringLocationCommand(driveSubsystem, 17));
     NamedCommands.registerCommand("AlignToFeedStation", new AutoAlignToScoringLocationCommand(driveSubsystem, 12));
