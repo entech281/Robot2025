@@ -81,7 +81,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
     @Override
     public void periodic() {
         if (ENABLED) {
-            if (currentInput.getActivate()) {
+            if (currentInput.getActivate() && RobotIO.getInstance().isSafePivotMove(currentInput.getRequestedPosition())) {
                 double targetPosition = calculateMotorPositionFromDegrees((currentInput.getRequestedPosition()));
                 pidController.setReference(targetPosition, ControlType.kPosition);
             } else {
