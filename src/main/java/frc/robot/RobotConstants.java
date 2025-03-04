@@ -177,8 +177,8 @@ public final class RobotConstants {
     public static final double SLOT0_MAX_ACCELERATION = 4800;
     public static final double SLOT1_MAX_VELOCITY = 5600;
     public static final double SLOT1_MAX_ACCELERATION = 4800;
-    public static final double SLOT0_ALLOWED_ERROR = 1;
-    public static final double SLOT1_ALLOWED_ERROR = 1;
+    public static final double SLOT0_ALLOWED_ERROR = 0.1;
+    public static final double SLOT1_ALLOWED_ERROR = 0.1;
   }
 
   public static interface CORAL{

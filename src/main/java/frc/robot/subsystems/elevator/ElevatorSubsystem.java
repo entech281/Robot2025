@@ -126,7 +126,7 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       elevatorOutput.setLeftBrakeModeEnabled(true);
       elevatorOutput.setRightBrakeModeEnabled(true);
       elevatorOutput.setCurrentPosition(calculateInchesFromMotorPosition(leftElevator.getEncoder().getPosition()));
-      elevatorOutput.setAtRequestedPosition(EntechUtils.isWithinTolerance(2,
+      elevatorOutput.setAtRequestedPosition(EntechUtils.isWithinTolerance(0.1,
           elevatorOutput.getCurrentPosition(), currentInput.getRequestedPosition()));
       elevatorOutput.setAtLowerLimit(
           leftElevator.getReverseLimitSwitch().isPressed());
