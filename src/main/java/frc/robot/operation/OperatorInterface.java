@@ -154,34 +154,34 @@ public class OperatorInterface
     testChooser.addOption("All tests", getTestCommand());
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.RUN_TEST)
-        .onTrue(new RunTestCommand(testChooser));
+        .whileTrue(new RunTestCommand(testChooser));
     
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L1));
+        .whileTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L1));
     
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L2)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L2));
+        .whileTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L2));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L3)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L3));
+        .whileTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L3));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L4)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L4));
+        .whileTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L4));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_GROUND)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_GROUND));
+        .whileTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_GROUND));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L2)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_L2));
+        .whileTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_L2));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L3)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_L3));
+        .whileTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_L3));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.BARGE)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.BARGE));
+        .whileTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.BARGE));
 
       operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.FIRE)
-        .onTrue(new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem()));
+        .whileTrue(new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem()));
   }
 
   private SendableChooser<Command> getTestCommandChooser() {
