@@ -25,8 +25,12 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
     private IdleMode mode;
 
     public static double calculateMotorPositionFromDegrees(double degrees) {
-        return degrees / 360;
+        return (degrees / 360) + ENCODER_ZERO_OFFSET;
     }
+
+    private static final double STARTING_POSITION = 0.0416;
+    private static final double ENCODER_ZERO_OFFSET = 0.837 - STARTING_POSITION;
+    
 
     @Override
     public void initialize() {
@@ -64,11 +68,12 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
         if (ENABLED) {
             output.setMoving(pivotMotor.getEncoder().getVelocity() != 0);
             output.setBrakeModeEnabled(IdleMode.kBrake == mode);
-            output.setCurrentPosition(pivotMotor.getAbsoluteEncoder().getPosition() * 360);
+            output.setCurrentPosition((pivotMotor.getAbsoluteEncoder().getPosition() - ENCODER_ZERO_OFFSET) * 360);
             output.setAtRequestedPosition(Math.abs(output.getCurrentPosition()
                     - currentInput.getRequestedPosition()) < RobotConstants.PIVOT.POSITION_TOLERANCE_DEG);
             output.setRequestedPosition(currentInput.getRequestedPosition());
             output.setSpeed(pivotMotor.get());
+            output.setAbsoluteEncoder(pivotMotor.getAbsoluteEncoder().getPosition());
         }
         return output;
     }
@@ -81,7 +86,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
     @Override
     public void periodic() {
         if (ENABLED) {
-            if (currentInput.getActivate() && RobotIO.getInstance().isSafePivotMove(currentInput.getRequestedPosition())) {
+            if (currentInput.getActivate()) {
                 double targetPosition = calculateMotorPositionFromDegrees((currentInput.getRequestedPosition()));
                 pidController.setReference(targetPosition, ControlType.kPosition);
             } else {

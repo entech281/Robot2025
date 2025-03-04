@@ -58,12 +58,12 @@ public final class RobotConstants {
 
   public static interface SafeZones {
     public static final SafeZone[] SAFE_ZONES = new SafeZone[] {
-      new SafeZone(0, 23, 30, 38),
-      new SafeZone(6.3, 23, 30, 168),
-      new SafeZone(3.2, 23, 30, 43),
-      new SafeZone(11, 23, 30, 168),
-      new SafeZone(18.7, 23, 30, 83),
-      new SafeZone(20, 23, 30, 173)
+      new SafeZone(-0.05, 22, 30, 38),
+      new SafeZone(6.3, 22, 30, 168),
+      new SafeZone(3.2, 22, 30, 43),
+      new SafeZone(11, 22, 30, 168),
+      new SafeZone(18.7, 22, 30, 83),
+      new SafeZone(20, 22, 30, 173)
     };
   }
 
@@ -144,15 +144,15 @@ public final class RobotConstants {
     public static final Map<String, Double> VALUES = Map.ofEntries(
       Map.entry("ElevatorSubsystem/NudgeAmount", 5.0),
       Map.entry("PivotSubsystem/NudgeAmount", 5.0),
-      Map.entry(Position.ALGAE_GROUND.getElevatorKey(), 0.0),
+      Map.entry(Position.ALGAE_GROUND.getElevatorKey(), 0.001),
       Map.entry(Position.ALGAE_L2.getElevatorKey(), 11.0),
       Map.entry(Position.ALGAE_L3.getElevatorKey(), 6.3),
-      Map.entry(Position.L1.getElevatorKey(), 0.0),
+      Map.entry(Position.L1.getElevatorKey(), 1.0),
       Map.entry(Position.L2.getElevatorKey(), 3.2),
       Map.entry(Position.L3.getElevatorKey(), 8.5),
       Map.entry(Position.L4.getElevatorKey(), 18.7),
-      Map.entry(Position.BARGE.getElevatorKey(), 22.0),
-      Map.entry(Position.HOME.getElevatorKey(), 0.0),
+      Map.entry(Position.BARGE.getElevatorKey(), 21.5),
+      Map.entry(Position.HOME.getElevatorKey(), 0.001),
       Map.entry(Position.SAFE_EXTEND.getElevatorKey(), -999.0),
       Map.entry(Position.ALGAE_GROUND.getPivotKey(), 165.0),
       Map.entry(Position.ALGAE_L2.getPivotKey(), 165.0),
@@ -163,7 +163,7 @@ public final class RobotConstants {
       Map.entry(Position.L4.getPivotKey(), 80.0),
       Map.entry(Position.BARGE.getPivotKey(), 80.0),
       Map.entry(Position.HOME.getPivotKey(), 15.0),
-      Map.entry(Position.SAFE_EXTEND.getPivotKey(), 32.0)
+      Map.entry(Position.SAFE_EXTEND.getPivotKey(), 35.0)
     );
   }
 
@@ -171,7 +171,7 @@ public final class RobotConstants {
     public static final double INITIAL_POSITION = 0.0;
     public static final double UPPER_SOFT_LIMIT_DEG = 22.25;
     public static final double LOWER_SOFT_LIMIT_DEG = 1;
-    public static final double ELEVATOR_CONVERSION_FACTOR = 5.714;
+    public static final double ELEVATOR_CONVERSION_FACTOR = 1.9;
     public static final double POSITION_TOLERANCE_DEG = 2;
     public static final double SLOT0_MAX_VELOCITY = 5600;
     public static final double SLOT0_MAX_ACCELERATION = 4800;

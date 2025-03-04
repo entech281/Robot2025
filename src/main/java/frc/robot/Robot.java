@@ -61,12 +61,11 @@ public class Robot extends LoggedRobot {
     } catch ( Exception e){
       DriverStation.reportWarning("Logger init failed.", e.getStackTrace());
     }
-
+    LiveTuningHandler.getInstance().init();
     subsystemManager = new SubsystemManager();
     odometry = new OdometryProcessor();
     commandFactory = new CommandFactory(subsystemManager, odometry);
     operatorInterface = new OperatorInterface(commandFactory, subsystemManager, odometry);
-    LiveTuningHandler.getInstance().init();
     operatorInterface.create();
     odometry.createEstimator();
   }
