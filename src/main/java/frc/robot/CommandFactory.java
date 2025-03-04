@@ -113,8 +113,10 @@ public class CommandFactory {
     NamedCommands.registerCommand("AlgaeL2", formSafeMovementCommand(Position.ALGAE_L2));
     NamedCommands.registerCommand("AlgaeL3", formSafeMovementCommand(Position.ALGAE_L3));
     NamedCommands.registerCommand("AlgaeGround", formSafeMovementCommand(Position.ALGAE_GROUND));
-    NamedCommands.registerCommand("AlignToReefE", new AutoAlignToScoringLocationCommand(driveSubsystem, 21));
-    NamedCommands.registerCommand("AlignToReefSW", new AutoAlignToScoringLocationCommand(driveSubsystem, 17));
+    NamedCommands.registerCommand("AlignToReefFar", new AutoAlignToScoringLocationCommand(driveSubsystem, 21));
+    NamedCommands.registerCommand("AlignToReefCloseRight", new AutoAlignToScoringLocationCommand(driveSubsystem, 17));
+    NamedCommands.registerCommand("AlignToReefFarRight", new AutoAlignToScoringLocationCommand(driveSubsystem, 22));
+    NamedCommands.registerCommand("AlignToReefFarLeft", new AutoAlignToScoringLocationCommand(driveSubsystem, 20));
     NamedCommands.registerCommand("AlignToFeedStation", new AutoAlignToScoringLocationCommand(driveSubsystem, 12));
     NamedCommands.registerCommand("IntakeCoral", new IntakeCoralCommand(coralMechanismSubsystem));
 

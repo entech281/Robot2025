@@ -11,13 +11,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auto Start"
+                  "pathName": "Start - Far Reef Face"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignToReefE"
+                  "name": "AlignToReefFar"
                 }
               },
               {
@@ -74,6 +74,12 @@
                 "type": "named",
                 "data": {
                   "name": "L4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToReefCloseRight"
                 }
               }
             ]

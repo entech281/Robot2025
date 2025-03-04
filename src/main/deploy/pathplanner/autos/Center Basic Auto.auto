@@ -11,13 +11,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignToReefE"
+                  "name": "AlignToReefFar"
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auto Start"
+                  "pathName": "Start - Far Reef Face"
                 }
               },
               {
