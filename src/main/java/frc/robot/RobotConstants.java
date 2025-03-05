@@ -145,8 +145,8 @@ public final class RobotConstants {
       Map.entry("ElevatorSubsystem/NudgeAmount", 5.0),
       Map.entry("PivotSubsystem/NudgeAmount", 5.0),
       Map.entry(Position.ALGAE_GROUND.getElevatorKey(), 0.001),
-      Map.entry(Position.ALGAE_L2.getElevatorKey(), 11.0),
-      Map.entry(Position.ALGAE_L3.getElevatorKey(), 6.3),
+      Map.entry(Position.ALGAE_L2.getElevatorKey(), 6.3),
+      Map.entry(Position.ALGAE_L3.getElevatorKey(), 11.0),
       Map.entry(Position.L1.getElevatorKey(), 1.0),
       Map.entry(Position.L2.getElevatorKey(), 3.2),
       Map.entry(Position.L3.getElevatorKey(), 8.5),
@@ -174,11 +174,11 @@ public final class RobotConstants {
     public static final double ELEVATOR_CONVERSION_FACTOR = 1.9;
     public static final double POSITION_TOLERANCE_DEG = 2;
     public static final double SLOT0_MAX_VELOCITY = 5600;
-    public static final double SLOT0_MAX_ACCELERATION = 4800;
+    public static final double SLOT0_MAX_ACCELERATION = 3200;
     public static final double SLOT1_MAX_VELOCITY = 5600;
-    public static final double SLOT1_MAX_ACCELERATION = 4800;
-    public static final double SLOT0_ALLOWED_ERROR = 0.1;
-    public static final double SLOT1_ALLOWED_ERROR = 0.1;
+    public static final double SLOT1_MAX_ACCELERATION = 3200;
+    public static final double SLOT0_ALLOWED_ERROR = 0.15;
+    public static final double SLOT1_ALLOWED_ERROR = 0.15;
   }
 
   public static interface CORAL{

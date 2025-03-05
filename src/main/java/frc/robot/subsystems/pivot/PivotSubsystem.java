@@ -12,6 +12,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
+import frc.entech.util.EntechUtils;
 import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
 
@@ -29,7 +30,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
     }
 
     private static final double STARTING_POSITION = 0.0416;
-    private static final double ENCODER_ZERO_OFFSET = 0.837 - STARTING_POSITION;
+    private static final double ENCODER_ZERO_OFFSET = 0.841 - STARTING_POSITION;
     
 
     @Override
@@ -42,7 +43,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
             pivotConfig.idleMode(IdleMode.kBrake);
             mode = IdleMode.kBrake;
             pivotConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-            pivotConfig.closedLoop.pidf(3.0, 0, 0, 0);
+            pivotConfig.closedLoop.pidf(3.5, 0, 0, 0);
             pivotConfig.closedLoop.outputRange(-1.0, 1.0);
             pivotConfig.closedLoop.positionWrappingEnabled(true);
             pivotConfig.closedLoop.positionWrappingInputRange(0, 1);
@@ -68,7 +69,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
         if (ENABLED) {
             output.setMoving(pivotMotor.getEncoder().getVelocity() != 0);
             output.setBrakeModeEnabled(IdleMode.kBrake == mode);
-            output.setCurrentPosition((pivotMotor.getAbsoluteEncoder().getPosition() - ENCODER_ZERO_OFFSET) * 360);
+            output.setCurrentPosition(EntechUtils.normalizeAngle(((pivotMotor.getAbsoluteEncoder().getPosition() * 360) - (ENCODER_ZERO_OFFSET * 360)) - 180) + 180);
             output.setAtRequestedPosition(Math.abs(output.getCurrentPosition()
                     - currentInput.getRequestedPosition()) < RobotConstants.PIVOT.POSITION_TOLERANCE_DEG);
             output.setRequestedPosition(currentInput.getRequestedPosition());

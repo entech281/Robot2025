@@ -190,8 +190,7 @@ public class OperatorInterface
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 
       operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.FIRE)
-        .onTrue(new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem()))
-        .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
+        .onTrue(new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem()));
   }
 
   private SendableChooser<Command> getTestCommandChooser() {

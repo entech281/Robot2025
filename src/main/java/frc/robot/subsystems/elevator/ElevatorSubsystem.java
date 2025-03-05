@@ -51,8 +51,8 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       motorConfig.idleMode(IdleMode.kBrake);
 
       motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-      .pid(1.5, 0.001, 0, ClosedLoopSlot.kSlot0)
-      .pid(0.5, 0, 0, ClosedLoopSlot.kSlot1)
+      .pidf(1.1, 0.001, 0, 0.0, ClosedLoopSlot.kSlot0)
+      .pid(0.05, 0, 0, ClosedLoopSlot.kSlot1)
       .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot0)
       .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot1);
 
@@ -93,10 +93,10 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   public void periodic() {
     double clampedPosition = clampRequestedPosition(currentInput.getRequestedPosition());
     if (ENABLED) {
-      if (!RobotIO.getInstance().isSafeElevatorMove(currentInput.getRequestedPosition())) {
-        leftElevator.set(0);
-        return;
-      }
+      // if (!RobotIO.getInstance().isSafeElevatorMove(currentInput.getRequestedPosition())) {
+      //   leftElevator.set(0);
+      //   return;
+      // }
       if (currentInput.getActivate()) {
         if ((calculateInchesFromMotorPosition(leftElevator.getEncoder().getPosition())) - clampedPosition <= 0) {
           leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
@@ -126,7 +126,7 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       elevatorOutput.setLeftBrakeModeEnabled(true);
       elevatorOutput.setRightBrakeModeEnabled(true);
       elevatorOutput.setCurrentPosition(calculateInchesFromMotorPosition(leftElevator.getEncoder().getPosition()));
-      elevatorOutput.setAtRequestedPosition(EntechUtils.isWithinTolerance(0.1,
+      elevatorOutput.setAtRequestedPosition(EntechUtils.isWithinTolerance(0.15,
           elevatorOutput.getCurrentPosition(), currentInput.getRequestedPosition()));
       elevatorOutput.setAtLowerLimit(
           leftElevator.getReverseLimitSwitch().isPressed());
