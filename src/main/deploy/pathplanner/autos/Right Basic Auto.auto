@@ -5,21 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Start - Far Right Reef Face"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AlignToReefFarRight"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToReefFarRight"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              }
+            ]
           }
         },
         {
