@@ -5,31 +5,19 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "AlignToReefE"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Auto Start"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "ElevatorL4"
+                  "name": "AlignToReefFar"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "PivotL4"
+                  "name": "L4"
                 }
               }
             ]
