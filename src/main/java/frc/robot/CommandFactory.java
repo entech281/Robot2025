@@ -116,6 +116,7 @@ public class CommandFactory {
     NamedCommands.registerCommand("AlignToReefFar", new AutoAlignToScoringLocationCommand(driveSubsystem, 21));
     NamedCommands.registerCommand("AlignToReefCloseRight", new AutoAlignToScoringLocationCommand(driveSubsystem, 17));
     NamedCommands.registerCommand("AlignToReefFarRight", new AutoAlignToScoringLocationCommand(driveSubsystem, 22));
+    NamedCommands.registerCommand("AlignToReefCloseLeft", new AutoAlignToScoringLocationCommand(driveSubsystem, 22));
     NamedCommands.registerCommand("AlignToReefFarLeft", new AutoAlignToScoringLocationCommand(driveSubsystem, 20));
     NamedCommands.registerCommand("AlignToFeedStation", new AutoAlignToScoringLocationCommand(driveSubsystem, 12));
     NamedCommands.registerCommand("IntakeCoral", new IntakeCoralCommand(coralMechanismSubsystem));

@@ -11,7 +11,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignToReefFar"
+                  "name": "AlignToReefFarLeft"
                 }
               },
               {
@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auto Refill Center"
+                  "pathName": "Auto Refill Left"
                 }
               },
               {
@@ -61,13 +61,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "L4"
+                  "name": "AlignToReefCloseLeft"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignToReefCloseRight"
+                  "name": "L4"
                 }
               }
             ]
