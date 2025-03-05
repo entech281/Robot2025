@@ -154,7 +154,7 @@ public final class RobotConstants {
       Map.entry(Position.BARGE.getElevatorKey(), 21.5),
       Map.entry(Position.HOME.getElevatorKey(), 0.001),
       Map.entry(Position.SAFE_EXTEND.getElevatorKey(), -999.0),
-      Map.entry(Position.ALGAE_GROUND.getPivotKey(), 165.0),
+      Map.entry(Position.ALGAE_GROUND.getPivotKey(), 180.0),
       Map.entry(Position.ALGAE_L2.getPivotKey(), 165.0),
       Map.entry(Position.ALGAE_L3.getPivotKey(), 165.0),
       Map.entry(Position.L1.getPivotKey(), 35.0),
