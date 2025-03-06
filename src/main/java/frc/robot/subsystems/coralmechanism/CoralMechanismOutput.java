@@ -10,6 +10,7 @@ public class CoralMechanismOutput extends SubsystemOutput {
   private double encoderPosition = 0.0;
   private boolean isAtTargetPosition = false;
   private boolean brakeModeEnabled = false;
+  private boolean hasAlgae = false;
 
   @Override
   public void toLog() {
@@ -59,4 +60,12 @@ public class CoralMechanismOutput extends SubsystemOutput {
   public void setBrakeModeEnabled(boolean brakeModeEnabled) {
         this.brakeModeEnabled = brakeModeEnabled;
    }
+
+  public boolean getHasAlgae() {
+    return this.hasAlgae;
+  }
+
+  public void setHasAlgae(boolean hasAlgae) {
+    this.hasAlgae = hasAlgae;
+  }
 }

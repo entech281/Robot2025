@@ -28,6 +28,7 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
     @Override
     public void initialize() {
         if (ENABLED) {
+            coralConfig = new SparkMaxConfig();
             coralIntakeMotor = new SparkMax(RobotConstants.PORTS.CAN.CORAL_MOTOR, MotorType.kBrushless);
 
             coralIntakeMotor.getEncoder().setPosition(0.0);
@@ -50,6 +51,13 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
         this.currentInput = input;
     }
 
+    private boolean hasAlgae() {
+        currentInput.setActivate(true);
+        currentInput.setRequestedSpeed(-0.05);
+        updateInputs(currentInput);
+        return coralIntakeMotor.get() < 0.0;
+      }
+
     @Override
     public CoralMechanismOutput toOutputs() {
         CoralMechanismOutput output = new CoralMechanismOutput();
@@ -57,6 +65,7 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
             output.setRunning(currentInput.getActivate());
             output.setCurrentSpeed(coralIntakeMotor.getEncoder().getVelocity());
             output.setBrakeModeEnabled(IdleMode.kBrake == mode);
+            output.setHasAlgae(hasAlgae());
         }
         return output;
     }
