@@ -19,7 +19,7 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
     private CoralMechanismInput currentInput = new CoralMechanismInput();
     private SparkMax coralIntakeMotor;
     private IdleMode mode;
-    private SparkMaxConfig coralConfig;
+    private SparkMaxConfig coralConfig = new SparkMaxConfig();
     private boolean hasAlgae = false;
 
     public static double calculateMotorSpeedFromInput(double inputSpeed) {
