@@ -35,4 +35,12 @@ public class ElevatorMoveCommand extends EntechCommand {
   public boolean isFinished() {
     return counter.isFinished(RobotIO.getInstance().getElevatorOutput().isAtRequestedPosition());
   }
+
+  @Override
+  public void end(boolean interrupted) {
+    if (interrupted) {
+      elevatorInput.setRequestedPosition(LiveTuningHandler.getInstance().getValue(Position.HOME.getElevatorKey()));
+      elevatorSS.updateInputs(elevatorInput);
+    }
+  }
 }
