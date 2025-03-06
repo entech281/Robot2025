@@ -1,10 +1,7 @@
 package frc.robot.commands;
 
 import frc.entech.commands.EntechCommand;
-import frc.entech.util.StoppingCounter;
-import frc.robot.io.RobotIO;
 import frc.robot.subsystems.coralmechanism.CoralMechanismInput;
-import frc.robot.subsystems.coralmechanism.CoralMechanismOutput;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 
 public class IntakeAlgaeCommand extends EntechCommand {
