@@ -28,6 +28,7 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
     @Override
     public void initialize() {
         if (ENABLED) {
+            coralConfig = new SparkMaxConfig();
             coralIntakeMotor = new SparkMax(RobotConstants.PORTS.CAN.CORAL_MOTOR, MotorType.kBrushless);
 
             coralIntakeMotor.getEncoder().setPosition(0.0);
