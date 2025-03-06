@@ -71,7 +71,9 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
     }
 
     public CoralMechanismOutput tOutputs(boolean checkHasAlgae) {
-        this.hasAlgae = hasAlgae();
+        if (checkHasAlgae) {
+            this.hasAlgae = hasAlgae();
+        }
         return toOutputs();
     }
 
