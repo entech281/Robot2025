@@ -169,9 +169,9 @@ public class OperatorInterface
         .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L3))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 
-    // operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L4)
-    //     .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L4))
-    //     .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L4)
+        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L4))
+        .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_GROUND)
         .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_GROUND))
