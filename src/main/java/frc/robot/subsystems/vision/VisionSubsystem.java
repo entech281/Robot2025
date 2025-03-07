@@ -7,7 +7,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringPublisher;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.util.AprilTagDistanceCalculator;
@@ -51,26 +50,32 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     Number[] tagXWs = tagXWEntry.getNumberArray(new Number[] {});
     String[] cameraUsed = cameraUsedEntry.getStringArray(new String[] {});
     long numberOfTargets = numberOfTargetsEntry.getInteger(0);
-
-    for (int i = 0; i < numberOfTargets; i++) {
-      VisionTarget target = new VisionTarget();
-      target.setTagID((int) ids[i].intValue());
-      target.setTagHeight((int) heights[i].intValue());
-      target.setTagWidth((int) widths[i].intValue());
-      target.setTagX(xs[i].doubleValue());
-      target.setTagY(ys[i].doubleValue());
-      target.setDistance(AprilTagDistanceCalculator.calculateCurrentDistanceInches(RobotConstants.APRIL_TAG_DATA.CALIBRATION, widths[i].intValue()));
-      target.setTagXW(tagXWs[i].doubleValue());
-      target.setTimestamp(timestamp);
-      target.setCameraName(cameraUsed[i]);
-      targetList.add(target);
+    try {
+      for (int i = 0; i < numberOfTargets; i++) {
+        VisionTarget target = new VisionTarget();
+        target.setTagID((int) ids[i].intValue());
+        target.setTagHeight((int) heights[i].intValue());
+        target.setTagWidth((int) widths[i].intValue());
+        target.setTagX(xs[i].doubleValue());
+        target.setTagY(ys[i].doubleValue());
+        try {
+          target.setDistance(AprilTagDistanceCalculator.calculateCurrentDistanceInches(RobotConstants.APRIL_TAG_DATA.CALIBRATION, widths[i].intValue()));
+        } catch (Exception e) {
+          continue;
+        }
+        target.setTagXW(tagXWs[i].doubleValue());
+        target.setTimestamp(timestamp);
+        target.setCameraName(cameraUsed[i]);
+        targetList.add(target);
+      }
+    } catch (Exception e) {
+      targetList = new ArrayList<>();
     }
 
-
     // Set values in VisionOutput
-    output.setHasTarget(hasTargetEntry.getBoolean(false));
+    output.setHasTarget(hasTargetEntry.getBoolean(false) && !targetList.isEmpty());
     output.setTimestamp(timestamp);
-    output.setNumberOfTags((int) numberOfTargets);
+    output.setNumberOfTags(targetList.size());
     if (output.hasTarget()) {
       output.setTargets(targetList);
       double closest = 999;
