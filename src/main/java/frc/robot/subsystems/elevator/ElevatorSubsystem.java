@@ -29,6 +29,8 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   private SparkMax leftElevator;
   private SparkMax rightElevator;
 
+  private Command testCommand = Commands.none();
+
   public static double calculateMotorPositionFromInches(double inches) {
     return -inches * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
   }
@@ -141,12 +143,15 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
 
   @Override
   public Command getTestCommand() {
-    return Commands.none();
+    return testCommand;
+  }
+
+  public void setTestCommand(Command test) {
+    testCommand = test;
   }
 
   @Override
   public boolean isEnabled() {
     return ENABLED;
   }
-
 }
