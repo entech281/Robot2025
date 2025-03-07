@@ -81,14 +81,14 @@ public class SubsystemManager {
 
   public List<EntechSubsystem<? extends SubsystemInput, ? extends SubsystemOutput>> getSubsystemList() {
     ArrayList<EntechSubsystem<? extends SubsystemInput, ? extends SubsystemOutput>> r = new ArrayList<>();
-    // r.add(navXSubsystem);
-    // r.add(driveSubsystem);
-    // r.add(visionSubsystem);
+    r.add(navXSubsystem);
+    r.add(driveSubsystem);
+    r.add(visionSubsystem);
     r.add(elevatorSubsystem);
-    // r.add(pivotSubsystem);
-    // r.add(ledSubsystem);
-    // r.add(coralMechanismSubsystem);
-    // r.add(internalCoralDetsectorSubsystem);
+    r.add(pivotSubsystem);
+    r.add(ledSubsystem);
+    r.add(coralMechanismSubsystem);
+    r.add(internalCoralDetectorSubsystem);
 
     return r;
   }

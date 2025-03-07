@@ -1,5 +1,6 @@
 package frc.robot.subsystems.elevator;
 
+import com.pathplanner.lib.auto.NamedCommands;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -12,8 +13,9 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.util.EntechUtils;
 import frc.robot.RobotConstants;
@@ -29,8 +31,6 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   private SparkMax leftElevator;
   private SparkMax rightElevator;
 
-  private Command testCommand = Commands.none();
-
   public static double calculateMotorPositionFromInches(double inches) {
     return -inches * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
   }
@@ -42,7 +42,6 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   @Override
   public void initialize() {
     if (ENABLED) {
-      
       SparkMaxConfig motorConfig = new SparkMaxConfig();
 
       leftElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_A, MotorType.kBrushless);
@@ -143,11 +142,14 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
 
   @Override
   public Command getTestCommand() {
-    return testCommand;
-  }
-
-  public void setTestCommand(Command test) {
-    testCommand = test;
+    return new InstantCommand(() -> {
+        new SequentialCommandGroup(
+          NamedCommands.getCommand("L2"),
+          new WaitCommand(5.0),
+          NamedCommands.getCommand("HOME")
+        ).schedule();
+      }
+    );
   }
 
   @Override

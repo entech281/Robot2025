@@ -125,8 +125,6 @@ public class CommandFactory {
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
-
-    subsystemManager.getElevatorSubsystem().setTestCommand(Commands.deferredProxy(() -> { return formSafeMovementCommand(Position.L2); }));
   }
 
   public Command getAutoCommand() {
