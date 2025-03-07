@@ -163,7 +163,10 @@ public final class RobotConstants {
       Map.entry(Position.L4.getPivotKey(), 80.0),
       Map.entry(Position.BARGE.getPivotKey(), 80.0),
       Map.entry(Position.HOME.getPivotKey(), 15.0),
-      Map.entry(Position.SAFE_EXTEND.getPivotKey(), 35.0)
+      Map.entry(Position.SAFE_EXTEND.getPivotKey(), 35.0),
+      Map.entry("CoralMechanismSubsystem/StartSpeed", 0.2),
+      Map.entry("CoralMechanismSubsystem/FireSpeed", 1.0),
+      Map.entry("CoralMechanismSubsystem/SlowDownSpeed", 0.1)
     );
   }
 

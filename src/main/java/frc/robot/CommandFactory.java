@@ -6,7 +6,6 @@ import org.json.simple.parser.ParseException;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -130,7 +129,6 @@ public class CommandFactory {
     auto.addCommands(new GyroResetByAngleCommand(navXSubsystem, odometry, autoChooser.getSelected().getName()));
     auto.addCommands(new WaitCommand(0.5));
     auto.addCommands(autoChooser.getSelected());
-    PathPlannerAuto test = new PathPlannerAuto("New Auto");
     return auto;
   }
 
