@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -51,6 +52,9 @@ public class OperatorInterface
   private final OdometryProcessor odometry;
 
   private final SendableChooser<Command> testChooser;
+
+  private IntakeCoralCommand intakeCommand;
+  private FireCoralCommand fireCommand;
 
   public OperatorInterface(CommandFactory commandFactory, SubsystemManager subsystemManager,
       OdometryProcessor odometry) {
@@ -130,8 +134,8 @@ public class OperatorInterface
     xboxController.button(1)
       .onTrue(new ElevatorDownCommand(subsystemManager.getElevatorSubsystem()));
 
-    xboxController.button(2)
-      .whileTrue(new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem()));
+    // xboxController.button(2)
+    //   .whileTrue(new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem()));
 
     xboxController.button(10)
         .whileTrue(commandFactory.getAlignmentCommand());
@@ -142,7 +146,7 @@ public class OperatorInterface
     xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.RESET_ODOMETRY)
         .onTrue(new ResetOdometryCommand(odometry));
 
-    subsystemManager.getVisionSubsystem().setDefaultCommand(new VisionCameraSwitchingCommand(subsystemManager.getVisionSubsystem(), xboxController::getRightY));
+    subsystemManager.getVisionSubsystem().setDefaultCommand(new VisionCameraSwitchingCommand(subsystemManager.getVisionSubsystem(), xboxController::getRightX));
   }
 
   public void operatorBindings() {
@@ -187,9 +191,20 @@ public class OperatorInterface
     // operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.BARGE)
     //     .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.BARGE))
     //     .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
-
-      operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.FIRE)
-        .whileTrue(new ConditionalCommand(new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), 1.0), new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem()), () -> { return RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral(); }));
+    intakeCommand = new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem());
+    fireCommand = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), 1.0);
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.FIRE)
+      .onTrue(new InstantCommand(() -> {
+        if (RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()) {
+          fireCommand.schedule();
+        } else {
+          intakeCommand.schedule();
+        }
+      }))
+      .onFalse(new InstantCommand(() -> {
+        intakeCommand.cancel();
+        fireCommand.cancel();
+      }));
   }
 
   private SendableChooser<Command> getTestCommandChooser() {

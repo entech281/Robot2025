@@ -32,7 +32,7 @@ public class IntakeCoralCommand extends EntechCommand {
 
 	@Override
 	public void initialize() {
-		input.setRequestedSpeed(0.4);
+		input.setRequestedSpeed(0.3);
 		intake.updateInputs(input);
 		counter.reset();
 	}
