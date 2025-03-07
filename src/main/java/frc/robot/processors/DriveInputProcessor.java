@@ -23,7 +23,7 @@ public class DriveInputProcessor {
     driveFilters.add(new HoldYawFilter());
     driveFilters.add(new AutoYawFilter());
     driveFilters.add(new LateralAlignFilter());
-    driveFilters.add(new CollisionDampeningFilter());
+    // driveFilters.add(new CollisionDampeningFilter());
   }
 
   public DriveInput processInput(DriveInput input) {

@@ -40,7 +40,6 @@ public class Robot extends LoggedRobot {
 
   public void loggerInit() {
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
-    Logger.recordMetadata("Version", BuildConstants.VERSION);
     Logger.recordMetadata("GITRevision", BuildConstants.GIT_REVISION + "");
     Logger.recordMetadata("GIT_SHA", BuildConstants.GIT_SHA);
     Logger.recordMetadata("GIT_Date", BuildConstants.GIT_DATE);

@@ -199,9 +199,9 @@ public class OperatorInterface
           new ConditionalCommand(
             fireCommandL1,
             fireCommand, 
-            operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1)::getAsBoolean
+            () -> { return operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1).getAsBoolean(); }
           ),
-          new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem()),
+          intakeCommand,
           () -> { return RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral(); }
         )
       );

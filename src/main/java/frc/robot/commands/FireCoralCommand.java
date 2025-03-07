@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import frc.entech.commands.EntechCommand;
-import frc.entech.util.StoppingCounter;
 import frc.robot.subsystems.coralmechanism.CoralMechanismInput;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 
