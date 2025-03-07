@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.AutonomousException;
+import frc.entech.commands.InstantAnytimeCommand;
 import frc.robot.commands.AutoAlignToScoringLocationCommand;
 import frc.robot.commands.ElevatorMoveCommand;
 import frc.robot.commands.FireCoralCommand;
@@ -37,6 +38,7 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
 import frc.robot.subsystems.pivot.PivotSubsystem;
+
 @SuppressWarnings("unused")
 public class CommandFactory {
   private final DriveSubsystem driveSubsystem;
@@ -70,9 +72,9 @@ public class CommandFactory {
     }
 
     ShuffleboardTab tab = Shuffleboard.getTab("stuffs");
-    tab.add("Save", new InstantCommand(() -> LiveTuningHandler.getInstance().saveToJSON()));
-    tab.add("Load", new InstantCommand(() -> LiveTuningHandler.getInstance().resetToJSON()));
-    tab.add("Code Defaults", new InstantCommand(() -> LiveTuningHandler.getInstance().resetToDefaults()));
+    tab.add("Save", new InstantAnytimeCommand(() -> LiveTuningHandler.getInstance().saveToJSON()));
+    tab.add("Load", new InstantAnytimeCommand(() -> LiveTuningHandler.getInstance().resetToJSON()));
+    tab.add("Code Defaults", new InstantAnytimeCommand(() -> LiveTuningHandler.getInstance().resetToDefaults()));
     tab.add("L1", getSafeElevatorPivotMoveCommand(Position.L1));
     tab.add("L2", getSafeElevatorPivotMoveCommand(Position.L2));
     tab.add("L3", getSafeElevatorPivotMoveCommand(Position.L3));

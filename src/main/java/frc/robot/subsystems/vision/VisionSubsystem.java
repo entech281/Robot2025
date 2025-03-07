@@ -6,6 +6,7 @@ import java.util.Optional;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.util.AprilTagDistanceCalculator;
@@ -102,9 +103,11 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
 
   @Override
   public void updateInputs(VisionInput input) {
-    try (NetworkTableEntry entry = new NetworkTableEntry(NetworkTableInstance.getDefault(), 0)) {
+    try (NetworkTableEntry entry = new NetworkTableEntry(NetworkTableInstance.getDefault(), networkTable.getInstance().getHandle())) {
       entry.setString(input.getCamera());
       networkTable.putValue("camera", entry.getValue());
+    } catch (Exception e) {
+      DriverStation.reportWarning(e.getMessage(), false);
     }
   }
 

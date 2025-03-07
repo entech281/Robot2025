@@ -263,8 +263,7 @@ public final class RobotConstants {
     }
 
     public static interface HAS_CORAL {
-      public static final int INTERNAL_SENSOR_FORWARD = 0;
-      public static final int INTERNAL_SENSOR_REAR = 1;
+      public static final int INTERNAL_SENSOR_FORWARD = 9;
     }
   }
 
@@ -361,7 +360,6 @@ public final class RobotConstants {
   public static interface APRIL_TAG_DATA {
     public static final AprilTagDistanceCalibration CALIBRATION = new AprilTagDistanceCalibration(640, 480, 70.2, 37.25/12);
     public static final Map<Integer, Double> TAG_ANGLES = Map.ofEntries(
-      Map.entry(1, 0.0),
       Map.entry(6, 300.0),
       Map.entry(7, 0.0),
       Map.entry(8, 60.0),

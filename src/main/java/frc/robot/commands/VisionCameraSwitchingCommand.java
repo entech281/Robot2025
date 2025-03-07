@@ -3,7 +3,6 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import frc.entech.commands.EntechCommand;
-import frc.robot.io.RobotIO;
 import frc.robot.subsystems.vision.VisionInput;
 import frc.robot.subsystems.vision.VisionSubsystem;
 
@@ -25,14 +24,10 @@ public class VisionCameraSwitchingCommand extends EntechCommand {
 
     @Override
     public void execute() {
-        if (RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()) {
+        if (axis.getAsDouble() <= -0.1) {
             vi.setCamera(VisionInput.Camera.TOP);
         } else {
-            if (axis.getAsDouble() <= -0.1) {
-                vi.setCamera(VisionInput.Camera.TOP);
-            } else {
-                vi.setCamera(VisionInput.Camera.TOP);
-            }
+            vi.setCamera(VisionInput.Camera.SIDE);
         }
         vision.updateInputs(vi);
     }
