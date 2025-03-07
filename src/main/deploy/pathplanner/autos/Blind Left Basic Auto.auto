@@ -9,15 +9,22 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "parallel",
                 "data": {
-                  "name": "AlignToReefFarRight"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L3"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Start - Far Left Reef Face"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "L1"
+                      }
+                    }
+                  ]
                 }
               }
             ]
