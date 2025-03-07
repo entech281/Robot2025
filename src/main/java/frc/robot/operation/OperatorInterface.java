@@ -56,6 +56,7 @@ public class OperatorInterface
 
   private IntakeCoralCommand intakeCommand;
   private FireCoralCommand fireCommand;
+  private FireCoralCommand fireCommandL1;
 
   public OperatorInterface(CommandFactory commandFactory, SubsystemManager subsystemManager,
       OdometryProcessor odometry) {
@@ -190,9 +191,20 @@ public class OperatorInterface
     //     .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.BARGE))
     //     .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
     intakeCommand = new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem());
-    fireCommand = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), 1.0);
+    fireCommand = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/FireSpeed"));
+    fireCommandL1 = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/L1FireSpeed"));
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.FIRE)
-      .whileTrue(new ConditionalCommand(new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/FireSpeed")), new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem()), () -> { return RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral(); }));
+      .whileTrue(
+        new ConditionalCommand(
+          new ConditionalCommand(
+            fireCommandL1,
+            fireCommand, 
+            operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1)::getAsBoolean
+          ),
+          new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem()),
+          () -> { return RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral(); }
+        )
+      );
   }
 
   private SendableChooser<Command> getTestCommandChooser() {
