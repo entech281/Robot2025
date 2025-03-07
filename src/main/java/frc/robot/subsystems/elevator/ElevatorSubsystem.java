@@ -146,7 +146,7 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
         new SequentialCommandGroup(
           NamedCommands.getCommand("L2"),
           new WaitCommand(5.0),
-          NamedCommands.getCommand("HOME")
+          NamedCommands.getCommand("Home")
         ).schedule();
       }
     );
