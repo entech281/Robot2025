@@ -12,6 +12,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.util.EntechUtils;
 import frc.robot.RobotConstants;
@@ -139,8 +141,7 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
 
   @Override
   public Command getTestCommand() {
-    // return new TestPivotCommand(this);
-    return new TestElevatorCommand(this);
+    return Commands.none();
   }
 
   @Override
