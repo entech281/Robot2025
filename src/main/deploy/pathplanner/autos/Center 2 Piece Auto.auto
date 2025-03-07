@@ -5,22 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlignToReefFar"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4"
-                }
-              }
-            ]
+            "name": "AlignToReefFar"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
           }
         },
         {
@@ -30,22 +23,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Auto Refill Center"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Home"
-                }
-              }
-            ]
+            "name": "Home"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Auto Refill Center"
           }
         },
         {
@@ -55,22 +41,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlignToReefCloseRight"
-                }
-              }
-            ]
+            "name": "AlignToReefCloseRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
           }
         },
         {

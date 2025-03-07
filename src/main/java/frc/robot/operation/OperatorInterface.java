@@ -3,6 +3,7 @@ package frc.robot.operation;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -155,10 +156,7 @@ public class OperatorInterface
     SmartDashboard.putData("Test Chooser", testChooser);
 
     testChooser.addOption("All tests", getTestCommand());
-
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.RUN_TEST)
-        .onTrue(new RunTestCommand(testChooser))
-        .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
+    Shuffleboard.getTab("stuffs").add("Run Test", new RunTestCommand(testChooser));
     
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1)
         .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L1))

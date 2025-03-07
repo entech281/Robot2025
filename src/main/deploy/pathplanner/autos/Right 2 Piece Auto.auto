@@ -5,22 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlignToReefFarRight"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4"
-                }
-              }
-            ]
+            "name": "AlignToReefFarRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
           }
         },
         {
@@ -30,22 +23,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Auto Refill Right"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Home"
-                }
-              }
-            ]
+            "name": "Home"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Auto Refill Right"
           }
         },
         {
@@ -55,22 +41,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlignToReefCloseRight"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L3"
-                }
-              }
-            ]
+            "name": "AlignToReefCloseRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
           }
         },
         {

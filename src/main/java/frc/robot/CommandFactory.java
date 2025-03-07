@@ -28,6 +28,7 @@ import frc.robot.commands.GyroResetByAngleCommand;
 import frc.robot.commands.IntakeCoralCommand;
 import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
+import frc.robot.commands.RunTestCommand;
 import frc.robot.io.RobotIO;
 import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.processors.OdometryProcessor;

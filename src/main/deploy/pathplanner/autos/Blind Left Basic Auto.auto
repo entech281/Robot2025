@@ -9,22 +9,15 @@
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Start - Far Left Reef Face"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "L1"
-                      }
-                    }
-                  ]
+                  "pathName": "Start - Far Left Reef Face"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L1"
                 }
               }
             ]
