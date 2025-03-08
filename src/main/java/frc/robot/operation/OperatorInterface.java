@@ -10,8 +10,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.entech.subsystems.EntechSubsystem;
@@ -60,7 +62,6 @@ public class OperatorInterface
   private IntakeCoralCommand intakeCommand;
   private FireCoralCommand fireCommand;
   private FireCoralCommand fireCommandL1;
-  private RunCommand quickRetract;
 
   public OperatorInterface(CommandFactory commandFactory, SubsystemManager subsystemManager,
       OdometryProcessor odometry) {
@@ -207,10 +208,18 @@ public class OperatorInterface
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.FIRE)
       .whileTrue(
         new ConditionalCommand(
-          new ConditionalCommand(
-            fireCommandL1,
-            fireCommand, 
-            () -> { return operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1).getAsBoolean(); }
+          new ParallelCommandGroup(
+            new ConditionalCommand(
+              fireCommandL1,
+              fireCommand, 
+              () -> { return operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1).getAsBoolean(); }
+            ),
+            new SequentialCommandGroup(
+              new WaitUntilCommand(() -> { return !RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral(); }),
+              new InstantCommand(() -> {
+                commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME).schedule();
+              })
+            )
           ),
           new ConditionalCommand(
             new IntakeAlgaeCommand(subsystemManager.getCoralMechanismSubsystem()),
@@ -220,21 +229,6 @@ public class OperatorInterface
           () -> { return RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral(); }
         )
       );
-
-    quickRetract = new RunCommand(
-      () -> {
-        if (!RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
-          && operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.FIRE).getAsBoolean()
-          && (
-            operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1).getAsBoolean() ||
-            operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L2).getAsBoolean() ||
-            operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L3).getAsBoolean() ||
-            operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L4).getAsBoolean()
-          )) {
-          commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME).schedule();
-        }
-      }
-    );
   }
 
   private SendableChooser<Command> getTestCommandChooser() {
