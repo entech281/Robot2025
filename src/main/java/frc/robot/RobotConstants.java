@@ -163,11 +163,14 @@ public final class RobotConstants {
       Map.entry(Position.L4.getPivotKey(), 80.0),
       Map.entry(Position.BARGE.getPivotKey(), 80.0),
       Map.entry(Position.HOME.getPivotKey(), 15.0),
+      Map.entry(Position.ALGAE_HOME.getElevatorKey(), 0.0),
+      Map.entry(Position.ALGAE_HOME.getPivotKey(), 100.0),
       Map.entry(Position.SAFE_EXTEND.getPivotKey(), 35.0),
       Map.entry("CoralMechanismSubsystem/StartSpeed", 0.2),
       Map.entry("CoralMechanismSubsystem/FireSpeed", 1.0),
       Map.entry("CoralMechanismSubsystem/SlowDownSpeed", 0.1),
-      Map.entry("CoralMechanismSubsystem/L1FireSpeed", 0.3)
+      Map.entry("CoralMechanismSubsystem/L1FireSpeed", 0.3),
+      Map.entry("CoralMechanismSubsystem/AlgaeIntakeSpeed", 0.2)
     );
   }
 
@@ -191,8 +194,8 @@ public final class RobotConstants {
   }
 
   public static interface PIVOT {
-    public static final double PIVOT_CONVERSION_FACTOR = 2.4;
     public static final double POSITION_TOLERANCE_DEG = 2;
+    public static final double POSITION_TOLERANCE_BIG = 4;
   }
 
   public static interface LED {

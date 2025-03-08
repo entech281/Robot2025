@@ -16,9 +16,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.AutonomousException;
@@ -26,13 +24,14 @@ import frc.entech.commands.InstantAnytimeCommand;
 import frc.robot.commands.AutoAlignToScoringLocationCommand;
 import frc.robot.commands.ElevatorMoveCommand;
 import frc.robot.commands.FireCoralCommand;
+import frc.robot.commands.FireCoralCommandAuto;
 import frc.robot.commands.GyroResetByAngleCommand;
 import frc.robot.commands.IntakeCoralCommand;
 import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
-import frc.robot.commands.RunTestCommand;
 import frc.robot.io.RobotIO;
 import frc.robot.livetuning.LiveTuningHandler;
+import frc.robot.operation.UserPolicy;
 import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -121,7 +120,7 @@ public class CommandFactory {
     NamedCommands.registerCommand("IntakeCoral", new IntakeCoralCommand(coralMechanismSubsystem));
 
     //TODO: Remove magic number. RobotConstants?
-    NamedCommands.registerCommand("ScoreCoral", new FireCoralCommand(coralMechanismSubsystem, 1.0));
+    NamedCommands.registerCommand("ScoreCoral", new FireCoralCommandAuto(coralMechanismSubsystem, 1.0));
     NamedCommands.registerCommand("ScoreCoralL1", new FireCoralCommand(coralMechanismSubsystem, 0.05));
 
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -155,13 +154,19 @@ public class CommandFactory {
 
     SequentialCommandGroup commands = new SequentialCommandGroup();
 
-    if (currentHeight < ELEVATOR_PIVOT_LIMBO || goalHeight < currentHeight || goalAngle < currentAngle) {
-      commands.addCommands(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.SAFE_EXTEND));
-      commands.addCommands(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), pos));
-      commands.addCommands(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), pos));
+    if (UserPolicy.getInstance().isAlgaeMode()) {
+        commands.addCommands(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.ALGAE_HOME));
+        commands.addCommands(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), pos));
+        commands.addCommands(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), pos));
     } else {
-      commands.addCommands(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), pos));
-      commands.addCommands(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), pos));
+      if (currentHeight < ELEVATOR_PIVOT_LIMBO || goalHeight < currentHeight || goalAngle < currentAngle) {
+        commands.addCommands(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.SAFE_EXTEND));
+        commands.addCommands(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), pos));
+        commands.addCommands(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), pos));
+      } else {
+        commands.addCommands(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), pos));
+        commands.addCommands(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), pos));
+      }
     }
     return commands;
   }

@@ -71,7 +71,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
             output.setBrakeModeEnabled(IdleMode.kBrake == mode);
             output.setCurrentPosition(EntechUtils.normalizeAngle(((pivotMotor.getAbsoluteEncoder().getPosition() * 360) - (ENCODER_ZERO_OFFSET * 360)) - 180) + 180);
             output.setAtRequestedPosition(Math.abs(output.getCurrentPosition()
-                    - currentInput.getRequestedPosition()) < RobotConstants.PIVOT.POSITION_TOLERANCE_DEG);
+                    - currentInput.getRequestedPosition()) < ((currentInput.getRequestedPosition() > 90) ? RobotConstants.PIVOT.POSITION_TOLERANCE_BIG : RobotConstants.PIVOT.POSITION_TOLERANCE_DEG ));
             output.setRequestedPosition(currentInput.getRequestedPosition());
             output.setSpeed(pivotMotor.get());
             output.setAbsoluteEncoder(pivotMotor.getAbsoluteEncoder().getPosition());

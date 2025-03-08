@@ -21,6 +21,12 @@
           "data": {
             "name": "ScoreCoral"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Home"
+          }
         }
       ]
     }
