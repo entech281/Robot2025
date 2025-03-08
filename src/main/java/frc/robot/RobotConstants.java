@@ -58,11 +58,12 @@ public final class RobotConstants {
 
   public static interface SafeZones {
     public static final SafeZone[] SAFE_ZONES = new SafeZone[] {
-      new SafeZone(0, 23, 29, 36),
-      new SafeZone(3.2, 23, 30, 40),
-      new SafeZone(11, 23, 30, 60),
-      new SafeZone(18.7, 23, 30, 80),
-      new SafeZone(20, 23, 30, 170)
+      new SafeZone(-0.05, 22, 30, 38),
+      new SafeZone(6.3, 22, 30, 168),
+      new SafeZone(3.2, 22, 30, 43),
+      new SafeZone(11, 22, 30, 168),
+      new SafeZone(18.7, 22, 30, 83),
+      new SafeZone(20, 22, 30, 173)
     };
   }
 
@@ -143,17 +144,17 @@ public final class RobotConstants {
     public static final Map<String, Double> VALUES = Map.ofEntries(
       Map.entry("ElevatorSubsystem/NudgeAmount", 5.0),
       Map.entry("PivotSubsystem/NudgeAmount", 5.0),
-      Map.entry(Position.ALGAE_GROUND.getElevatorKey(), 0.0),
-      Map.entry(Position.ALGAE_L2.getElevatorKey(), 11.0),
-      Map.entry(Position.ALGAE_L3.getElevatorKey(), 6.3),
-      Map.entry(Position.L1.getElevatorKey(), 0.0),
+      Map.entry(Position.ALGAE_GROUND.getElevatorKey(), 0.001),
+      Map.entry(Position.ALGAE_L2.getElevatorKey(), 6.3),
+      Map.entry(Position.ALGAE_L3.getElevatorKey(), 11.0),
+      Map.entry(Position.L1.getElevatorKey(), 1.0),
       Map.entry(Position.L2.getElevatorKey(), 3.2),
       Map.entry(Position.L3.getElevatorKey(), 8.5),
       Map.entry(Position.L4.getElevatorKey(), 18.7),
-      Map.entry(Position.BARGE.getElevatorKey(), 22.0),
-      Map.entry(Position.HOME.getElevatorKey(), 0.0),
+      Map.entry(Position.BARGE.getElevatorKey(), 21.5),
+      Map.entry(Position.HOME.getElevatorKey(), 0.001),
       Map.entry(Position.SAFE_EXTEND.getElevatorKey(), -999.0),
-      Map.entry(Position.ALGAE_GROUND.getPivotKey(), 165.0),
+      Map.entry(Position.ALGAE_GROUND.getPivotKey(), 180.0),
       Map.entry(Position.ALGAE_L2.getPivotKey(), 165.0),
       Map.entry(Position.ALGAE_L3.getPivotKey(), 165.0),
       Map.entry(Position.L1.getPivotKey(), 35.0),
@@ -162,22 +163,29 @@ public final class RobotConstants {
       Map.entry(Position.L4.getPivotKey(), 80.0),
       Map.entry(Position.BARGE.getPivotKey(), 80.0),
       Map.entry(Position.HOME.getPivotKey(), 15.0),
-      Map.entry(Position.SAFE_EXTEND.getPivotKey(), 32.0)
+      Map.entry(Position.ALGAE_HOME.getElevatorKey(), 0.0),
+      Map.entry(Position.ALGAE_HOME.getPivotKey(), 100.0),
+      Map.entry(Position.SAFE_EXTEND.getPivotKey(), 35.0),
+      Map.entry("CoralMechanismSubsystem/StartSpeed", 0.2),
+      Map.entry("CoralMechanismSubsystem/FireSpeed", 1.0),
+      Map.entry("CoralMechanismSubsystem/SlowDownSpeed", 0.1),
+      Map.entry("CoralMechanismSubsystem/L1FireSpeed", 0.3),
+      Map.entry("CoralMechanismSubsystem/AlgaeIntakeSpeed", 0.2)
     );
   }
 
   public static interface ELEVATOR {
     public static final double INITIAL_POSITION = 0.0;
-    public static final double UPPER_SOFT_LIMIT_DEG = 22.5;
+    public static final double UPPER_SOFT_LIMIT_DEG = 22.25;
     public static final double LOWER_SOFT_LIMIT_DEG = 1;
-    public static final double ELEVATOR_CONVERSION_FACTOR = 0.525;
+    public static final double ELEVATOR_CONVERSION_FACTOR = 1.9;
     public static final double POSITION_TOLERANCE_DEG = 2;
-    public static final double SLOT0_MAX_VELOCITY = 700;
-    public static final double SLOT0_MAX_ACCELERATION = 500;
-    public static final double SLOT1_MAX_VELOCITY = 700;
-    public static final double SLOT1_MAX_ACCELERATION = 500;
-    public static final double SLOT0_ALLOWED_ERROR = 1;
-    public static final double SLOT1_ALLOWED_ERROR = 0.2;
+    public static final double SLOT0_MAX_VELOCITY = 5600;
+    public static final double SLOT0_MAX_ACCELERATION = 3200;
+    public static final double SLOT1_MAX_VELOCITY = 5600;
+    public static final double SLOT1_MAX_ACCELERATION = 3200;
+    public static final double SLOT0_ALLOWED_ERROR = 0.15;
+    public static final double SLOT1_ALLOWED_ERROR = 0.15;
   }
 
   public static interface CORAL{
@@ -186,11 +194,11 @@ public final class RobotConstants {
   }
 
   public static interface PIVOT {
-    public static final double PIVOT_CONVERSION_FACTOR = 2.4;
     public static final double POSITION_TOLERANCE_DEG = 2;
+    public static final double POSITION_TOLERANCE_BIG = 4;
   }
 
-    public static interface LED {
+  public static interface LED {
     public static final int PORT = 0;
     public static final int NUM_LEDS = 100;
     public static final double BLINK_INTERVAL = 0.25;
@@ -222,12 +230,12 @@ public final class RobotConstants {
       public static final int REAR_LEFT_TURNING = 31;
       public static final int REAR_RIGHT_TURNING = 41;
 
-      public static final int ELEVATOR_A = 35;
-      public static final int ELEVATOR_B = 35;
+      public static final int ELEVATOR_A = 13;
+      public static final int ELEVATOR_B = 14;
 
-      public static final int CORAL_MOTOR = 38; 
+      public static final int CORAL_MOTOR = 35; 
 
-      public static final int PIVOT_MOTOR = 38;
+      public static final int PIVOT_MOTOR = 18;
 
 
     }
@@ -262,23 +270,22 @@ public final class RobotConstants {
     }
 
     public static interface HAS_CORAL {
-      public static final int INTERNAL_SENSOR_FORWARD = 0;
-      public static final int INTERNAL_SENSOR_REAR = 1;
+      public static final int INTERNAL_SENSOR_FORWARD = 9;
     }
   }
 
   public interface OPERATOR_PANEL {
     public static interface BUTTONS {
-      public static final int RUN_TEST = 9;
-      public static final int L1 = 7;
-      public static final int L2 = 6;
-      public static final int L3 = 5;
-      public static final int L4 = 4;
-      public static final int ALGAE_L2 = 1;
-      public static final int ALGAE_L3 = 2;
-      public static final int ALGAE_GROUND = 8;
-      public static final int BARGE = 3;
-      public static final int FIRE = 0;      
+      public static final int RUN_TEST = 10;
+      public static final int L1 = 8;
+      public static final int L2 = 7;
+      public static final int L3 = 6;
+      public static final int L4 = 5;
+      public static final int ALGAE_L2 = 2;
+      public static final int ALGAE_L3 = 3;
+      public static final int ALGAE_GROUND = 9;
+      public static final int BARGE = 4;
+      public static final int FIRE = 1;      
     }
 
     public static interface SWITCHES {
@@ -360,7 +367,6 @@ public final class RobotConstants {
   public static interface APRIL_TAG_DATA {
     public static final AprilTagDistanceCalibration CALIBRATION = new AprilTagDistanceCalibration(640, 480, 70.2, 37.25/12);
     public static final Map<Integer, Double> TAG_ANGLES = Map.ofEntries(
-      Map.entry(1, 0.0),
       Map.entry(6, 300.0),
       Map.entry(7, 0.0),
       Map.entry(8, 60.0),

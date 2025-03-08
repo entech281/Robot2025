@@ -6,6 +6,7 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.RobotConstants;
+import frc.robot.commandchecker.SafeMovementChecker;
 import frc.robot.subsystems.coraldetector.InternalCoralDetectorOutput;
 import frc.robot.subsystems.coralmechanism.CoralMechanismOutput;
 import frc.robot.subsystems.drive.DriveInput;
@@ -121,7 +122,17 @@ public class RobotIO implements DriveInputSupplier {
   public void updateInternalCoralDetector(InternalCoralDetectorOutput icdo) {
     latestInternalCoralDetectorOutput = icdo;
     icdo.log();
+  }  
+
+  public boolean isSafeElevatorMove(double elev) {
+    return moveChecker.isSafeElevatorMove(elev, latestPivotOutput.getCurrentPosition());
   }
+
+  public boolean isSafePivotMove(double piv) {
+    return moveChecker.isSafePivotMove(piv, latestElevatorOutput.getCurrentPosition());
+  }
+
+  private final SafeMovementChecker moveChecker = new SafeMovementChecker();
 
   private VisionOutput latestVisionOutput;
   private NavXOutput latestNavXOutput;

@@ -3,7 +3,9 @@ package frc.robot.subsystems.pivot;
 
 import frc.entech.commands.EntechCommand;
 import frc.entech.util.StoppingCounter;
+import frc.robot.Position;
 import frc.robot.RobotConstants;
+import frc.robot.livetuning.LiveTuningHandler;
 
 public class TestPivotCommand extends EntechCommand{
   private final PivotSubsystem pivot;
@@ -24,8 +26,8 @@ public class TestPivotCommand extends EntechCommand{
     input.setRequestedPosition(0);
 
     switch (stage) {
-      case 0 -> input.setRequestedPosition(5);
-      case 1 -> input.setRequestedPosition(0);
+      case 0 -> input.setRequestedPosition(LiveTuningHandler.getInstance().getValue(Position.ALGAE_GROUND.getPivotKey()));
+      case 1 -> input.setRequestedPosition(LiveTuningHandler.getInstance().getValue(Position.HOME.getPivotKey()));
       default -> { break; }
     }
 
@@ -59,8 +61,8 @@ public class TestPivotCommand extends EntechCommand{
   public void end(boolean interrupted) {
     PivotInput stop = new PivotInput();
 
-    stop.setActivate(false);
-    stop.setRequestedPosition(0);
+    stop.setActivate(true);
+    stop.setRequestedPosition(LiveTuningHandler.getInstance().getValue(Position.HOME.getPivotKey()));
 
     pivot.updateInputs(stop);
   }

@@ -15,7 +15,7 @@ import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.util.StoppingCounter;
 
 public class NavXSubsystem extends EntechSubsystem<NavXInput, NavXOutput> {
-  private static final boolean ENABLED = false;
+  private static final boolean ENABLED = true;
   private AHRS gyro;
   private final StoppingCounter faultCounter = new StoppingCounter(3.5);
   private boolean faultDetected = false;

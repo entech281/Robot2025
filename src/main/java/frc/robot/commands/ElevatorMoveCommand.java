@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import frc.entech.commands.EntechCommand;
+import frc.entech.util.StoppingCounter;
 import frc.robot.Position;
 import frc.robot.io.RobotIO;
 import frc.robot.livetuning.LiveTuningHandler;
@@ -9,6 +10,7 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 
 public class ElevatorMoveCommand extends EntechCommand {
   private final ElevatorInput elevatorInput = new ElevatorInput();
+  private final StoppingCounter counter = new StoppingCounter(0.15);
   private final ElevatorSubsystem elevatorSS;
   private final Position position;
 
@@ -21,6 +23,7 @@ public class ElevatorMoveCommand extends EntechCommand {
   @Override
   public void initialize() {
     elevatorInput.setRequestedPosition(LiveTuningHandler.getInstance().getValue(position.getElevatorKey()));
+    counter.reset();
   }
 
   @Override
@@ -30,6 +33,14 @@ public class ElevatorMoveCommand extends EntechCommand {
 
   @Override
   public boolean isFinished() {
-    return RobotIO.getInstance().getElevatorOutput().isAtRequestedPosition();
+    return counter.isFinished(RobotIO.getInstance().getElevatorOutput().isAtRequestedPosition());
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    if (interrupted) {
+      elevatorInput.setRequestedPosition(LiveTuningHandler.getInstance().getValue(Position.HOME.getElevatorKey()));
+      elevatorSS.updateInputs(elevatorInput);
+    }
   }
 }

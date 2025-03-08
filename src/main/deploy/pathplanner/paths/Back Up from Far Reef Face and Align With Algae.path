@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.984046052631578,
-        "y": 2.8319078947368417
+        "x": 5.74,
+        "y": 4.18
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.168747196753263,
-        "y": 3.052034365686765
+        "x": 6.585978222001835,
+        "y": 4.027122797053453
       },
       "isLocked": false,
-      "linkedName": "FarRightReefFace"
+      "linkedName": "FarReefFace"
     },
     {
       "anchor": {
-        "x": 4.387499999999999,
-        "y": 2.225740131578947
+        "x": 6.58125,
+        "y": 4.025
       },
       "prevControl": {
-        "x": 4.68436785888135,
-        "y": 2.4369223263490842
-      },
-      "nextControl": {
-        "x": 3.9885240761871428,
-        "y": 1.941921561361425
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.3951480263157894,
-        "y": 0.8017269736842104
-      },
-      "prevControl": {
-        "x": 1.005655276909774,
-        "y": 0.637616838852532
+        "x": 5.642729415574172,
+        "y": 4.221396103420112
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Backed up from Far Reef Face"
     }
   ],
   "rotationTargets": [],
@@ -58,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 52.50000000000001
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

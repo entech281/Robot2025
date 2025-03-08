@@ -10,6 +10,7 @@ public enum Position {
     ALGAE_L2,
     ALGAE_L3,
     ALGAE_GROUND,
+    ALGAE_HOME,
     BARGE;
 
     public String getElevatorKey() {

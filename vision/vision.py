@@ -374,6 +374,7 @@ def main():
                     table.putNumberArray("tagXWidths", tag_x_widths)
                     table.putNumber("missed_frames_counter", missed_frames_counter)
                     table.putNumber("missed_frames_total_counter", missed_frames_total_counter)
+                    table.putNumber("numberOfTargets", 0)
 
         except Exception as e:
             put_exception_onto_frame(frame,e)
