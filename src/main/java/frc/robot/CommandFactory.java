@@ -26,6 +26,7 @@ import frc.robot.commands.ElevatorMoveCommand;
 import frc.robot.commands.FireCoralCommand;
 import frc.robot.commands.FireCoralCommandAuto;
 import frc.robot.commands.GyroResetByAngleCommand;
+import frc.robot.commands.IntakeAlgaeCommand;
 import frc.robot.commands.IntakeCoralCommand;
 import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
@@ -118,6 +119,7 @@ public class CommandFactory {
     NamedCommands.registerCommand("AlignToReefFarLeft", new AutoAlignToScoringLocationCommand(driveSubsystem, 20));
     NamedCommands.registerCommand("AlignToFeedStation", new AutoAlignToScoringLocationCommand(driveSubsystem, 12));
     NamedCommands.registerCommand("IntakeCoral", new IntakeCoralCommand(coralMechanismSubsystem));
+    NamedCommands.registerCommand("IntakeAlgae", new IntakeAlgaeCommand(coralMechanismSubsystem));
 
     //TODO: Remove magic number. RobotConstants?
     NamedCommands.registerCommand("ScoreCoral", new FireCoralCommandAuto(coralMechanismSubsystem, 1.0));

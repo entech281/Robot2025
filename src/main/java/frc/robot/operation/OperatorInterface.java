@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -59,6 +60,7 @@ public class OperatorInterface
   private IntakeCoralCommand intakeCommand;
   private FireCoralCommand fireCommand;
   private FireCoralCommand fireCommandL1;
+  private RunCommand quickRetract;
 
   public OperatorInterface(CommandFactory commandFactory, SubsystemManager subsystemManager,
       OdometryProcessor odometry) {
@@ -218,6 +220,21 @@ public class OperatorInterface
           () -> { return RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral(); }
         )
       );
+
+    quickRetract = new RunCommand(
+      () -> {
+        if (!RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
+          && operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.FIRE).getAsBoolean()
+          && (
+            operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1).getAsBoolean() ||
+            operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L2).getAsBoolean() ||
+            operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L3).getAsBoolean() ||
+            operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L4).getAsBoolean()
+          )) {
+          commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME).schedule();
+        }
+      }
+    );
   }
 
   private SendableChooser<Command> getTestCommandChooser() {
