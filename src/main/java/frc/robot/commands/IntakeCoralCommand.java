@@ -10,7 +10,7 @@ import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 public class IntakeCoralCommand extends EntechCommand {
     private final CoralMechanismInput input = new CoralMechanismInput();
     private final CoralMechanismSubsystem intake;
-    private final StoppingCounter counter = new StoppingCounter(0.02);
+    private final StoppingCounter counter = new StoppingCounter(0.0);
 
     public IntakeCoralCommand(CoralMechanismSubsystem coral) {
         super(coral);
