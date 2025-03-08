@@ -5,22 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Start - Far Right Reef Face"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L1"
-                }
-              }
-            ]
+            "pathName": "Start - Far Right Reef Face"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L1"
           }
         },
         {
