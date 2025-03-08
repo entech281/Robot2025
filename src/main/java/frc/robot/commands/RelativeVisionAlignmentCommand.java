@@ -29,9 +29,9 @@ public class RelativeVisionAlignmentCommand extends EntechCommand {
         Optional<VisionTarget> target = RobotIO.getInstance().getVisionOutput().getBestTarget();
         if (RobotIO.getInstance().getVisionOutput().hasTarget() && target.isPresent()) {
             UserPolicy.getInstance().setAligningToAngle(true);
-            UserPolicy.getInstance().setTargetAngle(findTargetAngle(target.get().getTagID()));
-            DriverStation.reportWarning("" + SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(findTargetAngle(target.get().getTagID()))), false);
-            UserPolicy.getInstance().setLaterallyAligning(SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(findTargetAngle(target.get().getTagID()))) < LATERAL_START_ANGLE);
+            UserPolicy.getInstance().setTargetAngle(findTargetAngle(target.get().getTagID()) - 180);
+            DriverStation.reportWarning("" + SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(findTargetAngle(target.get().getTagID()) - 180)), false);
+            UserPolicy.getInstance().setLaterallyAligning(SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(findTargetAngle(target.get().getTagID()) - 180)) < LATERAL_START_ANGLE);
         }
     }
 
