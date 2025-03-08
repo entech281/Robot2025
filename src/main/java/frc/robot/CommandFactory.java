@@ -122,7 +122,7 @@ public class CommandFactory {
 
     //TODO: Remove magic number. RobotConstants?
     NamedCommands.registerCommand("ScoreCoral", new FireCoralCommand(coralMechanismSubsystem, 1.0));
-    NamedCommands.registerCommand("ScoreCoralL1", new FireCoralCommand(coralMechanismSubsystem, 0.3));
+    NamedCommands.registerCommand("ScoreCoralL1", new FireCoralCommand(coralMechanismSubsystem, 0.05));
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
