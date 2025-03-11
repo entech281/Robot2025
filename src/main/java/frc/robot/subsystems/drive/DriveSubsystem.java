@@ -55,8 +55,9 @@ public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
       double currentRotation;
 
       if (RobotConstants.DrivetrainConstants.RATE_LIMITING) {
+        double[] accelerationCappedInputs = capAccel(input.getXSpeed(), input.getYSpeed());
         double[] limitedInputs =
-            calculateSlewRateLimiting(input.getXSpeed(), input.getYSpeed(), input.getRotation());
+            calculateSlewRateLimiting(accelerationCappedInputs[0], accelerationCappedInputs[1], input.getRotation());
 
         xSpeedCommanded = limitedInputs[0];
         ySpeedCommanded = limitedInputs[1];
