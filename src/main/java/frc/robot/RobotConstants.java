@@ -28,6 +28,7 @@ public final class RobotConstants {
     // the robot, rather the allowed maximum speeds
     public static final double MAX_SPEED_METERS_PER_SECOND = 6.0; // 4.42; //4.8;
     public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = 4 * Math.PI;
+    public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3.0;
     // radians per second
 
     public static final double DIRECTION_SLEW_RATE = 1.2; // radians per second

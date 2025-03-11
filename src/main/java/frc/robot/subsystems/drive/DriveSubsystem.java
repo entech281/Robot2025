@@ -20,6 +20,7 @@ import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.DrivetrainConstants;
 import frc.robot.RobotConstants.SwerveModuleConstants;
+import frc.robot.io.RobotIO;
 
 /**
  * The {@code Drivetrain} class contains fields and methods pertaining to the function of the
@@ -80,6 +81,24 @@ public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
 
       setModuleStates(swerveModuleStates);
     }
+  }
+
+  private double[] capAccel (double targetXSpeed, double targetYSpeed) {
+    double currentXSpeed = toOutputs().getSpeeds().vxMetersPerSecond;
+    double currentYSpeed = toOutputs().getSpeeds().vyMetersPerSecond;
+
+    double targetXAccel = (targetXSpeed - currentXSpeed) / 20; //20 ms
+    double targetYAccel = (targetYSpeed - currentYSpeed) / 20; //20 ms
+
+    double capAccel = (RobotIO.getInstance().getElevatorOutput().getCurrentPosition() / RobotConstants.ELEVATOR.UPPER_SOFT_LIMIT_DEG) * RobotConstants.DrivetrainConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED;
+
+    if (Math.sqrt(Math.pow(targetXAccel, 2) + Math.pow(targetYAccel, 2)) > capAccel) {
+      double angle = Math.atan2(targetYSpeed, targetXSpeed);
+      targetXSpeed = capAccel * Math.cos(angle) + currentXSpeed;
+      targetYSpeed = capAccel * Math.sin(angle) + currentYSpeed;
+    }
+
+    return new double[] {targetXSpeed, targetYSpeed};
   }
 
   private double[] calculateSlewRateLimiting(double xSpeed, double ySpeed, double rotSpeed) {
