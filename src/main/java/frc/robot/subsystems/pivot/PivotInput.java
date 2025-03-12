@@ -6,7 +6,7 @@ import frc.entech.subsystems.SubsystemInput;
 
 public class PivotInput implements SubsystemInput {
     private boolean activate = true;
-    private double requestedPosition = 0.0;
+    private double requestedPosition = 15.0;
 
     @Override
     public void toLog(LogTable table) {

@@ -3,12 +3,16 @@ package frc.robot.operation;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.entech.subsystems.EntechSubsystem;
@@ -17,13 +21,12 @@ import frc.robot.Position;
 import frc.robot.RobotConstants;
 import frc.robot.SubsystemManager;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.ElevatorUpCommand;
 import frc.robot.commands.ElevatorDownCommand;
-import frc.robot.commands.ElevatorMoveCommand;
+import frc.robot.commands.ElevatorUpCommand;
 import frc.robot.commands.FireCoralCommand;
 import frc.robot.commands.GyroReset;
+import frc.robot.commands.IntakeAlgaeCommand;
 import frc.robot.commands.IntakeCoralCommand;
-import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.ResetOdometryCommand;
 import frc.robot.commands.RunTestCommand;
 import frc.robot.commands.TwistCommand;
@@ -35,6 +38,7 @@ import frc.robot.io.DriveInputSupplier;
 import frc.robot.io.OperatorInput;
 import frc.robot.io.OperatorInputSupplier;
 import frc.robot.io.RobotIO;
+import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.led.TestLEDCommand;
@@ -53,6 +57,10 @@ public class OperatorInterface
   private final OdometryProcessor odometry;
 
   private final SendableChooser<Command> testChooser;
+
+  private IntakeCoralCommand intakeCommand;
+  private FireCoralCommand fireCommand;
+  private FireCoralCommand fireCommandL1;
 
   public OperatorInterface(CommandFactory commandFactory, SubsystemManager subsystemManager,
       OdometryProcessor odometry) {
@@ -78,10 +86,8 @@ public class OperatorInterface
       enableTuningControllerBindings();
     }
 
-    if (DriverStation.isJoystickConnected(RobotConstants.PORTS.CONTROLLER.PANEL)) {
-      operatorPanel = new CommandJoystick(RobotConstants.PORTS.CONTROLLER.PANEL);
-      operatorBindings();
-    }
+    operatorPanel = new CommandJoystick(RobotConstants.PORTS.CONTROLLER.PANEL);
+    operatorBindings();
   }
 
   public void enableTuningControllerBindings() {
@@ -134,13 +140,8 @@ public class OperatorInterface
     xboxController.button(1)
       .onTrue(new ElevatorDownCommand(subsystemManager.getElevatorSubsystem()));
 
-    xboxController.button(2)
-      .whileTrue(new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem()));
 
-    xboxController.button(0)
-      .whileTrue(new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), 1.1));
-
-    xboxController.button(6)
+    xboxController.button(10)
         .whileTrue(commandFactory.getAlignmentCommand());
 
     xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.DRIVE_X)
@@ -149,7 +150,7 @@ public class OperatorInterface
     xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.RESET_ODOMETRY)
         .onTrue(new ResetOdometryCommand(odometry));
 
-    subsystemManager.getVisionSubsystem().setDefaultCommand(new VisionCameraSwitchingCommand(subsystemManager.getVisionSubsystem(), xboxController::getRightY));
+    subsystemManager.getVisionSubsystem().setDefaultCommand(new VisionCameraSwitchingCommand(subsystemManager.getVisionSubsystem(), xboxController::getRightX));
   }
 
   public void operatorBindings() {
@@ -158,60 +159,68 @@ public class OperatorInterface
     SmartDashboard.putData("Test Chooser", testChooser);
 
     testChooser.addOption("All tests", getTestCommand());
-
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.RUN_TEST)
-        .onTrue(new RunTestCommand(testChooser));
+    Shuffleboard.getTab("stuffs").add("Run Test", new RunTestCommand(testChooser));
     
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1)
-        .onTrue(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), Position.L1));
+        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L1))
+        .onTrue(new InstantCommand(() ->  UserPolicy.getInstance().setAlgaeMode(false)))
+        .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
     
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L2)
-        .onTrue(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), Position.L2));
+        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L2))
+        .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
+        .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L3)
-        .onTrue(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), Position.L3));
+        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L3))
+        .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
+        .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L4)
-        .onTrue(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), Position.L4));
+        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L4))
+        .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
+        .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_GROUND)
-        .onTrue(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), Position.ALGAE_GROUND));
+        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_GROUND))
+        .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(true)))
+        .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L2)
-        .onTrue(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), Position.ALGAE_L2));
+        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_L2))
+        .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(true)))
+        .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L3)
-        .onTrue(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), Position.ALGAE_L3));
+        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_L3))
+        .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(true)))
+        .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME));
 
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.BARGE)
-        .onTrue(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), Position.BARGE));
-
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1)
-        .onTrue(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.L1));
-    
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L2)
-        .onTrue(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.L2));
-
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L3)
-        .onTrue(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.L3));
-
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L4)
-        .onTrue(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.L4));
-
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_GROUND)
-        .onTrue(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.ALGAE_GROUND));
-
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L2)
-        .onTrue(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.ALGAE_L2));
-
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L3)
-        .onTrue(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.ALGAE_L3));
-
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.BARGE)
-        .onTrue(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.BARGE));
-
-      operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.FIRE)
-        .onTrue(new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem()));
+    intakeCommand = new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem());
+    fireCommand = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/FireSpeed"));
+    fireCommandL1 = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/L1FireSpeed"));
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.FIRE)
+      .whileTrue(
+        new ConditionalCommand(
+          new ParallelCommandGroup(
+            new ConditionalCommand(
+              fireCommandL1,
+              fireCommand, 
+              () -> operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1).getAsBoolean()
+            ),
+            new SequentialCommandGroup(
+              new WaitUntilCommand(() -> !RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()),
+              new InstantCommand(() -> commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME).schedule())
+            )
+          ),
+          new ConditionalCommand(
+            new IntakeAlgaeCommand(subsystemManager.getCoralMechanismSubsystem()),
+            intakeCommand,
+            () -> operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L3).getAsBoolean() || operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L2).getAsBoolean()
+          ),
+          () -> RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
+        )
+      );
   }
 
   private SendableChooser<Command> getTestCommandChooser() {
