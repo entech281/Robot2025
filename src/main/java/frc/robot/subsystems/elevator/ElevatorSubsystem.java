@@ -99,19 +99,17 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   @Override
   public void periodic() {
     double clampedPosition = clampRequestedPosition(currentInput.getRequestedPosition());
-    if (ENABLED) {
-      if (clampedPosition != lastPosition) {
-        if (currentInput.getActivate()) {
-          if ((calculateInchesFromMotorPosition(leftElevator.getEncoder().getPosition())) - clampedPosition <= 0) {
-            leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-          } 
-          else {
-            leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
-          }
+    if ((ENABLED) && (clampedPosition != lastPosition)) {
+      if (currentInput.getActivate()) {
+        if ((calculateInchesFromMotorPosition(leftElevator.getEncoder().getPosition())) - clampedPosition <= 0) {
+          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
         } 
         else {
-          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
         }
+      } 
+      else {
+        leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
       }
     }
     lastPosition = clampedPosition;
