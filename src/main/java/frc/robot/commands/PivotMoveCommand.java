@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import frc.entech.commands.EntechCommand;
+import frc.entech.util.StoppingCounter;
 import frc.robot.Position;
 import frc.robot.io.RobotIO;
 import frc.robot.livetuning.LiveTuningHandler;
@@ -10,6 +11,7 @@ import frc.robot.subsystems.pivot.PivotSubsystem;
 public class PivotMoveCommand extends EntechCommand {
   /** Creates a new PivotCommand. */
   private final PivotInput pivotInput = new PivotInput();
+  private final StoppingCounter counter = new StoppingCounter(0.15);
   private final PivotSubsystem pivotSS;
   private final Position position;
 
@@ -22,6 +24,7 @@ public class PivotMoveCommand extends EntechCommand {
   @Override
   public void initialize() {
     pivotInput.setRequestedPosition(LiveTuningHandler.getInstance().getValue(position.getPivotKey()));
+    counter.reset();
   }
 
   @Override
@@ -31,6 +34,6 @@ public class PivotMoveCommand extends EntechCommand {
 
   @Override
   public boolean isFinished() {
-    return RobotIO.getInstance().getPivotOutput().isAtRequestedPosition();
+    return counter.isFinished(RobotIO.getInstance().getPivotOutput().isAtRequestedPosition());
   }
 }

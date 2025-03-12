@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import frc.entech.commands.EntechCommand;
+import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.subsystems.coralmechanism.CoralMechanismInput;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 
@@ -15,7 +16,7 @@ public class IntakeAlgaeCommand extends EntechCommand {
 
 	@Override
 	public void end(boolean interrupted) {
-		input.setRequestedSpeed(-0.05);
+		input.setRequestedSpeed(0.0);
 		intake.updateInputs(input);
 	}
 
@@ -26,7 +27,7 @@ public class IntakeAlgaeCommand extends EntechCommand {
 
 	@Override
 	public void initialize() {
-		input.setRequestedSpeed(-0.2);
+		input.setRequestedSpeed(-LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/AlgaeIntakeSpeed"));
 		intake.updateInputs(input);
 	}
 

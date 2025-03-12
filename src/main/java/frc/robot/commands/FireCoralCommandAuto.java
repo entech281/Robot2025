@@ -1,15 +1,19 @@
 package frc.robot.commands;
 
 import frc.entech.commands.EntechCommand;
+import frc.entech.util.StoppingCounter;
+import frc.robot.io.RobotIO;
 import frc.robot.subsystems.coralmechanism.CoralMechanismInput;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 
-public class FireCoralCommand extends EntechCommand {
+public class FireCoralCommandAuto extends EntechCommand {
     private final CoralMechanismInput input = new CoralMechanismInput();
     private final CoralMechanismSubsystem intake;
     private final double speed;
+	//TODO: Magic number
+	private StoppingCounter counter = new StoppingCounter(2);
 
-    public FireCoralCommand(CoralMechanismSubsystem coral, double speed) {
+    public FireCoralCommandAuto(CoralMechanismSubsystem coral, double speed) {
         super(coral);
         this.intake = coral;
         this.speed = speed;
@@ -26,5 +30,11 @@ public class FireCoralCommand extends EntechCommand {
 	public void initialize() {
 		input.setRequestedSpeed(speed);
 		intake.updateInputs(input);
+		counter.reset();
+	}
+
+	@Override
+	public boolean isFinished() {
+		return counter.isFinished(!RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral());
 	}
 }

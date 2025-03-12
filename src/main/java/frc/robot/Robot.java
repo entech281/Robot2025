@@ -39,6 +39,13 @@ public class Robot extends LoggedRobot {
   private long robotStartTime = 0;
 
   public void loggerInit() {
+    Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
+    Logger.recordMetadata("GITRevision", BuildConstants.GIT_REVISION + "");
+    Logger.recordMetadata("GIT_SHA", BuildConstants.GIT_SHA);
+    Logger.recordMetadata("GIT_Date", BuildConstants.GIT_DATE);
+    Logger.recordMetadata("GIT_Branch", BuildConstants.GIT_BRANCH);
+    Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+    Logger.recordMetadata("BuildUnixTime", BuildConstants.BUILD_UNIX_TIME + "");
 
     if (isReal()) {
       Logger.addDataReceiver(new WPILOGWriter());
@@ -61,12 +68,11 @@ public class Robot extends LoggedRobot {
     } catch ( Exception e){
       DriverStation.reportWarning("Logger init failed.", e.getStackTrace());
     }
-
+    LiveTuningHandler.getInstance().init();
     subsystemManager = new SubsystemManager();
     odometry = new OdometryProcessor();
     commandFactory = new CommandFactory(subsystemManager, odometry);
     operatorInterface = new OperatorInterface(commandFactory, subsystemManager, odometry);
-    LiveTuningHandler.getInstance().init();
     operatorInterface.create();
     odometry.createEstimator();
   }
