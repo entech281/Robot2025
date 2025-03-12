@@ -99,6 +99,18 @@
           "data": {
             "name": "Home"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Auto Refill 3 Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeCoral"
+          }
         }
       ]
     }
