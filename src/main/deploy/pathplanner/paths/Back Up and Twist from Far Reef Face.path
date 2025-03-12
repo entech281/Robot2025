@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.74,
-        "y": 4.18
+        "x": 5.763404605263157,
+        "y": 4.025
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.606464209241952,
-        "y": 3.8321389966517523
+        "x": 6.247050936806836,
+        "y": 3.8900609784409736
       },
       "isLocked": false,
-      "linkedName": "FarReefFace"
+      "linkedName": "CenterAlgaeFarReefFace"
     },
     {
       "anchor": {
-        "x": 6.7640625,
-        "y": 4.18
+        "x": 6.760738636363637,
+        "y": 3.765738636363636
       },
       "prevControl": {
-        "x": 6.007360800555165,
-        "y": 4.211334477798608
+        "x": 5.944188018269341,
+        "y": 3.6578117711766502
       },
       "nextControl": null,
       "isLocked": false,
