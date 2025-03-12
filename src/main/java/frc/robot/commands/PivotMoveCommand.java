@@ -11,7 +11,7 @@ import frc.robot.subsystems.pivot.PivotSubsystem;
 public class PivotMoveCommand extends EntechCommand {
   /** Creates a new PivotCommand. */
   private final PivotInput pivotInput = new PivotInput();
-  private final StoppingCounter counter = new StoppingCounter(0.15);
+  private final StoppingCounter counter = new StoppingCounter(0.02);
   private final PivotSubsystem pivotSS;
   private final Position position;
 
