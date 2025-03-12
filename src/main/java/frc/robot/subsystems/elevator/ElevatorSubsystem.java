@@ -138,14 +138,13 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
 
   @Override
   public Command getTestCommand() {
-    return new InstantCommand(() -> {
+    return new InstantCommand(() ->
         new SequentialCommandGroup(
           NamedCommands.getCommand("L2"),
           new WaitCommand(5.0),
           NamedCommands.getCommand("Home"),
           new WaitCommand(5.0)
-        ).schedule();
-      }
+        ).schedule()
     );
   }
 
