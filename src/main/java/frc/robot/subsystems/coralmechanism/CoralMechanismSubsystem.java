@@ -61,7 +61,6 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
             output.setRunning(currentInput.getActivate());
             output.setCurrentSpeed(coralIntakeMotor.getEncoder().getVelocity());
             output.setBrakeModeEnabled(IdleMode.kBrake == mode);
-            // output.setHasAlgae(hasAlgae());
         }
         return output;
     }

@@ -53,9 +53,9 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     try {
       for (int i = 0; i < numberOfTargets; i++) {
         VisionTarget target = new VisionTarget();
-        target.setTagID((int) ids[i].intValue());
-        target.setTagHeight((int) heights[i].intValue());
-        target.setTagWidth((int) widths[i].intValue());
+        target.setTagID(ids[i].intValue());
+        target.setTagHeight(heights[i].intValue());
+        target.setTagWidth(widths[i].intValue());
         target.setTagX(xs[i].doubleValue());
         target.setTagY(ys[i].doubleValue());
         try {

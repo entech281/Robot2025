@@ -19,10 +19,8 @@ public class CollisionDampeningFilter implements DriveFilterI {
 
         double outputMag = ratio * inputMag;
 
-        if (inputMag > MIN_SPEED) {
-            if (outputMag < MIN_SPEED) {
-                outputMag = MIN_SPEED;
-            }
+        if (inputMag > MIN_SPEED && outputMag < MIN_SPEED) {
+            outputMag = MIN_SPEED;
         }
 
         processedInput.setXSpeed(Math.cos(inputAngle) * outputMag);
