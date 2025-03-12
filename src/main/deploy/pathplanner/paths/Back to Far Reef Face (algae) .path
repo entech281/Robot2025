@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.334763388025843,
-        "y": 4.0783052490628915
+        "x": 6.17509473996513,
+        "y": 4.017811067141474
       },
       "isLocked": false,
       "linkedName": "Backed up from Far Reef Face"
@@ -20,12 +20,12 @@
         "y": 4.025
       },
       "prevControl": {
-        "x": 5.51360296526854,
-        "y": 4.015043059907805
+        "x": 5.5113930914967995,
+        "y": 4.02939102397558
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "CenterAlgaeFarReefFace"
     }
   ],
   "rotationTargets": [],
