@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -141,8 +140,6 @@ public class OperatorInterface
     xboxController.button(1)
       .onTrue(new ElevatorDownCommand(subsystemManager.getElevatorSubsystem()));
 
-    // xboxController.button(2)
-    //   .whileTrue(new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem()));
 
     xboxController.button(10)
         .whileTrue(commandFactory.getAlignmentCommand());
