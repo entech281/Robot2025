@@ -6,6 +6,7 @@ package frc.robot;
 
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
@@ -50,7 +51,7 @@ public class Robot extends LoggedRobot {
     if (isReal()) {
       Logger.addDataReceiver(new WPILOGWriter());
       Logger.addDataReceiver(new NT4Publisher());
-      powerDistribution = new PowerDistribution(1, ModuleType.kRev);
+      LoggedPowerDistribution.getInstance(RobotConstants.PORTS.CAN.POWER_DISTRIBUTION_HUB, ModuleType.kRev);
       powerDistribution.clearStickyFaults();
     } else {
       setUseTiming(false);
