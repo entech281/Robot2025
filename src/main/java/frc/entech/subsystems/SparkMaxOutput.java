@@ -33,6 +33,7 @@ public class SparkMaxOutput {
       smo.appliedOutput = sm.getAppliedOutput();
       smo.isUpperLimitPressed = sm.getForwardLimitSwitch().isPressed();
       smo.isLowerLimitPressed = sm.getReverseLimitSwitch().isPressed();
+      smo.currentPosition = sm.getEncoder().getPosition();
       return smo;
   }
 
@@ -47,6 +48,7 @@ public class SparkMaxOutput {
     Logger.recordOutput(baseName + "/appliedOutput", appliedOutput);
     Logger.recordOutput(baseName + "/isUpperLimitPressed", isUpperLimitPressed);
     Logger.recordOutput(baseName + "/isLowerLimitPressed", isLowerLimitPressed);
+    Logger.recordOutput(baseName + "/currentPosition", currentPosition);
 
   }
 
