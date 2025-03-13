@@ -2,6 +2,7 @@ package frc.robot.subsystems.coralmechanism;
 
 import org.littletonrobotics.junction.Logger;
 
+import frc.entech.subsystems.SparkMaxOutput;
 import frc.entech.subsystems.SubsystemOutput;
 
 public class CoralMechanismOutput extends SubsystemOutput {
@@ -12,6 +13,8 @@ public class CoralMechanismOutput extends SubsystemOutput {
   private boolean brakeModeEnabled = false;
   private boolean hasAlgae = false;
 
+  private SparkMaxOutput motor;
+
   @Override
   public void toLog() {
     Logger.recordOutput("CoralMechanismOutput/isRunning", isRunning);
@@ -19,6 +22,8 @@ public class CoralMechanismOutput extends SubsystemOutput {
     Logger.recordOutput("CoralMechanismOutput/encoderPosition", encoderPosition);
     Logger.recordOutput("CoralMechanismOutput/isAtTargetPosition", isAtTargetPosition);
     Logger.recordOutput("CoralMechanismOutput/brakeModeEnabled", brakeModeEnabled);
+
+    motor.log("CoralMechanismOutput/motor");
   }
 
   public boolean isRunning() {
@@ -67,5 +72,13 @@ public class CoralMechanismOutput extends SubsystemOutput {
 
   public void setHasAlgae(boolean hasAlgae) {
     this.hasAlgae = hasAlgae;
+  }
+
+  public SparkMaxOutput getMotor() {
+    return this.motor;
+  }
+
+  public void setMotor(SparkMaxOutput motor) {
+    this.motor = motor;
   }
 }

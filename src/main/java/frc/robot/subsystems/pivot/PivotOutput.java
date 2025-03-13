@@ -2,6 +2,7 @@ package frc.robot.subsystems.pivot;
 
 import org.littletonrobotics.junction.Logger;
 
+import frc.entech.subsystems.SparkMaxOutput;
 import frc.entech.subsystems.SubsystemOutput;
 
 public class PivotOutput extends SubsystemOutput {
@@ -14,6 +15,8 @@ public class PivotOutput extends SubsystemOutput {
     private double requestedPosition = 0.0;
     private double currentPosition = 0.0;
 
+    private SparkMaxOutput motor;
+
     @Override
     public void toLog() {
         Logger.recordOutput("PivotOutput/absoluteEncoder", absoluteEncoder);
@@ -24,6 +27,8 @@ public class PivotOutput extends SubsystemOutput {
         Logger.recordOutput("PivotOutput/brakeModeEnabled", brakeModeEnabled);
         Logger.recordOutput("PivotOutput/requestedPosition", requestedPosition);
         Logger.recordOutput("PivotOutput/currentPosition", currentPosition);
+
+        motor.log("PivotOutput/motor");
     }
 
     public double getAbsoluteEncoder() {
@@ -88,5 +93,13 @@ public class PivotOutput extends SubsystemOutput {
 
     public void setCurrentPosition(double currentPosition) {
         this.currentPosition = currentPosition;
+    }
+
+    public SparkMaxOutput getMotor() {
+        return this.motor;
+    }
+
+    public void setMotor(SparkMaxOutput motor) {
+        this.motor = motor;
     }
 }

@@ -237,7 +237,7 @@ public final class RobotConstants {
 
       public static final int PIVOT_MOTOR = 18;
 
-
+      public static final int POWER_DISTRIBUTION_HUB = 1;
     }
 
 
