@@ -9,6 +9,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
+import frc.entech.subsystems.SparkMaxOutput;
 import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
 
@@ -61,6 +62,9 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
             output.setRunning(currentInput.getActivate());
             output.setCurrentSpeed(coralIntakeMotor.getEncoder().getVelocity());
             output.setBrakeModeEnabled(IdleMode.kBrake == mode);
+
+            SparkMaxOutput smo = SparkMaxOutput.createOutput(coralIntakeMotor);
+            output.setMotor(smo);
         }
         return output;
     }

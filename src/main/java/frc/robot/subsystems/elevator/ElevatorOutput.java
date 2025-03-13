@@ -1,6 +1,8 @@
 package frc.robot.subsystems.elevator;
 
 import org.littletonrobotics.junction.Logger;
+
+import frc.entech.subsystems.SparkMaxOutput;
 import frc.entech.subsystems.SubsystemOutput;
 
 public class ElevatorOutput extends SubsystemOutput {
@@ -13,6 +15,9 @@ public class ElevatorOutput extends SubsystemOutput {
   private boolean isAtLowerLimit = false;
   private double currentPosition = 0.0;
 
+  private SparkMaxOutput leftMotor;
+  private SparkMaxOutput rightMotor;
+
   @Override
   public void toLog() {
     Logger.recordOutput("ElevatorOutput/moving", moving);
@@ -23,6 +28,9 @@ public class ElevatorOutput extends SubsystemOutput {
     Logger.recordOutput("ElevatorOutput/isAtUpperLimit", isAtUpperLimit);
     Logger.recordOutput("ElevatorOutput/isAtLowerLimit", isAtLowerLimit);
     Logger.recordOutput("ElevatorOutput/isAtRequestedPosition", isAtRequestedPosition);
+
+    leftMotor.log("ElevatorOutput/leftMotor");
+    rightMotor.log("ElevatorOutput/rightMotor");
   }
 
   public boolean isMoving() {
@@ -87,5 +95,21 @@ public class ElevatorOutput extends SubsystemOutput {
 
   public void setRequestedPosition(double requestedPosition) {
     this.requestedPosition = requestedPosition;
+  }
+
+  public SparkMaxOutput getLeftMotor() {
+    return this.leftMotor;
+  }
+
+  public void setLeftMotor(SparkMaxOutput leftMotor) {
+    this.leftMotor = leftMotor;
+  }
+
+  public SparkMaxOutput getRightMotor() {
+    return this.rightMotor;
+  }
+
+  public void setRightMotor(SparkMaxOutput rightMotor) {
+    this.rightMotor = rightMotor;
   }
 }
