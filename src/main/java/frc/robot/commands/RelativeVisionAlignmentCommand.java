@@ -3,7 +3,6 @@ package frc.robot.commands;
 import java.util.Optional;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.entech.commands.EntechCommand;
 import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
@@ -15,23 +14,25 @@ public class RelativeVisionAlignmentCommand extends EntechCommand {
     private static final double LATERAL_START_ANGLE = Units.degreesToRadians(22.5);
     @Override
     public void initialize() {
-        Optional<VisionTarget> target = RobotIO.getInstance().getVisionOutput().getBestTarget();
-        if (RobotIO.getInstance().getVisionOutput().hasTarget() && target.isPresent()) {
-            UserPolicy.getInstance().setAligningToAngle(true);
-            UserPolicy.getInstance().setTargetAngle(findTargetAngle(target.get().getTagID()));
-            UserPolicy.getInstance().setLaterallyAligning(SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(findTargetAngle(target.get().getTagID()))) < LATERAL_START_ANGLE);
-        }
         UserPolicy.getInstance().setVisionPositionSetPoint(0);
     }
 
     @Override
     public void execute() {
-        Optional<VisionTarget> target = RobotIO.getInstance().getVisionOutput().getBestTarget();
-        if (RobotIO.getInstance().getVisionOutput().hasTarget() && target.isPresent()) {
-            UserPolicy.getInstance().setAligningToAngle(true);
-            UserPolicy.getInstance().setTargetAngle(findTargetAngle(target.get().getTagID()));
-            DriverStation.reportWarning("" + SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(findTargetAngle(target.get().getTagID()))), false);
-            UserPolicy.getInstance().setLaterallyAligning(SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(findTargetAngle(target.get().getTagID()))) < LATERAL_START_ANGLE);
+        if (UserPolicy.getInstance().isAligningToAngle()) {
+            Optional<VisionTarget> target = RobotIO.getInstance().getVisionOutput().getBestTarget();
+            if (RobotIO.getInstance().getVisionOutput().hasTarget() && target.isPresent()) {
+                UserPolicy.getInstance().setLaterallyAligning(SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(findTargetAngle(target.get().getTagID()))) < LATERAL_START_ANGLE);
+            } else {
+                UserPolicy.getInstance().setLaterallyAligning(false);
+            }
+        } else {
+            Optional<VisionTarget> target = RobotIO.getInstance().getVisionOutput().getBestTarget();
+            if (RobotIO.getInstance().getVisionOutput().hasTarget() && target.isPresent()) {
+                UserPolicy.getInstance().setAligningToAngle(true);
+                UserPolicy.getInstance().setTargetAngle(findTargetAngle(target.get().getTagID()));
+                UserPolicy.getInstance().setTargetTagID(target.get().getTagID());
+            }
         }
     }
 

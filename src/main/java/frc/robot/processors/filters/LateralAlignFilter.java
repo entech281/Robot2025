@@ -6,8 +6,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.io.RobotIO;
-import frc.robot.operation.UserPolicy;
 import frc.robot.subsystems.drive.DriveInput;
 
 public class LateralAlignFilter implements DriveFilterI {
@@ -25,12 +23,17 @@ public class LateralAlignFilter implements DriveFilterI {
         if (UserPolicy.getInstance().isLaterallyAligning() && !UserPolicy.getInstance().isTwistable()) {
             processedInput = operatorDirectionalSnap(processedInput, UserPolicy.getInstance().getTargetAngle());
 
-            if (RobotIO.getInstance().getVisionOutput().hasTarget() && (Math.abs(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagXW() - UserPolicy.getInstance().getVisionPositionSetPoint()) >= TOLERANCE)) {
-                processedInput = motionTowardsAlignment(
-                    processedInput,
-                    controller.calculate(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagXW(), UserPolicy.getInstance().getVisionPositionSetPoint()),
-                    UserPolicy.getInstance().getTargetAngle()
-                );
+            if (RobotIO.getInstance().getVisionOutput().hasTarget()) {
+                for (VisionTarget t : RobotIO.getInstance().getVisionOutput().getTargets()) {
+                    if (t.getTagID() == UserPolicy.getInstance().getTargetTagID() && (Math.abs(t.getTagXW() - UserPolicy.getInstance().getVisionPositionSetPoint()) >= TOLERANCE)) {
+                        processedInput = motionTowardsAlignment(
+                            processedInput,
+                            controller.calculate(t.getTagXW(), UserPolicy.getInstance().getVisionPositionSetPoint()),
+                            UserPolicy.getInstance().getTargetAngle()
+                        );
+                    }
+                }
+                
             }
         }
 
