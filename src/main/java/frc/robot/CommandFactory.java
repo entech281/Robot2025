@@ -118,7 +118,7 @@ public class CommandFactory {
     NamedCommands.registerCommand("AlignToReefCloseLeft", new AutoAlignToScoringLocationCommand(driveSubsystem, 22));
     NamedCommands.registerCommand("AlignToReefFarLeft", new AutoAlignToScoringLocationCommand(driveSubsystem, 20));
     NamedCommands.registerCommand("AlignToFeedStation", new AutoAlignToScoringLocationCommand(driveSubsystem, 12));
-    NamedCommands.registerCommand("IntakeCoral", new IntakeCoralCommand(coralMechanismSubsystem));
+    NamedCommands.registerCommand("IntakeCoral", new IntakeCoralCommand(coralMechanismSubsystem, pivotSubsystem));
     NamedCommands.registerCommand("IntakeAlgae", new IntakeAlgaeCommand(coralMechanismSubsystem));
 
     //TODO: Remove magic number. RobotConstants?
