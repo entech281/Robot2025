@@ -112,12 +112,11 @@ public class CommandFactory {
     NamedCommands.registerCommand("AlgaeL2", formSafeMovementCommand(Position.ALGAE_L2));
     NamedCommands.registerCommand("AlgaeL3", formSafeMovementCommand(Position.ALGAE_L3));
     NamedCommands.registerCommand("AlgaeGround", formSafeMovementCommand(Position.ALGAE_GROUND));
-    NamedCommands.registerCommand("AlignToReefFar", new AutoAlignToScoringLocationCommand(driveSubsystem, 21));
-    NamedCommands.registerCommand("AlignToReefCloseRight", new AutoAlignToScoringLocationCommand(driveSubsystem, 17));
-    NamedCommands.registerCommand("AlignToReefFarRight", new AutoAlignToScoringLocationCommand(driveSubsystem, 22));
-    NamedCommands.registerCommand("AlignToReefCloseLeft", new AutoAlignToScoringLocationCommand(driveSubsystem, 22));
-    NamedCommands.registerCommand("AlignToReefFarLeft", new AutoAlignToScoringLocationCommand(driveSubsystem, 20));
-    NamedCommands.registerCommand("AlignToFeedStation", new AutoAlignToScoringLocationCommand(driveSubsystem, 12));
+    NamedCommands.registerCommand("AlignToReefFar", new AutoAlignToScoringLocationCommand(driveSubsystem, DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue) ? 21 : 10));
+    NamedCommands.registerCommand("AlignToReefCloseRight", new AutoAlignToScoringLocationCommand(driveSubsystem, DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue) ? 17 : 8));
+    NamedCommands.registerCommand("AlignToReefFarRight", new AutoAlignToScoringLocationCommand(driveSubsystem, DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue) ? 22 : 9));
+    NamedCommands.registerCommand("AlignToReefCloseLeft", new AutoAlignToScoringLocationCommand(driveSubsystem, DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue) ? 19 : 6));
+    NamedCommands.registerCommand("AlignToReefFarLeft", new AutoAlignToScoringLocationCommand(driveSubsystem, DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue) ? 20 : 11));
     NamedCommands.registerCommand("IntakeCoral", new IntakeCoralCommand(coralMechanismSubsystem));
     NamedCommands.registerCommand("IntakeAlgae", new IntakeAlgaeCommand(coralMechanismSubsystem));
     NamedCommands.registerCommand("FireAlgae", new FireCoralCommand(coralMechanismSubsystem, 1.0));
