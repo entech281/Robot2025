@@ -25,7 +25,9 @@ public class IntakeCoralCommand extends EntechCommand {
 	public void end(boolean interrupted) {
 		corInput.setRequestedSpeed(0.0);
 		intake.updateInputs(corInput);
-		new PivotMoveCommand(pivot, Position.SAFE_EXTEND).schedule();
+		if (RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()) {
+			new PivotMoveCommand(pivot, Position.SAFE_EXTEND).schedule();
+		}
 	}
 
 	@Override

@@ -6,7 +6,10 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.io.RobotIO;
+import frc.robot.operation.UserPolicy;
 import frc.robot.subsystems.drive.DriveInput;
+import frc.robot.subsystems.vision.VisionTarget;
 
 public class LateralAlignFilter implements DriveFilterI {
     private final PIDController controller = new PIDController(0.075, 0.0, 0.0);
