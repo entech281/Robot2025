@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.AutonomousException;
 import frc.entech.commands.InstantAnytimeCommand;
+import frc.robot.RobotConstants.Vision;
 import frc.robot.commands.AutoAlignToScoringLocationCommand;
 import frc.robot.commands.ElevatorMoveCommand;
 import frc.robot.commands.FireCoralCommand;
@@ -30,6 +31,7 @@ import frc.robot.commands.IntakeAlgaeCommand;
 import frc.robot.commands.IntakeCoralCommand;
 import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
+import frc.robot.commands.VisionCameraSwitchingCommand;
 import frc.robot.io.RobotIO;
 import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.operation.UserPolicy;
@@ -40,6 +42,7 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
 import frc.robot.subsystems.pivot.PivotSubsystem;
+import frc.robot.subsystems.vision.VisionSubsystem;
 
 @SuppressWarnings("unused")
 public class CommandFactory {
@@ -51,6 +54,7 @@ public class CommandFactory {
   private final SubsystemManager subsystemManager;
   private final LEDSubsystem ledSubsystem;
   private final CoralMechanismSubsystem coralMechanismSubsystem;
+  private final VisionSubsystem visionSubsystem;
   private final SendableChooser<Command> autoChooser;
 
 
@@ -61,6 +65,7 @@ public class CommandFactory {
     this.elevatorSubsystem = subsystemManager.getElevatorSubsystem();
     this.pivotSubsystem = subsystemManager.getPivotSubsystem();
     this.coralMechanismSubsystem = subsystemManager.getCoralMechanismSubsystem();
+    this.visionSubsystem = subsystemManager.getVisionSubsystem();
     this.odometry = odometry;
     this.subsystemManager = subsystemManager;
 
@@ -120,6 +125,8 @@ public class CommandFactory {
     NamedCommands.registerCommand("IntakeCoral", new IntakeCoralCommand(coralMechanismSubsystem));
     NamedCommands.registerCommand("IntakeAlgae", new IntakeAlgaeCommand(coralMechanismSubsystem));
     NamedCommands.registerCommand("FireAlgae", new FireCoralCommand(coralMechanismSubsystem, 1.0));
+    NamedCommands.registerCommand("SwitchToRightCamera", new VisionCameraSwitchingCommand(visionSubsystem, () -> -1.0));
+    NamedCommands.registerCommand("SwitchToLeftCamera", new VisionCameraSwitchingCommand(visionSubsystem, () -> 1.0));
 
     //TODO: Remove magic number. RobotConstants?
     NamedCommands.registerCommand("ScoreCoral", new FireCoralCommandAuto(coralMechanismSubsystem, 1.0));
