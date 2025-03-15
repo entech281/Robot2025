@@ -44,7 +44,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
             pivotConfig.idleMode(IdleMode.kBrake);
             mode = IdleMode.kBrake;
             pivotConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-            pivotConfig.closedLoop.pidf(3.5, 0, 0, 0);
+            pivotConfig.closedLoop.pidf(4.5, 0, 0, 0);
             pivotConfig.closedLoop.outputRange(-0.8, 0.8);
             pivotConfig.closedLoop.positionWrappingEnabled(true);
             pivotConfig.closedLoop.positionWrappingInputRange(0, 1);
