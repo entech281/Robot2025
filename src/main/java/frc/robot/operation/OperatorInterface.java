@@ -23,6 +23,7 @@ import frc.robot.SubsystemManager;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ElevatorDownCommand;
 import frc.robot.commands.ElevatorUpCommand;
+import frc.robot.commands.FireAlgaeCommand;
 import frc.robot.commands.FireCoralCommand;
 import frc.robot.commands.GyroReset;
 import frc.robot.commands.IntakeAlgaeCommand;
@@ -196,6 +197,16 @@ public class OperatorInterface
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(true)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME));
 
+    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.BARGE)
+        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.BARGE))
+        .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(true)))
+        .onFalse(new ConditionalCommand(
+          commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME),
+          commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME),
+          () -> UserPolicy.getInstance().isAlgaeMode()
+          )
+        );
+
     intakeCommand = new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem(), subsystemManager.getPivotSubsystem());
     fireCommand = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/FireSpeed"));
     fireCommandL1 = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/L1FireSpeed"));
@@ -214,8 +225,15 @@ public class OperatorInterface
             )
           ),
           new ConditionalCommand(
-            new IntakeAlgaeCommand(subsystemManager.getCoralMechanismSubsystem()),
-            intakeCommand,
+            new InstantCommand(() -> new IntakeAlgaeCommand(subsystemManager.getCoralMechanismSubsystem()).schedule()),
+            new ConditionalCommand(
+              new ParallelCommandGroup(
+                new FireAlgaeCommand(subsystemManager.getCoralMechanismSubsystem()),
+                new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false))
+              ),
+              intakeCommand,
+              () -> operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.BARGE).getAsBoolean()
+            ),
             () -> operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L3).getAsBoolean() || operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L2).getAsBoolean()
           ),
           () -> RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()

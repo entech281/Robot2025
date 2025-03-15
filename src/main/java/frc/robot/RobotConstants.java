@@ -170,7 +170,8 @@ public final class RobotConstants {
       Map.entry("CoralMechanismSubsystem/FireSpeed", 1.0),
       Map.entry("CoralMechanismSubsystem/SlowDownSpeed", 0.1),
       Map.entry("CoralMechanismSubsystem/L1FireSpeed", 0.3),
-      Map.entry("CoralMechanismSubsystem/AlgaeIntakeSpeed", 0.2)
+      Map.entry("CoralMechanismSubsystem/AlgaeIntakeSpeed", 0.2),
+      Map.entry("CoralMechanismSubsystem/AlgaeFireSpeed", 0.6)
     );
   }
 
