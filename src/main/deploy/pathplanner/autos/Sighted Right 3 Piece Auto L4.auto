@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Start - Far Right Reef Face"
+            "name": "SwitchToRightCamera"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToReefFarRight"
           }
         },
         {
@@ -41,9 +47,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Back to Score Right Coral Close Right Reef Face"
+            "name": "SwitchToLeftCamera"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToReefCloseRight"
           }
         },
         {
@@ -77,9 +89,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Back to Score Left Coral Close Right Reef Face"
+            "name": "SwitchToRightCamera"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToReefCloseRight"
           }
         },
         {

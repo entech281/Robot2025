@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Start - Far Right Reef Face"
+            "pathName": "Start - Far Left Reef Face"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto Refill Right"
+            "pathName": "Auto Refill Left"
           }
         },
         {
@@ -43,13 +43,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Back to Score Right Coral Close Right Reef Face"
+            "pathName": "Back to Score Left Coral Close Left Reef Face"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "L4"
+            "name": "Home"
           }
         },
         {
@@ -67,7 +67,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto Refill 2 Right"
+            "pathName": "Auto Refill 2 Left"
           }
         },
         {
@@ -79,13 +79,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Back to Score Left Coral Close Right Reef Face"
+            "pathName": "Back to Score Right Coral Close Left Reef Face"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "L4"
+            "name": "Home"
           }
         },
         {
@@ -103,7 +103,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto Refill 3 Right"
+            "pathName": "Auto Refill 3 Left"
           }
         },
         {
