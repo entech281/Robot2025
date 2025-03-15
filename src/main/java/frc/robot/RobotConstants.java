@@ -183,7 +183,7 @@ public final class RobotConstants {
     public static final double SLOT0_MAX_VELOCITY = 5600;
     public static final double SLOT0_MAX_ACCELERATION = 6400;
     public static final double SLOT1_MAX_VELOCITY = 5600;
-    public static final double SLOT1_MAX_ACCELERATION = 6400;
+    public static final double SLOT1_MAX_ACCELERATION = 3200;
     public static final double SLOT0_ALLOWED_ERROR = 0.15;
     public static final double SLOT1_ALLOWED_ERROR = 0.15;
   }

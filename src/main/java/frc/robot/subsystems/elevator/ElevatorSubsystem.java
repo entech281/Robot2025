@@ -12,7 +12,6 @@ import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -59,7 +58,7 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       motorConfig.idleMode(IdleMode.kBrake);
 
       motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-      .pidf(0.3, 0.0, 0.0, 0.0, ClosedLoopSlot.kSlot0)
+      .pidf(0.55, 0.0, 0.0, 0.0, ClosedLoopSlot.kSlot0)
       .pidf(0.25, 0.0, 0.0, 0.0, ClosedLoopSlot.kSlot1)
       .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot0)
       .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot1);
@@ -70,7 +69,7 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
           .allowedClosedLoopError(RobotConstants.ELEVATOR.SLOT1_ALLOWED_ERROR,ClosedLoopSlot.kSlot1)
           .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal, ClosedLoopSlot.kSlot1);
 
-      motorConfig.secondaryCurrentLimit(40);
+      // motorConfig.secondaryCurrentLimit(40);
 
       SparkMaxConfig followerConfig = new SparkMaxConfig();
       followerConfig.apply(motorConfig).follow(leftElevator);
@@ -105,10 +104,10 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
     if ((ENABLED) && (clampedPosition != lastPosition)) {
       if (currentInput.getActivate()) {
         if ((calculateInchesFromMotorPosition(leftElevator.getEncoder().getPosition())) - clampedPosition <= 0) {
-          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kPosition, ClosedLoopSlot.kSlot0, clampedPosition != 0 ? RobotIO.getInstance().getElevatorOutput().getCurrentPosition() < clampedPosition ? -kg : kg : 0.0);
+          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kPosition, ClosedLoopSlot.kSlot0, -kg);
         } 
         else {
-          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1, clampedPosition != 0 ? RobotIO.getInstance().getElevatorOutput().getCurrentPosition() < clampedPosition ? -kg : kg : 0.0);
+          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1, kg);
         }
       } 
       else {
