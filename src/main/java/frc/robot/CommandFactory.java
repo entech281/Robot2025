@@ -163,11 +163,12 @@ public class CommandFactory {
     } else {
       if (currentHeight < ELEVATOR_PIVOT_LIMBO || goalHeight < currentHeight || goalAngle < currentAngle) {
         commands.addCommands(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.SAFE_EXTEND));
-        commands.addCommands(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), pos));
-        commands.addCommands(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), pos));
-      } else {
-        commands.addCommands(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), pos));
-        commands.addCommands(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), pos));
+      }
+      
+      commands.addCommands(new ElevatorMoveCommand(subsystemManager.getElevatorSubsystem(), pos));
+
+      if (!RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()){
+          commands.addCommands(new PivotMoveCommand(subsystemManager.getPivotSubsystem(), pos));
       }
     }
     return commands;
