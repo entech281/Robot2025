@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.AutonomousException;
 import frc.entech.commands.InstantAnytimeCommand;
 import frc.robot.commands.AutoAlignToScoringLocationCommand;
+import frc.robot.commands.AutoFireAlgaeCommand;
 import frc.robot.commands.AutoIntakeAlgaeCommand;
 import frc.robot.commands.ElevatorMoveCommand;
 import frc.robot.commands.FireCoralCommand;
@@ -126,7 +127,7 @@ public class CommandFactory {
     }
     NamedCommands.registerCommand("IntakeCoral", new IntakeCoralCommand(coralMechanismSubsystem, pivotSubsystem));
     NamedCommands.registerCommand("IntakeAlgae", new AutoIntakeAlgaeCommand(coralMechanismSubsystem));
-    NamedCommands.registerCommand("FireAlgae", new FireCoralCommand(coralMechanismSubsystem, 1.0));
+    NamedCommands.registerCommand("FireAlgae", new AutoFireAlgaeCommand(coralMechanismSubsystem, 1.0));
     NamedCommands.registerCommand("SwitchToRightCamera", new VisionCameraSwitchingCommand(visionSubsystem, () -> -1.0));
     NamedCommands.registerCommand("SwitchToLeftCamera", new VisionCameraSwitchingCommand(visionSubsystem, () -> 1.0));
 

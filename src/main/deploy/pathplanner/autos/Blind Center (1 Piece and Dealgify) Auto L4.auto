@@ -41,15 +41,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Back to Far Reef Face (algae) "
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeAlgae"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeAlgae"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Back to Far Reef Face (algae) "
+                }
+              }
+            ]
           }
         },
         {

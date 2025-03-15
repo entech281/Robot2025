@@ -24,7 +24,7 @@ public class VisionCameraSwitchingCommand extends EntechCommand {
 
     @Override
     public void execute() {
-        if ((-axis.getAsDouble()) <= -0.1) {
+        if ((axis.getAsDouble()) <= -0.1) {
             vi.setCamera(VisionInput.Camera.TOP);
         } else {
             vi.setCamera(VisionInput.Camera.SIDE);
