@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.subsystems.EntechSubsystem;
+import frc.entech.subsystems.SparkMaxOutput;
 import frc.entech.util.EntechUtils;
 import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
@@ -30,6 +32,8 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
 
   private SparkMax leftElevator;
   private SparkMax rightElevator;
+
+  private double lastPosition;
 
   public static double calculateMotorPositionFromInches(double inches) {
     return -inches * RobotConstants.ELEVATOR.ELEVATOR_CONVERSION_FACTOR;
@@ -54,19 +58,18 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       motorConfig.idleMode(IdleMode.kBrake);
 
       motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-      .pidf(0.575, 0.0, 0, 0.0, ClosedLoopSlot.kSlot0)
-      .pid(0.05, 0, 0, ClosedLoopSlot.kSlot1)
+      .pidf(0.55, 0.0, 0.0, 0.0, ClosedLoopSlot.kSlot0)
+      .pidf(0.25, 0.0, 0.0, 0.0, ClosedLoopSlot.kSlot1)
       .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot0)
       .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot1);
 
       motorConfig.closedLoop.maxMotion
-          .maxVelocity(RobotConstants.ELEVATOR.SLOT0_MAX_VELOCITY,ClosedLoopSlot.kSlot0)
-          .maxAcceleration(RobotConstants.ELEVATOR.SLOT0_MAX_ACCELERATION,ClosedLoopSlot.kSlot0)
-          .allowedClosedLoopError(RobotConstants.ELEVATOR.SLOT0_ALLOWED_ERROR,ClosedLoopSlot.kSlot0)
-
           .maxAcceleration(RobotConstants.ELEVATOR.SLOT1_MAX_ACCELERATION,ClosedLoopSlot.kSlot1)
-          .maxVelocity(RobotConstants.ELEVATOR.SLOT1_MAX_VELOCITY,ClosedLoopSlot.kSlot1 )
-          .allowedClosedLoopError(RobotConstants.ELEVATOR.SLOT1_ALLOWED_ERROR,ClosedLoopSlot.kSlot1);
+          .maxVelocity(RobotConstants.ELEVATOR.SLOT1_MAX_VELOCITY,ClosedLoopSlot.kSlot1)
+          .allowedClosedLoopError(RobotConstants.ELEVATOR.SLOT1_ALLOWED_ERROR,ClosedLoopSlot.kSlot1)
+          .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal, ClosedLoopSlot.kSlot1);
+
+      // motorConfig.secondaryCurrentLimit(40);
 
       SparkMaxConfig followerConfig = new SparkMaxConfig();
       followerConfig.apply(motorConfig).follow(leftElevator);
@@ -74,6 +77,8 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
 
       leftElevator.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       rightElevator.configure(followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+      lastPosition = RobotConstants.ELEVATOR.UPPER_SOFT_LIMIT_DEG;
     }
   }
   private double clampRequestedPosition(double position) {
@@ -95,19 +100,21 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   @Override
   public void periodic() {
     double clampedPosition = clampRequestedPosition(currentInput.getRequestedPosition());
-    if (ENABLED) {
+    double kg = 0.15;
+    if ((ENABLED) && (clampedPosition != lastPosition)) {
       if (currentInput.getActivate()) {
         if ((calculateInchesFromMotorPosition(leftElevator.getEncoder().getPosition())) - clampedPosition <= 0) {
-          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kPosition, ClosedLoopSlot.kSlot0, -kg);
         } 
         else {
-          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1, kg);
         }
       } 
       else {
-        leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(RobotConstants.ELEVATOR.LOWER_SOFT_LIMIT_DEG), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
+        leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, clampedPosition != 0 ? RobotIO.getInstance().getElevatorOutput().getCurrentPosition() < clampedPosition ? -kg : kg : 0.0);
       }
     }
+    lastPosition = clampedPosition;
   }
   
 
@@ -132,6 +139,11 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       elevatorOutput.setAtUpperLimit(
           leftElevator.getForwardLimitSwitch().isPressed());
       elevatorOutput.setRequestedPosition(currentInput.getRequestedPosition());
+
+      SparkMaxOutput sm = SparkMaxOutput.createOutput(leftElevator);
+      elevatorOutput.setLeftMotor(sm);
+      SparkMaxOutput sm2 = SparkMaxOutput.createOutput(rightElevator);
+      elevatorOutput.setRightMotor(sm2);
     }
     return elevatorOutput;
   }

@@ -1,11 +1,15 @@
 package frc.robot.processors.filters;
 
+import java.util.Optional;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.io.RobotIO;
 import frc.robot.operation.UserPolicy;
 import frc.robot.subsystems.drive.DriveInput;
+import frc.robot.subsystems.vision.VisionTarget;
 
 public class LateralAlignFilter implements DriveFilterI {
     private final PIDController controller = new PIDController(0.075, 0.0, 0.0);
@@ -22,12 +26,17 @@ public class LateralAlignFilter implements DriveFilterI {
         if (UserPolicy.getInstance().isLaterallyAligning() && !UserPolicy.getInstance().isTwistable()) {
             processedInput = operatorDirectionalSnap(processedInput, UserPolicy.getInstance().getTargetAngle());
 
-            if (RobotIO.getInstance().getVisionOutput().hasTarget() && (Math.abs(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagXW() - UserPolicy.getInstance().getVisionPositionSetPoint()) >= TOLERANCE)) {
-                processedInput = motionTowardsAlignment(
-                    processedInput,
-                    controller.calculate(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagXW(), UserPolicy.getInstance().getVisionPositionSetPoint()),
-                    UserPolicy.getInstance().getTargetAngle()
-                );
+            if (RobotIO.getInstance().getVisionOutput().hasTarget()) {
+                for (VisionTarget t : RobotIO.getInstance().getVisionOutput().getTargets()) {
+                    if (t.getTagID() == UserPolicy.getInstance().getTargetTagID() && (Math.abs(t.getTagXW() - UserPolicy.getInstance().getVisionPositionSetPoint()) >= TOLERANCE)) {
+                        processedInput = motionTowardsAlignment(
+                            processedInput,
+                            controller.calculate(t.getTagXW(), UserPolicy.getInstance().getVisionPositionSetPoint()),
+                            UserPolicy.getInstance().getTargetAngle()
+                        );
+                    }
+                }
+                
             }
         }
 
@@ -39,7 +48,13 @@ public class LateralAlignFilter implements DriveFilterI {
 
         double mag = MathUtil.clamp(magnitude, -1, 1);
 
-        double angleRadians = Units.degreesToRadians(goalAngle + 90);
+        double angleRadians;
+        Optional<DriverStation.Alliance> team = DriverStation.getAlliance();
+        if (team.isPresent() && team.get() == DriverStation.Alliance.Red) {
+            angleRadians = Units.degreesToRadians(goalAngle - 90);
+        } else {
+            angleRadians = Units.degreesToRadians(goalAngle + 90);
+        }
         processedInput.setXSpeed(input.getXSpeed() + Math.cos(angleRadians) * mag);
         processedInput.setYSpeed(input.getYSpeed() + Math.sin(angleRadians) * mag);
 

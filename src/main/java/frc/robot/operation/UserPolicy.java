@@ -11,6 +11,7 @@ public class UserPolicy {
   private double visionPositionSetPoint = 0.0;
   private boolean laterallyAligning = false;
   private boolean algaeMode = false;
+  private int targetTagID = 7;
 
   private UserPolicy() {
     Logger.recordOutput("UserPolicy/twistable", twistable);
@@ -19,6 +20,7 @@ public class UserPolicy {
     Logger.recordOutput("UserPolicy/visionPositionSetPoint", visionPositionSetPoint);
     Logger.recordOutput("UserPolicy/laterallyAligning", laterallyAligning);
     Logger.recordOutput("UserPolicy/algaeMode", algaeMode);
+    Logger.recordOutput("UserPolicy/targetTagID", targetTagID);
   }
 
   public static UserPolicy getInstance() {
@@ -77,5 +79,14 @@ public class UserPolicy {
   public void setAlgaeMode(boolean algaeMode) {
     this.algaeMode = algaeMode;
     Logger.recordOutput("UserPolicy/algaeMode", algaeMode);
+  }
+
+  public int getTargetTagID() {
+    return this.targetTagID;
+  }
+
+  public void setTargetTagID(int targetTagID) {
+    this.targetTagID = targetTagID;
+    Logger.recordOutput("UserPolicy/targetTagID", targetTagID);
   }
 }

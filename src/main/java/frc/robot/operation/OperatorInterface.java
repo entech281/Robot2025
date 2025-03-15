@@ -196,7 +196,7 @@ public class OperatorInterface
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(true)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME));
 
-    intakeCommand = new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem());
+    intakeCommand = new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem(), subsystemManager.getPivotSubsystem());
     fireCommand = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/FireSpeed"));
     fireCommandL1 = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/L1FireSpeed"));
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.FIRE)

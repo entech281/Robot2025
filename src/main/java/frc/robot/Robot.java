@@ -6,11 +6,11 @@ package frc.robot;
 
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -35,7 +35,6 @@ public class Robot extends LoggedRobot {
   private CommandFactory commandFactory;
   private OdometryProcessor odometry;
   private OperatorInterface operatorInterface;
-  private PowerDistribution powerDistribution;
   private long robotStartTime = 0;
 
   public void loggerInit() {
@@ -50,8 +49,7 @@ public class Robot extends LoggedRobot {
     if (isReal()) {
       Logger.addDataReceiver(new WPILOGWriter());
       Logger.addDataReceiver(new NT4Publisher());
-      powerDistribution = new PowerDistribution(1, ModuleType.kRev);
-      powerDistribution.clearStickyFaults();
+      LoggedPowerDistribution.getInstance(RobotConstants.PORTS.CAN.POWER_DISTRIBUTION_HUB, ModuleType.kRev);
     } else {
       setUseTiming(false);
       Logger.addDataReceiver(new NT4Publisher());

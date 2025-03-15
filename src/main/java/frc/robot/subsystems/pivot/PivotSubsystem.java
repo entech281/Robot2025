@@ -12,6 +12,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
+import frc.entech.subsystems.SparkMaxOutput;
 import frc.entech.util.EntechUtils;
 import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
@@ -43,7 +44,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
             pivotConfig.idleMode(IdleMode.kBrake);
             mode = IdleMode.kBrake;
             pivotConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-            pivotConfig.closedLoop.pidf(3.5, 0, 0, 0);
+            pivotConfig.closedLoop.pidf(4.5, 0, 0, 0);
             pivotConfig.closedLoop.outputRange(-0.8, 0.8);
             pivotConfig.closedLoop.positionWrappingEnabled(true);
             pivotConfig.closedLoop.positionWrappingInputRange(0, 1);
@@ -75,6 +76,9 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
             output.setRequestedPosition(currentInput.getRequestedPosition());
             output.setSpeed(pivotMotor.get());
             output.setAbsoluteEncoder(pivotMotor.getAbsoluteEncoder().getPosition());
+
+            SparkMaxOutput smo = SparkMaxOutput.createOutput(pivotMotor);
+            output.setMotor(smo);
         }
         return output;
     }
