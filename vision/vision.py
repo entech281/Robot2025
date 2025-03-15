@@ -359,6 +359,7 @@ def main():
                 put_text(frame,(20,400),f"w: {float(tag_width[0]):.2f}")
                 put_text(frame,(20,430),f"x: {float(tag_x[0]):.2f}")
                 put_text(frame,(20,460),f"lc: { float(loop_total_counter)}")
+                put_text(frame,(20,340),f"h: {float(tag_height[0]):.2f}")
 
             else:
                 missed_frames_counter += 1
