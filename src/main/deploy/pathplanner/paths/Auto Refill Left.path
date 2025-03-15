@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.984046052631578,
-        "y": 5.198848684210526
+        "x": 5.0,
+        "y": 5.249
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.16101861708125,
-        "y": 4.9799333962883345
+        "x": 5.176972564449672,
+        "y": 5.030084712077808
       },
       "isLocked": false,
       "linkedName": "FarLeftReefFace"
