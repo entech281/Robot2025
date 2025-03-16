@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.9886363636363638,
-        "y": 5.164943181818182
+        "x": 3.709431818181818,
+        "y": 4.998750000000001
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.486318424793146,
-        "y": 4.747237207094322
+        "x": 4.207113879338601,
+        "y": 4.5810440252761415
       },
       "isLocked": false,
-      "linkedName": "LeftCoralCloseLeftReefFace"
+      "linkedName": "RightCoralCloseLeftReefFace"
     },
     {
       "anchor": {

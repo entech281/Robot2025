@@ -11,6 +11,25 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "ScoreL4Left"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "ScoreCoral"
@@ -43,19 +62,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Home"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "ScoreCoral"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Home"
           }
         },
         {
@@ -79,19 +86,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Home"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "ScoreCoral"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Home"
           }
         },
         {
