@@ -272,6 +272,10 @@ public final class RobotConstants {
     public static interface HAS_CORAL {
       public static final int INTERNAL_SENSOR_FORWARD = 9;
     }
+
+    public static interface HAS_ALGAE {
+      public static final int INTERNAL_ALGAE_SENSOR = 8;
+    }
   }
 
   public interface OPERATOR_PANEL {

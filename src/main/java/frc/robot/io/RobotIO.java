@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.RobotConstants;
 import frc.robot.commandchecker.SafeMovementChecker;
+import frc.robot.subsystems.algaedetector.InternalAlgaeDetectorOutput;
 import frc.robot.subsystems.coraldetector.InternalCoralDetectorOutput;
 import frc.robot.subsystems.coralmechanism.CoralMechanismOutput;
 import frc.robot.subsystems.drive.DriveInput;
@@ -79,6 +80,10 @@ public class RobotIO implements DriveInputSupplier {
     return latestInternalCoralDetectorOutput;
   }
 
+  public InternalAlgaeDetectorOutput getInternalAlgaeDetectorOutput() {
+    return latestInternalAlgaeDetectorOutput;
+  }
+
   public void updateNavx(NavXOutput no) {
     latestNavXOutput = no;
     no.log();
@@ -124,6 +129,11 @@ public class RobotIO implements DriveInputSupplier {
     icdo.log();
   }  
 
+  public void updateInternalAlgaeDetector(InternalAlgaeDetectorOutput iado) {
+    latestInternalAlgaeDetectorOutput = iado;
+    iado.log();
+  }
+
   public boolean isSafeElevatorMove(double elev) {
     return moveChecker.isSafeElevatorMove(elev, latestPivotOutput.getCurrentPosition());
   }
@@ -142,5 +152,6 @@ public class RobotIO implements DriveInputSupplier {
   private LEDOutput latestLEDOutput;
   private CoralMechanismOutput latestCoralMechanismOutput;
   private InternalCoralDetectorOutput latestInternalCoralDetectorOutput;
+  private InternalAlgaeDetectorOutput latestInternalAlgaeDetectorOutput;
   private Pose2d latestOdometryPose = RobotConstants.ODOMETRY.INITIAL_POSE;
 }
