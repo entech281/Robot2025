@@ -9,13 +9,15 @@ import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
 import frc.robot.operation.UserPolicy;
 import frc.robot.processors.DriveInputProcessor;
+import frc.robot.processors.filters.AutoYawFilter;
+import frc.robot.processors.filters.LateralAlignFilter;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.SwerveUtils;
 import frc.robot.subsystems.vision.VisionTarget;
 
 public class AutoAlignToScoringLocationCommand extends EntechCommand {
-    private static final double SPEED = 0.35;
+    private static final double SPEED = 0.1;
     private static final double LATERAL_START_ANGLE = 22.5;
     private static final double STOPPING_DISTANCE = 0.8;
     private final DriveSubsystem drive;
@@ -23,6 +25,9 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
     private final DriveInputProcessor inputProcessor;
     public static final double TOLERANCE = 0.1;
     private static final double START_DISTANCE = 8.0;
+
+    private final LateralAlignFilter lateralFilter = new LateralAlignFilter();
+    private final AutoYawFilter yawFilter = new AutoYawFilter();
 
     public AutoAlignToScoringLocationCommand(DriveSubsystem drive, int tagID) {
         super(drive);
@@ -46,7 +51,8 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
                     if (t.getTagID() == tagID && SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) < LATERAL_START_ANGLE) {
                         UserPolicy.getInstance().setLaterallyAligning(true);
                         if (t.getDistance() > STOPPING_DISTANCE) {
-                            double ratio = -MathUtil.clamp(t.getDistance() / 2, 0.0, 1.0);
+                            // double ratio = -1.0;
+                            double ratio = -MathUtil.clamp(t.getDistance() / START_DISTANCE, 0.0, 1.0);
                             input.setXSpeed((ratio * Math.cos(UserPolicy.getInstance().getTargetAngle()) * SPEED) + input.getXSpeed());
                             input.setYSpeed((Math.sin(UserPolicy.getInstance().getTargetAngle()) * SPEED * ratio) + input.getYSpeed());
                         }
@@ -63,7 +69,8 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
                 UserPolicy.getInstance().setTargetTagID(tagID);
             }
         }
-        input = inputProcessor.processInput(input);
+        input = lateralFilter.process(input);
+        input = yawFilter.process(input);
         drive.updateInputs(input);
     }
 

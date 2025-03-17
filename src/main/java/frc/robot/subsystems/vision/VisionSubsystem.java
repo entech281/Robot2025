@@ -7,6 +7,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringPublisher;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.util.AprilTagDistanceCalculator;
@@ -61,6 +62,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
         try {
           target.setDistance(AprilTagDistanceCalculator.calculateCurrentDistanceInches(RobotConstants.APRIL_TAG_DATA.CALIBRATION, widths[i].intValue()));
         } catch (Exception e) {
+          DriverStation.reportWarning(e.getMessage(), false);
           continue;
         }
         target.setTagXW(tagXWs[i].doubleValue());
@@ -70,6 +72,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
       }
     } catch (Exception e) {
       targetList = new ArrayList<>();
+      DriverStation.reportWarning(e.getMessage(), false);
     }
 
     // Set values in VisionOutput
