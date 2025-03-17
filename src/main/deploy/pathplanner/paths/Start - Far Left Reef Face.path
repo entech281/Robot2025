@@ -8,51 +8,30 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.723907375168645,
-        "y": 6.3604591457294655
+        "x": 7.540886798544922,
+        "y": 6.280795220158476
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.052272727272728,
-        "y": 5.354545454545455
+        "x": 6.218,
+        "y": 5.798
       },
       "prevControl": {
-        "x": 4.499767012369221,
-        "y": 5.14827399483663
+        "x": 5.97273095985264,
+        "y": 5.749594443033956
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "FarLeftReefFace"
+      "linkedName": "StartL4Left"
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.6,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 3.0,
-        "maxAcceleration": 1.5,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "L4",
-      "waypointRelativePos": 0.6,
-      "endWaypointRelativePos": 1.0,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -62,8 +41,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": -119.99999999999999
+    "velocity": 3.0,
+    "rotation": -152.662
   },
   "reversed": false,
   "folder": null,
