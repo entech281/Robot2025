@@ -11,25 +11,6 @@
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "ScoreL4Left"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "ScoreCoral"

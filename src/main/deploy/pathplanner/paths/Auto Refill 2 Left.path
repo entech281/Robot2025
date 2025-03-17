@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.207113879338601,
-        "y": 4.5810440252761415
+        "x": 4.207344547461554,
+        "y": 4.498971417904449
       },
       "isLocked": false,
       "linkedName": "RightCoralCloseLeftReefFace"
@@ -20,8 +20,8 @@
         "y": 7.335568181818181
       },
       "prevControl": {
-        "x": 1.2600866307406442,
-        "y": 7.506461805734297
+        "x": 1.2665986408472054,
+        "y": 7.5131596225721795
       },
       "nextControl": null,
       "isLocked": false,
