@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.763404605263157,
-        "y": 4.025
+        "x": 7.7,
+        "y": 4.816079545454546
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.247050936806836,
-        "y": 3.8900609784409736
+        "x": 8.13266378427337,
+        "y": 4.899884564987435
       },
       "isLocked": false,
-      "linkedName": "CenterAlgaeFarReefFace"
+      "linkedName": "ScoreBarge"
     },
     {
       "anchor": {
-        "x": 6.760738636363637,
-        "y": 3.765738636363636
+        "x": 6.68096590909091,
+        "y": 4.536875
       },
       "prevControl": {
-        "x": 5.944188018269341,
-        "y": 3.6578117711766502
+        "x": 6.435236549096692,
+        "y": 4.477370776283379
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": -50.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

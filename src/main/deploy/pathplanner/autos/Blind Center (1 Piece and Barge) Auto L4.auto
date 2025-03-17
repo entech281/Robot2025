@@ -60,9 +60,41 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Back Up and Twist from Far Reef Face"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Back Up and Score Barge"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeAlgae"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Barge"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeAlgae"
+                }
+              }
+            ]
           }
         },
         {
@@ -75,6 +107,12 @@
           "type": "named",
           "data": {
             "name": "Home"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Get off the line"
           }
         }
       ]
