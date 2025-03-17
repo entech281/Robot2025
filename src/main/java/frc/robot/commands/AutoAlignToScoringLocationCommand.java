@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.entech.commands.EntechCommand;
 import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
@@ -35,43 +34,49 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
 
     @Override
     public void initialize() {
-        Optional<VisionTarget> target = RobotIO.getInstance().getVisionOutput().getBestTarget();
-        if (RobotIO.getInstance().getVisionOutput().hasTarget() && target.isPresent()) {
-            UserPolicy.getInstance().setAligningToAngle(true);
-            UserPolicy.getInstance().setTargetAngle(findTargetAngle(target.get().getTagID()));
-            DriverStation.reportWarning("" + SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(findTargetAngle(target.get().getTagID()))), false);
-            UserPolicy.getInstance().setLaterallyAligning(SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(findTargetAngle(target.get().getTagID()))) < LATERAL_START_ANGLE);
-        }
         UserPolicy.getInstance().setVisionPositionSetPoint(0);
     }
     
     @Override
     public void execute() {
-        Optional<VisionTarget> target = RobotIO.getInstance().getVisionOutput().getBestTarget();
-        if (RobotIO.getInstance().getVisionOutput().hasTarget() && target.isPresent()) {
-            UserPolicy.getInstance().setAligningToAngle(true);
-            UserPolicy.getInstance().setTargetAngle(findTargetAngle(target.get().getTagID()));
-            DriverStation.reportWarning("" + SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(findTargetAngle(target.get().getTagID()))), false);
-            UserPolicy.getInstance().setLaterallyAligning(SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(findTargetAngle(target.get().getTagID()))) < LATERAL_START_ANGLE);
-            double angle = Units.degreesToRadians(findTargetAngle(target.get().getTagID()));
-
-            DriveInput input = inputProcessor.processInput(RobotIO.getInstance().getDriveInput());
-        
-        if (RobotIO.getInstance().getVisionOutput().hasTarget() && RobotIO.getInstance().getVisionOutput().getTargets().get(0).getDistance() > STOPPING_DISTANCE) {
-            double ratio = MathUtil.clamp(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getDistance() / START_DISTANCE, 0.0, 1.0);
-            input.setXSpeed((Math.cos(angle) * SPEED * ratio) + input.getXSpeed());
-            input.setYSpeed((Math.sin(angle) * SPEED * ratio) + input.getYSpeed());
+        DriveInput input = RobotIO.getInstance().getDriveInput();
+        if (UserPolicy.getInstance().isAligningToAngle()) {
+            if (RobotIO.getInstance().getVisionOutput().hasTarget()) {
+                for (VisionTarget t : RobotIO.getInstance().getVisionOutput().getTargets()) {
+                    if (t.getTagID() == tagID && SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) < LATERAL_START_ANGLE) {
+                        UserPolicy.getInstance().setLaterallyAligning(true);
+                        if (t.getDistance() > STOPPING_DISTANCE) {
+                            double ratio = -MathUtil.clamp(t.getDistance() / 2, 0.0, 1.0);
+                            input.setXSpeed((ratio * Math.cos(UserPolicy.getInstance().getTargetAngle()) * SPEED) + input.getXSpeed());
+                            input.setYSpeed((Math.sin(UserPolicy.getInstance().getTargetAngle()) * SPEED * ratio) + input.getYSpeed());
+                        }
+                    }
+                }
+            } else {
+                UserPolicy.getInstance().setLaterallyAligning(false);
+            }
+        } else {
+            Optional<VisionTarget> target = RobotIO.getInstance().getVisionOutput().getBestTarget();
+            if (RobotIO.getInstance().getVisionOutput().hasTarget() && target.isPresent()) {
+                UserPolicy.getInstance().setAligningToAngle(true);
+                UserPolicy.getInstance().setTargetAngle(findTargetAngle(tagID));
+                UserPolicy.getInstance().setTargetTagID(tagID);
+            }
         }
-
+        input = inputProcessor.processInput(input);
         drive.updateInputs(input);
-        }
     }
 
     @Override
     public boolean isFinished() {
-        return RobotIO.getInstance().getVisionOutput().hasTarget() &&
-        (RobotIO.getInstance().getVisionOutput().getTargets().get(0).getDistance() <= STOPPING_DISTANCE) &&
-        (Math.abs(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagXW() - UserPolicy.getInstance().getVisionPositionSetPoint()) >= TOLERANCE);
+        if (RobotIO.getInstance().getVisionOutput().hasTarget()) {
+            for (VisionTarget t : RobotIO.getInstance().getVisionOutput().getTargets()) {
+                if (t.getTagID() == tagID) {
+                    return(t.getDistance() <= STOPPING_DISTANCE) && (Math.abs(t.getTagXW() - UserPolicy.getInstance().getVisionPositionSetPoint()) >= TOLERANCE);
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -83,9 +88,9 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
 
     private double findTargetAngle(int tagID) {
         if (RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.containsKey(tagID)) {
-            return RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.get(tagID);
+            return RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.get(tagID) - 180;
         } else {
-            return UserPolicy.getInstance().getTargetAngle();
+            return 0;
         }
     }
 }
