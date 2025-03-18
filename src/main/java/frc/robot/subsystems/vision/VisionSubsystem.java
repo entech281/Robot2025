@@ -18,6 +18,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
   // NetworkTable instance
   private final NetworkTable networkTable;
   private final StringPublisher cameraSetter;
+  private final VisionColorChecker colorChecker = new VisionColorChecker();
 
   public VisionSubsystem() {
     // Initialize the NetworkTable instance
@@ -98,38 +99,21 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     } else {
       output.setTargets(new ArrayList<>());
       output.setBestTarget(Optional.empty());
+
     }
 
-    int selectedTag = UserPolicy.getInstance().getTargetTagID();
-    double selectedTagWidth = 0;
-    for (VisionTarget target : targetList) {
-      if (target.getTagID() == selectedTag){
-        selectedTagWidth = target.getTagWidth();
-      }
-    }
-
-    output.setReefCloseness(VisionSubsystem.getCloseness(selectedTagWidth));
+    Optional<VisionTarget> selectedTarget = colorChecker.getSelectedTarget(UserPolicy.getInstance().getTargetTagID(), targetList);
+    String color = "000000";
 
     
+    if (selectedTarget.isPresent()) {
+      color = VisionColorChecker.getCloseness(selectedTarget.get().getTagWidth());
+    }
+    output.setReefCloseness(color);
+
     return output;
   }
   
-  public static final String getCloseness(double selectedTagWidth) {
-    if (selectedTagWidth >= 200 && selectedTagWidth <= 250) {
-      return "#00FF00";
-    }
-    else if (selectedTagWidth >= 144 && selectedTagWidth < 200) {
-      return "#FFFF00";
-    }
-    else if (selectedTagWidth > 250) {
-      return "#FF0000";
-    }
-    else {
-      return "#000000";
-    }
-  }
-
-
   @Override
   public void initialize() {
     // Initialization logic if needed
