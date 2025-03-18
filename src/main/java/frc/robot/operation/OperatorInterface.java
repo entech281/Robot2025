@@ -218,6 +218,7 @@ public class OperatorInterface
           () -> RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
         )
       );
+
   }
 
   private SendableChooser<Command> getTestCommandChooser() {
