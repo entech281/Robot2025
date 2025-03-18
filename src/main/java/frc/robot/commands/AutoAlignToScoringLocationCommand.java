@@ -51,10 +51,9 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
                     if (t.getTagID() == tagID && SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) < LATERAL_START_ANGLE) {
                         UserPolicy.getInstance().setLaterallyAligning(true);
                         if (t.getDistance() > STOPPING_DISTANCE) {
-                            // double ratio = -1.0;
                             double ratio = -MathUtil.clamp(t.getDistance() / START_DISTANCE, 0.0, 1.0);
-                            input.setXSpeed((ratio * Math.cos(UserPolicy.getInstance().getTargetAngle()) * SPEED) + input.getXSpeed());
-                            input.setYSpeed((Math.sin(UserPolicy.getInstance().getTargetAngle()) * SPEED * ratio) + input.getYSpeed());
+                            input.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * SPEED) + input.getXSpeed());
+                            input.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * SPEED * ratio) + input.getYSpeed());
                         }
                     }
                 }
