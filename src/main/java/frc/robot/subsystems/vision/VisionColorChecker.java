@@ -10,7 +10,6 @@ public class VisionColorChecker {
     private int missingCounter = 0;
 
     public Optional<VisionTarget> getSelectedTarget(int selectedTagId, List<VisionTarget> targetList) {
-        //int selectedTag = UserPolicy.getInstance().getTargetTagID();
 
         Optional<VisionTarget> selectedTarget = Optional.empty();
         for (VisionTarget target : targetList) {
@@ -36,10 +35,8 @@ public class VisionColorChecker {
             }
         }
         else{
-            Optional.empty();
+            return Optional.empty();
         }
-
-        return selectedTarget;
     }
     
 
