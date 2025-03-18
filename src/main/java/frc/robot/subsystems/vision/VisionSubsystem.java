@@ -129,6 +129,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     }
   }
 
+
   @Override
   public void initialize() {
     // Initialization logic if needed

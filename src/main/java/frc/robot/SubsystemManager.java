@@ -11,6 +11,7 @@ import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.subsystems.SubsystemInput;
 import frc.entech.subsystems.SubsystemOutput;
 import frc.robot.io.RobotIO;
+import frc.robot.subsystems.algaedetector.InternalAlgaeDetectorSubsystem;
 import frc.robot.subsystems.coraldetector.InternalCoralDetectorSubsystem;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -32,6 +33,7 @@ public class SubsystemManager {
   private final LEDSubsystem ledSubsystem = new LEDSubsystem();
   private final CoralMechanismSubsystem coralMechanismSubsystem = new CoralMechanismSubsystem();
   private final InternalCoralDetectorSubsystem internalCoralDetectorSubsystem = new InternalCoralDetectorSubsystem();
+  private final InternalAlgaeDetectorSubsystem internalAlgaeDetectorSubsystem = new InternalAlgaeDetectorSubsystem();
 
 
   public SubsystemManager() {
@@ -43,6 +45,7 @@ public class SubsystemManager {
     ledSubsystem.initialize();
     coralMechanismSubsystem.initialize();
     internalCoralDetectorSubsystem.initialize();
+    internalAlgaeDetectorSubsystem.initialize();
 
     periodic();
   }
@@ -79,6 +82,10 @@ public class SubsystemManager {
     return internalCoralDetectorSubsystem;
   }
 
+  public InternalAlgaeDetectorSubsystem getInternalAlgaeDetectorSubsystem() {
+    return internalAlgaeDetectorSubsystem;
+  }
+
   public List<EntechSubsystem<? extends SubsystemInput, ? extends SubsystemOutput>> getSubsystemList() {
     ArrayList<EntechSubsystem<? extends SubsystemInput, ? extends SubsystemOutput>> r = new ArrayList<>();
     r.add(navXSubsystem);
@@ -89,6 +96,7 @@ public class SubsystemManager {
     r.add(ledSubsystem);
     r.add(coralMechanismSubsystem);
     r.add(internalCoralDetectorSubsystem);
+    r.add(internalAlgaeDetectorSubsystem);
 
     return r;
   }
@@ -111,5 +119,7 @@ public class SubsystemManager {
     outputs.updateCoralMechanism(coralMechanismSubsystem.getOutputs());
 
     outputs.updateInternalCoralDetector(internalCoralDetectorSubsystem.getOutputs());
+
+    outputs.updateInternalAlgaeDetector(internalAlgaeDetectorSubsystem.getOutputs());
   }
 }
