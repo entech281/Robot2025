@@ -5,8 +5,8 @@ import org.littletonrobotics.junction.Logger;
 public class VisionTarget {
     private int tagID;
     private String cameraName;
-    private int tagHeight;
-    private int tagWidth;
+    private double tagHeight;
+    private double tagWidth;
     private double tagX;
     private double tagY;
     private double distance;
@@ -29,7 +29,7 @@ public class VisionTarget {
         this.cameraName = cameraName;
     }
 
-    public int getTagHeight() {
+    public double getTagHeight() {
         return this.tagHeight;
     }
 
@@ -37,7 +37,7 @@ public class VisionTarget {
         this.tagHeight = tagHeight;
     }
 
-    public int getTagWidth() {
+    public double getTagWidth() {
         return this.tagWidth;
     }
 
