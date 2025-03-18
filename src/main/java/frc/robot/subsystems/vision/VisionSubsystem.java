@@ -115,13 +115,13 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
   }
   
   public static final String getCloseness(int selectedTagWidth) {
-    if (selectedTagWidth >= 240 && selectedTagWidth <= 260) {
+    if (selectedTagWidth >= 200 && selectedTagWidth <= 250) {
       return "#00FF00";
     }
-    else if (selectedTagWidth >= 200 && selectedTagWidth < 240) {
+    else if (selectedTagWidth >= 144 && selectedTagWidth < 200) {
       return "#FFFF00";
     }
-    else if (selectedTagWidth > 260) {
+    else if (selectedTagWidth > 250) {
       return "#FF0000";
     }
     else {

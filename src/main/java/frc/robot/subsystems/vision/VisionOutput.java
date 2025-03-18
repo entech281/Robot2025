@@ -22,6 +22,7 @@ public class VisionOutput extends SubsystemOutput {
     Logger.recordOutput("VisionOutput/timestamp", timestamp);
     Logger.recordOutput("VisionOutput/hasTarget", hasTarget);
     Logger.recordOutput("VisionOutput/numberOfTags", numberOfTags);
+    Logger.recordOutput("VisionOutput/reefCloseness", reefCloseness);
     if (bestTarget.isPresent()) {
       bestTarget.get().log("VisionOutput/bestTarget");
     }

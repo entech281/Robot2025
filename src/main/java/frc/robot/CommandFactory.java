@@ -29,7 +29,6 @@ import frc.robot.commands.ElevatorMoveCommand;
 import frc.robot.commands.FireCoralCommand;
 import frc.robot.commands.FireCoralCommandAuto;
 import frc.robot.commands.GyroResetByAngleCommand;
-import frc.robot.commands.IntakeCoralCommand;
 import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
 import frc.robot.commands.VisionCameraSwitchingCommand;
@@ -92,7 +91,7 @@ public class CommandFactory {
     tab.add("ALGAE_L2", getSafeElevatorPivotMoveCommand(Position.ALGAE_L2));
     tab.add("ALGAE_L3", getSafeElevatorPivotMoveCommand(Position.ALGAE_L3));
     tab.add("ALGAE_GROUND", getSafeElevatorPivotMoveCommand(Position.ALGAE_GROUND));
-    tab.add("AUTO_ALIGN_TO_17", new AutoAlignToScoringLocationCommand(driveSubsystem, 17));
+    tab.add("AUTO_ALIGN_TO_17", new AutoAlignToScoringLocationCommand(driveSubsystem, 18));
 
     AutoBuilder.configure(odometry::getEstimatedPose,
         odometry::resetOdometry,

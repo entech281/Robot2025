@@ -17,7 +17,7 @@ import frc.robot.subsystems.drive.SwerveUtils;
 import frc.robot.subsystems.vision.VisionTarget;
 
 public class AutoAlignToScoringLocationCommand extends EntechCommand {
-    private static final double SPEED = 0.1;
+    private static final double SPEED = 0.5;
     private static final double LATERAL_START_ANGLE = 22.5;
     private static final double STOPPING_DISTANCE = 0.8;
     private final DriveSubsystem drive;
