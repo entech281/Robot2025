@@ -101,7 +101,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     }
 
     int selectedTag = UserPolicy.getInstance().getTargetTagID();
-    int selectedTagWidth = 0;
+    double selectedTagWidth = 0;
     for (VisionTarget target : targetList) {
       if (target.getTagID() == selectedTag){
         selectedTagWidth = target.getTagWidth();
@@ -114,7 +114,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     return output;
   }
   
-  public static final String getCloseness(int selectedTagWidth) {
+  public static final String getCloseness(double selectedTagWidth) {
     if (selectedTagWidth >= 200 && selectedTagWidth <= 250) {
       return "#00FF00";
     }

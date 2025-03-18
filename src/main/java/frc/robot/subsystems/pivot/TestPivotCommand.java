@@ -18,6 +18,8 @@ public class TestPivotCommand extends EntechCommand{
     this.pivot = pivotSubsystem;
   }
 
+
+
   @Override
   public void execute() {
     PivotInput input = new PivotInput();
