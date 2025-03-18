@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.58125,
-        "y": 4.025
+        "x": 6.218,
+        "y": 5.798
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.17509473996513,
-        "y": 4.017811067141474
+        "x": 6.688374472220546,
+        "y": 5.998262151028483
       },
       "isLocked": false,
-      "linkedName": "Backed up from Far Reef Face"
+      "linkedName": "StartL4Left"
     },
     {
       "anchor": {
-        "x": 5.763404605263157,
-        "y": 4.025
+        "x": 5.052272727272728,
+        "y": 5.354545454545455
       },
       "prevControl": {
-        "x": 5.5113930914967995,
-        "y": 4.02939102397558
+        "x": 4.756657712198275,
+        "y": 5.234737078106443
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "CenterAlgaeFarReefFace"
+      "linkedName": "FarLeftReefFace"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.5,
+    "maxVelocity": 3.0,
     "maxAcceleration": 1.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 180.0
+    "velocity": 3.0,
+    "rotation": -152.662
   },
   "useDefaultConstraints": false
 }

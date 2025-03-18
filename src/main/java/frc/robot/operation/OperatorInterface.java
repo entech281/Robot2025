@@ -21,8 +21,6 @@ import frc.robot.Position;
 import frc.robot.RobotConstants;
 import frc.robot.SubsystemManager;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.ElevatorDownCommand;
-import frc.robot.commands.ElevatorUpCommand;
 import frc.robot.commands.FireCoralCommand;
 import frc.robot.commands.GyroReset;
 import frc.robot.commands.IntakeAlgaeCommand;
@@ -133,12 +131,6 @@ public class OperatorInterface
 
     xboxController.button(9)
         .onTrue(new RunTestCommand(testChooser));
-        
-    xboxController.button(4)
-      .onTrue(new ElevatorUpCommand(subsystemManager.getElevatorSubsystem()));
-
-    xboxController.button(1)
-      .onTrue(new ElevatorDownCommand(subsystemManager.getElevatorSubsystem()));
 
 
     xboxController.button(10)
@@ -193,6 +185,11 @@ public class OperatorInterface
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L3)
         .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_L3))
+        .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(true)))
+        .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME));
+
+        operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.BARGE)
+        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.BARGE))
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(true)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME));
 

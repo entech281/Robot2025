@@ -22,14 +22,16 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.AutonomousException;
 import frc.entech.commands.InstantAnytimeCommand;
 import frc.robot.commands.AutoAlignToScoringLocationCommand;
+import frc.robot.commands.AutoFireAlgaeCommand;
+import frc.robot.commands.AutoIntakeAlgaeCommand;
+import frc.robot.commands.AutoIntakeCoralCommand;
 import frc.robot.commands.ElevatorMoveCommand;
 import frc.robot.commands.FireCoralCommand;
 import frc.robot.commands.FireCoralCommandAuto;
 import frc.robot.commands.GyroResetByAngleCommand;
-import frc.robot.commands.IntakeAlgaeCommand;
-import frc.robot.commands.IntakeCoralCommand;
 import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
+import frc.robot.commands.VisionCameraSwitchingCommand;
 import frc.robot.io.RobotIO;
 import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.operation.UserPolicy;
@@ -40,6 +42,7 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
 import frc.robot.subsystems.pivot.PivotSubsystem;
+import frc.robot.subsystems.vision.VisionSubsystem;
 
 @SuppressWarnings("unused")
 public class CommandFactory {
@@ -51,6 +54,7 @@ public class CommandFactory {
   private final SubsystemManager subsystemManager;
   private final LEDSubsystem ledSubsystem;
   private final CoralMechanismSubsystem coralMechanismSubsystem;
+  private final VisionSubsystem visionSubsystem;
   private final SendableChooser<Command> autoChooser;
 
 
@@ -61,6 +65,7 @@ public class CommandFactory {
     this.elevatorSubsystem = subsystemManager.getElevatorSubsystem();
     this.pivotSubsystem = subsystemManager.getPivotSubsystem();
     this.coralMechanismSubsystem = subsystemManager.getCoralMechanismSubsystem();
+    this.visionSubsystem = subsystemManager.getVisionSubsystem();
     this.odometry = odometry;
     this.subsystemManager = subsystemManager;
 
@@ -86,6 +91,7 @@ public class CommandFactory {
     tab.add("ALGAE_L2", getSafeElevatorPivotMoveCommand(Position.ALGAE_L2));
     tab.add("ALGAE_L3", getSafeElevatorPivotMoveCommand(Position.ALGAE_L3));
     tab.add("ALGAE_GROUND", getSafeElevatorPivotMoveCommand(Position.ALGAE_GROUND));
+    tab.add("AUTO_ALIGN_TO_17", new AutoAlignToScoringLocationCommand(driveSubsystem, 18));
 
     AutoBuilder.configure(odometry::getEstimatedPose,
         odometry::resetOdometry,
@@ -112,14 +118,19 @@ public class CommandFactory {
     NamedCommands.registerCommand("AlgaeL2", formSafeMovementCommand(Position.ALGAE_L2));
     NamedCommands.registerCommand("AlgaeL3", formSafeMovementCommand(Position.ALGAE_L3));
     NamedCommands.registerCommand("AlgaeGround", formSafeMovementCommand(Position.ALGAE_GROUND));
-    NamedCommands.registerCommand("AlignToReefFar", new AutoAlignToScoringLocationCommand(driveSubsystem, 21));
-    NamedCommands.registerCommand("AlignToReefCloseRight", new AutoAlignToScoringLocationCommand(driveSubsystem, 17));
-    NamedCommands.registerCommand("AlignToReefFarRight", new AutoAlignToScoringLocationCommand(driveSubsystem, 22));
-    NamedCommands.registerCommand("AlignToReefCloseLeft", new AutoAlignToScoringLocationCommand(driveSubsystem, 22));
-    NamedCommands.registerCommand("AlignToReefFarLeft", new AutoAlignToScoringLocationCommand(driveSubsystem, 20));
-    NamedCommands.registerCommand("AlignToFeedStation", new AutoAlignToScoringLocationCommand(driveSubsystem, 12));
-    NamedCommands.registerCommand("IntakeCoral", new IntakeCoralCommand(coralMechanismSubsystem, pivotSubsystem));
-    NamedCommands.registerCommand("IntakeAlgae", new IntakeAlgaeCommand(coralMechanismSubsystem));
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+      NamedCommands.registerCommand("AlignToReefFar", new AutoAlignToScoringLocationCommand(driveSubsystem, alliance.get().equals(DriverStation.Alliance.Blue) ? 21 : 10));
+      NamedCommands.registerCommand("AlignToReefCloseRight", new AutoAlignToScoringLocationCommand(driveSubsystem, alliance.get().equals(DriverStation.Alliance.Blue) ? 17 : 8));
+      NamedCommands.registerCommand("AlignToReefFarRight", new AutoAlignToScoringLocationCommand(driveSubsystem, alliance.get().equals(DriverStation.Alliance.Blue) ? 22 : 9));
+      NamedCommands.registerCommand("AlignToReefCloseLeft", new AutoAlignToScoringLocationCommand(driveSubsystem, alliance.get().equals(DriverStation.Alliance.Blue) ? 19 : 6));
+      NamedCommands.registerCommand("AlignToReefFarLeft", new AutoAlignToScoringLocationCommand(driveSubsystem, alliance.get().equals(DriverStation.Alliance.Blue) ? 20 : 11));
+    }
+    NamedCommands.registerCommand("IntakeCoral", new AutoIntakeCoralCommand(coralMechanismSubsystem));
+    NamedCommands.registerCommand("IntakeAlgae", new AutoIntakeAlgaeCommand(coralMechanismSubsystem));
+    NamedCommands.registerCommand("FireAlgae", new AutoFireAlgaeCommand(coralMechanismSubsystem, 1.0));
+    NamedCommands.registerCommand("SwitchToRightCamera", new VisionCameraSwitchingCommand(visionSubsystem, () -> -1.0));
+    NamedCommands.registerCommand("SwitchToLeftCamera", new VisionCameraSwitchingCommand(visionSubsystem, () -> 1.0));
 
     //TODO: Remove magic number. RobotConstants?
     NamedCommands.registerCommand("ScoreCoral", new FireCoralCommandAuto(coralMechanismSubsystem, 1.0));

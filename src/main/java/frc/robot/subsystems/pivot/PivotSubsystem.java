@@ -31,7 +31,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
     }
 
     private static final double STARTING_POSITION = 0.0416;
-    private static final double ENCODER_ZERO_OFFSET = 0.679 - STARTING_POSITION;
+    private static final double ENCODER_ZERO_OFFSET = 0.680 - STARTING_POSITION;
     
 
     @Override

@@ -7,10 +7,12 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringPublisher;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.util.AprilTagDistanceCalculator;
 import frc.robot.RobotConstants;
+import frc.robot.operation.UserPolicy;
 
 public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> {
   // NetworkTable instance
@@ -61,6 +63,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
         try {
           target.setDistance(AprilTagDistanceCalculator.calculateCurrentDistanceInches(RobotConstants.APRIL_TAG_DATA.CALIBRATION, widths[i].intValue()));
         } catch (Exception e) {
+          DriverStation.reportWarning(e.getMessage(), false);
           continue;
         }
         target.setTagXW(tagXWs[i].doubleValue());
@@ -70,6 +73,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
       }
     } catch (Exception e) {
       targetList = new ArrayList<>();
+      DriverStation.reportWarning(e.getMessage(), false);
     }
 
     // Set values in VisionOutput
@@ -96,7 +100,33 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
       output.setBestTarget(Optional.empty());
     }
 
+    int selectedTag = UserPolicy.getInstance().getTargetTagID();
+    int selectedTagWidth = 0;
+    for (VisionTarget target : targetList) {
+      if (target.getTagID() == selectedTag){
+        selectedTagWidth = target.getTagWidth();
+      }
+    }
+
+    output.setReefCloseness(VisionSubsystem.getCloseness(selectedTagWidth));
+
+    
     return output;
+  }
+  
+  public static final String getCloseness(int selectedTagWidth) {
+    if (selectedTagWidth >= 200 && selectedTagWidth <= 250) {
+      return "#00FF00";
+    }
+    else if (selectedTagWidth >= 144 && selectedTagWidth < 200) {
+      return "#FFFF00";
+    }
+    else if (selectedTagWidth > 250) {
+      return "#FF0000";
+    }
+    else {
+      return "#000000";
+    }
   }
 
   @Override

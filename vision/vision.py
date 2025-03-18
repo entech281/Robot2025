@@ -35,6 +35,7 @@ class CameraProperties(object):
     ABSOLUTE_EXPOSURE = 'exposure_time_absolute'
     BRIGHTNESS= "brightness"
     AUTO_WHITE_BALANCE="white_balance_automatic"
+    HUE="hue"
 
 class CameraValues(object):
     EXPOSURE_SUPER_LOW = 2
@@ -43,6 +44,7 @@ class CameraValues(object):
     NOT_PRETTY_DARN_BRIGHT=30
     NO_AUTO_WHITE_BALANCE=0
     PRETTY_BRIGHT=60
+    MAX_HUE=100
 
 
 def print_camera_properties(camera):
@@ -238,7 +240,9 @@ def main():
             cameras[location].getProperty(CameraProperties.EXPOSURE_RAW_ABSOLUTE).set(CameraValues.EXPOSURE_SUPER_LOW)
             cameras[location].getProperty(CameraProperties.AUTO_EXPOSURE).set(CameraValues.AUTO_EXPOSURE_MANUAL)
             cameras[location].getProperty(CameraProperties.BRIGHTNESS).set(CameraValues.NOT_PRETTY_DARN_BRIGHT)
+            cameras[location].getProperty(CameraProperties.ABSOLUTE_EXPOSURE).set(CameraValues.EXPOSURE_SUPER_LOW)
             cameras[location].getProperty(CameraProperties.AUTO_WHITE_BALANCE).set(CameraValues.NO_AUTO_WHITE_BALANCE)
+            cameras[location].getProperty(CameraProperties.HUE).set(CameraValues.MAX_HUE)
         elif location == 'side':
             print("Setting side properties")
             cameras[location].setVideoMode(cs.VideoMode.PixelFormat.kMJPEG,
@@ -246,7 +250,8 @@ def main():
             cameras[location].getProperty(CameraProperties.AUTO_EXPOSURE).set(CameraValues.AUTO_EXPOSURE_MANUAL)
             cameras[location].getProperty(CameraProperties.BRIGHTNESS).set(CameraValues.NOT_PRETTY_DARN_BRIGHT)
             cameras[location].getProperty(CameraProperties.AUTO_WHITE_BALANCE).set(CameraValues.NO_AUTO_WHITE_BALANCE)
-            cameras[location].getProperty(CameraProperties.EXPOSURE_RAW_ABSOLUTE).set(CameraValues.HIGHISH_EXPOSURE)
+            cameras[location].getProperty(CameraProperties.EXPOSURE_RAW_ABSOLUTE).set(CameraValues.EXPOSURE_SUPER_LOW)
+            cameras[location].getProperty(CameraProperties.ABSOLUTE_EXPOSURE).set(CameraValues.EXPOSURE_SUPER_LOW)
         elif location == 'bottom':
             print("Setting bottom properties")
             pass

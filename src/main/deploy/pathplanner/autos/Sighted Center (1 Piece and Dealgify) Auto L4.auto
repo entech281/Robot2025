@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Start - Far Right Reef Face"
+            "name": "SwitchToLeftCamera"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToReefFar"
           }
         },
         {
@@ -31,31 +37,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto Refill Right"
+            "pathName": "Back Up from Far Reef Face and Align With Algae"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "IntakeCoral"
+            "name": "AlgaeL2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Back to Score Right Coral Close Right Reef Face"
+            "pathName": "Back to Far Reef Face (algae) "
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "L4"
+            "name": "IntakeAlgae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Back Up and Score Barge"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ScoreCoral"
+            "name": "FireAlgae"
           }
         },
         {
@@ -67,49 +79,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto Refill 2 Right"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeCoral"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Back to Score Left Coral Close Right Reef Face"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ScoreCoral"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Home"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Auto Refill 3 Right"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeCoral"
+            "pathName": "Get off the line"
           }
         }
       ]

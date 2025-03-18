@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Start - Far Right Reef Face"
+            "name": "SwitchToLeftCamera"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToReefFarLeft"
           }
         },
         {
@@ -31,7 +37,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto Refill Right"
+            "pathName": "Auto Refill Left"
           }
         },
         {
@@ -41,9 +47,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Back to Score Right Coral Close Right Reef Face"
+            "name": "SwitchToRightCamera"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToReefCloseLeft"
           }
         },
         {
@@ -67,7 +79,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto Refill 2 Right"
+            "pathName": "Auto Refill 2 Left"
           }
         },
         {
@@ -77,9 +89,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Back to Score Left Coral Close Right Reef Face"
+            "name": "SwitchToLeftCamera"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToReefCloseLeft"
           }
         },
         {
@@ -103,7 +121,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto Refill 3 Right"
+            "pathName": "Auto Refill 3 Left"
           }
         },
         {
