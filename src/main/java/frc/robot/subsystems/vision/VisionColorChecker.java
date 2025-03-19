@@ -8,9 +8,9 @@ public class VisionColorChecker {
 
     private VisionTarget lastTarget;
     private int missingCounter = 0;
-    private static int totalMissingCounter = 0;
+    private int totalMissingCounter = 0;
 
-    public static final int getStaleDataCounter(){
+    public int getStaleDataCounter(){
         return totalMissingCounter;
     }
 
@@ -22,12 +22,10 @@ public class VisionColorChecker {
                 selectedTarget = Optional.of(target);
             }
         }
-        //Optional<VisionTarget> r = Optional.empty();
         if (selectedTarget.isPresent()){
             VisionTarget s = selectedTarget.get();
             if (s.getTimestamp() > lastTarget.getTimestamp()){
                 lastTarget = s;
-              //  r = Optional.of(s);
             }
             else {
                 missingCounter += 1;
