@@ -5,41 +5,34 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "path",
+          "data": {
+            "pathName": "Start - Back Center Far Left Reef Face"
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Start - Back Center Far Left Reef Face"
+                  "name": "SwitchToLeftCamera"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "SwitchToLeftCamera"
+                  "name": "AlignToReefFarLeft"
                 }
               }
             ]
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlignToReefFarLeft"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4"
-                }
-              }
-            ]
+            "name": "L4"
           }
         },
         {
@@ -67,13 +60,19 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
+          "data": {
+            "pathName": "Left Feed Zone - Back Center Close Left Reef Face"
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Left Feed Zone - Back Center Close Left Reef Face"
+                  "name": "AlignToReefCloseLeft"
                 }
               },
               {
@@ -86,22 +85,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlignToReefCloseLeft"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4"
-                }
-              }
-            ]
+            "name": "L4"
           }
         },
         {
@@ -129,13 +115,19 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
+          "data": {
+            "pathName": "Left Feed Zone - Back Center Close Left Reef Face"
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Left Feed Zone - Back Center Close Left Reef Face"
+                  "name": "AlignToReefCloseLeft"
                 }
               },
               {
@@ -148,22 +140,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlignToReefCloseLeft"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4"
-                }
-              }
-            ]
+            "name": "L4"
           }
         },
         {
