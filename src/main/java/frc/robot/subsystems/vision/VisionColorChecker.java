@@ -8,6 +8,11 @@ public class VisionColorChecker {
 
     private VisionTarget lastTarget;
     private int missingCounter = 0;
+    private static int totalMissingCounter = 0;
+
+    public static final int getStaleDataCounter(){
+        return totalMissingCounter;
+    }
 
     public Optional<VisionTarget> getSelectedTarget(int selectedTagId, List<VisionTarget> targetList) {
 
@@ -17,26 +22,24 @@ public class VisionColorChecker {
                 selectedTarget = Optional.of(target);
             }
         }
+        //Optional<VisionTarget> r = Optional.empty();
         if (selectedTarget.isPresent()){
             VisionTarget s = selectedTarget.get();
             if (s.getTimestamp() > lastTarget.getTimestamp()){
                 lastTarget = s;
-                return Optional.of(s);
+              //  r = Optional.of(s);
             }
             else {
                 missingCounter += 1;
+                totalMissingCounter += 1;
                 if(missingCounter > MISSING_TARGET_COUNT) {
                     missingCounter = 0;
-                    return Optional.empty();
+                    lastTarget = null;
                 }
-                else {
-                    return Optional.of(lastTarget);
-                }
+                selectedTarget = Optional.of(lastTarget);
             }
         }
-        else{
-            return Optional.empty();
-        }
+        return selectedTarget;
     }
     
 

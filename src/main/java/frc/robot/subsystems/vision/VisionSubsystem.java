@@ -110,6 +110,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
       color = VisionColorChecker.getCloseness(selectedTarget.get().getTagWidth());
     }
     output.setReefCloseness(color);
+    output.setStaleData(VisionColorChecker.getStaleDataCounter());
 
     return output;
   }

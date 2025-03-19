@@ -14,8 +14,7 @@ public class VisionOutput extends SubsystemOutput {
   private long timestamp;
   private int numberOfTags;
   private String reefCloseness;
-
-
+  private int staleData;
 
   @Override
   public void toLog() {
@@ -23,12 +22,21 @@ public class VisionOutput extends SubsystemOutput {
     Logger.recordOutput("VisionOutput/hasTarget", hasTarget);
     Logger.recordOutput("VisionOutput/numberOfTags", numberOfTags);
     Logger.recordOutput("VisionOutput/reefCloseness", reefCloseness);
+    Logger.recordOutput("VisionOutput/staleDataCounter", staleData);
     if (bestTarget.isPresent()) {
       bestTarget.get().log("VisionOutput/bestTarget");
     }
     for (int i = 0; i < targets.size(); i++) {
       targets.get(i).log("VisionOutput/targets/target" + i);
     }
+  }
+
+  public int getStaleData() {
+    return staleData;
+  }
+
+  public void setStaleData(int staleData) {
+    this.staleData = staleData;
   }
 
   public String getReefCloseness() {
