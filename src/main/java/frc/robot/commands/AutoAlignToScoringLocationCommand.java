@@ -19,7 +19,7 @@ import frc.robot.subsystems.vision.VisionTarget;
 public class AutoAlignToScoringLocationCommand extends EntechCommand {
     private static final double SPEED = 0.5;
     private static final double LATERAL_START_ANGLE = 22.5;
-    private static final double STOPPING_DISTANCE = 0.8;
+    private static final double STOPPING_DISTANCE = 1.05;
     private final DriveSubsystem drive;
     private final int tagID;
     private final DriveInputProcessor inputProcessor;
@@ -51,10 +51,9 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
                     if (t.getTagID() == tagID && SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) < LATERAL_START_ANGLE) {
                         UserPolicy.getInstance().setLaterallyAligning(true);
                         if (t.getDistance() > STOPPING_DISTANCE) {
-                            // double ratio = -1.0;
-                            double ratio = -MathUtil.clamp(t.getDistance() / START_DISTANCE, 0.0, 1.0);
-                            input.setXSpeed((ratio * Math.cos(UserPolicy.getInstance().getTargetAngle()) * SPEED) + input.getXSpeed());
-                            input.setYSpeed((Math.sin(UserPolicy.getInstance().getTargetAngle()) * SPEED * ratio) + input.getYSpeed());
+                            double ratio = MathUtil.clamp(t.getDistance() / START_DISTANCE, 0.0, 1.0);
+                            input.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * SPEED) + input.getXSpeed());
+                            input.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * SPEED * ratio) + input.getYSpeed());
                         }
                     }
                 }
@@ -79,7 +78,7 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
         if (RobotIO.getInstance().getVisionOutput().hasTarget()) {
             for (VisionTarget t : RobotIO.getInstance().getVisionOutput().getTargets()) {
                 if (t.getTagID() == tagID) {
-                    return(t.getDistance() <= STOPPING_DISTANCE) && (Math.abs(t.getTagXW() - UserPolicy.getInstance().getVisionPositionSetPoint()) >= TOLERANCE);
+                    return(t.getDistance() <= STOPPING_DISTANCE) && (Math.abs(t.getTagXW() - UserPolicy.getInstance().getVisionPositionSetPoint()) <= TOLERANCE);
                 }
             }
         }

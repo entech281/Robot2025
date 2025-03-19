@@ -3,6 +3,7 @@ package frc.robot.commands;
 import frc.entech.commands.EntechCommand;
 import frc.entech.util.StoppingCounter;
 import frc.robot.livetuning.LiveTuningHandler;
+import frc.robot.operation.UserPolicy;
 import frc.robot.subsystems.coralmechanism.CoralMechanismInput;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 
@@ -20,6 +21,7 @@ public class AutoIntakeAlgaeCommand extends EntechCommand {
 	public void end(boolean interrupted) {
 		input.setRequestedSpeed(0.0);
 		intake.updateInputs(input);
+		UserPolicy.getInstance().setAlgaeMode(true);
 	}
 
 	@Override
