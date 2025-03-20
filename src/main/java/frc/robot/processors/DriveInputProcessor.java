@@ -2,14 +2,16 @@ package frc.robot.processors;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import frc.robot.io.RobotIO;
 import frc.robot.processors.filters.AutoYawFilter;
 import frc.robot.processors.filters.DriveFilterI;
 import frc.robot.processors.filters.HoldYawFilter;
 import frc.robot.processors.filters.LateralAlignFilter;
 import frc.robot.processors.filters.MaxConstraintFilter;
-import frc.robot.processors.filters.TwistFilter;
 import frc.robot.processors.filters.SquaringFilter;
+import frc.robot.processors.filters.TowardsTargetFilter;
+import frc.robot.processors.filters.TwistFilter;
 import frc.robot.subsystems.drive.DriveInput;
 
 public class DriveInputProcessor {
@@ -22,6 +24,7 @@ public class DriveInputProcessor {
     driveFilters.add(new HoldYawFilter());
     driveFilters.add(new AutoYawFilter());
     driveFilters.add(new LateralAlignFilter());
+    driveFilters.add(new TowardsTargetFilter());
   }
 
   public DriveInput processInput(DriveInput input) {

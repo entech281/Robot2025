@@ -12,6 +12,7 @@ public class UserPolicy {
   private boolean laterallyAligning = false;
   private boolean algaeMode = false;
   private int targetTagID = 7;
+  private boolean towardsAlignment = false;
 
   private UserPolicy() {
     Logger.recordOutput("UserPolicy/twistable", twistable);
@@ -21,6 +22,7 @@ public class UserPolicy {
     Logger.recordOutput("UserPolicy/laterallyAligning", laterallyAligning);
     Logger.recordOutput("UserPolicy/algaeMode", algaeMode);
     Logger.recordOutput("UserPolicy/targetTagID", targetTagID);
+    Logger.recordOutput("UserPolicy/towardsAlignment", towardsAlignment);
   }
 
   public static UserPolicy getInstance() {
@@ -88,5 +90,14 @@ public class UserPolicy {
   public void setTargetTagID(int targetTagID) {
     this.targetTagID = targetTagID;
     Logger.recordOutput("UserPolicy/targetTagID", targetTagID);
+  }
+
+  public boolean isTowardsAlignment() {
+    return towardsAlignment;
+  }
+
+  public void setTowardsAlignment(boolean towardsAlignment) {
+    this.towardsAlignment = towardsAlignment;
+    Logger.recordOutput("UserPolicy/towardsAlignment", towardsAlignment);
   }
 }
