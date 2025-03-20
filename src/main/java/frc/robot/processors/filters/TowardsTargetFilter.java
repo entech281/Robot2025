@@ -8,7 +8,7 @@ import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.vision.VisionTarget;
 
 public class TowardsTargetFilter implements DriveFilterI {
-    private static final double STOPPING_DISTANCE = 1.05;
+    private static final double STOPPING_DISTANCE = 1.0;
     private static final double START_DISTANCE = 8.0;
     private static final double SPEED = 0.5;
 
