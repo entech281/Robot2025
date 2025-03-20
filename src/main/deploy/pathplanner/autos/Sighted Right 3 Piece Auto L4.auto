@@ -11,19 +11,19 @@
           }
         },
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "SwitchToRightCamera"
+                  "name": "AlignToReefFarRight"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignToReefFarRight"
+                  "name": "SwitchToRightCamera"
                 }
               }
             ]
@@ -66,19 +66,19 @@
           }
         },
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "SwitchToLeftCamera"
+                  "name": "AlignToReefCloseRight"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignToReefCloseRight"
+                  "name": "SwitchToLeftCamera"
                 }
               }
             ]
@@ -121,19 +121,19 @@
           }
         },
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "SwitchToRightCamera"
+                  "name": "AlignToReefCloseRight"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignToReefCloseRight"
+                  "name": "SwitchToRightCamera"
                 }
               }
             ]

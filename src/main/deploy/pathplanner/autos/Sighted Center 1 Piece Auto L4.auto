@@ -11,19 +11,19 @@
           }
         },
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "SwitchToLeftCamera"
+                  "name": "AlignToReefFar"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignToReefFar"
+                  "name": "SwitchToLeftCamera"
                 }
               }
             ]
