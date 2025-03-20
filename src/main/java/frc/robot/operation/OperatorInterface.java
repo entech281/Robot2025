@@ -27,6 +27,7 @@ import frc.robot.commands.IntakeAlgaeCommand;
 import frc.robot.commands.IntakeCoralCommand;
 import frc.robot.commands.ResetOdometryCommand;
 import frc.robot.commands.RunTestCommand;
+import frc.robot.commands.TeleFullAutoAlign;
 import frc.robot.commands.TwistCommand;
 import frc.robot.commands.VisionCameraSwitchingCommand;
 import frc.robot.commands.XDriveCommand;
@@ -40,6 +41,7 @@ import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.led.TestLEDCommand;
+import frc.robot.subsystems.vision.VisionInput.Camera;
 
 public class OperatorInterface
     implements DriveInputSupplier, DebugInputSupplier, OperatorInputSupplier {
@@ -141,6 +143,9 @@ public class OperatorInterface
     
     xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.RESET_ODOMETRY)
         .onTrue(new ResetOdometryCommand(odometry));
+
+    xboxController.leftBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.SIDE));
+    xboxController.rightBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.SIDE));
 
     subsystemManager.getVisionSubsystem().setDefaultCommand(new VisionCameraSwitchingCommand(subsystemManager.getVisionSubsystem(), xboxController::getRightX));
   }

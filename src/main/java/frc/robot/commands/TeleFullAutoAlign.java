@@ -8,13 +8,28 @@ import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
 import frc.robot.operation.UserPolicy;
 import frc.robot.subsystems.drive.SwerveUtils;
+import frc.robot.subsystems.vision.VisionInput;
+import frc.robot.subsystems.vision.VisionInput.Camera;
+import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.subsystems.vision.VisionTarget;
 
 public class TeleFullAutoAlign extends EntechCommand {
     private static final double LATERAL_START_ANGLE = Units.degreesToRadians(22.5);
+    public final VisionSubsystem vision;
+    public final VisionInput input = new VisionInput();
+    public final Camera camera;
+
+    public TeleFullAutoAlign(VisionSubsystem vision, Camera camera) {
+        super(vision);
+        this.vision = vision;
+        this.camera = camera;
+        input.setCamera(camera);
+    }
+
     @Override
     public void initialize() {
         UserPolicy.getInstance().setVisionPositionSetPoint(0);
+        vision.updateInputs(input);
     }
 
     @Override
@@ -36,6 +51,7 @@ public class TeleFullAutoAlign extends EntechCommand {
                 UserPolicy.getInstance().setTargetTagID(target.get().getTagID());
             }
         }
+        vision.updateInputs(input);
     }
 
     private double findTargetAngle(int tagID) {
