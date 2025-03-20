@@ -5,15 +5,28 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "SwitchToRightCamera"
+            "pathName": "Start - Back Center Far Right Reef Face"
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "AlignToReefFarRight"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SwitchToRightCamera"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToReefFarRight"
+                }
+              }
+            ]
           }
         },
         {
@@ -47,15 +60,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "SwitchToLeftCamera"
+            "pathName": "Right Feed Zone - Back Center Close Right Reef Face"
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "AlignToReefCloseRight"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SwitchToLeftCamera"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToReefCloseRight"
+                }
+              }
+            ]
           }
         },
         {
@@ -89,15 +115,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "SwitchToRightCamera"
+            "pathName": "Right Feed Zone - Back Center Close Right Reef Face"
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "AlignToReefCloseRight"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SwitchToRightCamera"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToReefCloseRight"
+                }
+              }
+            ]
           }
         },
         {

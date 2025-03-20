@@ -45,22 +45,9 @@
           "data": {
             "commands": [
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "IntakeAlgae"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AlgaeHome"
-                      }
-                    }
-                  ]
+                  "name": "IntakeAlgae"
                 }
               },
               {
@@ -86,12 +73,6 @@
                 "type": "named",
                 "data": {
                   "name": "IntakeAlgae"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlgaeHome"
                 }
               }
             ]
