@@ -16,7 +16,7 @@ public class TestInternalAlgaeDetectorCommand extends EntechCommand {
 
   @Override
   public void execute() {
-    Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST, "Trigger the coral sensor.");
+    Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST, "Trigger the algae sensor.");
   }
 
   @Override

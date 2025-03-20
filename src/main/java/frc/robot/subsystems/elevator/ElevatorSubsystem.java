@@ -1,6 +1,5 @@
 package frc.robot.subsystems.elevator;
 
-import com.pathplanner.lib.auto.NamedCommands;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -14,9 +13,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.subsystems.SparkMaxOutput;
 import frc.entech.util.EntechUtils;
@@ -58,7 +55,7 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       motorConfig.idleMode(IdleMode.kBrake);
 
       motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-      .pidf(0.55, 0.0, 0.0, 0.0, ClosedLoopSlot.kSlot0)
+      .pidf(0.375, 0.0, 0.0, 0.0, ClosedLoopSlot.kSlot0)
       .pidf(0.25, 0.0, 0.0, 0.0, ClosedLoopSlot.kSlot1)
       .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot0)
       .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot1);
@@ -150,11 +147,7 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
 
   @Override
   public Command getTestCommand() {
-    return new SequentialCommandGroup(
-      NamedCommands.getCommand("L2"),
-      new WaitCommand(5.0),
-      NamedCommands.getCommand("Home"),
-      new WaitCommand(5.0));
+    return Commands.none();
   }
 
   @Override

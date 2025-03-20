@@ -144,7 +144,7 @@ public class OperatorInterface
     xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.RESET_ODOMETRY)
         .onTrue(new ResetOdometryCommand(odometry));
 
-    xboxController.leftBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.SIDE));
+    xboxController.leftBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.TOP));
     xboxController.rightBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.SIDE));
 
     subsystemManager.getVisionSubsystem().setDefaultCommand(new VisionCameraSwitchingCommand(subsystemManager.getVisionSubsystem(), xboxController::getRightX));
