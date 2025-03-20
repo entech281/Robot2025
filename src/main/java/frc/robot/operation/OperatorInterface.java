@@ -20,6 +20,7 @@ import frc.robot.CommandFactory;
 import frc.robot.Position;
 import frc.robot.RobotConstants;
 import frc.robot.SubsystemManager;
+import frc.robot.commands.AlgaeHoldCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.FireCoralCommand;
 import frc.robot.commands.GyroReset;
@@ -222,7 +223,8 @@ public class OperatorInterface
           ),
           () -> RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
         )
-      );
+      )
+      .onFalse(new AlgaeHoldCommand(subsystemManager.getCoralMechanismSubsystem()));
   }
 
   private SendableChooser<Command> getTestCommandChooser() {
