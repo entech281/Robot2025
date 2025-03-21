@@ -160,29 +160,62 @@ public class OperatorInterface
     Shuffleboard.getTab("stuffs").add("Run Test", new RunTestCommand(testChooser));
     
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L1))
+        .onTrue(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.AUTO_L1),
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.L1),
+            () -> xboxController.leftBumper().getAsBoolean() || xboxController.rightBumper().getAsBoolean()
+          )
+        )
         .onTrue(new InstantCommand(() ->  UserPolicy.getInstance().setAlgaeMode(false)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
     
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L2)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L2))
+        .onTrue(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.AUTO_L2),
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.L2),
+            () -> xboxController.leftBumper().getAsBoolean() || xboxController.rightBumper().getAsBoolean()
+          )
+        )
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L3)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L3))
+        .onTrue(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.AUTO_L3),
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.L3),
+            () -> xboxController.leftBumper().getAsBoolean() || xboxController.rightBumper().getAsBoolean()
+          )
+        )
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L4)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L4))
+        .onTrue(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.AUTO_L4),
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.L4),
+            () -> xboxController.leftBumper().getAsBoolean() || xboxController.rightBumper().getAsBoolean()
+          )
+        )
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_GROUND)
         .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_GROUND))
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(true)))
-        .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME));
+        .onFalse(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME),
+            new SequentialCommandGroup(
+              new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)),
+              commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME)
+            ),
+            () -> RobotIO.getInstance().getInternalAlgaeDetectorOutput().hasAlgae()
+          )
+        );
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L2)
         .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_L2))
@@ -197,7 +230,16 @@ public class OperatorInterface
         operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.BARGE)
         .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.BARGE))
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(true)))
-        .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME));
+        .onFalse(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME),
+            new SequentialCommandGroup(
+              new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)),
+              commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME)
+            ),
+            () -> RobotIO.getInstance().getInternalAlgaeDetectorOutput().hasAlgae()
+          )
+        );
 
     intakeCommand = new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem(), subsystemManager.getPivotSubsystem());
     fireCommand = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/FireSpeed"));

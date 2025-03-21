@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 5.843352272727274,
-        "y": 4.177897727272727
+        "x": 5.869943181818183,
+        "y": 4.17125
       },
       "prevControl": {
-        "x": 6.361622605632319,
-        "y": 4.180987380722268
+        "x": 6.388213514723228,
+        "y": 4.1743396534495405
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "FarReefFace"
     }
   ],
   "rotationTargets": [],
