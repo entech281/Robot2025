@@ -121,6 +121,10 @@ public class CommandFactory {
     NamedCommands.registerCommand("AlgaeL3", Commands.deferredProxy(() -> formSafeMovementCommand(Position.ALGAE_L3)));
     NamedCommands.registerCommand("AlgaeGround", Commands.deferredProxy(() -> formSafeMovementCommand(Position.ALGAE_GROUND)));
     NamedCommands.registerCommand("AlgaeHome", Commands.deferredProxy(() -> formSafeMovementCommand(Position.ALGAE_HOME)));
+    NamedCommands.registerCommand("AutoL1", Commands.deferredProxy(() -> formSafeMovementCommand(Position.AUTO_L1)));
+    NamedCommands.registerCommand("AutoL2", Commands.deferredProxy(() -> formSafeMovementCommand(Position.AUTO_L2)));
+    NamedCommands.registerCommand("AutoL3", Commands.deferredProxy(() -> formSafeMovementCommand(Position.AUTO_L3)));
+    NamedCommands.registerCommand("AutoL4", Commands.deferredProxy(() -> formSafeMovementCommand(Position.AUTO_L4)));
     NamedCommands.registerCommand("SetAlgaeMode", new InstantCommand( () -> UserPolicy.getInstance().setAlgaeMode(true)));
     var alliance = DriverStation.getAlliance();
       NamedCommands.registerCommand("AlignToReefFar", 
