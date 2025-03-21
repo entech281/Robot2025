@@ -21,11 +21,11 @@ public class TowardsTargetFilter implements DriveFilterI {
                     if (t.getDistance() > LiveTuningHandler.getInstance().getValue("AutoAlign/Stop")) {
                         double ratio = MathUtil.clamp(t.getDistance() / LiveTuningHandler.getInstance().getValue("AutoAlign/Start"), 0.0, 1.0);
                         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
-                            processedInput.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/Stop")) + input.getXSpeed());
-                            processedInput.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/Stop") * ratio) + input.getYSpeed());
+                            processedInput.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/Speed")) + input.getXSpeed());
+                            processedInput.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/Speed") * ratio) + input.getYSpeed());
                         } else {
-                            processedInput.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -LiveTuningHandler.getInstance().getValue("AutoAlign/Stop")) + input.getXSpeed());
-                            processedInput.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -LiveTuningHandler.getInstance().getValue("AutoAlign/Stop") * ratio) + input.getYSpeed());
+                            processedInput.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -LiveTuningHandler.getInstance().getValue("AutoAlign/Speed")) + input.getXSpeed());
+                            processedInput.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -LiveTuningHandler.getInstance().getValue("AutoAlign/Speed") * ratio) + input.getYSpeed());
                         }
                     }
                 }
