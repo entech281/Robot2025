@@ -161,6 +161,14 @@ public final class RobotConstants {
       Map.entry(Position.L2.getPivotKey(), 33.0),
       Map.entry(Position.L3.getPivotKey(), 33.0),
       Map.entry(Position.L4.getPivotKey(), 50.0),
+      Map.entry(Position.AUTO_L1.getPivotKey(), 30.0),
+      Map.entry(Position.AUTO_L2.getPivotKey(), 33.0),
+      Map.entry(Position.AUTO_L3.getPivotKey(), 33.0),
+      Map.entry(Position.AUTO_L4.getPivotKey(), 50.0),
+      Map.entry(Position.AUTO_L1.getElevatorKey(), 2.0),
+      Map.entry(Position.AUTO_L2.getElevatorKey(), 4.7),
+      Map.entry(Position.AUTO_L3.getElevatorKey(), 10.0),
+      Map.entry(Position.AUTO_L4.getElevatorKey(), 19.5),
       Map.entry(Position.BARGE.getPivotKey(), 80.0),
       Map.entry(Position.HOME.getPivotKey(), 15.0),
       Map.entry(Position.ALGAE_HOME.getElevatorKey(), 0.0),
@@ -171,6 +179,12 @@ public final class RobotConstants {
       Map.entry("CoralMechanismSubsystem/SlowDownSpeed", 0.15),
       Map.entry("CoralMechanismSubsystem/L1FireSpeed", 0.6),
       Map.entry("CoralMechanismSubsystem/AlgaeIntakeSpeed", 0.7),
+      Map.entry("AutoAlign/Speed", 0.5),
+      Map.entry("AutoAlign/Start", 8.0),
+      Map.entry("AutoAlign/Stop", 1.0),
+      Map.entry("AutoAlign/AutoSpeed", 0.5),
+      Map.entry("AutoAlign/AutoStart", 8.0),
+      Map.entry("AutoAlign/AutoStop", 1.05),
       Map.entry("CoralMechanismSubsystem/AlgaeHoldSpeed", 0.025)
     );
   }

@@ -160,22 +160,46 @@ public class OperatorInterface
     Shuffleboard.getTab("stuffs").add("Run Test", new RunTestCommand(testChooser));
     
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L1))
+        .onTrue(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.AUTO_L1),
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.L1),
+            () -> xboxController.leftBumper().getAsBoolean() || xboxController.rightBumper().getAsBoolean()
+          )
+        )
         .onTrue(new InstantCommand(() ->  UserPolicy.getInstance().setAlgaeMode(false)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
     
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L2)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L2))
+        .onTrue(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.AUTO_L2),
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.L2),
+            () -> xboxController.leftBumper().getAsBoolean() || xboxController.rightBumper().getAsBoolean()
+          )
+        )
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L3)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L3))
+        .onTrue(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.AUTO_L3),
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.L3),
+            () -> xboxController.leftBumper().getAsBoolean() || xboxController.rightBumper().getAsBoolean()
+          )
+        )
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L4)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L4))
+        .onTrue(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.AUTO_L4),
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.L4),
+            () -> xboxController.leftBumper().getAsBoolean() || xboxController.rightBumper().getAsBoolean()
+          )
+        )
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 
