@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import java.util.Optional;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -62,8 +60,7 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
                 UserPolicy.getInstance().setLaterallyAligning(false);
             }
         } else {
-            Optional<VisionTarget> target = RobotIO.getInstance().getVisionOutput().getBestTarget();
-            if (RobotIO.getInstance().getVisionOutput().hasTarget() && target.isPresent()) {
+            if (RobotIO.getInstance().getVisionOutput().hasTarget()) {
                 UserPolicy.getInstance().setAligningToAngle(true);
                 UserPolicy.getInstance().setTargetAngle(findTargetAngle(tagID));
                 UserPolicy.getInstance().setTargetTagID(tagID);
