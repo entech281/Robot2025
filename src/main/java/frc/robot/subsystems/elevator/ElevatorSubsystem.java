@@ -19,6 +19,7 @@ import frc.entech.subsystems.SparkMaxOutput;
 import frc.entech.util.EntechUtils;
 import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
+import frc.robot.operation.UserPolicy;
 
 public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOutput> {
 
@@ -57,7 +58,9 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
       .pidf(0.375, 0.0, 0.0, 0.0, ClosedLoopSlot.kSlot0)
       .pidf(0.25, 0.0, 0.0, 0.0, ClosedLoopSlot.kSlot1)
+      .pidf(0.15, 0.0, 0.0, 0.0, ClosedLoopSlot.kSlot2)
       .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot0)
+      .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot2)
       .outputRange(-1.0, 1.0, ClosedLoopSlot.kSlot1);
 
       motorConfig.closedLoop.maxMotion
@@ -101,7 +104,11 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
     if ((ENABLED) && (clampedPosition != lastPosition)) {
       if (currentInput.getActivate()) {
         if ((calculateInchesFromMotorPosition(leftElevator.getEncoder().getPosition())) - clampedPosition <= 0) {
-          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kPosition, ClosedLoopSlot.kSlot0, -kg);
+          if (UserPolicy.getInstance().isAlgaeMode()) {
+            leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kPosition, ClosedLoopSlot.kSlot2, -kg);
+          } else {
+            leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kPosition, ClosedLoopSlot.kSlot0, -kg);
+          }
         } 
         else {
           leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1, kg);
