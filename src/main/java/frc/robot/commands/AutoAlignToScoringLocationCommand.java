@@ -98,7 +98,7 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
             if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
                 return RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.get(tagID) - 180;
             } else {
-                return RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.get(tagID);
+                return RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.get(tagID) - 180;
             }
         } else {
             return 0;
