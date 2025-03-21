@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of Start - Far Reef Face"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
