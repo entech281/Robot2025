@@ -154,13 +154,14 @@ public class OperatorInterface
     rumbleCommand = new RunCommand(
       () -> {
         if (RobotIO.getInstance().getVisionOutput().hasTarget() && (xboxController.leftBumper().getAsBoolean() || xboxController.rightBumper().getAsBoolean() || xboxController.rightStick().getAsBoolean())) {
-          xboxController.setRumble(RumbleType.kBothRumble, 0.75);
+          xboxController.setRumble(RumbleType.kBothRumble, 1.0);
         } else {
           xboxController.setRumble(RumbleType.kBothRumble, 0.0);
         }
       }
     );
 
+    rumbleCommand.schedule();
     subsystemManager.getVisionSubsystem().setDefaultCommand(new VisionCameraSwitchingCommand(subsystemManager.getVisionSubsystem(), xboxController::getRightX));
   }
 
