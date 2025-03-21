@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -32,7 +33,6 @@ import frc.robot.commands.FireCoralCommandAuto;
 import frc.robot.commands.GyroResetByAngleCommand;
 import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
-import frc.robot.commands.VisionCameraSwitchingCommand;
 import frc.robot.io.RobotIO;
 import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.operation.UserPolicy;
@@ -45,7 +45,6 @@ import frc.robot.subsystems.navx.NavXSubsystem;
 import frc.robot.subsystems.pivot.PivotSubsystem;
 import frc.robot.subsystems.vision.VisionInput;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 
 @SuppressWarnings("unused")
 public class CommandFactory {
@@ -112,16 +111,17 @@ public class CommandFactory {
           return false;
         }, driveSubsystem);
     
-    NamedCommands.registerCommand("L1", formSafeMovementCommand(Position.L1));
-    NamedCommands.registerCommand("L2", formSafeMovementCommand(Position.L2));
-    NamedCommands.registerCommand("L3", formSafeMovementCommand(Position.L3));
-    NamedCommands.registerCommand("L4", formSafeMovementCommand(Position.L4));
-    NamedCommands.registerCommand("Home", formSafeMovementCommand(Position.HOME));
-    NamedCommands.registerCommand("Barge", formSafeMovementCommand(Position.BARGE));
-    NamedCommands.registerCommand("AlgaeL2", formSafeMovementCommand(Position.ALGAE_L2));
-    NamedCommands.registerCommand("AlgaeL3", formSafeMovementCommand(Position.ALGAE_L3));
-    NamedCommands.registerCommand("AlgaeGround", formSafeMovementCommand(Position.ALGAE_GROUND));
-    NamedCommands.registerCommand("AlgaeHome", formSafeMovementCommand(Position.ALGAE_HOME));
+    NamedCommands.registerCommand("L1", Commands.deferredProxy(() -> formSafeMovementCommand(Position.L1)));
+    NamedCommands.registerCommand("L2", Commands.deferredProxy(() -> formSafeMovementCommand(Position.L2)));
+    NamedCommands.registerCommand("L3", Commands.deferredProxy(() -> formSafeMovementCommand(Position.L3)));
+    NamedCommands.registerCommand("L4", Commands.deferredProxy(() -> formSafeMovementCommand(Position.L4)));
+    NamedCommands.registerCommand("Home", Commands.deferredProxy(() -> formSafeMovementCommand(Position.HOME)));
+    NamedCommands.registerCommand("Barge", Commands.deferredProxy(() -> formSafeMovementCommand(Position.BARGE)));
+    NamedCommands.registerCommand("AlgaeL2", Commands.deferredProxy(() -> formSafeMovementCommand(Position.ALGAE_L2)));
+    NamedCommands.registerCommand("AlgaeL3", Commands.deferredProxy(() -> formSafeMovementCommand(Position.ALGAE_L3)));
+    NamedCommands.registerCommand("AlgaeGround", Commands.deferredProxy(() -> formSafeMovementCommand(Position.ALGAE_GROUND)));
+    NamedCommands.registerCommand("AlgaeHome", Commands.deferredProxy(() -> formSafeMovementCommand(Position.ALGAE_HOME)));
+    NamedCommands.registerCommand("SetAlgaeMode", new InstantCommand( () -> UserPolicy.getInstance().setAlgaeMode(true)));
     var alliance = DriverStation.getAlliance();
       NamedCommands.registerCommand("AlignToReefFar", 
         new ConditionalCommand(

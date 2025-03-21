@@ -29,6 +29,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "SetAlgaeMode"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Back Up from Far Reef Face and Align With Algae"
