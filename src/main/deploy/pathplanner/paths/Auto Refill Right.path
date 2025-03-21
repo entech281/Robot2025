@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.032329545454545,
-        "y": 2.7353409090909087
+        "x": 5.041776315789473,
+        "y": 2.7068256578947363
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.210011286235994,
-        "y": 2.9112079014256675
+        "x": 5.219458056570922,
+        "y": 2.882692650229495
       },
       "isLocked": false,
       "linkedName": "FarRightReefFace"
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 1.3960227272727275,
-        "y": 0.7809090909090901
+        "x": 1.2893092105263155,
+        "y": 0.6766447368421052
       },
       "prevControl": {
-        "x": 1.0052443154903885,
-        "y": 0.6130181517509767
+        "x": 0.8985307987439766,
+        "y": 0.5087537976839919
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,8 +49,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.3,
+    "maxAcceleration": 3.3,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
