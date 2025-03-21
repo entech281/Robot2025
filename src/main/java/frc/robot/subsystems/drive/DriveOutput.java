@@ -16,12 +16,14 @@ public class DriveOutput extends SubsystemOutput {
   private SwerveModuleState[] moduleStates;
   private ChassisSpeeds speeds;
 
-  private SparkMaxOutput frontLeft;
-  private SparkMaxOutput frontRight;
-  private SparkMaxOutput rearLeft;
-  private SparkMaxOutput rearRight;
-
-  
+  private SparkMaxOutput frontLeftDrive;
+  private SparkMaxOutput frontRightDrive;
+  private SparkMaxOutput rearLeftDrive;
+  private SparkMaxOutput rearRightDrive;
+  private SparkMaxOutput frontLeftTurn;
+  private SparkMaxOutput frontRightTurn;
+  private SparkMaxOutput rearLeftTurn;
+  private SparkMaxOutput rearRightTurn;
 
   @Override
   public void toLog() {
@@ -31,10 +33,14 @@ public class DriveOutput extends SubsystemOutput {
     Logger.recordOutput("DriveOutput/moduleStates", moduleStates);
     Logger.recordOutput("DriveOutput/chassisSpeed", speeds);
 
-    frontLeft.log("DriveOutput/frontLeft");
-    frontRight.log("DriveOutput/frontRight");
-    rearLeft.log("DriveOutput/rearLeft");
-    rearRight.log("DriveOutput/rearRight");
+    frontLeftDrive.log("DriveOutput/frontLeft");
+    frontRightDrive.log("DriveOutput/frontRight");
+    rearLeftDrive.log("DriveOutput/rearLeft");
+    rearRightDrive.log("DriveOutput/rearRight");
+    frontRightTurn.log("DriveOutput/frontRightTurn");
+    rearLeftTurn.log("DriveOutput/rearLeftTurn");
+    rearRightTurn.log("DriveOutput/rearRightTurn");
+    frontLeftTurn.log("DriveOutput/frontLeftTurn");
   }
 
   public SwerveModulePosition[] getModulePositions() {
@@ -78,35 +84,67 @@ public class DriveOutput extends SubsystemOutput {
     this.speeds = speeds;
   }
 
-  public SparkMaxOutput getFrontLeft() {
-    return frontLeft;
+   public SparkMaxOutput getFrontLeftDrive() {
+    return frontLeftDrive;
   }
 
-  public void setFrontLeft(SparkMaxOutput frontLeft) {
-    this.frontLeft = frontLeft;
+  public void setFrontLeftDrive(SparkMaxOutput frontLeftDrive) {
+    this.frontLeftDrive = frontLeftDrive;
   }
 
-  public SparkMaxOutput getFrontRight() {
-    return frontRight;
+  public SparkMaxOutput getFrontRightDrive() {
+    return frontRightDrive;
   }
 
-  public void setFrontRight(SparkMaxOutput frontRight) {
-    this.frontRight = frontRight;
+  public void setFrontRightDrive(SparkMaxOutput frontRightDrive) {
+    this.frontRightDrive = frontRightDrive;
   }
 
-  public SparkMaxOutput getRearLeft() {
-    return rearLeft;
+  public SparkMaxOutput getRearLeftDrive() {
+    return rearLeftDrive;
   }
 
-  public void setRearLeft(SparkMaxOutput rearLeft) {
-    this.rearLeft = rearLeft;
+  public void setRearLeftDrive(SparkMaxOutput rearLeftDrive) {
+    this.rearLeftDrive = rearLeftDrive;
   }
 
-  public SparkMaxOutput getRearRight() {
-    return rearRight;
+  public SparkMaxOutput getRearRightDrive() {
+    return rearRightDrive;
   }
 
-  public void setRearRight(SparkMaxOutput rearRight) {
-    this.rearRight = rearRight;
+  public void setRearRightDrive(SparkMaxOutput rearRightDrive) {
+    this.rearRightDrive = rearRightDrive;
+  }
+
+  public SparkMaxOutput getFrontLeftTurn() {
+    return frontLeftTurn;
+  }
+
+  public void setFrontLeftTurn(SparkMaxOutput frontLeftTurn) {
+    this.frontLeftTurn = frontLeftTurn;
+  }
+
+  public SparkMaxOutput getFrontRightTurn() {
+    return frontRightTurn;
+  }
+
+  public void setFrontRightTurn(SparkMaxOutput frontRightTurn) {
+    this.frontRightTurn = frontRightTurn;
+  }
+
+  public SparkMaxOutput getRearLeftTurn() {
+    return rearLeftTurn;
+  }
+
+  public void setRearLeftTurn(SparkMaxOutput rearLeftTurn) {
+    this.rearLeftTurn = rearLeftTurn;
+  }
+
+  public SparkMaxOutput getRearRightTurn() {
+    return rearRightTurn;
+  }
+
+  public void setRearRightTurn(SparkMaxOutput rearRightTurn) {
+    this.rearRightTurn = rearRightTurn;
   }
 }
