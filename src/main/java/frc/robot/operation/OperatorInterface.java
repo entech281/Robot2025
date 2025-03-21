@@ -158,10 +158,10 @@ public class OperatorInterface
         } else {
           xboxController.setRumble(RumbleType.kBothRumble, 0.0);
         }
-      }
+      }, subsystemManager.getInternalAlgaeDetectorSubsystem()
     );
 
-    rumbleCommand.schedule();
+    subsystemManager.getInternalAlgaeDetectorSubsystem().setDefaultCommand(rumbleCommand);
     subsystemManager.getVisionSubsystem().setDefaultCommand(new VisionCameraSwitchingCommand(subsystemManager.getVisionSubsystem(), xboxController::getRightX));
   }
 
