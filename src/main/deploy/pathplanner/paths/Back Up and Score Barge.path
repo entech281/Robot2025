@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.3533304867324265,
-        "y": 4.250596100462215
+        "x": 6.349761044155313,
+        "y": 4.288407169147513
       },
       "isLocked": false,
       "linkedName": "CenterAlgaeFarReefFace"
     },
     {
       "anchor": {
-        "x": 7.7,
-        "y": 4.816079545454546
+        "x": 7.525227272727274,
+        "y": 4.842670454545455
       },
       "prevControl": {
-        "x": 5.723382166695746,
-        "y": 5.040638994617052
+        "x": 5.642785497630434,
+        "y": 3.980646094360992
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
