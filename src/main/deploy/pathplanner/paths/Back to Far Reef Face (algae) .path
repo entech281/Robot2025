@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.17509473996513,
-        "y": 4.017811067141474
+        "x": 6.901036914595052,
+        "y": 3.958082351623939
       },
       "isLocked": false,
       "linkedName": "Backed up from Far Reef Face"
@@ -47,7 +47,7 @@
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 1.5,
     "rotation": 180.0
   },
   "useDefaultConstraints": false
