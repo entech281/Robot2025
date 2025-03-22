@@ -65,6 +65,7 @@ public class OperatorInterface
   private FireCoralCommand fireCommand;
   private FireCoralCommand fireCommandL1;
   private RunCommand rumbleCommand;
+  private FireCoralCommand algaeFireCommand;
 
   public OperatorInterface(CommandFactory commandFactory, SubsystemManager subsystemManager,
       OdometryProcessor odometry) {
@@ -258,6 +259,7 @@ public class OperatorInterface
     intakeCommand = new IntakeCoralCommand(subsystemManager.getCoralMechanismSubsystem(), subsystemManager.getPivotSubsystem());
     fireCommand = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/FireSpeed"));
     fireCommandL1 = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/L1FireSpeed"));
+    algaeFireCommand = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/AlgaeFireSpeed"));
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.FIRE)
       .whileTrue(
         new ConditionalCommand(
@@ -274,7 +276,11 @@ public class OperatorInterface
           ),
           new ConditionalCommand(
             new IntakeAlgaeCommand(subsystemManager.getCoralMechanismSubsystem()),
-            intakeCommand,
+            new ConditionalCommand(
+              algaeFireCommand,
+              intakeCommand,
+              () -> operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.BARGE).getAsBoolean() || operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_GROUND).getAsBoolean()
+            ),
             () -> operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L3).getAsBoolean() || operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L2).getAsBoolean()
           ),
           () -> RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
