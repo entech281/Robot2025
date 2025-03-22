@@ -14,7 +14,7 @@ public class VisionOutput extends SubsystemOutput {
   private long timestamp;
   private int numberOfTags;
   private String reefCloseness;
-
+  private boolean cameraGood;
 
 
   @Override
@@ -23,6 +23,7 @@ public class VisionOutput extends SubsystemOutput {
     Logger.recordOutput("VisionOutput/hasTarget", hasTarget);
     Logger.recordOutput("VisionOutput/numberOfTags", numberOfTags);
     Logger.recordOutput("VisionOutput/reefCloseness", reefCloseness);
+    Logger.recordOutput("VisionOutput/cameraGood", cameraGood);
     if (bestTarget.isPresent()) {
       bestTarget.get().log("VisionOutput/bestTarget");
     }
@@ -77,5 +78,13 @@ public class VisionOutput extends SubsystemOutput {
 
   public void setNumberOfTags(int numberOfTags) {
     this.numberOfTags = numberOfTags;
+  }
+
+  public boolean isCameraGood() {
+    return this.cameraGood;
+  }
+
+  public void setCameraGood(boolean cameraGood) {
+    this.cameraGood = cameraGood;
   }
 }

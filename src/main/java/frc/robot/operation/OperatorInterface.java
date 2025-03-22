@@ -3,6 +3,7 @@ package frc.robot.operation;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -11,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -62,6 +64,7 @@ public class OperatorInterface
   private IntakeCoralCommand intakeCommand;
   private FireCoralCommand fireCommand;
   private FireCoralCommand fireCommandL1;
+  private RunCommand rumbleCommand;
 
   public OperatorInterface(CommandFactory commandFactory, SubsystemManager subsystemManager,
       OdometryProcessor odometry) {
@@ -148,6 +151,17 @@ public class OperatorInterface
     xboxController.leftBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.TOP));
     xboxController.rightBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.SIDE));
 
+    rumbleCommand = new RunCommand(
+      () -> {
+        if (RobotIO.getInstance().getVisionOutput().hasTarget() && (xboxController.leftBumper().getAsBoolean() || xboxController.rightBumper().getAsBoolean() || xboxController.rightStick().getAsBoolean())) {
+          xboxController.setRumble(RumbleType.kBothRumble, 1.0);
+        } else {
+          xboxController.setRumble(RumbleType.kBothRumble, 0.0);
+        }
+      }, subsystemManager.getInternalAlgaeDetectorSubsystem()
+    );
+
+    subsystemManager.getInternalAlgaeDetectorSubsystem().setDefaultCommand(rumbleCommand);
     subsystemManager.getVisionSubsystem().setDefaultCommand(new VisionCameraSwitchingCommand(subsystemManager.getVisionSubsystem(), xboxController::getRightX));
   }
 
@@ -160,22 +174,46 @@ public class OperatorInterface
     Shuffleboard.getTab("stuffs").add("Run Test", new RunTestCommand(testChooser));
     
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L1))
+        .onTrue(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.AUTO_L1),
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.L1),
+            () -> xboxController.leftBumper().getAsBoolean() || xboxController.rightBumper().getAsBoolean()
+          )
+        )
         .onTrue(new InstantCommand(() ->  UserPolicy.getInstance().setAlgaeMode(false)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
     
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L2)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L2))
+        .onTrue(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.AUTO_L2),
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.L2),
+            () -> xboxController.leftBumper().getAsBoolean() || xboxController.rightBumper().getAsBoolean()
+          )
+        )
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L3)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L3))
+        .onTrue(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.AUTO_L3),
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.L3),
+            () -> xboxController.leftBumper().getAsBoolean() || xboxController.rightBumper().getAsBoolean()
+          )
+        )
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 
     operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L4)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.L4))
+        .onTrue(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.AUTO_L4),
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.L4),
+            () -> xboxController.leftBumper().getAsBoolean() || xboxController.rightBumper().getAsBoolean()
+          )
+        )
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 

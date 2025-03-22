@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.525227272727274,
-        "y": 4.842670454545455
+        "x": 8.321,
+        "y": 4.929
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.957891057000644,
-        "y": 4.926475474078344
+        "x": 8.753663784273371,
+        "y": 5.012805019532889
       },
       "isLocked": false,
       "linkedName": "ScoreBarge"
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.3,
+    "maxAcceleration": 3.3,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
