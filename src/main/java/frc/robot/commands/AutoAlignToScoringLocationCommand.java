@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -21,9 +22,16 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
     private final DriveSubsystem drive;
     private final int tagID;
     public static final double TOLERANCE = 0.1;
+    public static final double DIST_TOLERANCE = 0.05;
 
     private final LateralAlignFilter lateralFilter = new LateralAlignFilter();
     private final AutoYawFilter yawFilter = new AutoYawFilter();
+
+    private final PIDController moveController = new PIDController(
+        LiveTuningHandler.getInstance().getValue("AutoAlign/StopP"),
+        LiveTuningHandler.getInstance().getValue("AutoAlign/StopI"),
+        LiveTuningHandler.getInstance().getValue("AutoAlign/StopD")
+    );
 
     public AutoAlignToScoringLocationCommand(DriveSubsystem drive, int tagID) {
         super(drive);
@@ -45,15 +53,13 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
                 for (VisionTarget t : RobotIO.getInstance().getVisionOutput().getTargets()) {
                     if (t.getTagID() == tagID && SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) < LATERAL_START_ANGLE) {
                         UserPolicy.getInstance().setLaterallyAligning(true);
-                        if (t.getDistance() > LiveTuningHandler.getInstance().getValue("AutoAlign/AutoStop")) {
-                            double ratio = MathUtil.clamp(t.getDistance() / LiveTuningHandler.getInstance().getValue("AutoAlign/AutoStart"), 0.0, 1.0);
-                            if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
-                                input.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/AutoSpeed")) + input.getXSpeed());
-                                input.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/AutoSpeed") * ratio) + input.getYSpeed());
-                            } else {
-                                input.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -LiveTuningHandler.getInstance().getValue("AutoAlign/AutoSpeed")) + input.getXSpeed());
-                                input.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -LiveTuningHandler.getInstance().getValue("AutoAlign/AutoSpeed") * ratio) + input.getYSpeed());
-                            }
+                        double ratio = MathUtil.clamp(-moveController.calculate(t.getDistance(), LiveTuningHandler.getInstance().getValue("AutoAlign/Stop")), -1.0, 1.0);
+                        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
+                            input.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/AutoSpeed")) + input.getXSpeed());
+                            input.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/AutoSpeed") * ratio) + input.getYSpeed());
+                        } else {
+                            input.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -LiveTuningHandler.getInstance().getValue("AutoAlign/AutoSpeed")) + input.getXSpeed());
+                            input.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -LiveTuningHandler.getInstance().getValue("AutoAlign/AutoSpeed") * ratio) + input.getYSpeed());
                         }
                     }
                 }
@@ -77,7 +83,7 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
         if (RobotIO.getInstance().getVisionOutput().hasTarget()) {
             for (VisionTarget t : RobotIO.getInstance().getVisionOutput().getTargets()) {
                 if (t.getTagID() == tagID) {
-                    return(t.getDistance() <= LiveTuningHandler.getInstance().getValue("AutoAlign/AutoStop")) && (Math.abs(t.getTagXW() - UserPolicy.getInstance().getVisionPositionSetPoint()) <= TOLERANCE);
+                    return(Math.abs(t.getDistance() - LiveTuningHandler.getInstance().getValue("AutoAlign/AutoStop")) <= DIST_TOLERANCE) && (Math.abs(t.getTagXW() - UserPolicy.getInstance().getVisionPositionSetPoint()) <= TOLERANCE);
                 }
             }
         }

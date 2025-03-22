@@ -29,17 +29,17 @@ public class TowardsTargetFilter implements DriveFilterI {
         if (RobotIO.getInstance().getVisionOutput().hasTarget() && UserPolicy.getInstance().isTowardsAlignment()) {
             for (VisionTarget t : RobotIO.getInstance().getVisionOutput().getTargets()) {
                 if (t.getTagID() == UserPolicy.getInstance().getTargetTagID()) {
-                        moveController.setP(LiveTuningHandler.getInstance().getValue("AutoAlign/StopP"));
-                        moveController.setI(LiveTuningHandler.getInstance().getValue("AutoAlign/StopI"));
-                        moveController.setD(LiveTuningHandler.getInstance().getValue("AutoAlign/StopD"));
-                        double ratio = MathUtil.clamp(moveController.calculate(t.getDistance(), LiveTuningHandler.getInstance().getValue("AutoAlign/Stop")), 0.0, 1.0);
-                        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
-                            processedInput.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/Speed")) + input.getXSpeed());
-                            processedInput.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/Speed") * ratio) + input.getYSpeed());
-                        } else {
-                            processedInput.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -LiveTuningHandler.getInstance().getValue("AutoAlign/Speed")) + input.getXSpeed());
-                            processedInput.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -LiveTuningHandler.getInstance().getValue("AutoAlign/Speed") * ratio) + input.getYSpeed());
-                        }
+                    moveController.setP(LiveTuningHandler.getInstance().getValue("AutoAlign/StopP"));
+                    moveController.setI(LiveTuningHandler.getInstance().getValue("AutoAlign/StopI"));
+                    moveController.setD(LiveTuningHandler.getInstance().getValue("AutoAlign/StopD"));
+                    double ratio = MathUtil.clamp(-moveController.calculate(t.getDistance(), LiveTuningHandler.getInstance().getValue("AutoAlign/Stop")), -1.0, 1.0);
+                    if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
+                        processedInput.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/Speed")) + input.getXSpeed());
+                        processedInput.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/Speed") * ratio) + input.getYSpeed());
+                    } else {
+                        processedInput.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -LiveTuningHandler.getInstance().getValue("AutoAlign/Speed")) + input.getXSpeed());
+                        processedInput.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -LiveTuningHandler.getInstance().getValue("AutoAlign/Speed") * ratio) + input.getYSpeed());
+                    }
                 }
             }
         }
