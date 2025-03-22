@@ -185,13 +185,16 @@ public final class RobotConstants {
       Map.entry("AutoAlign/AutoSpeed", 0.5),
       Map.entry("AutoAlign/AutoStart", 8.0),
       Map.entry("AutoAlign/AutoStop", 1.05),
+      Map.entry("AutoAlign/StopP", 0.125),
+      Map.entry("AutoAlign/StopI", 0.0),
+      Map.entry("AutoAlign/StopD", 0.0),
       Map.entry("CoralMechanismSubsystem/AlgaeHoldSpeed", 0.025)
     );
   }
 
   public static interface ELEVATOR {
     public static final double INITIAL_POSITION = 0.0;
-    public static final double UPPER_SOFT_LIMIT_DEG = 22.25;
+    public static final double UPPER_SOFT_LIMIT_DEG = 22.5;
     public static final double LOWER_SOFT_LIMIT_DEG = 1;
     public static final double ELEVATOR_CONVERSION_FACTOR = 1.9;
     public static final double POSITION_TOLERANCE_DEG = 2;
