@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 5.843352272727274,
-        "y": 4.177897727272727
+        "x": 5.82,
+        "y": 4.17125
       },
       "prevControl": {
-        "x": 6.361622605632319,
-        "y": 4.180987380722268
+        "x": 6.338270332905045,
+        "y": 4.1743396534495405
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "FarReefFace"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.3,
+    "maxAcceleration": 3.3,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

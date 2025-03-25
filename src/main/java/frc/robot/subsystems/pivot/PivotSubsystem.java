@@ -1,5 +1,6 @@
 package frc.robot.subsystems.pivot;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -16,6 +17,7 @@ import frc.entech.subsystems.SparkMaxOutput;
 import frc.entech.util.EntechUtils;
 import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
+import frc.robot.operation.UserPolicy;
 
 public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
     private static final boolean ENABLED = true;
@@ -44,8 +46,10 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
             pivotConfig.idleMode(IdleMode.kBrake);
             mode = IdleMode.kBrake;
             pivotConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-            pivotConfig.closedLoop.pidf(4.5, 0, 0, 0);
-            pivotConfig.closedLoop.outputRange(-0.8, 0.8);
+            pivotConfig.closedLoop.pidf(4.5, 0, 0, 0, ClosedLoopSlot.kSlot0);
+            pivotConfig.closedLoop.pidf(3.5, 0, 0, 0, ClosedLoopSlot.kSlot1);
+            pivotConfig.closedLoop.outputRange(-0.4, 0.4, ClosedLoopSlot.kSlot0);
+            pivotConfig.closedLoop.outputRange(-0.4, 0.4, ClosedLoopSlot.kSlot1);
             pivotConfig.closedLoop.positionWrappingEnabled(true);
             pivotConfig.closedLoop.positionWrappingInputRange(0, 1);
             pivotMotor.configure(pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -93,7 +97,11 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
         if (ENABLED) {
             if (currentInput.getActivate()) {
                 double targetPosition = calculateMotorPositionFromDegrees((currentInput.getRequestedPosition()));
-                pidController.setReference(targetPosition, ControlType.kPosition);
+                if (UserPolicy.getInstance().isAlgaeMode()) {
+                    pidController.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+                } else {
+                    pidController.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+                }
             } else {
                 pivotMotor.set(0);
             }

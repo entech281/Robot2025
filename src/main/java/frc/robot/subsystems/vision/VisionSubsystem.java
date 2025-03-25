@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.util.AprilTagDistanceCalculator;
+import frc.entech.util.StoppingCounter;
 import frc.robot.RobotConstants;
 import frc.robot.operation.UserPolicy;
 
@@ -18,6 +19,8 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
   // NetworkTable instance
   private final NetworkTable networkTable;
   private final StringPublisher cameraSetter;
+  private final StoppingCounter piLost = new StoppingCounter(1.0);
+  private int lastLoopCount = 0;
 
   public VisionSubsystem() {
     // Initialize the NetworkTable instance
@@ -40,6 +43,7 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     NetworkTableEntry tagXWEntry = networkTable.getEntry("tagXWidths");
     NetworkTableEntry cameraUsedEntry = networkTable.getEntry("cameraUsed");
     NetworkTableEntry numberOfTargetsEntry = networkTable.getEntry("numberOfTargets");
+    NetworkTableEntry loopEntry = networkTable.getEntry("loop_total_counter");
 
     ArrayList<VisionTarget> targetList = new ArrayList<>();
     
@@ -52,6 +56,9 @@ public class VisionSubsystem extends EntechSubsystem<VisionInput, VisionOutput> 
     Number[] tagXWs = tagXWEntry.getNumberArray(new Number[] {});
     String[] cameraUsed = cameraUsedEntry.getStringArray(new String[] {});
     long numberOfTargets = numberOfTargetsEntry.getInteger(0);
+    int loopCount = (int) loopEntry.getInteger(0);
+    output.setCameraGood(!piLost.isFinished(loopCount == lastLoopCount));
+    lastLoopCount = loopCount;
     try {
       for (int i = 0; i < numberOfTargets; i++) {
         VisionTarget target = new VisionTarget();

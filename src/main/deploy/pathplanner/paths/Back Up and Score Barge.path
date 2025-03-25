@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.3533304867324265,
-        "y": 4.250596100462215
+        "x": 6.588055270077305,
+        "y": 4.308737810632676
       },
       "isLocked": false,
       "linkedName": "CenterAlgaeFarReefFace"
     },
     {
       "anchor": {
-        "x": 7.7,
-        "y": 4.816079545454546
+        "x": 8.321,
+        "y": 4.929
       },
       "prevControl": {
-        "x": 5.723382166695746,
-        "y": 5.040638994617052
+        "x": 6.17952146519816,
+        "y": 4.169300962320602
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.3,
+    "maxAcceleration": 3.3,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
