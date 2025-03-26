@@ -1,14 +1,15 @@
 package frc.robot.commands;
 
-import java.util.Optional;
-
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.entech.commands.EntechCommand;
 import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
+import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.operation.UserPolicy;
-import frc.robot.processors.DriveInputProcessor;
 import frc.robot.processors.filters.AutoYawFilter;
 import frc.robot.processors.filters.LateralAlignFilter;
 import frc.robot.subsystems.drive.DriveInput;
@@ -17,24 +18,26 @@ import frc.robot.subsystems.drive.SwerveUtils;
 import frc.robot.subsystems.vision.VisionTarget;
 
 public class AutoAlignToScoringLocationCommand extends EntechCommand {
-    private static final double SPEED = 0.5;
     private static final double LATERAL_START_ANGLE = 22.5;
-    private static final double STOPPING_DISTANCE = 1.05;
     private final DriveSubsystem drive;
     private final int tagID;
-    private final DriveInputProcessor inputProcessor;
     public static final double TOLERANCE = 0.1;
-    private static final double START_DISTANCE = 8.0;
+    public static final double DIST_TOLERANCE = 0.05;
 
     private final LateralAlignFilter lateralFilter = new LateralAlignFilter();
     private final AutoYawFilter yawFilter = new AutoYawFilter();
+
+    private final PIDController moveController = new PIDController(
+        LiveTuningHandler.getInstance().getValue("AutoAlign/StopP"),
+        LiveTuningHandler.getInstance().getValue("AutoAlign/StopI"),
+        LiveTuningHandler.getInstance().getValue("AutoAlign/StopD")
+    );
 
     public AutoAlignToScoringLocationCommand(DriveSubsystem drive, int tagID) {
         super(drive);
 
         this.drive = drive;
         this.tagID = tagID;
-        this.inputProcessor = new DriveInputProcessor();
     }
 
     @Override
@@ -50,10 +53,13 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
                 for (VisionTarget t : RobotIO.getInstance().getVisionOutput().getTargets()) {
                     if (t.getTagID() == tagID && SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) < LATERAL_START_ANGLE) {
                         UserPolicy.getInstance().setLaterallyAligning(true);
-                        if (t.getDistance() > STOPPING_DISTANCE) {
-                            double ratio = MathUtil.clamp(t.getDistance() / START_DISTANCE, 0.0, 1.0);
-                            input.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * SPEED) + input.getXSpeed());
-                            input.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * SPEED * ratio) + input.getYSpeed());
+                        double ratio = MathUtil.clamp(-moveController.calculate(t.getDistance(), LiveTuningHandler.getInstance().getValue("AutoAlign/Stop")), -1.0, 1.0);
+                        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
+                            input.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/AutoSpeed")) + input.getXSpeed());
+                            input.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/AutoSpeed") * ratio) + input.getYSpeed());
+                        } else {
+                            input.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -LiveTuningHandler.getInstance().getValue("AutoAlign/AutoSpeed")) + input.getXSpeed());
+                            input.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -LiveTuningHandler.getInstance().getValue("AutoAlign/AutoSpeed") * ratio) + input.getYSpeed());
                         }
                     }
                 }
@@ -61,8 +67,7 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
                 UserPolicy.getInstance().setLaterallyAligning(false);
             }
         } else {
-            Optional<VisionTarget> target = RobotIO.getInstance().getVisionOutput().getBestTarget();
-            if (RobotIO.getInstance().getVisionOutput().hasTarget() && target.isPresent()) {
+            if (RobotIO.getInstance().getVisionOutput().hasTarget()) {
                 UserPolicy.getInstance().setAligningToAngle(true);
                 UserPolicy.getInstance().setTargetAngle(findTargetAngle(tagID));
                 UserPolicy.getInstance().setTargetTagID(tagID);
@@ -78,7 +83,7 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
         if (RobotIO.getInstance().getVisionOutput().hasTarget()) {
             for (VisionTarget t : RobotIO.getInstance().getVisionOutput().getTargets()) {
                 if (t.getTagID() == tagID) {
-                    return(t.getDistance() <= STOPPING_DISTANCE) && (Math.abs(t.getTagXW() - UserPolicy.getInstance().getVisionPositionSetPoint()) <= TOLERANCE);
+                    return(Math.abs(t.getDistance() - LiveTuningHandler.getInstance().getValue("AutoAlign/AutoStop")) <= DIST_TOLERANCE) && (Math.abs(t.getTagXW() - UserPolicy.getInstance().getVisionPositionSetPoint()) <= TOLERANCE);
                 }
             }
         }
@@ -94,7 +99,11 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
 
     private double findTargetAngle(int tagID) {
         if (RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.containsKey(tagID)) {
-            return RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.get(tagID) - 180;
+            if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+                return RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.get(tagID) - 180;
+            } else {
+                return RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.get(tagID) - 180;
+            }
         } else {
             return 0;
         }

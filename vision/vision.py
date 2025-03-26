@@ -267,14 +267,19 @@ def main():
 
 
     # Setup video streaming
-    mjpegServer = cs.CameraServer.addServer('annotated',SETTINGS_STREAM_PORT)
+    topMjpegServer = cs.CameraServer.addServer('annotated',SETTINGS_STREAM_PORT)
+    sideMjpegServer = cs.CameraServer.addServer('annotated',SETTINGS_STREAM_PORT)
 
-    mjpegServer.setSource(cameras['top'])
+    topMjpegServer.setSource(cameras['top'])
+    sideMjpegServer.setSource(cameras['side'])
     print(f"mjpg server listening at http://0.0.0.0:{SETTINGS_STREAM_PORT}")
 
 
-    cvsink = cs.CvSink("cvsink")
-    cvsink.setSource(cameras['top'])
+    topCvsink = cs.CvSink("cvsink")
+    sideCvsink = cs.CvSink("cvsink")
+    topCvsink.setSource(cameras['top'])
+    sideCvsink.setSource(cameras['side'])
+    selectedCvsink = topCvsink
     cvSource = cs.CameraServer.putVideo("vision", RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
 
     table.putString("camera", "top")
@@ -296,20 +301,17 @@ def main():
         if camera_net != current_camera:
             current_camera = camera_net
         if current_camera in cameras.keys():
-            mjpegServer.setSource(cameras[current_camera])
-            cvsink.setSource(cameras[current_camera])
+            selectedCvsink = topCvsink if current_camera == 'top' else sideCvsink
         else:
-            mjpegServer.setSource(cameras['top'])
-            cvsink.setSource(cameras['top'])
             current_camera.replace(current_camera, 'top')
         frame_timer.tick()
 
         loop_total_counter += 1
         table.putNumber("loop_total_counter", loop_total_counter)
 
-        timestamp, frame = cvsink.grabFrame(frame_buffer)
+        timestamp, frame = selectedCvsink.grabFrame(frame_buffer)
         if timestamp == 0:
-            print("error:", cvsink.getError())
+            print("error:", selectedCvsink.getError())
             continue
 
         # Draw FPS counter

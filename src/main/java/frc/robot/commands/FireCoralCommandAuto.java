@@ -11,7 +11,7 @@ public class FireCoralCommandAuto extends EntechCommand {
     private final CoralMechanismSubsystem intake;
     private final double speed;
 	//TODO: Magic number
-	private StoppingCounter counter = new StoppingCounter(0.06);
+	private StoppingCounter counter = new StoppingCounter(0.02);
 
     public FireCoralCommandAuto(CoralMechanismSubsystem coral, double speed) {
         super(coral);

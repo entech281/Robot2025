@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.052272727272728,
-        "y": 5.354545454545455
+        "x": 5.349671052631578,
+        "y": 5.179605263157893
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.267419337034276,
-        "y": 5.227219352319275
+        "x": 5.601385653251103,
+        "y": 5.018743747874796
       },
       "isLocked": false,
       "linkedName": "FarLeftReefFace"
@@ -20,24 +20,24 @@
         "y": 5.622203947368421
       },
       "prevControl": {
-        "x": 4.852633463992723,
-        "y": 5.471840705155831
+        "x": 4.97767223569006,
+        "y": 5.4269983662868775
       },
       "nextControl": {
-        "x": 4.333703129149476,
-        "y": 5.739112517192364
+        "x": 3.5759326574053825,
+        "y": 6.083208352095385
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.4425568181818185,
-        "y": 7.335568181818181
+        "x": 1.2771832191780823,
+        "y": 7.3306506849315065
       },
       "prevControl": {
-        "x": 1.1539643661902976,
-        "y": 7.487695412710053
+        "x": 0.8614532028383959,
+        "y": 7.556723128022499
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,8 +49,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.3,
+    "maxAcceleration": 3.3,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -58,7 +58,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -52.50000000000001
+    "rotation": -54.0
   },
   "reversed": false,
   "folder": null,

@@ -146,6 +146,16 @@ public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
         output.setModuleStates(new SwerveModuleState[] {frontLeft.getState(), frontRight.getState(),
                 rearLeft.getState(), rearRight.getState()});
         output.setSpeeds(lastChassisSpeeds);
+
+      output.setFrontLeftDrive(frontLeft.getDriveOuput());
+      output.setFrontRightDrive(frontRight.getDriveOuput());
+      output.setRearLeftDrive(rearLeft.getDriveOuput());
+      output.setRearRightDrive(rearRight.getDriveOuput());
+      output.setFrontRightTurn(frontRight.getTurnOutput());
+      output.setRearLeftTurn(rearLeft.getTurnOutput());
+      output.setRearRightTurn(rearRight.getTurnOutput());
+      output.setFrontLeftTurn(frontLeft.getTurnOutput());
+
     }
     return output;
   }

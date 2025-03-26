@@ -5,21 +5,34 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "SwitchToLeftCamera"
+            "pathName": "Copy of Start - Far Reef Face"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToReefFar"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SwitchToRightCamera"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AlignToReefFar"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4"
+            "name": "AutoL4"
           }
         },
         {
@@ -35,6 +48,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "SetAlgaeMode"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Back Up from Far Reef Face and Align With Algae"
@@ -47,21 +66,34 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Back to Far Reef Face (algae) "
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeAlgae"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Back to Far Reef Face (algae) "
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeAlgae"
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "Back Up and Score Barge"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Barge"
           }
         },
         {

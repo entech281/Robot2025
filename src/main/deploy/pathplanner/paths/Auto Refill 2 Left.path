@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.459314693663266,
-        "y": 4.953136687970385
+        "x": 4.517924158687561,
+        "y": 4.950230776137924
       },
       "isLocked": false,
       "linkedName": "LeftCoralCloseLeftReefFace"
     },
     {
       "anchor": {
-        "x": 1.4425568181818185,
-        "y": 7.335568181818181
+        "x": 1.2771832191780823,
+        "y": 7.3306506849315065
       },
       "prevControl": {
-        "x": 1.261675275817544,
-        "y": 7.50814241984901
+        "x": 1.0782922528455408,
+        "y": 7.482118118762372
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.3,
+    "maxAcceleration": 3.3,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -52.50000000000001
+    "rotation": -54.0
   },
   "reversed": false,
   "folder": null,
