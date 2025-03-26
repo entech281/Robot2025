@@ -13,6 +13,22 @@ public class BargeDetectorOutput extends SubsystemOutput {
     this.curColor = curColor;
   }
 
+  public Color getColor() {
+    return this.curColor;
+  }
+
+  public boolean hasBlueLine() {
+    return getColor().equals(Color.kBlue);
+  }
+
+  public boolean hasRedLine() {
+    return getColor().equals(Color.kRed);
+  }
+
+  public boolean hasLine() {
+    return hasBlueLine() || hasRedLine();
+  }
+
   @Override
   public void toLog() {
     Logger.recordOutput("InternalAlgaeDetectorOutput/CoralSensor", curColor.toString());
