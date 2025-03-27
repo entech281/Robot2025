@@ -204,7 +204,7 @@ public class CommandFactory {
     .remove(TargetLocation.BLUE_RIGHT_NW)
     .remove(TargetLocation.RED_RIGHT_NW)));
 
-    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2", new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getElevatorSubsystem(), subsystemManager.getPivotSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this, Position.L2));
+    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Left", new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getElevatorSubsystem(), subsystemManager.getPivotSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this, Position.L2, "right"));
     var alliance = DriverStation.getAlliance();
       NamedCommands.registerCommand("AlignToReefFar", 
         new ConditionalCommand(
