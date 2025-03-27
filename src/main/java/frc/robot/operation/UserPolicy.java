@@ -2,6 +2,8 @@ package frc.robot.operation;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 public class UserPolicy {
   private static final UserPolicy instance = new UserPolicy();
 
