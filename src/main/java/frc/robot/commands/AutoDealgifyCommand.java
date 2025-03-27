@@ -10,8 +10,6 @@ import frc.robot.Position;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveSubsystem;
-import frc.robot.subsystems.elevator.ElevatorSubsystem;
-import frc.robot.subsystems.pivot.PivotSubsystem;
 
 public class AutoDealgifyCommand extends EntechCommand{
 
@@ -22,7 +20,7 @@ public class AutoDealgifyCommand extends EntechCommand{
     private Command runningCommand;
     private final String curSide;
     
-    public AutoDealgifyCommand(DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory, Position targetPos, String curSide) {
+    public AutoDealgifyCommand(DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory, Position targetPos, String curSide) {
         this.driveSubsystem = driveSubsystem;
         this.targetPos = targetPos;
         this.commandFactory = commandFactory;

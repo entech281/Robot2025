@@ -1,7 +1,5 @@
 package frc.robot.operation;
 
-import java.util.Set;
-
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
