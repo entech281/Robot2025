@@ -1,6 +1,10 @@
 package frc.robot.operation;
 
+import frc.robot.subsystems.vision.TargetLocation;
 import org.littletonrobotics.junction.Logger;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserPolicy {
   private static final UserPolicy instance = new UserPolicy();
@@ -13,6 +17,7 @@ public class UserPolicy {
   private boolean algaeMode = false;
   private int targetTagID = 7;
   private boolean towardsAlignment = false;
+  private Set<TargetLocation> selectedTargetLocations = new HashSet<>();
 
   private UserPolicy() {
     Logger.recordOutput("UserPolicy/twistable", twistable);
@@ -23,6 +28,16 @@ public class UserPolicy {
     Logger.recordOutput("UserPolicy/algaeMode", algaeMode);
     Logger.recordOutput("UserPolicy/targetTagID", targetTagID);
     Logger.recordOutput("UserPolicy/towardsAlignment", towardsAlignment);
+  }
+
+  public void setTargetLocations(TargetLocation t1, TargetLocation t2){
+    selectedTargetLocations.clear();
+    selectedTargetLocations.add(t1);
+    selectedTargetLocations.add(t2);
+  }
+
+  public Set<TargetLocation> getSelectedTargetLocations(){
+      return selectedTargetLocations;
   }
 
   public static UserPolicy getInstance() {
