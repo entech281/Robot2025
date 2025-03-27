@@ -44,6 +44,7 @@ import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.led.TestLEDCommand;
+import frc.robot.subsystems.vision.TargetLocation;
 import frc.robot.subsystems.vision.VisionInput.Camera;
 
 public class OperatorInterface
@@ -53,7 +54,8 @@ public class OperatorInterface
 
   private CommandXboxController tuningController;
 
-  private CommandJoystick operatorPanel;
+  private CommandJoystick scoreOperatorPanel;
+  private CommandJoystick alignOperatorPanel;
 
   private final CommandFactory commandFactory;
   private final SubsystemManager subsystemManager;
@@ -91,8 +93,11 @@ public class OperatorInterface
       enableTuningControllerBindings();
     }
 
-    operatorPanel = new CommandJoystick(RobotConstants.PORTS.CONTROLLER.PANEL);
-    operatorBindings();
+    scoreOperatorPanel = new CommandJoystick(RobotConstants.PORTS.CONTROLLER.SCORE_PANEL);
+    scoreOperatorBindings();
+
+    alignOperatorPanel = new CommandJoystick(RobotConstants.PORTS.CONTROLLER.ALIGN_PANEL);
+    scoreOperatorBindings();
   }
 
   public void enableTuningControllerBindings() {
@@ -166,7 +171,7 @@ public class OperatorInterface
     subsystemManager.getVisionSubsystem().setDefaultCommand(new VisionCameraSwitchingCommand(subsystemManager.getVisionSubsystem(), xboxController::getRightX));
   }
 
-  public void operatorBindings() {
+  public void scoreOperatorBindings() {
     testChooser.addOption("All tests", getTestCommand());
     Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST, "No Current Test");
     SmartDashboard.putData("Test Chooser", testChooser);
@@ -174,7 +179,7 @@ public class OperatorInterface
     testChooser.addOption("All tests", getTestCommand());
     Shuffleboard.getTab("stuffs").add("Run Test", new RunTestCommand(testChooser));
     
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1)
+    scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.L1)
         .onTrue(
           new ConditionalCommand(
             commandFactory.getSafeElevatorPivotMoveCommand(Position.AUTO_L1),
@@ -185,7 +190,7 @@ public class OperatorInterface
         .onTrue(new InstantCommand(() ->  UserPolicy.getInstance().setAlgaeMode(false)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
     
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L2)
+    scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.L2)
         .onTrue(
           new ConditionalCommand(
             commandFactory.getSafeElevatorPivotMoveCommand(Position.AUTO_L2),
@@ -196,7 +201,7 @@ public class OperatorInterface
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L3)
+    scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.L3)
         .onTrue(
           new ConditionalCommand(
             commandFactory.getSafeElevatorPivotMoveCommand(Position.AUTO_L3),
@@ -207,7 +212,7 @@ public class OperatorInterface
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L4)
+    scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.L4)
         .onTrue(
           new ConditionalCommand(
             commandFactory.getSafeElevatorPivotMoveCommand(Position.AUTO_L4),
@@ -218,7 +223,7 @@ public class OperatorInterface
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
 
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_GROUND)
+    scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.ALGAE_GROUND)
         .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_GROUND))
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(true)))
         .onFalse(
@@ -232,17 +237,17 @@ public class OperatorInterface
           )
         );
 
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L2)
+    scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.ALGAE_L2)
         .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_L2))
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(true)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME));
 
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L3)
+    scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.ALGAE_L3)
         .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_L3))
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(true)))
         .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME));
 
-        operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.BARGE)
+        scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.BARGE)
         .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.BARGE))
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(true)))
         .onFalse(
@@ -260,14 +265,14 @@ public class OperatorInterface
     fireCommand = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/FireSpeed"));
     fireCommandL1 = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/L1FireSpeed"));
     algaeFireCommand = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/AlgaeFireSpeed"));
-    operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.FIRE)
+    scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.FIRE)
       .whileTrue(
         new ConditionalCommand(
           new ParallelCommandGroup(
             new ConditionalCommand(
               fireCommandL1,
               fireCommand, 
-              () -> operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.L1).getAsBoolean()
+              () -> scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.L1).getAsBoolean()
             ),
             new SequentialCommandGroup(
               new WaitUntilCommand(() -> !RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()),
@@ -279,14 +284,82 @@ public class OperatorInterface
             new ConditionalCommand(
               algaeFireCommand,
               intakeCommand,
-              () -> operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.BARGE).getAsBoolean() || operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_GROUND).getAsBoolean()
+              () -> scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.BARGE).getAsBoolean() || scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.ALGAE_GROUND).getAsBoolean()
             ),
-            () -> operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L3).getAsBoolean() || operatorPanel.button(RobotConstants.OPERATOR_PANEL.BUTTONS.ALGAE_L2).getAsBoolean()
+            () -> scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.ALGAE_L3).getAsBoolean() || scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.ALGAE_L2).getAsBoolean()
           ),
           () -> RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
         )
       )
       .onFalse(new AlgaeHoldCommand(subsystemManager.getCoralMechanismSubsystem()));
+  }
+
+  public void alignOperatorBindings() {
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_N)
+        .onTrue(new InstantCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_N, TargetLocation.RED_LEFT_N)
+        ));
+
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_N)
+        .onTrue(new InstantCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_N, TargetLocation.RED_RIGHT_N)
+        ));
+
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_NE)
+        .onTrue(new InstantCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_N, TargetLocation.RED_LEFT_N)
+        ));
+
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_NE)
+        .onTrue(new InstantCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_NE, TargetLocation.RED_RIGHT_NE)
+        ));
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_SE)
+        .onTrue(new InstantCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_SE, TargetLocation.RED_LEFT_SE)
+        ));
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_SE)
+        .onTrue(new InstantCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_SE, TargetLocation.RED_RIGHT_SE)
+        ));
+
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_S)
+        .onTrue(new InstantCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_S, TargetLocation.RED_LEFT_S)
+        ));
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_S)
+        .onTrue(new InstantCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_S, TargetLocation.RED_RIGHT_S)
+        ));
+
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_SW)
+        .onTrue(new InstantCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_SW, TargetLocation.RED_LEFT_SW)
+        ));
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_SW)
+        .onTrue(new InstantCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_SW, TargetLocation.RED_RIGHT_SW)
+        ));
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_NW)
+        .onTrue(new InstantCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_NW, TargetLocation.RED_LEFT_NW)
+        ));
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_NW)
+        .onTrue(new InstantCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_NW, TargetLocation.RED_RIGHT_NW)
+        ));
+
   }
 
   private SendableChooser<Command> getTestCommandChooser() {

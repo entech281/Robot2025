@@ -263,7 +263,8 @@ public final class RobotConstants {
     public static interface CONTROLLER {
       public static final double JOYSTICK_AXIS_THRESHOLD = 0.2;
       public static final int DRIVER_CONTROLLER = 0;
-      public static final int PANEL = 1;
+      public static final int SCORE_PANEL = 1;
+      public static final int ALIGN_PANEL = 4;
       public static final int TEST_JOYSTICK = 2;
       public static final int TUNING_CONTROLLER = 3;
 
@@ -297,7 +298,7 @@ public final class RobotConstants {
     }
   }
 
-  public interface OPERATOR_PANEL {
+  public interface SCORE_OPERATOR_PANEL {
     public static interface BUTTONS {
       public static final int RUN_TEST = 10;
       public static final int L1 = 8;
@@ -309,6 +310,28 @@ public final class RobotConstants {
       public static final int ALGAE_GROUND = 9;
       public static final int BARGE = 4;
       public static final int FIRE = 1;      
+    }
+
+    public static interface SWITCHES {
+    }
+  }
+
+  public interface ALIGN_OPERATOR_PANEL {
+    public static interface BUTTONS {
+      /*All directions are relative to how the branches 
+      are seen from where the driver is standing*/
+      public static final int LEFT_N = 10;
+      public static final int RIGHT_N = 10;
+      public static final int LEFT_NE = 10;  
+      public static final int RIGHT_NE = 10;
+      public static final int LEFT_SE = 10;  
+      public static final int RIGHT_SE = 10;  
+      public static final int LEFT_S = 10;  
+      public static final int RIGHT_S = 10;  
+      public static final int LEFT_SW = 10;  
+      public static final int RIGHT_SW = 10;  
+      public static final int LEFT_NW = 10;  
+      public static final int RIGHT_NW = 10;  
     }
 
     public static interface SWITCHES {
