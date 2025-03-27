@@ -297,67 +297,67 @@ public class OperatorInterface
   public void alignOperatorBindings() {
     alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_N)
         .onTrue(new InstantCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_N, TargetLocation.RED_LEFT_N)
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_H, TargetLocation.RED_H)
         ));
 
 
     alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_N)
         .onTrue(new InstantCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_N, TargetLocation.RED_RIGHT_N)
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_G, TargetLocation.RED_G)
         ));
 
 
     alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_NE)
         .onTrue(new InstantCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_N, TargetLocation.RED_LEFT_N)
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_F, TargetLocation.RED_F)
         ));
 
 
     alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_NE)
         .onTrue(new InstantCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_NE, TargetLocation.RED_RIGHT_NE)
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_E, TargetLocation.RED_E)
         ));
 
     alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_SE)
         .onTrue(new InstantCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_SE, TargetLocation.RED_LEFT_SE)
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_C, TargetLocation.RED_C)
         ));
 
     alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_SE)
         .onTrue(new InstantCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_SE, TargetLocation.RED_RIGHT_SE)
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_D, TargetLocation.RED_D)
         ));
 
 
     alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_S)
         .onTrue(new InstantCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_S, TargetLocation.RED_LEFT_S)
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_A, TargetLocation.RED_A)
         ));
 
     alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_S)
         .onTrue(new InstantCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_S, TargetLocation.RED_RIGHT_S)
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_B, TargetLocation.RED_B)
         ));
 
 
     alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_SW)
         .onTrue(new InstantCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_SW, TargetLocation.RED_LEFT_SW)
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_K, TargetLocation.RED_K)
         ));
 
     alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_SW)
         .onTrue(new InstantCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_SW, TargetLocation.RED_RIGHT_SW)
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_L, TargetLocation.RED_L)
         ));
 
     alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_NW)
         .onTrue(new InstantCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_NW, TargetLocation.RED_LEFT_NW)
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_J, TargetLocation.RED_J)
         ));
 
     alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_NW)
         .onTrue(new InstantCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_NW, TargetLocation.RED_RIGHT_NW)
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_I, TargetLocation.RED_I)
         ));
 
   }

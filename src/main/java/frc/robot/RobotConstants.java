@@ -321,14 +321,14 @@ public final class RobotConstants {
       /*All directions are relative to how the branches 
       are seen from where the driver is standing*/
       public static final int LEFT_N = 10;
-      public static final int RIGHT_N = 10;
+      public static final int RIGHT_N = 4;
       public static final int LEFT_NE = 10;  
-      public static final int RIGHT_NE = 10;
+      public static final int RIGHT_NE = 5;
       public static final int LEFT_SE = 10;  
-      public static final int RIGHT_SE = 10;  
-      public static final int LEFT_S = 10;  
+      public static final int RIGHT_SE = 6;  
+      public static final int LEFT_S = 7;  
       public static final int RIGHT_S = 10;  
-      public static final int LEFT_SW = 10;  
+      public static final int LEFT_SW = 3;  
       public static final int RIGHT_SW = 10;  
       public static final int LEFT_NW = 10;  
       public static final int RIGHT_NW = 10;  
