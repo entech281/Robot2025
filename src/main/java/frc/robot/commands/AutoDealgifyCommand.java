@@ -7,14 +7,11 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.EntechCommand;
 import frc.robot.CommandFactory;
 import frc.robot.Position;
-import frc.robot.operation.UserPolicy;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.pivot.PivotSubsystem;
-import frc.robot.subsystems.vision.TargetLocation;
-import frc.robot.subsystems.vision.VisionInput;
 
 public class AutoDealgifyCommand extends EntechCommand{
 
@@ -23,12 +20,14 @@ public class AutoDealgifyCommand extends EntechCommand{
     private final CommandFactory commandFactory;
     private final CoralMechanismSubsystem coralMechanismSubsystem;
     private Command runningCommand;
+    private final String curSide;
     
-    public AutoDealgifyCommand(DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory, Position targetPos) {
+    public AutoDealgifyCommand(DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory, Position targetPos, String curSide) {
         this.driveSubsystem = driveSubsystem;
         this.targetPos = targetPos;
         this.commandFactory = commandFactory;
         this.coralMechanismSubsystem = coralMechanismSubsystem;
+        this.curSide = curSide;
     }
 
     @Override
@@ -42,12 +41,10 @@ public class AutoDealgifyCommand extends EntechCommand{
             driveInput.setXSpeed(0.0);
             driveSubsystem.updateInputs(driveInput);
             commandFactory.getSafeElevatorPivotMoveCommand(targetPos).schedule();
-
             TargetLocation targetLocation =  TargetLocation.BLUE_LEFT_N; //UserPolicy.getInstance().getSelectedTargetLocations().
-            
-            String curSide = targetLocation.camera.equals(VisionInput.Camera.TOP) ? "left" : "right";
 
-            if(curSide.equals("left")) {
+            
+            if(this.curSide.equals("left")) {
                 driveInput.setYSpeed(-0.5);
             } else {
                 driveInput.setYSpeed(0.5);
