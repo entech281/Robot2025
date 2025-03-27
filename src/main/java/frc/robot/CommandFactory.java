@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.AutonomousException;
 import frc.entech.commands.InstantAnytimeCommand;
 import frc.robot.commands.AutoAlignToScoringLocationCommand;
+import frc.robot.commands.AutoDealgifyCommand;
 import frc.robot.commands.AutoFireAlgaeCommand;
 import frc.robot.commands.AutoIntakeAlgaeCommand;
 import frc.robot.commands.AutoIntakeCoralCommand;
@@ -203,6 +204,7 @@ public class CommandFactory {
     .remove(TargetLocation.BLUE_RIGHT_NW)
     .remove(TargetLocation.RED_RIGHT_NW)));
 
+    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2", new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getElevatorSubsystem(), subsystemManager.getPivotSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this, Position.L2));
     var alliance = DriverStation.getAlliance();
       NamedCommands.registerCommand("AlignToReefFar", 
         new ConditionalCommand(
