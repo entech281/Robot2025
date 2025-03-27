@@ -41,6 +41,8 @@ public class AutoDealgifyCommand extends EntechCommand{
             driveInput.setXSpeed(0.0);
             driveSubsystem.updateInputs(driveInput);
             commandFactory.getSafeElevatorPivotMoveCommand(targetPos).schedule();
+            TargetLocation targetLocation =  TargetLocation.BLUE_LEFT_N; //UserPolicy.getInstance().getSelectedTargetLocations().
+
             
             if(this.curSide.equals("left")) {
                 driveInput.setYSpeed(-0.5);
