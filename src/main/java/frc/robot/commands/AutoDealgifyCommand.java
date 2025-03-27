@@ -41,7 +41,7 @@ public class AutoDealgifyCommand extends EntechCommand{
             commandFactory.getSafeElevatorPivotMoveCommand(targetPos).schedule();
 
             //TODO Update this to actually get the value
-            String curSide = "left";
+            String curSide = "right";
 
             if(curSide.equals("left")) {
                 driveInput.setYSpeed(-0.5);
