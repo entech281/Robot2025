@@ -43,7 +43,7 @@ public class AutoDealgifyCommand extends EntechCommand{
             driveSubsystem.updateInputs(driveInput);
             commandFactory.getSafeElevatorPivotMoveCommand(targetPos).schedule();
 
-            TargetLocation targetLocation = UserPolicy.getTargetWhiteList().get(0);
+            TargetLocation targetLocation =  TargetLocation.BLUE_LEFT_N; //UserPolicy.getInstance().getSelectedTargetLocations().
             
             String curSide = targetLocation.camera.equals(VisionInput.Camera.TOP) ? "left" : "right";
 
