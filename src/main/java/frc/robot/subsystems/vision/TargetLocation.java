@@ -20,6 +20,12 @@ public class TargetLocation {
         return Objects.equals(tagID, that.tagID) && camera == that.camera;
     }
 
+
+    @Override
+    public String toString() {
+        return "TargetLocation{" + "tagID=" + tagID + ", camera=" + camera + '}';
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(tagID, camera);
