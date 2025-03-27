@@ -130,68 +130,8 @@ public class CommandFactory {
     NamedCommands.registerCommand("AutoL4", Commands.deferredProxy(() -> formSafeMovementCommand(Position.AUTO_L4)));
     NamedCommands.registerCommand("SetAlgaeMode", new InstantCommand( () -> UserPolicy.getInstance().setAlgaeMode(true)));
 
-    NamedCommands.registerCommand("AddTargetNorthLeft", new InstantCommand( () -> UserPolicy.getInstance().getTargetWhiteList()
-    .add(TargetLocation.BLUE_H)
-    .add(TargetLocation.RED_H)
-    .remove(TargetLocation.BLUE_H)
-    .remove(TargetLocation.RED_H)));
-    NamedCommands.registerCommand("AddTargetNorthRight", new InstantCommand( () -> UserPolicy.getInstance().getTargetWhiteList()
-    .add(TargetLocation.BLUE_G)
-    .add(TargetLocation.RED_G)
-    .remove(TargetLocation.BLUE_G)
-    .remove(TargetLocation.RED_G)));
-    NamedCommands.registerCommand("AddTargetNortheastLeft", new InstantCommand( () -> UserPolicy.getInstance().getTargetWhiteList()
-    .add(TargetLocation.BLUE_F)
-    .add(TargetLocation.RED_F)
-    .remove(TargetLocation.BLUE_F)
-    .remove(TargetLocation.RED_F)));
-    NamedCommands.registerCommand("AddTargetNortheastRight", new InstantCommand( () -> UserPolicy.getInstance().getTargetWhiteList()
-    .add(TargetLocation.BLUE_E)
-    .add(TargetLocation.RED_E)
-    .remove(TargetLocation.BLUE_E)
-    .remove(TargetLocation.RED_E)));
-    NamedCommands.registerCommand("AddTargetSoutheastLeft", new InstantCommand( () -> UserPolicy.getInstance().getTargetWhiteList()
-    .add(TargetLocation.BLUE_C)
-    .add(TargetLocation.RED_C)
-    .remove(TargetLocation.BLUE_C)
-    .remove(TargetLocation.RED_C)));
-    NamedCommands.registerCommand("AddTargetSoutheastRight", new InstantCommand( () -> UserPolicy.getInstance().getTargetWhiteList()
-    .add(TargetLocation.BLUE_D)
-    .add(TargetLocation.RED_D)
-    .remove(TargetLocation.BLUE_D)
-    .remove(TargetLocation.RED_D)));
-    NamedCommands.registerCommand("AddTargetSouthLeft", new InstantCommand( () -> UserPolicy.getInstance().getTargetWhiteList()
-    .add(TargetLocation.BLUE_A)
-    .add(TargetLocation.RED_A)
-    .remove(TargetLocation.BLUE_A)
-    .remove(TargetLocation.RED_A)));
-    NamedCommands.registerCommand("AddTargetSouthRight", new InstantCommand( () -> UserPolicy.getInstance().getTargetWhiteList()
-    .add(TargetLocation.BLUE_B)
-    .add(TargetLocation.RED_B)
-    .remove(TargetLocation.BLUE_B)
-    .remove(TargetLocation.RED_B)));
-    NamedCommands.registerCommand("AddTargetSouthwestLeft", new InstantCommand( () -> UserPolicy.getInstance().getTargetWhiteList()
-    .add(TargetLocation.BLUE_K)
-    .add(TargetLocation.RED_K)
-    .remove(TargetLocation.BLUE_K)
-    .remove(TargetLocation.RED_K)));
-    NamedCommands.registerCommand("AddTargetSouthwestRight", new InstantCommand( () -> UserPolicy.getInstance().getTargetWhiteList()
-    .add(TargetLocation.BLUE_L)
-    .add(TargetLocation.RED_L)
-    .remove(TargetLocation.BLUE_L)
-    .remove(TargetLocation.RED_L)));
-    NamedCommands.registerCommand("AddTargetNorthwestLeft", new InstantCommand( () -> UserPolicy.getInstance().getTargetWhiteList()
-    .add(TargetLocation.BLUE_J)
-    .add(TargetLocation.RED_J)
-    .remove(TargetLocation.BLUE_J)
-    .remove(TargetLocation.RED_J)));
-    NamedCommands.registerCommand("AddTargetNorthwestRIGHT", new InstantCommand( () -> UserPolicy.getInstance().getTargetWhiteList()
-    .add(TargetLocation.BLUE_I)
-    .add(TargetLocation.RED_I)
-    .remove(TargetLocation.BLUE_I)
-    .remove(TargetLocation.RED_I)));
 
-    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2", new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getElevatorSubsystem(), subsystemManager.getPivotSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this, Position.L2));
+    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Left", new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this, Position.L2, "right"));
     var alliance = DriverStation.getAlliance();
       NamedCommands.registerCommand("AlignToReefFar", 
         new ConditionalCommand(

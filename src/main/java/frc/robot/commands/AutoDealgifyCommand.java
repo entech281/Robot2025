@@ -10,8 +10,6 @@ import frc.robot.Position;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveSubsystem;
-import frc.robot.subsystems.elevator.ElevatorSubsystem;
-import frc.robot.subsystems.pivot.PivotSubsystem;
 
 public class AutoDealgifyCommand extends EntechCommand{
 
@@ -20,12 +18,14 @@ public class AutoDealgifyCommand extends EntechCommand{
     private final CommandFactory commandFactory;
     private final CoralMechanismSubsystem coralMechanismSubsystem;
     private Command runningCommand;
+    private final String curSide;
     
-    public AutoDealgifyCommand(DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory, Position targetPos) {
+    public AutoDealgifyCommand(DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory, Position targetPos, String curSide) {
         this.driveSubsystem = driveSubsystem;
         this.targetPos = targetPos;
         this.commandFactory = commandFactory;
         this.coralMechanismSubsystem = coralMechanismSubsystem;
+        this.curSide = curSide;
     }
 
     @Override
@@ -39,11 +39,10 @@ public class AutoDealgifyCommand extends EntechCommand{
             driveInput.setXSpeed(0.0);
             driveSubsystem.updateInputs(driveInput);
             commandFactory.getSafeElevatorPivotMoveCommand(targetPos).schedule();
+            
 
-            //TODO Update this to actually get the value
-            String curSide = "right";
-
-            if(curSide.equals("left")) {
+            
+            if(this.curSide.equals("left")) {
                 driveInput.setYSpeed(-0.5);
             } else {
                 driveInput.setYSpeed(0.5);
