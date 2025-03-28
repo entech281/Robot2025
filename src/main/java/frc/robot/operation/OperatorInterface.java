@@ -153,6 +153,7 @@ public class OperatorInterface
     xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.RESET_ODOMETRY)
         .onTrue(new ResetOdometryCommand(odometry));
 
+    //TODO get the right angles for the feed zones based on red or blue
     xboxController.leftBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.TOP)).onFalse(new ConditionalCommand(new RotateToAngle(0), Commands.none(), () -> !RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()));
     xboxController.rightBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.SIDE)).onFalse(new ConditionalCommand(new RotateToAngle(0), Commands.none(), () -> !RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()));
 
