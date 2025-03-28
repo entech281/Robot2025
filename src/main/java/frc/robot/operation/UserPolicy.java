@@ -36,6 +36,10 @@ public class UserPolicy {
     selectedTargetLocations.add(t2);
   }
 
+  public void clearTargetLocations() {
+    selectedTargetLocations.clear();
+  }
+
   public Set<TargetLocation> getSelectedTargetLocations(){
       return selectedTargetLocations;
   }
