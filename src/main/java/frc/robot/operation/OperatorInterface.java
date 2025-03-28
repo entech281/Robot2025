@@ -294,71 +294,84 @@ public class OperatorInterface
   }
 
   public void alignOperatorBindings() {
-    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_N)
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.A)
         .onTrue(new InstantAnytimeCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_N, TargetLocation.RED_LEFT_N)
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_A, TargetLocation.RED_A)
+        ));
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.B)
+        .onTrue(new InstantAnytimeCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_B, TargetLocation.RED_B)
+        ));
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.C)
+        .onTrue(new InstantAnytimeCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_C, TargetLocation.RED_C)
+        ));
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.D)
+        .onTrue(new InstantAnytimeCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_D, TargetLocation.RED_D)
+        ));
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.E)
+        .onTrue(new InstantAnytimeCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_E, TargetLocation.RED_E)
+        ));
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.F)
+        .onTrue(new InstantAnytimeCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_F, TargetLocation.RED_F)
+        ));
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.G)
+        .onTrue(new InstantAnytimeCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_G, TargetLocation.RED_G)
+        ));
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.H)
+        .onTrue(new InstantAnytimeCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_H, TargetLocation.RED_H)
+        ));
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.I)
+        .onTrue(new InstantAnytimeCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_I, TargetLocation.RED_I)
+        ));
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.J)
+        .onTrue(new InstantAnytimeCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_J, TargetLocation.RED_J)
         ));
 
 
-    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_N)
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.K)
         .onTrue(new InstantAnytimeCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_N, TargetLocation.RED_RIGHT_N)
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_K, TargetLocation.RED_K)
+        ));
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.L)
+        .onTrue(new InstantAnytimeCommand( () ->
+            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_L, TargetLocation.RED_L)
         ));
 
 
-    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_NE)
-        .onTrue(new InstantAnytimeCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_N, TargetLocation.RED_LEFT_N)
-        ));
 
-
-    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_NE)
-        .onTrue(new InstantAnytimeCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_NE, TargetLocation.RED_RIGHT_NE)
-        ));
-
-    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_SE)
-        .onTrue(new InstantAnytimeCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_SE, TargetLocation.RED_LEFT_SE)
-        ));
-
-    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_SE)
-        .onTrue(new InstantAnytimeCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_SE, TargetLocation.RED_RIGHT_SE)
-        ));
-
-
-    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_S)
-        .onTrue(new InstantAnytimeCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_S, TargetLocation.RED_LEFT_S)
-        ));
-
-    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_S)
-        .onTrue(new InstantAnytimeCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_S, TargetLocation.RED_RIGHT_S)
-        ));
-
-
-    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_SW)
-        .onTrue(new InstantAnytimeCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_SW, TargetLocation.RED_LEFT_SW)
-        ));
-
-    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_SW)
-        .onTrue(new InstantAnytimeCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_SW, TargetLocation.RED_RIGHT_SW)
-        ));
-
-    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_NW)
-        .onTrue(new InstantAnytimeCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_LEFT_NW, TargetLocation.RED_LEFT_NW)
-        ));
-
-    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_NW)
-        .onTrue(new InstantAnytimeCommand( () ->
-            UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_RIGHT_NW, TargetLocation.RED_RIGHT_NW)
-        ));
-
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.A)
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.B))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.C))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.D))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.E))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.F))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.G))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.H))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.I))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.J))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.K))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.L))
+    .onFalse(new InstantAnytimeCommand( () -> 
+          UserPolicy.getInstance().clearTargetLocations()
+    ));
   }
 
   private SendableChooser<Command> getTestCommandChooser() {
