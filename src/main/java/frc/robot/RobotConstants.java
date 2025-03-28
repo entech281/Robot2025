@@ -184,6 +184,7 @@ public final class RobotConstants {
       Map.entry("AutoAlign/Start", 8.0),
       Map.entry("AutoAlign/Stop", 1.0),
       Map.entry("AutoAlign/AutoSpeed", 0.5),
+      Map.entry("AutoAlign/MaxSpeed", 0.2),
       Map.entry("AutoAlign/AutoStart", 8.0),
       Map.entry("AutoAlign/AutoStop", 1.05),
       Map.entry("AutoAlign/StopP", 0.125),

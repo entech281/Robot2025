@@ -33,12 +33,13 @@ public class TowardsTargetFilter implements DriveFilterI {
                     moveController.setI(LiveTuningHandler.getInstance().getValue("AutoAlign/StopI"));
                     moveController.setD(LiveTuningHandler.getInstance().getValue("AutoAlign/StopD"));
                     double ratio = MathUtil.clamp(-moveController.calculate(t.getDistance(), LiveTuningHandler.getInstance().getValue("AutoAlign/Stop")), -1.0, 1.0);
+                    double mag = MathUtil.clamp(ratio * LiveTuningHandler.getInstance().getValue("AutoAlign/Speed"), -LiveTuningHandler.getInstance().getValue("AutoAlign/MaxSpeed"), LiveTuningHandler.getInstance().getValue("AutoAlign/MaxSpeed"));
                     if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
-                        processedInput.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/Speed")) + input.getXSpeed());
-                        processedInput.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/Speed") * ratio) + input.getYSpeed());
+                        processedInput.setXSpeed((Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * mag) + input.getXSpeed());
+                        processedInput.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * mag) + input.getYSpeed());
                     } else {
-                        processedInput.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -LiveTuningHandler.getInstance().getValue("AutoAlign/Speed")) + input.getXSpeed());
-                        processedInput.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -LiveTuningHandler.getInstance().getValue("AutoAlign/Speed") * ratio) + input.getYSpeed());
+                        processedInput.setXSpeed((Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -mag) + input.getXSpeed());
+                        processedInput.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * -mag) + input.getYSpeed());
                     }
                 }
             }
