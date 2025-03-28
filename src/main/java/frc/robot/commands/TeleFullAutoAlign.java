@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import edu.wpi.first.math.util.Units;
@@ -9,6 +11,7 @@ import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
 import frc.robot.operation.UserPolicy;
 import frc.robot.subsystems.drive.SwerveUtils;
+import frc.robot.subsystems.vision.TargetLocation;
 import frc.robot.subsystems.vision.VisionInput;
 import frc.robot.subsystems.vision.VisionInput.Camera;
 import frc.robot.subsystems.vision.VisionSubsystem;
@@ -45,11 +48,19 @@ public class TeleFullAutoAlign extends EntechCommand {
                 UserPolicy.getInstance().setTowardsAlignment(false);
             }
         } else {
-            Optional<VisionTarget> target = RobotIO.getInstance().getVisionOutput().getBestTarget();
-            if (RobotIO.getInstance().getVisionOutput().hasTarget() && target.isPresent()) {
-                UserPolicy.getInstance().setAligningToAngle(true);
-                UserPolicy.getInstance().setTargetAngle(findTargetAngle(target.get().getTagID()));
-                UserPolicy.getInstance().setTargetTagID(target.get().getTagID());
+            List<VisionTarget> targets = RobotIO.getInstance().getVisionOutput().getTargets();
+            List<VisionTarget> foundTargets = new ArrayList<>();
+            if (!targets.isEmpty()) {
+                for (VisionTarget t : targets) {
+                    if (UserPolicy.getInstance().getSelectedTargetLocations().contains(new TargetLocation(t.getTagID(), t.getCameraName().equals(VisionInput.Camera.SIDE.label) ? VisionInput.Camera.SIDE : VisionInput.Camera.TOP))) {
+                        foundTargets.add(t);
+                    }
+                }
+                if (!foundTargets.isEmpty()) {
+                    UserPolicy.getInstance().setAligningToAngle(true);
+                    UserPolicy.getInstance().setTargetAngle(findTargetAngle(foundTargets.get(0).getTagID()));
+                    UserPolicy.getInstance().setTargetTagID(foundTargets.get(0).getTagID());
+                }
             }
         }
         vision.updateInputs(input);
