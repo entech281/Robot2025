@@ -3,6 +3,8 @@ package frc.robot.operation;
 import frc.robot.subsystems.vision.TargetLocation;
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,13 +30,15 @@ public class UserPolicy {
     Logger.recordOutput("UserPolicy/algaeMode", algaeMode);
     Logger.recordOutput("UserPolicy/targetTagID", targetTagID);
     Logger.recordOutput("UserPolicy/towardsAlignment", towardsAlignment);
+    Logger.recordOutput("UserPolicy/selectedTargets", selectedTargetLocations +"");
   }
 
   public void setTargetLocations(TargetLocation t1, TargetLocation t2){
     selectedTargetLocations.clear();
     selectedTargetLocations.add(t1);
     selectedTargetLocations.add(t2);
-    Logger.recordOutput("UserPolicy/selectedTargets", selectedTargetLocations +"");
+    DriverStation.reportWarning("Set it", false);
+    Logger.recordOutput("UserPolicy/selectedTargets", selectedTargetLocations +"foo");
   }
 
   public Set<TargetLocation> getSelectedTargetLocations(){

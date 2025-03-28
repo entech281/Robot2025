@@ -97,7 +97,7 @@ public class OperatorInterface
     scoreOperatorBindings();
 
     alignOperatorPanel = new CommandJoystick(RobotConstants.PORTS.CONTROLLER.ALIGN_PANEL);
-    scoreOperatorBindings();
+    alignOperatorBindings();
   }
 
   public void enableTuningControllerBindings() {
@@ -172,12 +172,6 @@ public class OperatorInterface
   }
 
   public void scoreOperatorBindings() {
-    testChooser.addOption("All tests", getTestCommand());
-    Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST, "No Current Test");
-    SmartDashboard.putData("Test Chooser", testChooser);
-
-    testChooser.addOption("All tests", getTestCommand());
-    Shuffleboard.getTab("stuffs").add("Run Test", new RunTestCommand(testChooser));
     
     scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.L1)
         .onTrue(
