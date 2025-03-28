@@ -184,6 +184,7 @@ public final class RobotConstants {
       Map.entry("AutoAlign/Start", 8.0),
       Map.entry("AutoAlign/Stop", 1.0),
       Map.entry("AutoAlign/AutoSpeed", 0.5),
+      Map.entry("AutoAlign/MaxSpeed", 0.2),
       Map.entry("AutoAlign/AutoStart", 8.0),
       Map.entry("AutoAlign/AutoStop", 1.05),
       Map.entry("AutoAlign/StopP", 0.125),
@@ -320,18 +321,18 @@ public final class RobotConstants {
     public static interface BUTTONS {
       /*All directions are relative to how the branches 
       are seen from where the driver is standing*/
-      public  int A = 8;
-      public  int B = 9;
-      public  int C = 10;
-      public  int D = 11;
-      public  int E = 0;
-      public  int F = 1;
-      public  int G = 2;
-      public  int H = 3;
-      public  int I = 4;
-      public  int J = 5;
-      public  int K = 6;
-      public  int L = 7;
+      public  int A = 9;
+      public  int B = 10;
+      public  int C = 11;
+      public  int D = 12;
+      public  int E = 1;
+      public  int F = 2;
+      public  int G = 3;
+      public  int H = 4;
+      public  int I = 5;
+      public  int J = 6;
+      public  int K = 7;
+      public  int L = 8;
     }
 
     public static interface SWITCHES {
