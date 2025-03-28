@@ -1,10 +1,12 @@
 package frc.robot.subsystems.coraldetector;
 
+import java.util.function.BooleanSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import frc.entech.subsystems.SubsystemOutput;
 
-public class InternalCoralDetectorOutput extends SubsystemOutput {
+public class InternalCoralDetectorOutput extends SubsystemOutput  implements BooleanSupplier {
 
   private boolean coralSensor = false;
 
@@ -14,6 +16,10 @@ public class InternalCoralDetectorOutput extends SubsystemOutput {
 
   public boolean hasCoral() {
     return coralSensor;
+  }
+
+  public boolean getAsBoolean() {
+    return hasCoral();
   }
 
   @Override

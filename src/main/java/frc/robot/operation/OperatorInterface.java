@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.entech.commands.InstantAnytimeCommand;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.CommandFactory;
@@ -68,6 +69,9 @@ public class OperatorInterface
   private RunCommand rumbleCommand;
   private FireCoralCommand algaeFireCommand;
 
+  private Trigger algaeTrigger;
+  private Trigger coralTrigger;
+
   public OperatorInterface(CommandFactory commandFactory, SubsystemManager subsystemManager,
       OdometryProcessor odometry) {
     this.commandFactory = commandFactory;
@@ -97,6 +101,9 @@ public class OperatorInterface
 
     alignOperatorPanel = new CommandJoystick(RobotConstants.PORTS.CONTROLLER.ALIGN_PANEL);
     alignOperatorBindings();
+
+    algaeTrigger = new Trigger(RobotIO.getInstance().getInternalAlgaeDetectorOutput());
+    coralTrigger = new Trigger(RobotIO.getInstance().getInternalCoralDetectorOutput());
   }
 
   public void enableTuningControllerBindings() {
