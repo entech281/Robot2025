@@ -4,9 +4,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -172,12 +170,6 @@ public class OperatorInterface
   }
 
   public void scoreOperatorBindings() {
-    testChooser.addOption("All tests", getTestCommand());
-    Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST, "No Current Test");
-    SmartDashboard.putData("Test Chooser", testChooser);
-
-    testChooser.addOption("All tests", getTestCommand());
-    Shuffleboard.getTab("stuffs").add("Run Test", new RunTestCommand(testChooser));
     
     scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.L1)
         .onTrue(
