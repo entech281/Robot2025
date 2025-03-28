@@ -35,10 +35,12 @@ public class UserPolicy {
     selectedTargetLocations.clear();
     selectedTargetLocations.add(t1);
     selectedTargetLocations.add(t2);
+    Logger.recordOutput("UserPolicy/selectedTargets", selectedTargetLocations + "");
   }
 
   public void clearTargetLocations() {
     selectedTargetLocations.clear();
+    Logger.recordOutput("UserPolicy/selectedTargets", selectedTargetLocations + "");
   }
 
   public Set<TargetLocation> getSelectedTargetLocations(){
