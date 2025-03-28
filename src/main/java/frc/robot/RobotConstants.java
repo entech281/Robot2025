@@ -320,18 +320,18 @@ public final class RobotConstants {
     public static interface BUTTONS {
       /*All directions are relative to how the branches 
       are seen from where the driver is standing*/
-      public static final int LEFT_N = 10;
-      public static final int RIGHT_N = 4;
-      public static final int LEFT_NE = 10;  
-      public static final int RIGHT_NE = 5;
-      public static final int LEFT_SE = 10;  
-      public static final int RIGHT_SE = 6;  
-      public static final int LEFT_S = 7;  
-      public static final int RIGHT_S = 10;  
-      public static final int LEFT_SW = 3;  
-      public static final int RIGHT_SW = 10;  
-      public static final int LEFT_NW = 10;  
-      public static final int RIGHT_NW = 10;  
+      public  int A = 8;
+      public  int B = 9;
+      public  int C = 10;
+      public  int D = 11;
+      public  int E = 0;
+      public  int F = 1;
+      public  int G = 2;
+      public  int H = 3;
+      public  int I = 4;
+      public  int J = 5;
+      public  int K = 6;
+      public  int L = 7;
     }
 
     public static interface SWITCHES {
