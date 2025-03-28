@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.EntechCommand;
 import frc.robot.CommandFactory;
 import frc.robot.Position;
+import frc.robot.io.DriveInputSupplier;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -19,23 +20,25 @@ public class AutoDealgifyCommand extends EntechCommand{
     private final CoralMechanismSubsystem coralMechanismSubsystem;
     private Command runningCommand;
     private final String curSide;
+    private final DriveInputSupplier driveInputSupplier;
     
-    public AutoDealgifyCommand(DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory, Position targetPos, String curSide) {
+    public AutoDealgifyCommand(DriveInputSupplier driveInputSupplier,DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory, Position targetPos, String curSide) {
         this.driveSubsystem = driveSubsystem;
         this.targetPos = targetPos;
         this.commandFactory = commandFactory;
         this.coralMechanismSubsystem = coralMechanismSubsystem;
         this.curSide = curSide;
+        this.driveInputSupplier = driveInputSupplier;
     }
 
     @Override
     public void initialize() {
-        runningCommand = new SequentialCommandGroup(new InstantCommand(() -> {        DriveInput driveInput = new DriveInput();
+        DriveInput driveInput = driveInputSupplier.getDriveInput();
+        runningCommand = new SequentialCommandGroup(new InstantCommand(() -> {
             driveInput.setXSpeed(-1.0);
             driveSubsystem.updateInputs(driveInput);
         }), new WaitCommand(0.5),
         new InstantCommand(() -> {
-            DriveInput driveInput = new DriveInput();
             driveInput.setXSpeed(0.0);
             driveSubsystem.updateInputs(driveInput);
             commandFactory.getSafeElevatorPivotMoveCommand(targetPos).schedule();
@@ -50,14 +53,12 @@ public class AutoDealgifyCommand extends EntechCommand{
 
             driveSubsystem.updateInputs(driveInput);
         }), new WaitCommand(0.15), new InstantCommand(() -> {
-            DriveInput driveInput = new DriveInput();
             driveInput.setXSpeed(1.0);
             driveInput.setYSpeed(0.0);
             driveSubsystem.updateInputs(driveInput);
             new IntakeAlgaeCommand(coralMechanismSubsystem).schedule();
         }), new WaitCommand(0.5),
         new InstantCommand(() -> {
-            DriveInput driveInput = new DriveInput();
             driveInput.setXSpeed(0.0);
             driveSubsystem.updateInputs(driveInput);
         }));
