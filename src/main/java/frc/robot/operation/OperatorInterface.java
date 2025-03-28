@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.entech.commands.InstantAnytimeCommand;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.CommandFactory;
 import frc.robot.Position;
@@ -359,6 +360,22 @@ public class OperatorInterface
         .onTrue(new InstantCommand( () ->
             UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_I, TargetLocation.RED_I)
         ));
+
+    alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_N)
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_NE))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_NW))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_S))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_SE))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.LEFT_SW))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_N))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_NE))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_NW))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_S))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_SE))
+    .and(alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.RIGHT_SW))
+    .onFalse(new InstantAnytimeCommand( () -> 
+          UserPolicy.getInstance().clearTargetLocations()
+    ));
 
   }
 
