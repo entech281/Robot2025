@@ -1,8 +1,11 @@
 package frc.robot.operation;
 
+import java.util.Optional;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -152,10 +155,10 @@ public class OperatorInterface
     
     xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.RESET_ODOMETRY)
         .onTrue(new ResetOdometryCommand(odometry));
+    Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
 
-    //TODO get the right angles for the feed zones based on red or blue
-    xboxController.leftBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.TOP)).onFalse(new ConditionalCommand(new RotateToAngle(0), Commands.none(), () -> !RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()));
-    xboxController.rightBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.SIDE)).onFalse(new ConditionalCommand(new RotateToAngle(0), Commands.none(), () -> !RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()));
+    xboxController.leftBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.TOP)).onFalse(new ConditionalCommand(new RotateToAngle(alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue) ? -53 : 53), Commands.none(), () -> !RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()));
+    xboxController.rightBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.SIDE)).onFalse(new ConditionalCommand(new RotateToAngle(alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue) ? 53 : -53), Commands.none(), () -> !RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()));
 
     rumbleCommand = new RunCommand(
       () -> {
