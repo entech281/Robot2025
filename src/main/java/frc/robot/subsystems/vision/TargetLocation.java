@@ -25,6 +25,12 @@ public class TargetLocation {
         return Objects.hash(tagID, camera);
     }
 
+
+    @Override
+    public String toString() {
+        return "ID=" + tagID + ", cam=" + camera;
+    }
+
     public static final TargetLocation RED_H = new TargetLocation(10, VisionInput.Camera.TOP);
     public static final TargetLocation RED_G = new TargetLocation(10, VisionInput.Camera.SIDE);
     public static final TargetLocation RED_F = new TargetLocation(9, VisionInput.Camera.TOP);

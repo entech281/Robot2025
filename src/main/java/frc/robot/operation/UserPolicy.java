@@ -28,6 +28,7 @@ public class UserPolicy {
     Logger.recordOutput("UserPolicy/algaeMode", algaeMode);
     Logger.recordOutput("UserPolicy/targetTagID", targetTagID);
     Logger.recordOutput("UserPolicy/towardsAlignment", towardsAlignment);
+    Logger.recordOutput("UserPolicy/selectedTargets", selectedTargetLocations + "");
   }
 
   public void setTargetLocations(TargetLocation t1, TargetLocation t2){
