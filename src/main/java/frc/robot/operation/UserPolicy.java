@@ -1,10 +1,11 @@
 package frc.robot.operation;
 
-import frc.robot.subsystems.vision.TargetLocation;
-import org.littletonrobotics.junction.Logger;
-
 import java.util.HashSet;
 import java.util.Set;
+
+import org.littletonrobotics.junction.Logger;
+
+import frc.robot.subsystems.vision.TargetLocation;
 
 public class UserPolicy {
   private static final UserPolicy instance = new UserPolicy();
