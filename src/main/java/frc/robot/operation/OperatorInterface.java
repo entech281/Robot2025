@@ -27,6 +27,7 @@ import frc.robot.commands.GyroReset;
 import frc.robot.commands.IntakeAlgaeCommand;
 import frc.robot.commands.IntakeCoralCommand;
 import frc.robot.commands.ResetOdometryCommand;
+import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.RunTestCommand;
 import frc.robot.commands.TeleFullAutoAlign;
 import frc.robot.commands.TwistCommand;
@@ -152,8 +153,8 @@ public class OperatorInterface
     xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.RESET_ODOMETRY)
         .onTrue(new ResetOdometryCommand(odometry));
 
-    xboxController.leftBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.TOP));
-    xboxController.rightBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.SIDE));
+    xboxController.leftBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.TOP)).onFalse(new ConditionalCommand(new RotateToAngle(0), Commands.none(), () -> !RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()));
+    xboxController.rightBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.SIDE)).onFalse(new ConditionalCommand(new RotateToAngle(0), Commands.none(), () -> !RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()));
 
     rumbleCommand = new RunCommand(
       () -> {
