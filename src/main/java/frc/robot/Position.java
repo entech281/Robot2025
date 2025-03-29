@@ -15,7 +15,8 @@ public enum Position {
     ALGAE_L3,
     ALGAE_GROUND,
     ALGAE_HOME,
-    BARGE;
+    BARGE,
+    FLICK_LEVEL;
 
     public String getElevatorKey() {
         return "ElevatorSubsystem/" + toString();
