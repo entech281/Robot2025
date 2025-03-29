@@ -175,6 +175,7 @@ public class OperatorInterface
           }
           if (foundTargets.isEmpty()) {
             xboxController.setRumble(RumbleType.kBothRumble, 0.0);
+            Logger.recordOutput("ALIGNED", false);
           } else {
             VisionTarget t = foundTargets.get(0);
             xboxController.setRumble(RumbleType.kBothRumble, 1.0);
