@@ -1,6 +1,11 @@
 package frc.robot.commands;
 
+import java.util.List;
+import java.util.Optional;
+
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -13,26 +18,49 @@ import frc.robot.io.DriveInputSupplier;
 import frc.robot.operation.UserPolicy;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.vision.TargetLocation;
+import frc.robot.subsystems.vision.VisionInput;
 
 public class AutoDealgifyCommand extends EntechCommand {
 
     private final DriveSubsystem driveSubsystem;
-    private final Position targetPos;
     private final CommandFactory commandFactory;
     private final CoralMechanismSubsystem coralMechanismSubsystem;
     private Command runningCommand;
-    private final String curSide;
+    private TargetLocation currentLoc;
 
-    public AutoDealgifyCommand(DriveInputSupplier driveInputSupplier, DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory, Position targetPos, String curSide) {
+    public AutoDealgifyCommand(DriveInputSupplier driveInputSupplier, DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory) {
         this.driveSubsystem = driveSubsystem;
-        this.targetPos = targetPos;
         this.commandFactory = commandFactory;
         this.coralMechanismSubsystem = coralMechanismSubsystem;
-        this.curSide = curSide;
     }
 
     @Override
     public void initialize() {
+
+        List<TargetLocation> pos = UserPolicy.getInstance().getSelectedTargetLocations().stream().toList();
+
+        if (pos.size() < 1) {
+            return;
+        }
+
+        currentLoc = pos.get(0);
+
+        Optional<Alliance> alliance = DriverStation.getAlliance();
+
+        if (currentLoc.tagID > 10 && alliance.isPresent() && alliance.get().equals(Alliance.Red)) {
+            currentLoc = pos.get(1);
+        }
+
+        Position targetPos;
+
+        if (alliance.isPresent() && alliance.equals(Alliance.Blue)) {
+            targetPos = currentLoc.tagID % 2 == 0 ? Position.ALGAE_L3 : Position.ALGAE_L2;
+        } else {
+            targetPos = currentLoc.tagID % 2 == 0 ? Position.ALGAE_L2 : Position.ALGAE_L3;
+        }
+        
+
         runningCommand = new SequentialCommandGroup(
             // Drive backward continuously for 0.5 seconds
             new RunCommand(() -> driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0)), driveSubsystem).withTimeout(1.0),
@@ -48,7 +76,7 @@ public class AutoDealgifyCommand extends EntechCommand {
 
             // Drive laterally based on the current side
             new RunCommand(() -> {
-                if (this.curSide.equals("left")) {
+                if (currentLoc.camera.equals(VisionInput.Camera.SIDE)) {
                     driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, -0.5, 0.0));
                 } else {
                     driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.5, 0.0));
@@ -93,6 +121,6 @@ public class AutoDealgifyCommand extends EntechCommand {
 
     @Override
     public boolean isFinished() {
-        return runningCommand.isFinished();
+        return runningCommand.isFinished() || runningCommand == null;
     }
 }

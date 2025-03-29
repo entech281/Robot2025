@@ -1,7 +1,9 @@
 package frc.robot.operation;
 
+import java.lang.Character.UnicodeScript;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -178,7 +180,7 @@ public class OperatorInterface
       )
     );
 
-    xboxController.a().whileTrue(new AutoDealgifyCommand(RobotIO.getInstance(), subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), commandFactory, Position.ALGAE_L2, "left"));
+    xboxController.a().whileTrue(new AutoDealgifyCommand(RobotIO.getInstance(), subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), commandFactory));
 
     rumbleCommand = new RunCommand(
       () -> {
@@ -309,7 +311,11 @@ public class OperatorInterface
             ),
             new SequentialCommandGroup(
               new WaitUntilCommand(() -> !RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()),
-              new InstantCommand(() -> commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME).schedule())
+              new ConditionalCommand(
+                new InstantCommand( () -> new AutoDealgifyCommand(RobotIO.getInstance(), subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), commandFactory)),
+                new InstantCommand(() -> commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME).schedule()), 
+                () -> scoreOperatorPanel.button(16).getAsBoolean()
+              )
             )
           ),
           new ConditionalCommand(
