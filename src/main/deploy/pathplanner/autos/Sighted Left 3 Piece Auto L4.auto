@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Start - Back Center Far Left Reef Face"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Start - Back Center Far Left Reef Face"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SwitchToLeftCamera"
+                }
+              }
+            ]
           }
         },
         {
@@ -60,9 +73,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Left Feed Zone - Back Center Close Left Reef Face"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left Feed Zone - Back Center Close Left Reef Face"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SwitchToRightCamera"
+                }
+              }
+            ]
           }
         },
         {
@@ -115,9 +141,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Left Feed Zone - Back Center Close Left Reef Face"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left Feed Zone - Back Center Close Left Reef Face"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SwitchToLeftCamera"
+                }
+              }
+            ]
           }
         },
         {
