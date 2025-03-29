@@ -28,8 +28,6 @@ public class RobotToFieldConverter {
         Translation2d robotRelative = new Translation2d(xSpeed, ySpeed);
 
         // Rotate the robot-relative inputs by the robot's heading to get field-relative inputs
-        Translation2d fieldRelative = robotRelative.rotateBy(robotHeading);
-
-        return fieldRelative;
+        return robotRelative.rotateBy(robotHeading);
     }
 }
