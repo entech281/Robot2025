@@ -54,6 +54,8 @@ public final class RobotConstants {
 
     public static final boolean GYRO_REVERSED = false;
     public static final boolean RATE_LIMITING = true;
+
+    public static final double SPEED_LIMIT = 0.2;
   }
 
   public static interface SafeZones {

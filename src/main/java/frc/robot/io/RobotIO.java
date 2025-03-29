@@ -104,6 +104,10 @@ public class RobotIO implements DriveInputSupplier {
     vo.log();
   }
 
+  public void setElevator(ElevatorOutput elo) {
+    latestElevatorOutput = elo;
+  }
+
   public void updateElevator(ElevatorOutput elo) {
     latestElevatorOutput = elo;
     elo.log();
@@ -119,10 +123,18 @@ public class RobotIO implements DriveInputSupplier {
     ledo.log();
   }
 
+  public void setCoralMechanism(CoralMechanismOutput cmo) {
+    latestCoralMechanismOutput = cmo;
+  }
+
   public void updateCoralMechanism(CoralMechanismOutput cmo) {
     latestCoralMechanismOutput = cmo;
     cmo.log();
   }
+
+  public void setInternalCoralDetector(InternalCoralDetectorOutput icdo) {
+    latestInternalCoralDetectorOutput = icdo;
+  }  
 
   public void updateInternalCoralDetector(InternalCoralDetectorOutput icdo) {
     latestInternalCoralDetectorOutput = icdo;
