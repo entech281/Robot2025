@@ -178,7 +178,7 @@ public class OperatorInterface
       )
     );
 
-    xboxController.a().onTrue(new AutoDealgifyCommand(RobotIO.getInstance(), subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), commandFactory, Position.ALGAE_L2, "right"));
+    xboxController.a().whileTrue(new AutoDealgifyCommand(RobotIO.getInstance(), subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), commandFactory, Position.ALGAE_L2, "left"));
 
     rumbleCommand = new RunCommand(
       () -> {

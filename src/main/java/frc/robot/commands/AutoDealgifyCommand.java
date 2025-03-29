@@ -12,7 +12,6 @@ import frc.robot.Position;
 import frc.robot.io.DriveInputSupplier;
 import frc.robot.operation.UserPolicy;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
-import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveSubsystem;
 
 public class AutoDealgifyCommand extends EntechCommand {
@@ -23,7 +22,6 @@ public class AutoDealgifyCommand extends EntechCommand {
     private final CoralMechanismSubsystem coralMechanismSubsystem;
     private Command runningCommand;
     private final String curSide;
-    private final DriveInputSupplier driveInputSupplier;
 
     public AutoDealgifyCommand(DriveInputSupplier driveInputSupplier, DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory, Position targetPos, String curSide) {
         this.driveSubsystem = driveSubsystem;
@@ -31,14 +29,13 @@ public class AutoDealgifyCommand extends EntechCommand {
         this.commandFactory = commandFactory;
         this.coralMechanismSubsystem = coralMechanismSubsystem;
         this.curSide = curSide;
-        this.driveInputSupplier = driveInputSupplier;
     }
 
     @Override
     public void initialize() {
         runningCommand = new SequentialCommandGroup(
             // Drive backward continuously for 0.5 seconds
-            new RunCommand(() -> driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0)), driveSubsystem).withTimeout(0.5),
+            new RunCommand(() -> driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0)), driveSubsystem).withTimeout(1.0),
 
             // Stop the drivetrain and perform algae motions
             new InstantCommand(() -> {
@@ -56,11 +53,14 @@ public class AutoDealgifyCommand extends EntechCommand {
                 } else {
                     driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.5, 0.0));
                 }
-            }, driveSubsystem).withTimeout(0.25),
+            }, driveSubsystem).withTimeout(0.5),
 
             // Drive forward continuously for 0.5 seconds and start algae intake
-            new RunCommand(() -> driveSubsystem.pathFollowDrive(new ChassisSpeeds(1.0, 0.0, 0.0)), driveSubsystem).withTimeout(0.5),
-            new InstantCommand(() -> new AutoIntakeAlgaeCommand(coralMechanismSubsystem).schedule()),
+            new RunCommand(() -> {
+                driveSubsystem.pathFollowDrive(new ChassisSpeeds(1.0, 0.0, 0.0));
+                new IntakeAlgaeCommand(coralMechanismSubsystem).schedule();
+        }).withTimeout(1.0),
+            // new RunCommand(() -> new AutoIntakeAlgaeCommand(coralMechanismSubsystem).schedule()).withTimeout(1.0),
 
             // Stop the drivetrain and continue algae intake
             new InstantCommand(() -> {
@@ -69,10 +69,10 @@ public class AutoDealgifyCommand extends EntechCommand {
             }),
 
             // Wait for 3 seconds to complete algae intake
-            new WaitCommand(3),
+            new WaitCommand(2),
 
             // Drive backward to return to the starting position and reset elevator pivot
-            new RunCommand(() -> driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0)), driveSubsystem).withTimeout(0.5),
+            new RunCommand(() -> driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0)), driveSubsystem).withTimeout(1.0),
             new InstantCommand(() -> {
                 driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0));
                 commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME).schedule();
