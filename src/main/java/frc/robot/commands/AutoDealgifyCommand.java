@@ -11,6 +11,7 @@ import frc.robot.io.DriveInputSupplier;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.drive.RobotToFieldConverter;
 
 public class AutoDealgifyCommand extends EntechCommand{
 
@@ -35,31 +36,31 @@ public class AutoDealgifyCommand extends EntechCommand{
     public void initialize() {
         DriveInput driveInput = driveInputSupplier.getDriveInput();
         runningCommand = new SequentialCommandGroup(new InstantCommand(() -> {
-            driveInput.setXSpeed(-1.0);
+            driveInput.setXSpeed(RobotToFieldConverter.toFieldRelative(-1.0, 0.0).getX());
             driveSubsystem.updateInputs(driveInput);
         }), new WaitCommand(0.5),
         new InstantCommand(() -> {
-            driveInput.setXSpeed(0.0);
+            driveInput.setXSpeed(RobotToFieldConverter.toFieldRelative(0.0, 0.0).getX());
             driveSubsystem.updateInputs(driveInput);
             commandFactory.getSafeElevatorPivotMoveCommand(targetPos).schedule();
             
 
             
             if(this.curSide.equals("left")) {
-                driveInput.setYSpeed(-0.5);
+                driveInput.setYSpeed(RobotToFieldConverter.toFieldRelative(0.0, -0.5).getY());
             } else {
-                driveInput.setYSpeed(0.5);
+                driveInput.setYSpeed(RobotToFieldConverter.toFieldRelative(0.0, 0.5).getY());
             }
 
             driveSubsystem.updateInputs(driveInput);
         }), new WaitCommand(0.15), new InstantCommand(() -> {
-            driveInput.setXSpeed(1.0);
-            driveInput.setYSpeed(0.0);
+            driveInput.setXSpeed(RobotToFieldConverter.toFieldRelative(1.0, 0.0).getX());
+            driveInput.setYSpeed(RobotToFieldConverter.toFieldRelative(0.0, 0.0).getY());
             driveSubsystem.updateInputs(driveInput);
             new IntakeAlgaeCommand(coralMechanismSubsystem).schedule();
         }), new WaitCommand(0.5),
         new InstantCommand(() -> {
-            driveInput.setXSpeed(0.0);
+            driveInput.setXSpeed(RobotToFieldConverter.toFieldRelative(0.0, 0.0).getX());
             driveSubsystem.updateInputs(driveInput);
         }));
         runningCommand.schedule();
