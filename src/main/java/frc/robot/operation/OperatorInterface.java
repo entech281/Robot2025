@@ -1,5 +1,8 @@
 package frc.robot.operation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -46,7 +49,9 @@ import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.led.TestLEDCommand;
 import frc.robot.subsystems.vision.TargetLocation;
+import frc.robot.subsystems.vision.VisionInput;
 import frc.robot.subsystems.vision.VisionInput.Camera;
+import frc.robot.subsystems.vision.VisionTarget;
 
 public class OperatorInterface
     implements DriveInputSupplier, DebugInputSupplier, OperatorInputSupplier {
@@ -155,16 +160,25 @@ public class OperatorInterface
     xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.RESET_ODOMETRY)
         .onTrue(new ResetOdometryCommand(odometry));
 
-    xboxController.leftBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.TOP));
-    xboxController.rightBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.SIDE));
+    xboxController.leftBumper().whileTrue(new TeleFullAutoAlign());
+    xboxController.rightBumper().whileTrue(new TeleFullAutoAlign());
 
     rumbleCommand = new RunCommand(
       () -> {
-        if (RobotIO.getInstance().getVisionOutput().hasTarget() && (xboxController.leftBumper().getAsBoolean() || xboxController.rightBumper().getAsBoolean() || xboxController.rightStick().getAsBoolean())) {
-          xboxController.setRumble(RumbleType.kBothRumble, 1.0);
-        } else {
-          xboxController.setRumble(RumbleType.kBothRumble, 0.0);
-        }
+        List<VisionTarget> targets = RobotIO.getInstance().getVisionOutput().getTargets();
+          List<VisionTarget> foundTargets = new ArrayList<>();
+          if (!targets.isEmpty()) {
+            for (VisionTarget t : targets) {
+              if (UserPolicy.getInstance().getSelectedTargetLocations().contains(new TargetLocation(t.getTagID(), t.getCameraName().equals(VisionInput.Camera.SIDE.label) ? VisionInput.Camera.SIDE : VisionInput.Camera.TOP))) {
+                foundTargets.add(t);
+              }
+            }
+            if (foundTargets.isEmpty()) {
+              xboxController.setRumble(RumbleType.kBothRumble, 0.0);
+            } else {
+              xboxController.setRumble(RumbleType.kBothRumble, 1.0);
+            }
+          }
       }, subsystemManager.getInternalAlgaeDetectorSubsystem()
     );
 
