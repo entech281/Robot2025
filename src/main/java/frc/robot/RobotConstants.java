@@ -174,6 +174,8 @@ public final class RobotConstants {
       Map.entry(Position.ALGAE_HOME.getElevatorKey(), 0.0),
       Map.entry(Position.ALGAE_HOME.getPivotKey(), 100.0),
       Map.entry(Position.SAFE_EXTEND.getPivotKey(), 35.0),
+      Map.entry(Position.FLICK_LEVEL.getElevatorKey(), -999.0),
+      Map.entry(Position.ALGAE_HOME.getPivotKey(), 80.0),
       Map.entry("CoralMechanismSubsystem/StartSpeed", 0.5),
       Map.entry("CoralMechanismSubsystem/FireSpeed", 1.0),
       Map.entry("CoralMechanismSubsystem/SlowDownSpeed", 0.15),

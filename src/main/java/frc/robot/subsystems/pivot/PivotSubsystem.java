@@ -15,8 +15,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.subsystems.SparkMaxOutput;
 import frc.entech.util.EntechUtils;
+import frc.robot.Position;
 import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
+import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.operation.UserPolicy;
 
 public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
@@ -97,7 +99,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
         if (ENABLED) {
             if (currentInput.getActivate()) {
                 double targetPosition = calculateMotorPositionFromDegrees((currentInput.getRequestedPosition()));
-                if (UserPolicy.getInstance().isAlgaeMode()) {
+                if (UserPolicy.getInstance().isAlgaeMode() && currentInput.getRequestedPosition() != LiveTuningHandler.getInstance().getValue(Position.FLICK_LEVEL.getPivotKey())) {
                     pidController.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot1);
                 } else {
                     pidController.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);

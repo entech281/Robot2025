@@ -34,6 +34,7 @@ import frc.robot.commands.FireCoralCommand;
 import frc.robot.commands.GyroReset;
 import frc.robot.commands.IntakeAlgaeCommand;
 import frc.robot.commands.IntakeCoralCommand;
+import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.ResetOdometryCommand;
 import frc.robot.commands.RotateToAngleCommand;
 import frc.robot.commands.RunTestCommand;
@@ -313,7 +314,14 @@ public class OperatorInterface
           new ConditionalCommand(
             new IntakeAlgaeCommand(subsystemManager.getCoralMechanismSubsystem()),
             new ConditionalCommand(
-              algaeFireCommand,
+              new ConditionalCommand(
+                new ParallelCommandGroup(
+                  algaeFireCommand,
+                  new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.FLICK_LEVEL)
+                ),
+                algaeFireCommand,
+                () -> scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.BARGE).getAsBoolean()
+              ),
               intakeCommand,
               () -> scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.BARGE).getAsBoolean() || scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.ALGAE_GROUND).getAsBoolean()
             ),
