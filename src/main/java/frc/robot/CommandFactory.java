@@ -1,7 +1,6 @@
 package frc.robot;
 
 import java.io.IOException;
-import java.util.Set;
 
 import org.json.simple.parser.ParseException;
 
@@ -45,7 +44,6 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
 import frc.robot.subsystems.pivot.PivotSubsystem;
-import frc.robot.subsystems.vision.TargetLocation;
 import frc.robot.subsystems.vision.VisionInput;
 import frc.robot.subsystems.vision.VisionSubsystem;
 
@@ -131,7 +129,7 @@ public class CommandFactory {
     NamedCommands.registerCommand("SetAlgaeMode", new InstantCommand( () -> UserPolicy.getInstance().setAlgaeMode(true)));
 
 
-    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Left", new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this, Position.L2, "right"));
+    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Left", new SequentialCommandGroup(new AutoDealgifyCommand(RobotIO.getInstance(), subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this, Position.ALGAE_L2, "right"), formSafeMovementCommand(Position.ALGAE_HOME)));
     var alliance = DriverStation.getAlliance();
       NamedCommands.registerCommand("AlignToReefFar", 
         new ConditionalCommand(
