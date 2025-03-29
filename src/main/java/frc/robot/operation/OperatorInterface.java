@@ -179,7 +179,7 @@ public class OperatorInterface
           } else {
             VisionTarget t = foundTargets.get(0);
             xboxController.setRumble(RumbleType.kBothRumble, 1.0);
-            Logger.recordOutput("ALIGNED", t.getDistance() <= LiveTuningHandler.getInstance().getValue("AutoAlign/Stop") && Math.abs(t.getTagXW()) <= 0.125);
+            Logger.recordOutput("ALIGNED", t.getDistance() <= 0.725 && Math.abs(t.getTagXW()) <= 0.125);
           }
         }
       }, subsystemManager.getInternalAlgaeDetectorSubsystem()
