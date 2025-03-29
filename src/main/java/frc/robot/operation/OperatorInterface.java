@@ -6,6 +6,8 @@ import java.util.List;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -33,6 +35,7 @@ import frc.robot.commands.GyroReset;
 import frc.robot.commands.IntakeAlgaeCommand;
 import frc.robot.commands.IntakeCoralCommand;
 import frc.robot.commands.ResetOdometryCommand;
+import frc.robot.commands.RotateToAngleCommand;
 import frc.robot.commands.RunTestCommand;
 import frc.robot.commands.TeleFullAutoAlign;
 import frc.robot.commands.TwistCommand;
@@ -160,25 +163,40 @@ public class OperatorInterface
     xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.RESET_ODOMETRY)
         .onTrue(new ResetOdometryCommand(odometry));
 
-    xboxController.leftBumper().whileTrue(new TeleFullAutoAlign());
-    xboxController.rightBumper().whileTrue(new TeleFullAutoAlign());
+    xboxController.leftBumper().whileTrue(
+      new ConditionalCommand(
+        new TeleFullAutoAlign(),
+        new RotateToAngleCommand(() -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue ? -53 : 53),
+        () -> UserPolicy.getInstance().isAlgaeMode() || RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
+      )
+    );
+    xboxController.rightBumper().whileTrue(
+      new ConditionalCommand(
+        new TeleFullAutoAlign(),
+        new RotateToAngleCommand(() -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue ? 53 : -53),
+        () -> UserPolicy.getInstance().isAlgaeMode() || RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
+      )
+    );
 
     rumbleCommand = new RunCommand(
       () -> {
         List<VisionTarget> targets = RobotIO.getInstance().getVisionOutput().getTargets();
-          List<VisionTarget> foundTargets = new ArrayList<>();
-          if (!targets.isEmpty()) {
-            for (VisionTarget t : targets) {
-              if (UserPolicy.getInstance().getSelectedTargetLocations().contains(new TargetLocation(t.getTagID(), t.getCameraName().equals(VisionInput.Camera.SIDE.label) ? VisionInput.Camera.SIDE : VisionInput.Camera.TOP))) {
-                foundTargets.add(t);
-              }
-            }
-            if (foundTargets.isEmpty()) {
-              xboxController.setRumble(RumbleType.kBothRumble, 0.0);
-            } else {
-              xboxController.setRumble(RumbleType.kBothRumble, 1.0);
+        List<VisionTarget> foundTargets = new ArrayList<>();
+        if (!targets.isEmpty()) {
+          for (VisionTarget t : targets) {
+            if (UserPolicy.getInstance().getSelectedTargetLocations().contains(new TargetLocation(t.getTagID(), t.getCameraName().equals(VisionInput.Camera.SIDE.label) ? VisionInput.Camera.SIDE : VisionInput.Camera.TOP))) {
+              foundTargets.add(t);
             }
           }
+          if (foundTargets.isEmpty()) {
+            xboxController.setRumble(RumbleType.kBothRumble, 0.0);
+            Logger.recordOutput("ALIGNED", false);
+          } else {
+            VisionTarget t = foundTargets.get(0);
+            xboxController.setRumble(RumbleType.kBothRumble, 1.0);
+            Logger.recordOutput("ALIGNED", t.getDistance() <= 0.725 && Math.abs(t.getTagXW()) <= 0.125);
+          }
+        }
       }, subsystemManager.getInternalAlgaeDetectorSubsystem()
     );
 
