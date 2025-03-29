@@ -99,7 +99,7 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
         if (ENABLED) {
             if (currentInput.getActivate()) {
                 double targetPosition = calculateMotorPositionFromDegrees((currentInput.getRequestedPosition()));
-                if (UserPolicy.getInstance().isAlgaeMode() && currentInput.getRequestedPosition() != LiveTuningHandler.getInstance().getValue(Position.FLICK_LEVEL.getPivotKey())) {
+                if (UserPolicy.getInstance().isAlgaeMode()) {
                     pidController.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot1);
                 } else {
                     pidController.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);

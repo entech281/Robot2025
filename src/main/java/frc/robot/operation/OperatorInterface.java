@@ -78,6 +78,7 @@ public class OperatorInterface
   private FireCoralCommand fireCommandL1;
   private RunCommand rumbleCommand;
   private FireCoralCommand algaeFireCommand;
+  private FireCoralCommand algaeFireCommand2;
 
   public OperatorInterface(CommandFactory commandFactory, SubsystemManager subsystemManager,
       OdometryProcessor odometry) {
@@ -297,6 +298,7 @@ public class OperatorInterface
     fireCommand = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/FireSpeed"));
     fireCommandL1 = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/L1FireSpeed"));
     algaeFireCommand = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/AlgaeFireSpeed"));
+    algaeFireCommand2 = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/AlgaeFireSpeed"));
     scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.FIRE)
       .whileTrue(
         new ConditionalCommand(
@@ -316,8 +318,11 @@ public class OperatorInterface
             new ConditionalCommand(
               new ConditionalCommand(
                 new ParallelCommandGroup(
-                  algaeFireCommand,
-                  new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.FLICK_LEVEL)
+                  algaeFireCommand2,
+                  new SequentialCommandGroup(
+                    new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)),
+                    new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.FLICK_LEVEL)
+                  )
                 ),
                 algaeFireCommand,
                 () -> scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.BARGE).getAsBoolean()
