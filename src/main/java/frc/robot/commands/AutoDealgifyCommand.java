@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -23,7 +24,7 @@ public class AutoDealgifyCommand extends EntechCommand{
     private final String curSide;
     private final DriveInputSupplier driveInputSupplier;
     
-    public AutoDealgifyCommand(DriveInputSupplier driveInputSupplier,DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory, Position targetPos, String curSide) {
+    public AutoDealgifyCommand(DriveInputSupplier driveInputSupplier, DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory, Position targetPos, String curSide) {
         this.driveSubsystem = driveSubsystem;
         this.targetPos = targetPos;
         this.commandFactory = commandFactory;
@@ -36,32 +37,41 @@ public class AutoDealgifyCommand extends EntechCommand{
     public void initialize() {
         DriveInput driveInput = driveInputSupplier.getDriveInput();
         runningCommand = new SequentialCommandGroup(new InstantCommand(() -> {
-            driveInput.setXSpeed(RobotToFieldConverter.toFieldRelative(-1.0, 0.0).getX());
-            driveSubsystem.updateInputs(driveInput);
+            // driveInput.setXSpeed(RobotToFieldConverter.toFieldRelative(-1.0, 0.0).getX());
+            // driveSubsystem.updateInputs(driveInput);
+            driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0));
         }), new WaitCommand(0.5),
         new InstantCommand(() -> {
-            driveInput.setXSpeed(RobotToFieldConverter.toFieldRelative(0.0, 0.0).getX());
-            driveSubsystem.updateInputs(driveInput);
+            // driveInput.setXSpeed(RobotToFieldConverter.toFieldRelative(0.0, 0.0).getX());
+            // driveSubsystem.updateInputs(driveInput);
+            driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0));
             commandFactory.getSafeElevatorPivotMoveCommand(targetPos).schedule();
             
 
             
             if(this.curSide.equals("left")) {
-                driveInput.setYSpeed(RobotToFieldConverter.toFieldRelative(0.0, -0.5).getY());
+                // driveInput.setYSpeed(RobotToFieldConverter.toFieldRelative(0.0, -0.5).getY());
+                driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, -0.5, 0.0));
             } else {
-                driveInput.setYSpeed(RobotToFieldConverter.toFieldRelative(0.0, 0.5).getY());
+                // driveInput.setYSpeed(RobotToFieldConverter.toFieldRelative(0.0, 0.5).getY());
+                driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.5, 0.0));
             }
 
-            driveSubsystem.updateInputs(driveInput);
+            // driveSubsystem.updateInputs(driveInput);
         }), new WaitCommand(0.15), new InstantCommand(() -> {
-            driveInput.setXSpeed(RobotToFieldConverter.toFieldRelative(1.0, 0.0).getX());
-            driveInput.setYSpeed(RobotToFieldConverter.toFieldRelative(0.0, 0.0).getY());
-            driveSubsystem.updateInputs(driveInput);
+            // driveInput.setXSpeed(RobotToFieldConverter.toFieldRelative(1.0, 0.0).getX());
+            // driveInput.setYSpeed(RobotToFieldConverter.toFieldRelative(0.0, 0.0).getY());
+            // driveSubsystem.updateInputs(driveInput);
+            driveSubsystem.pathFollowDrive(new ChassisSpeeds(1.0, 0.0, 0.0));
             new IntakeAlgaeCommand(coralMechanismSubsystem).schedule();
         }), new WaitCommand(0.5),
         new InstantCommand(() -> {
-            driveInput.setXSpeed(RobotToFieldConverter.toFieldRelative(0.0, 0.0).getX());
-            driveSubsystem.updateInputs(driveInput);
+            // driveInput.setXSpeed(RobotToFieldConverter.toFieldRelative(0.0, 0.0).getX());
+            // driveSubsystem.updateInputs(driveInput);
+            driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0));
+        }), new WaitCommand(0.5),
+        new InstantCommand( () -> {
+            driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0));
         }));
         runningCommand.schedule();
     }
