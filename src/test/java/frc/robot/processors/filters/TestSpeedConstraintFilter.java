@@ -29,7 +29,7 @@ public class TestSpeedConstraintFilter {
 
         DriveInput input = new DriveInput();
         input.setXSpeed(1);
-        SpeedConstraintFilter filter = new SpeedConstraintFilter(RobotConstants.DrivetrainConstants.SPEED_LIMIT, 10);
+        SpeedConstraintFilter filter = new SpeedConstraintFilter(RobotConstants.DrivetrainConstants.SPEED_LIMIT, 20.3);
         assertEquals(0.2, filter.process(input).getXSpeed());
     }
 
@@ -44,7 +44,7 @@ public class TestSpeedConstraintFilter {
 
         DriveInput input = new DriveInput();
         input.setXSpeed(1);
-        SpeedConstraintFilter filter = new SpeedConstraintFilter(RobotConstants.DrivetrainConstants.SPEED_LIMIT, 10);
+        SpeedConstraintFilter filter = new SpeedConstraintFilter(RobotConstants.DrivetrainConstants.SPEED_LIMIT, 20.3);
         assertEquals(1, filter.process(input).getXSpeed());
     }
 
@@ -59,7 +59,7 @@ public class TestSpeedConstraintFilter {
 
         DriveInput input = new DriveInput();
         input.setXSpeed(1);
-        SpeedConstraintFilter filter = new SpeedConstraintFilter(RobotConstants.DrivetrainConstants.SPEED_LIMIT, 10);
+        SpeedConstraintFilter filter = new SpeedConstraintFilter(RobotConstants.DrivetrainConstants.SPEED_LIMIT, 20.3);
         assertEquals(0.2, filter.process(input).getXSpeed());
     }
 
@@ -74,7 +74,7 @@ public class TestSpeedConstraintFilter {
 
         DriveInput input = new DriveInput();
         input.setXSpeed(1);
-        SpeedConstraintFilter filter = new SpeedConstraintFilter(RobotConstants.DrivetrainConstants.SPEED_LIMIT, 10);
+        SpeedConstraintFilter filter = new SpeedConstraintFilter(RobotConstants.DrivetrainConstants.SPEED_LIMIT, 20.3);
         assertEquals(1, filter.process(input).getXSpeed());
     }
 
@@ -89,7 +89,7 @@ public class TestSpeedConstraintFilter {
 
         DriveInput input = new DriveInput();
         input.setXSpeed(1);
-        SpeedConstraintFilter filter = new SpeedConstraintFilter(RobotConstants.DrivetrainConstants.SPEED_LIMIT, 10);
+        SpeedConstraintFilter filter = new SpeedConstraintFilter(RobotConstants.DrivetrainConstants.SPEED_LIMIT, 20.3);
         assertEquals(1, filter.process(input).getXSpeed());
 
         eo.setCurrentPosition(20.3);
