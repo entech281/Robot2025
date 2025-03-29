@@ -21,7 +21,7 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
     private static final double LATERAL_START_ANGLE = 22.5;
     private final DriveSubsystem drive;
     private final int tagID;
-    public static final double TOLERANCE = 0.1;
+    public static final double TOLERANCE = 0.12;
     public static final double DIST_TOLERANCE = 0.05;
 
     private final LateralAlignFilter lateralFilter = new LateralAlignFilter();
