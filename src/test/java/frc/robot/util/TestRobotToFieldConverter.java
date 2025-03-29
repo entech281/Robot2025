@@ -12,7 +12,7 @@ public class TestRobotToFieldConverter {
     private static final double DELTA = 1e-6; // Tolerance for floating-point comparisons
 
     @Test
-    public void testZeroHeading() {
+    void testZeroHeading() {
         // Robot-relative inputs
         double xSpeed = 1.0; // Forward
         double ySpeed = 0.0; // No lateral movement
@@ -27,7 +27,7 @@ public class TestRobotToFieldConverter {
     }
 
     @Test
-    public void testNinetyDegreeHeading() {
+    void testNinetyDegreeHeading() {
         // Robot-relative inputs
         double xSpeed = 1.0; // Forward
         double ySpeed = 0.0; // No lateral movement
@@ -42,7 +42,7 @@ public class TestRobotToFieldConverter {
     }
 
     @Test
-    public void testOneEightyDegreeHeading() {
+    void testOneEightyDegreeHeading() {
         // Robot-relative inputs
         double xSpeed = 1.0; // Forward
         double ySpeed = 0.0; // No lateral movement
@@ -57,7 +57,7 @@ public class TestRobotToFieldConverter {
     }
 
     @Test
-    public void testTwoSeventyDegreeHeading() {
+    void testTwoSeventyDegreeHeading() {
         // Robot-relative inputs
         double xSpeed = 1.0; // Forward
         double ySpeed = 0.0; // No lateral movement
@@ -72,7 +72,7 @@ public class TestRobotToFieldConverter {
     }
 
     @Test
-    public void testDiagonalMovement() {
+    void testDiagonalMovement() {
         // Robot-relative inputs
         double xSpeed = 1.0; // Forward
         double ySpeed = 1.0; // Right
@@ -87,7 +87,7 @@ public class TestRobotToFieldConverter {
     }
 
     @Test
-    public void testNegativeHeading() {
+    void testNegativeHeading() {
         // Robot-relative inputs
         double xSpeed = 1.0; // Forward
         double ySpeed = 0.0; // No lateral movement
@@ -102,7 +102,7 @@ public class TestRobotToFieldConverter {
     }
 
     @Test
-    public void testNoMovementNinetyDegrees() {
+    void testNoMovementNinetyDegrees() {
         double xSpeed = 0.0;
         double ySpeed = 0.0;
         double heading = 90.0;
@@ -112,7 +112,7 @@ public class TestRobotToFieldConverter {
     }
 
     @Test
-    public void testNoMovementZeroDegrees() {
+    void testNoMovementZeroDegrees() {
         double xSpeed = 0.0;
         double ySpeed = 0.0;
         double heading = 0.0;

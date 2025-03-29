@@ -6,6 +6,7 @@ import frc.robot.io.RobotIO;
 
 public class RobotToFieldConverter {
 
+    private RobotToFieldConverter() {}
 
     public static Translation2d toFieldRelative(double xSpeed, double ySpeed) {
         return toFieldRelative(xSpeed, ySpeed, RobotIO.getInstance().getNavXOutput().getYaw());
