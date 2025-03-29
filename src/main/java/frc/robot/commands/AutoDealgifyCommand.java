@@ -9,6 +9,7 @@ import frc.entech.commands.EntechCommand;
 import frc.robot.CommandFactory;
 import frc.robot.Position;
 import frc.robot.io.DriveInputSupplier;
+import frc.robot.operation.UserPolicy;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -44,6 +45,7 @@ public class AutoDealgifyCommand extends EntechCommand{
         new InstantCommand(() -> {
             // driveInput.setXSpeed(RobotToFieldConverter.toFieldRelative(0.0, 0.0).getX());
             // driveSubsystem.updateInputs(driveInput);
+            UserPolicy.getInstance().setAlgaeMode(true);
             driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0));
             commandFactory.getSafeElevatorPivotMoveCommand(targetPos).schedule();
             
@@ -63,12 +65,19 @@ public class AutoDealgifyCommand extends EntechCommand{
             // driveInput.setYSpeed(RobotToFieldConverter.toFieldRelative(0.0, 0.0).getY());
             // driveSubsystem.updateInputs(driveInput);
             driveSubsystem.pathFollowDrive(new ChassisSpeeds(1.0, 0.0, 0.0));
-            new IntakeAlgaeCommand(coralMechanismSubsystem).schedule();
+            new AutoIntakeAlgaeCommand(coralMechanismSubsystem).schedule();
+
         }), new WaitCommand(0.5),
+        new InstantCommand( () -> {
+            driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0));
+            new AutoIntakeAlgaeCommand(coralMechanismSubsystem).schedule();
+        }),
+        new WaitCommand(3),
         new InstantCommand(() -> {
             // driveInput.setXSpeed(RobotToFieldConverter.toFieldRelative(0.0, 0.0).getX());
             // driveSubsystem.updateInputs(driveInput);
             driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0));
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME).schedule();;
         }), new WaitCommand(0.5),
         new InstantCommand( () -> {
             driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0));
