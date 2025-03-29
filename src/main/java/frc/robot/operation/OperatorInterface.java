@@ -29,6 +29,7 @@ import frc.robot.Position;
 import frc.robot.RobotConstants;
 import frc.robot.SubsystemManager;
 import frc.robot.commands.AlgaeHoldCommand;
+import frc.robot.commands.AutoDealgifyCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.FireCoralCommand;
 import frc.robot.commands.GyroReset;
@@ -53,7 +54,6 @@ import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.led.TestLEDCommand;
 import frc.robot.subsystems.vision.TargetLocation;
 import frc.robot.subsystems.vision.VisionInput;
-import frc.robot.subsystems.vision.VisionInput.Camera;
 import frc.robot.subsystems.vision.VisionTarget;
 
 public class OperatorInterface
@@ -177,6 +177,8 @@ public class OperatorInterface
         () -> UserPolicy.getInstance().isAlgaeMode() || RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
       )
     );
+
+    xboxController.a().onTrue(new AutoDealgifyCommand(RobotIO.getInstance(), subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), commandFactory, Position.ALGAE_L2, "right"));
 
     rumbleCommand = new RunCommand(
       () -> {
