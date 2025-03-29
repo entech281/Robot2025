@@ -175,10 +175,11 @@ public class OperatorInterface
           }
           if (foundTargets.isEmpty()) {
             xboxController.setRumble(RumbleType.kBothRumble, 0.0);
+            Logger.recordOutput("ALIGNED", false);
           } else {
             VisionTarget t = foundTargets.get(0);
             xboxController.setRumble(RumbleType.kBothRumble, 1.0);
-            Logger.recordOutput("ALIGNED", t.getDistance() <= LiveTuningHandler.getInstance().getValue("AutoAlign/Stop") && Math.abs(t.getTagXW()) <= 0.125);
+            Logger.recordOutput("ALIGNED", t.getDistance() <= 0.7 && Math.abs(t.getTagXW()) <= 0.125);
           }
         }
       }, subsystemManager.getInternalAlgaeDetectorSubsystem()
