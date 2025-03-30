@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
 import frc.robot.subsystems.coraldetector.InternalCoralDetectorOutput;
 import frc.robot.subsystems.coralmechanism.CoralMechanismOutput;
@@ -37,7 +36,7 @@ public class TestSpeedConstraintFilter {
     }
 
     @Test
-    public void shouldBeSlowSpeedWithIntakeRunningButNoCoral(){
+    void shouldBeSlowSpeedWithIntakeRunningButNoCoral(){
         assertEquals(
             SpeedConstraintFilter.SLOWEST_SPEED,
             SpeedConstraintFilter.computeMaxSpeed(0,false,true),
@@ -46,7 +45,7 @@ public class TestSpeedConstraintFilter {
     }
 
     @Test
-    public void shouldBeModerateSpeedWithElevatorHalfUp(){
+    void shouldBeModerateSpeedWithElevatorHalfUp(){
         assertEquals(
             0.6,
             SpeedConstraintFilter.computeMaxSpeed(10.0,false,false),
@@ -55,7 +54,7 @@ public class TestSpeedConstraintFilter {
     }
 
     @Test
-    public void shouldBeSlowSpeedWithElevatorUp(){
+    void shouldBeSlowSpeedWithElevatorUp(){
         assertEquals(
             SpeedConstraintFilter.SLOWEST_SPEED,
             SpeedConstraintFilter.computeMaxSpeed(SpeedConstraintFilter.ELEVATOR_HEIGHT_AT_TOP,false,false),
@@ -64,7 +63,7 @@ public class TestSpeedConstraintFilter {
     }
 
     @Test
-    public void crazyHighValueofElevatorShouldStillGiveSlowSpeed(){
+    void crazyHighValueofElevatorShouldStillGiveSlowSpeed(){
         assertEquals(
             SpeedConstraintFilter.SLOWEST_SPEED,
             SpeedConstraintFilter.computeMaxSpeed(100.0,false,false),
@@ -73,7 +72,7 @@ public class TestSpeedConstraintFilter {
     }
 
     @Test
-    public void crazyLowValueofElevatorShouldStillGiveFullSpeed(){
+    void crazyLowValueofElevatorShouldStillGiveFullSpeed(){
         assertEquals(
             SpeedConstraintFilter.FULL_SPEED,
             SpeedConstraintFilter.computeMaxSpeed(-100.0,false,false),
@@ -82,7 +81,7 @@ public class TestSpeedConstraintFilter {
     }
 
     @Test
-    public void testSpeedWhenElevatorUpUsingActualFilter(){
+    gitvoid testSpeedWhenElevatorUpUsingActualFilter(){
         //only have to test this once to make sure values are correct
         //when coming from robot values
 

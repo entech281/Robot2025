@@ -8,11 +8,10 @@ import frc.robot.subsystems.drive.DriveInput;
 
 public class SpeedConstraintFilter implements DriveFilterI {
 
-  public static double ELEVATOR_HEIGHT_AT_TOP = 20.0;
-  public static double ELEVATOR_HEIGHT_FOR_FULL_SPEED =
-      RobotConstants.DrivetrainConstants.SPEED_LIMIT;
-  public static double FULL_SPEED = 1.0;
-  public static double SLOWEST_SPEED = 0.2;
+  public static final double ELEVATOR_HEIGHT_AT_TOP = 20.0;
+  public static final double ELEVATOR_HEIGHT_FOR_FULL_SPEED =  RobotConstants.DrivetrainConstants.SPEED_LIMIT;
+  public static final double FULL_SPEED = 1.0;
+  public static final double SLOWEST_SPEED = 0.2;
 
   @Override
   public DriveInput process(DriveInput input) {
