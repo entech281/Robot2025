@@ -81,7 +81,7 @@ public class TestSpeedConstraintFilter {
     }
 
     @Test
-    gitvoid testSpeedWhenElevatorUpUsingActualFilter(){
+    void testSpeedWhenElevatorUpUsingActualFilter(){
         //only have to test this once to make sure values are correct
         //when coming from robot values
 
