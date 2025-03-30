@@ -1,8 +1,13 @@
 package frc.robot.operation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -24,12 +29,15 @@ import frc.robot.Position;
 import frc.robot.RobotConstants;
 import frc.robot.SubsystemManager;
 import frc.robot.commands.AlgaeHoldCommand;
+import frc.robot.commands.AutoDealgifyCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.FireCoralCommand;
 import frc.robot.commands.GyroReset;
 import frc.robot.commands.IntakeAlgaeCommand;
 import frc.robot.commands.IntakeCoralCommand;
+import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.ResetOdometryCommand;
+import frc.robot.commands.RotateToAngleCommand;
 import frc.robot.commands.RunTestCommand;
 import frc.robot.commands.TeleFullAutoAlign;
 import frc.robot.commands.TwistCommand;
@@ -46,7 +54,8 @@ import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.led.TestLEDCommand;
 import frc.robot.subsystems.vision.TargetLocation;
-import frc.robot.subsystems.vision.VisionInput.Camera;
+import frc.robot.subsystems.vision.VisionInput;
+import frc.robot.subsystems.vision.VisionTarget;
 
 public class OperatorInterface
     implements DriveInputSupplier, DebugInputSupplier, OperatorInputSupplier {
@@ -69,6 +78,7 @@ public class OperatorInterface
   private FireCoralCommand fireCommandL1;
   private RunCommand rumbleCommand;
   private FireCoralCommand algaeFireCommand;
+  private FireCoralCommand algaeFireCommand2;
 
   public OperatorInterface(CommandFactory commandFactory, SubsystemManager subsystemManager,
       OdometryProcessor odometry) {
@@ -155,15 +165,41 @@ public class OperatorInterface
     xboxController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_XBOX.RESET_ODOMETRY)
         .onTrue(new ResetOdometryCommand(odometry));
 
-    xboxController.leftBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.TOP));
-    xboxController.rightBumper().whileTrue(new TeleFullAutoAlign(subsystemManager.getVisionSubsystem(), Camera.SIDE));
+    xboxController.leftBumper().whileTrue(
+      new ConditionalCommand(
+        new TeleFullAutoAlign(),
+        new RotateToAngleCommand(() -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue ? -53 : 53),
+        () -> UserPolicy.getInstance().isAlgaeMode() || RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
+      )
+    );
+    xboxController.rightBumper().whileTrue(
+      new ConditionalCommand(
+        new TeleFullAutoAlign(),
+        new RotateToAngleCommand(() -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue ? 53 : -53),
+        () -> UserPolicy.getInstance().isAlgaeMode() || RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
+      )
+    );
+
+    xboxController.a().whileTrue(new AutoDealgifyCommand(RobotIO.getInstance(), subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), commandFactory, Position.ALGAE_L2, "left"));
 
     rumbleCommand = new RunCommand(
       () -> {
-        if (RobotIO.getInstance().getVisionOutput().hasTarget() && (xboxController.leftBumper().getAsBoolean() || xboxController.rightBumper().getAsBoolean() || xboxController.rightStick().getAsBoolean())) {
-          xboxController.setRumble(RumbleType.kBothRumble, 1.0);
-        } else {
-          xboxController.setRumble(RumbleType.kBothRumble, 0.0);
+        List<VisionTarget> targets = RobotIO.getInstance().getVisionOutput().getTargets();
+        List<VisionTarget> foundTargets = new ArrayList<>();
+        if (!targets.isEmpty()) {
+          for (VisionTarget t : targets) {
+            if (UserPolicy.getInstance().getSelectedTargetLocations().contains(new TargetLocation(t.getTagID(), t.getCameraName().equals(VisionInput.Camera.SIDE.label) ? VisionInput.Camera.SIDE : VisionInput.Camera.TOP))) {
+              foundTargets.add(t);
+            }
+          }
+          if (foundTargets.isEmpty()) {
+            xboxController.setRumble(RumbleType.kBothRumble, 0.0);
+            Logger.recordOutput("ALIGNED", false);
+          } else {
+            VisionTarget t = foundTargets.get(0);
+            xboxController.setRumble(RumbleType.kBothRumble, 1.0);
+            Logger.recordOutput("ALIGNED", t.getDistance() <= 0.725 && Math.abs(t.getTagXW()) <= 0.125);
+          }
         }
       }, subsystemManager.getInternalAlgaeDetectorSubsystem()
     );
@@ -264,6 +300,7 @@ public class OperatorInterface
     fireCommand = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/FireSpeed"));
     fireCommandL1 = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/L1FireSpeed"));
     algaeFireCommand = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/AlgaeFireSpeed"));
+    algaeFireCommand2 = new FireCoralCommand(subsystemManager.getCoralMechanismSubsystem(), LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/AlgaeFireSpeed"));
     scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.FIRE)
       .whileTrue(
         new ConditionalCommand(
@@ -281,7 +318,17 @@ public class OperatorInterface
           new ConditionalCommand(
             new IntakeAlgaeCommand(subsystemManager.getCoralMechanismSubsystem()),
             new ConditionalCommand(
-              algaeFireCommand,
+              new ConditionalCommand(
+                new ParallelCommandGroup(
+                  algaeFireCommand2,
+                  new SequentialCommandGroup(
+                    new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)),
+                    new PivotMoveCommand(subsystemManager.getPivotSubsystem(), Position.FLICK_LEVEL)
+                  )
+                ),
+                algaeFireCommand,
+                () -> scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.BARGE).getAsBoolean()
+              ),
               intakeCommand,
               () -> scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.BARGE).getAsBoolean() || scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.ALGAE_GROUND).getAsBoolean()
             ),

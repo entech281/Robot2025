@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import frc.entech.commands.EntechCommand;
+import frc.robot.io.RobotIO;
 import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.subsystems.coralmechanism.CoralMechanismInput;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
@@ -33,6 +34,6 @@ public class IntakeAlgaeCommand extends EntechCommand {
 
 	@Override
 	public boolean isFinished() {
-    return intake.toOutputs().getHasAlgae();
+    return RobotIO.getInstance().getInternalAlgaeDetectorOutput().hasAlgae();
 	}
 }
