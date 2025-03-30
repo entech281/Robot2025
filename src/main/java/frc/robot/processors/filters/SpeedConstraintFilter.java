@@ -1,49 +1,66 @@
 package frc.robot.processors.filters;
 
+import edu.wpi.first.math.MathUtil;
+import frc.entech.util.EntechUtils;
+import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
 import frc.robot.subsystems.drive.DriveInput;
 
 public class SpeedConstraintFilter implements DriveFilterI {
-        public static final double MAX_SPEED = 1.0;
-        public static final double MIN_SPEED_HEIGHT = 4.4;
-        private double speedLimit;
-        private double position;
 
-        public SpeedConstraintFilter(double speedLimit, double position) {
-            this.speedLimit = speedLimit;
-            this.position = position;
-        }
+  public static double ELEVATOR_HEIGHT_AT_TOP = 20.0;
+  public static double ELEVATOR_HEIGHT_FOR_FULL_SPEED =
+      RobotConstants.DrivetrainConstants.SPEED_LIMIT;
+  public static double FULL_SPEED = 1.0;
+  public static double SLOWEST_SPEED = 0.2;
+
+  @Override
+  public DriveInput process(DriveInput input) {
+
+    double currentElevatorPosition = RobotIO.getInstance().getElevatorOutput().getCurrentPosition();
+    boolean intakeHasCoral = RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral();
+    boolean intakeRunning = RobotIO.getInstance().getCoralMechanismOutput().isRunning();
+
+    double overallMaxSpeed =
+        computeMaxSpeed(currentElevatorPosition, intakeHasCoral, intakeRunning);
+
+    return getConstrainedInput(input, overallMaxSpeed);
+  }
 
 
-        //public  double  map(double value) {
-        //  return (value - this.position) * (MAX_SPEED - this.speedLimit) / (this.position - MIN_SPEED_HEIGHT) + this.speedLimit;
-        //}
 
-      public  double  map(double currentElevatorPosition, double inputSpeed) {
-          return inputSpeed * ((this.position- currentElevatorPosition)/this.position )* ( MAX_SPEED - this.speedLimit) + this.speedLimit;
-      }
+  public static double computeMaxSpeedFromElevatorHeight(double currentElevatorHeight) {
 
-        @Override
-        public DriveInput process(DriveInput input) {
+    double calculated = EntechUtils.map(currentElevatorHeight, ELEVATOR_HEIGHT_FOR_FULL_SPEED,
+        ELEVATOR_HEIGHT_AT_TOP, FULL_SPEED, SLOWEST_SPEED);
 
-            double currentElevatorPosition = RobotIO.getInstance().getElevatorOutput().getCurrentPosition();
-            boolean intakeHasCoral = RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral();
-            boolean intakeRunning = RobotIO.getInstance().getCoralMechanismOutput().isRunning();
-            
-            if (currentElevatorPosition >= position || (!intakeHasCoral && intakeRunning)) {
-                return getConstrainedInput(input,currentElevatorPosition);
-            }
-            else {
-                return input;
-            }
-        }
+    //make sure this calculation never returns more than full speed or less than zero speed
+    return MathUtil.clamp(calculated, SLOWEST_SPEED, FULL_SPEED);
+  }
 
-        private DriveInput getConstrainedInput(DriveInput input, double currentElevatorPosition) {
-            DriveInput processedInput = new DriveInput(input);
+  public static double computeMaxSpeedFromCoralIntake(boolean hasCoral, boolean intakeRunning) {
+    if (!hasCoral && intakeRunning) {
+      return SLOWEST_SPEED;
+    } else {
+      return FULL_SPEED;
+    }
+  }
 
-                processedInput.setXSpeed(map(currentElevatorPosition,input.getXSpeed()));
-                processedInput.setYSpeed(map(currentElevatorPosition,input.getYSpeed()));
+  public static double computeMaxSpeed(double currentElevatorHeight, boolean hasCoral,
+      boolean intakeRunning) {
 
-                return processedInput;
-        }
+    return Math.min(computeMaxSpeedFromElevatorHeight(currentElevatorHeight),
+        computeMaxSpeedFromCoralIntake(hasCoral, intakeRunning));
+  }
+
+
+
+  private DriveInput getConstrainedInput(DriveInput input, double maxSpeed) {
+    DriveInput processedInput = new DriveInput(input);
+
+    processedInput.setXSpeed(MathUtil.clamp(processedInput.getXSpeed(), -maxSpeed, maxSpeed));
+    processedInput.setYSpeed(MathUtil.clamp(processedInput.getYSpeed(), -maxSpeed, maxSpeed));
+
+    return processedInput;
+  }
 }

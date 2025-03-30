@@ -29,7 +29,7 @@ public class DriveInputProcessor {
     driveFilters.add(new AutoYawFilter());
     driveFilters.add(new LateralAlignFilter());
     driveFilters.add(new TowardsTargetFilter());
-    driveFilters.add(new SpeedConstraintFilter(RobotConstants.DrivetrainConstants.SPEED_LIMIT, LiveTuningHandler.getInstance().getValue(Position.L2.getElevatorKey())));
+    driveFilters.add(new SpeedConstraintFilter());
   }
 
   public DriveInput processInput(DriveInput input) {

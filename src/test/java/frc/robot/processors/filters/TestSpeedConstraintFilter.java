@@ -13,87 +13,100 @@ import frc.robot.subsystems.elevator.ElevatorOutput;
 
 public class TestSpeedConstraintFilter {
 
-    RobotIO rio = RobotIO.getInstance();
-    ElevatorOutput eo = new ElevatorOutput();
-    CoralMechanismOutput cmo = new CoralMechanismOutput();
-    InternalCoralDetectorOutput cdo = new InternalCoralDetectorOutput();
+    private SpeedConstraintFilter filter = new SpeedConstraintFilter();
+    public static final double TOLERANCE = 0.01;
+
+
 
     @Test
-    public void testSpeedWhenElevatorUp(){
-        eo.setCurrentPosition(18);
-        cmo.setRunning(false);
-        cdo.setCoralSensor(false);
-        rio.setCoralMechanism(cmo);
-        rio.setInternalCoralDetector(cdo);
-        rio.setElevator(eo);
-
-        DriveInput input = new DriveInput();
-        input.setXSpeed(1);
-        SpeedConstraintFilter filter = new SpeedConstraintFilter(RobotConstants.DrivetrainConstants.SPEED_LIMIT, 20.3);
-        assertEquals(0.2, filter.process(input).getXSpeed());
+    public void shouldBeFullSpeedWithNoCoral_ElevatorDown(){
+        assertEquals(
+            SpeedConstraintFilter.FULL_SPEED,
+            SpeedConstraintFilter.computeMaxSpeed(0,false,false),
+            TOLERANCE
+        );
     }
 
     @Test
-    public void testSpeedWhenElevatorDown(){
-        eo.setCurrentPosition(8);
-        cmo.setRunning(false);
-        cdo.setCoralSensor(false);
-        rio.setCoralMechanism(cmo);
-        rio.setInternalCoralDetector(cdo);
-        rio.setElevator(eo);
-
-        DriveInput input = new DriveInput();
-        input.setXSpeed(1);
-        SpeedConstraintFilter filter = new SpeedConstraintFilter(RobotConstants.DrivetrainConstants.SPEED_LIMIT, 20.3);
-        assertEquals(1, filter.process(input).getXSpeed());
+    public void shouldBeFullSpeedWithCoralAndIntakeRunning_ElevatorDown(){
+        assertEquals(
+            SpeedConstraintFilter.FULL_SPEED,
+            SpeedConstraintFilter.computeMaxSpeed(0,true,true),
+            TOLERANCE
+        );
     }
 
     @Test
-    public void testSpeedWhenIntaking(){
-        eo.setCurrentPosition(0);
-        cmo.setRunning(true);
-        cdo.setCoralSensor(false);
-        rio.setCoralMechanism(cmo);
-        rio.setInternalCoralDetector(cdo);
-        rio.setElevator(eo);
-
-        DriveInput input = new DriveInput();
-        input.setXSpeed(1);
-        SpeedConstraintFilter filter = new SpeedConstraintFilter(RobotConstants.DrivetrainConstants.SPEED_LIMIT, 20.3);
-        assertEquals(0.2, filter.process(input).getXSpeed());
+    public void shouldBeSlowSpeedWithIntakeRunningButNoCoral(){
+        assertEquals(
+            SpeedConstraintFilter.SLOWEST_SPEED,
+            SpeedConstraintFilter.computeMaxSpeed(0,false,true),
+            TOLERANCE
+        );
     }
 
     @Test
-    public void testSpeedWhenNotIntaking(){
-        eo.setCurrentPosition(0);
-        cmo.setRunning(false);
-        cdo.setCoralSensor(false);
-        rio.setCoralMechanism(cmo);
-        rio.setInternalCoralDetector(cdo);
-        rio.setElevator(eo);
-
-        DriveInput input = new DriveInput();
-        input.setXSpeed(1);
-        SpeedConstraintFilter filter = new SpeedConstraintFilter(RobotConstants.DrivetrainConstants.SPEED_LIMIT, 20.3);
-        assertEquals(1, filter.process(input).getXSpeed());
+    public void shouldBeModerateSpeedWithElevatorHalfUp(){
+        assertEquals(
+            0.6,
+            SpeedConstraintFilter.computeMaxSpeed(10.0,false,false),
+            TOLERANCE
+        );
     }
 
     @Test
-    public void testMap(){
-        eo.setCurrentPosition(4.4);
-        cmo.setRunning(false);
-        cdo.setCoralSensor(false);
+    public void shouldBeSlowSpeedWithElevatorUp(){
+        assertEquals(
+            SpeedConstraintFilter.SLOWEST_SPEED,
+            SpeedConstraintFilter.computeMaxSpeed(SpeedConstraintFilter.ELEVATOR_HEIGHT_AT_TOP,false,false),
+            TOLERANCE
+        );
+    }
+
+    @Test
+    public void crazyHighValueofElevatorShouldStillGiveSlowSpeed(){
+        assertEquals(
+            SpeedConstraintFilter.SLOWEST_SPEED,
+            SpeedConstraintFilter.computeMaxSpeed(100.0,false,false),
+            TOLERANCE
+        );
+    }
+
+    @Test
+    public void crazyLowValueofElevatorShouldStillGiveFullSpeed(){
+        assertEquals(
+            SpeedConstraintFilter.FULL_SPEED,
+            SpeedConstraintFilter.computeMaxSpeed(-100.0,false,false),
+            TOLERANCE
+        );
+    }
+
+    @Test
+    public void testSpeedWhenElevatorUpUsingActualFilter(){
+        //only have to test this once to make sure values are correct
+        //when coming from robot values
+
+        setRobotIOValues(18.0,false,false);
+        DriveInput input = new DriveInput();
+        input.setXSpeed(1.0);
+
+        assertEquals(0.28, filter.process(input).getXSpeed(),TOLERANCE);
+        assertEquals(0.28, filter.process(input).getXSpeed(),TOLERANCE);
+    }
+
+    private static void setRobotIOValues (double elevatorPosition, boolean hasCoral, boolean intakeRunning){
+        //this crazyness is why singletons are really bad for unit testing
+        RobotIO rio = RobotIO.getInstance();
+        ElevatorOutput eo = new ElevatorOutput();
+        CoralMechanismOutput cmo = new CoralMechanismOutput();
+        InternalCoralDetectorOutput cdo = new InternalCoralDetectorOutput();
+
+        eo.setCurrentPosition(elevatorPosition);
+        cmo.setRunning(intakeRunning);
+        cdo.setCoralSensor(hasCoral);
         rio.setCoralMechanism(cmo);
         rio.setInternalCoralDetector(cdo);
         rio.setElevator(eo);
-
-        DriveInput input = new DriveInput();
-        input.setXSpeed(1);
-        SpeedConstraintFilter filter = new SpeedConstraintFilter(RobotConstants.DrivetrainConstants.SPEED_LIMIT, 20.3);
-        assertEquals(1, filter.process(input).getXSpeed());
-
-        eo.setCurrentPosition(20.3);
-        rio.setElevator(eo);
-        assertEquals(0.2, filter.process(input).getXSpeed());
     }
+
 }

@@ -16,6 +16,21 @@ public final class EntechUtils {
   }
 
   /**
+   * Re-maps a number from one range to another.
+   * That is, a value of fromLow would get mapped to toLow,
+   * a value of fromHigh to toHigh, values in-between to values in-between, etc.
+   * @param x
+   * @param in_min
+   * @param in_max
+   * @param out_min
+   * @param out_max
+   * @return
+   */
+  public static double map(double x, double in_min, double in_max, double out_min, double out_max) {
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+  }
+
+  /**
    * Scale up a value if its magnitude is below minMagnitude
    *
    * @param value value to be checked
