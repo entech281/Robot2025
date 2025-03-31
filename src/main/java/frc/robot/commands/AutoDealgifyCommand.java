@@ -54,7 +54,7 @@ public class AutoDealgifyCommand extends EntechCommand {
 
         Position targetPos;
 
-        if (alliance.isPresent() && alliance.equals(Alliance.Blue)) {
+        if (alliance.isPresent() && alliance.get().equals(Alliance.Blue)) {
             targetPos = currentLoc.tagID % 2 == 0 ? Position.ALGAE_L3 : Position.ALGAE_L2;
         } else {
             targetPos = currentLoc.tagID % 2 == 0 ? Position.ALGAE_L2 : Position.ALGAE_L3;
@@ -62,6 +62,9 @@ public class AutoDealgifyCommand extends EntechCommand {
         
 
         runningCommand = new SequentialCommandGroup(
+
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME),
+
             // Drive backward continuously for 0.5 seconds
             new RunCommand(() -> driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0)), driveSubsystem).withTimeout(1.0),
 
