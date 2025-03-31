@@ -1,7 +1,9 @@
 package frc.robot.subsystems.vision;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -30,6 +32,18 @@ public class VisionOutput extends SubsystemOutput {
     for (int i = 0; i < targets.size(); i++) {
       targets.get(i).log("VisionOutput/targets/target" + i);
     }
+  }
+
+  public List<VisionTarget> findSpecificTarget(Set<TargetLocation> query) {
+    List<VisionTarget> foundTargets = new ArrayList<>();
+    if (!targets.isEmpty()) {
+      for (VisionTarget t : targets) {
+        if (query.contains(new TargetLocation(t.getTagID(), t.getCameraName().equals(VisionInput.Camera.SIDE.label) ? VisionInput.Camera.SIDE : VisionInput.Camera.TOP))) {
+          foundTargets.add(t);
+        }
+      }
+    }
+    return foundTargets;
   }
 
   public String getReefCloseness() {

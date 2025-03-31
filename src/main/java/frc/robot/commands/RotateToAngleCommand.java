@@ -27,8 +27,7 @@ public class RotateToAngleCommand extends EntechCommand {
 
     @Override
     public void initialize() {
-        UserPolicy.getInstance().setAligningToAngle(true);
-        UserPolicy.getInstance().setTargetAngle(angle.getAsDouble());
+        execute();
     }
 
     @Override
