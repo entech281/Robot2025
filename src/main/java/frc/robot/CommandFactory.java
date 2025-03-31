@@ -130,7 +130,7 @@ public class CommandFactory {
     NamedCommands.registerCommand("SetAlgaeMode", new InstantCommand( () -> UserPolicy.getInstance().setAlgaeMode(true)));
 
 
-    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Left", new SequentialCommandGroup(new AutoDealgifyCommand(RobotIO.getInstance(), subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this, Position.ALGAE_L2, "right"), formSafeMovementCommand(Position.ALGAE_HOME)));
+    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Left", new SequentialCommandGroup(new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this, Position.ALGAE_L2, "right"), formSafeMovementCommand(Position.ALGAE_HOME)));
     var alliance = DriverStation.getAlliance();
       NamedCommands.registerCommand("AlignToReefFar", 
         new ConditionalCommand(

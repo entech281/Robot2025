@@ -180,7 +180,7 @@ public class OperatorInterface
       )
     );
 
-    xboxController.a().whileTrue(new AutoDealgifyCommand(RobotIO.getInstance(), subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), commandFactory, Position.ALGAE_L2, "left"));
+    xboxController.a().whileTrue(new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), commandFactory, Position.ALGAE_L2, "left"));
 
     rumbleCommand = new RunCommand(
       () -> {
@@ -205,7 +205,7 @@ public class OperatorInterface
     );
 
     subsystemManager.getInternalAlgaeDetectorSubsystem().setDefaultCommand(rumbleCommand);
-    subsystemManager.getVisionSubsystem().setDefaultCommand(new VisionCameraSwitchingCommand(subsystemManager.getVisionSubsystem(), xboxController::getRightX));
+    subsystemManager.getVisionSubsystem().setDefaultCommand(new VisionCameraSwitchingCommand(subsystemManager.getVisionSubsystem()));
   }
 
   public void scoreOperatorBindings() {
