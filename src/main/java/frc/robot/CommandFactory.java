@@ -32,6 +32,7 @@ import frc.robot.commands.ElevatorMoveCommand;
 import frc.robot.commands.FireCoralCommand;
 import frc.robot.commands.FireCoralCommandAuto;
 import frc.robot.commands.GyroResetByAngleCommand;
+import frc.robot.commands.IntakeCoralCommand;
 import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
 import frc.robot.io.RobotIO;
@@ -129,7 +130,7 @@ public class CommandFactory {
     NamedCommands.registerCommand("SetAlgaeMode", new InstantCommand( () -> UserPolicy.getInstance().setAlgaeMode(true)));
 
 
-    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Left", new SequentialCommandGroup(new AutoDealgifyCommand(RobotIO.getInstance(), subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this, Position.ALGAE_L2, "right"), formSafeMovementCommand(Position.ALGAE_HOME)));
+    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Left", new SequentialCommandGroup(new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this, Position.ALGAE_L2, "right"), formSafeMovementCommand(Position.ALGAE_HOME)));
     var alliance = DriverStation.getAlliance();
       NamedCommands.registerCommand("AlignToReefFar", 
         new ConditionalCommand(
@@ -170,7 +171,7 @@ public class CommandFactory {
             () -> {return alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue);}
         )
       );
-    NamedCommands.registerCommand("IntakeCoral", new AutoIntakeCoralCommand(coralMechanismSubsystem));
+    NamedCommands.registerCommand("IntakeCoral", new IntakeCoralCommand(coralMechanismSubsystem, pivotSubsystem));
     NamedCommands.registerCommand("IntakeAlgae", new AutoIntakeAlgaeCommand(coralMechanismSubsystem));
     NamedCommands.registerCommand("FireAlgae", new AutoFireAlgaeCommand(coralMechanismSubsystem, 1.0));
     NamedCommands.registerCommand("SwitchToRightCamera", Commands.run(() -> {
