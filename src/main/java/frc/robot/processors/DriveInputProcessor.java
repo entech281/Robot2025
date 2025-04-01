@@ -9,6 +9,7 @@ import frc.robot.processors.filters.DriveFilterI;
 import frc.robot.processors.filters.HoldYawFilter;
 import frc.robot.processors.filters.LateralAlignFilter;
 import frc.robot.processors.filters.MaxConstraintFilter;
+import frc.robot.processors.filters.SpeedConstraintFilter;
 import frc.robot.processors.filters.SquaringFilter;
 import frc.robot.processors.filters.TowardsTargetFilter;
 import frc.robot.processors.filters.TwistFilter;

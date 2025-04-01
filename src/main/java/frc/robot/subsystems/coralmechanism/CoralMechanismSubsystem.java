@@ -59,8 +59,8 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
     public CoralMechanismOutput toOutputs() {
         CoralMechanismOutput output = new CoralMechanismOutput();
         if (ENABLED) {
-            output.setRunning(currentInput.getActivate());
             output.setCurrentSpeed(coralIntakeMotor.getEncoder().getVelocity());
+            output.setRunning(Math.abs(output.getCurrentSpeed()) >= 0.01);
             output.setBrakeModeEnabled(IdleMode.kBrake == mode);
 
             SparkMaxOutput smo = SparkMaxOutput.createOutput(coralIntakeMotor);
