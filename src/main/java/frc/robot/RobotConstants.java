@@ -23,6 +23,13 @@ import frc.robot.commandchecker.SafeZone;
 public final class RobotConstants {
   public static final double TIME_PER_PERIODICAL_LOOP_SECONDS = 0.00;
 
+  public static interface AccelerationFilter {
+    public static final double DIRECTION_SLEW_RATE = 1.2; // radians per second
+    public static final double MAGNITUDE_SLEW_RATE = 4.75;
+    // 2.0; //1.8; // percent per second (1 = 100%)
+    public static final double ROTATIONAL_SLEW_RATE = 3.5;
+  }
+
   public static interface DrivetrainConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
