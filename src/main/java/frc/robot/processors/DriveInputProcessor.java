@@ -26,7 +26,6 @@ public class DriveInputProcessor {
     driveFilters.add(new AutoYawFilter());
     driveFilters.add(new LateralAlignFilter());
     driveFilters.add(new TowardsTargetFilter());
-    driveFilters.add(new SpeedConstraintFilter());
   }
 
   public DriveInput processInput(DriveInput input) {
