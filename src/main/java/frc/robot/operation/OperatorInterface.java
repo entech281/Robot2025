@@ -1,7 +1,7 @@
 package frc.robot.operation;
 
-import java.lang.Character.UnicodeScript;
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -56,7 +56,6 @@ import frc.robot.processors.OdometryProcessor;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.led.TestLEDCommand;
 import frc.robot.subsystems.vision.TargetLocation;
-import frc.robot.subsystems.vision.VisionInput;
 import frc.robot.subsystems.vision.VisionTarget;
 
 public class OperatorInterface
@@ -186,28 +185,20 @@ public class OperatorInterface
 
     rumbleCommand = new RunCommand(
       () -> {
-        List<VisionTarget> targets = RobotIO.getInstance().getVisionOutput().getTargets();
-        List<VisionTarget> foundTargets = new ArrayList<>();
-        if (!targets.isEmpty()) {
-          for (VisionTarget t : targets) {
-            if (UserPolicy.getInstance().getSelectedTargetLocations().contains(new TargetLocation(t.getTagID(), t.getCameraName().equals(VisionInput.Camera.SIDE.label) ? VisionInput.Camera.SIDE : VisionInput.Camera.TOP))) {
-              foundTargets.add(t);
-            }
-          }
-          if (foundTargets.isEmpty()) {
-            xboxController.setRumble(RumbleType.kBothRumble, 0.0);
-            Logger.recordOutput("ALIGNED", false);
-          } else {
-            VisionTarget t = foundTargets.get(0);
-            xboxController.setRumble(RumbleType.kBothRumble, 1.0);
-            Logger.recordOutput("ALIGNED", t.getDistance() <= 0.725 && Math.abs(t.getTagXW()) <= 0.125);
-          }
+        List<VisionTarget> foundTargets = RobotIO.getInstance().getVisionOutput().findSpecificTarget(UserPolicy.getInstance().getSelectedTargetLocations());
+        if (foundTargets.isEmpty()) {
+          xboxController.setRumble(RumbleType.kBothRumble, 0.0);
+          Logger.recordOutput("ALIGNED", false);
+        } else {
+          VisionTarget t = foundTargets.get(0);
+          xboxController.setRumble(RumbleType.kBothRumble, 1.0);
+          Logger.recordOutput("ALIGNED", t.getDistance() <= 0.725 && Math.abs(t.getTagXW()) <= 0.125);
         }
       }, subsystemManager.getInternalAlgaeDetectorSubsystem()
     );
 
     subsystemManager.getInternalAlgaeDetectorSubsystem().setDefaultCommand(rumbleCommand);
-    subsystemManager.getVisionSubsystem().setDefaultCommand(new VisionCameraSwitchingCommand(subsystemManager.getVisionSubsystem(), xboxController::getRightX));
+    subsystemManager.getVisionSubsystem().setDefaultCommand(new VisionCameraSwitchingCommand(subsystemManager.getVisionSubsystem()));
   }
 
   public void scoreOperatorBindings() {
