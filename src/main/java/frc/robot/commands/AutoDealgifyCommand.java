@@ -28,7 +28,7 @@ public class AutoDealgifyCommand extends EntechCommand {
     private Command runningCommand;
     private TargetLocation currentLoc;
 
-    public AutoDealgifyCommand(DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory, Position targetPos, String curSide) {
+    public AutoDealgifyCommand(DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory) {
         this.driveSubsystem = driveSubsystem;
         this.commandFactory = commandFactory;
         this.coralMechanismSubsystem = coralMechanismSubsystem;
