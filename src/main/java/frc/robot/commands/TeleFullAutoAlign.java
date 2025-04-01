@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.entech.commands.EntechCommand;
 import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
@@ -43,11 +42,7 @@ public class TeleFullAutoAlign extends EntechCommand {
 
     private double findTargetAngle(int tagID) {
         if (RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.containsKey(tagID)) {
-            if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-                return RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.get(tagID) - 180;
-            } else {
-                return RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.get(tagID) - 180;
-            }
+            return RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.get(tagID) - 180;
         } else {
             return 0;
         }

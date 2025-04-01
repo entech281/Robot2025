@@ -1,5 +1,7 @@
 package frc.robot.processors.filters;
 
+import java.util.Optional;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
@@ -34,7 +36,8 @@ public class TowardsTargetFilter implements DriveFilterI {
                     moveController.setD(LiveTuningHandler.getInstance().getValue("AutoAlign/StopD"));
                     double ratio = MathUtil.clamp(-moveController.calculate(t.getDistance(), LiveTuningHandler.getInstance().getValue("AutoAlign/Stop")), -1.0, 1.0);
                     double mag = MathUtil.clamp(ratio * LiveTuningHandler.getInstance().getValue("AutoAlign/Speed"), -LiveTuningHandler.getInstance().getValue("AutoAlign/MaxSpeed"), LiveTuningHandler.getInstance().getValue("AutoAlign/MaxSpeed"));
-                    if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
+                    Optional<Alliance> alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
                         processedInput.setXSpeed((Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * mag) + input.getXSpeed());
                         processedInput.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * mag) + input.getYSpeed());
                     } else {
