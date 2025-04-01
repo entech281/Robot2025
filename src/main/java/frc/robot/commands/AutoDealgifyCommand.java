@@ -26,24 +26,22 @@ public class AutoDealgifyCommand extends EntechCommand {
     private final CommandFactory commandFactory;
     private final CoralMechanismSubsystem coralMechanismSubsystem;
     private Command runningCommand;
+    private Position targetPos;
     private TargetLocation currentLoc;
 
     public AutoDealgifyCommand(DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory) {
         this.driveSubsystem = driveSubsystem;
         this.commandFactory = commandFactory;
         this.coralMechanismSubsystem = coralMechanismSubsystem;
-    }
-
-    @Override
-    public void initialize() {
 
         List<TargetLocation> pos = UserPolicy.getInstance().getSelectedTargetLocations().stream().toList();
 
-        if (pos.size() < 1) {
+        currentLoc = pos.get(0);
+
+        
+        if (pos.isEmpty()) {
             return;
         }
-
-        currentLoc = pos.get(0);
 
         Optional<Alliance> alliance = DriverStation.getAlliance();
 
@@ -51,15 +49,16 @@ public class AutoDealgifyCommand extends EntechCommand {
             currentLoc = pos.get(1);
         }
 
-        Position targetPos;
-
         if (alliance.isPresent() && alliance.get().equals(Alliance.Blue)) {
             targetPos = currentLoc.tagID % 2 == 0 ? Position.ALGAE_L3 : Position.ALGAE_L2;
         } else {
             targetPos = currentLoc.tagID % 2 == 0 ? Position.ALGAE_L2 : Position.ALGAE_L3;
         }
-        
 
+    }
+
+    @Override
+    public void initialize() {
         runningCommand = new SequentialCommandGroup(
 
             commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME),
