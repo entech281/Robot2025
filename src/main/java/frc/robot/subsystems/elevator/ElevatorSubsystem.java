@@ -157,6 +157,14 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
     return Commands.none();
   }
 
+  public Trigger getAtHeightTrigger() {
+    return new Trigger(() -> )
+  }
+
+  public boolean isAtRequestedHeight() {
+
+  }
+
   @Override
   public boolean isEnabled() {
     return ENABLED;
