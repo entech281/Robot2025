@@ -59,6 +59,10 @@ public class AutoDealgifyCommand extends EntechCommand {
 
     @Override
     public void initialize() {
+        if (targetPos == null) {
+            return;
+        }
+
         runningCommand = new SequentialCommandGroup(
 
             commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME),
