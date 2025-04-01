@@ -45,6 +45,7 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
 import frc.robot.subsystems.pivot.PivotSubsystem;
+import frc.robot.subsystems.vision.TargetLocation;
 import frc.robot.subsystems.vision.VisionInput;
 import frc.robot.subsystems.vision.VisionSubsystem;
 
@@ -130,7 +131,8 @@ public class CommandFactory {
     NamedCommands.registerCommand("SetAlgaeMode", new InstantCommand( () -> UserPolicy.getInstance().setAlgaeMode(true)));
 
 
-    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Left", new SequentialCommandGroup(new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this, Position.ALGAE_L2, "right"), formSafeMovementCommand(Position.ALGAE_HOME)));
+    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Left", new SequentialCommandGroup(new InstantCommand( () -> UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_H, TargetLocation.RED_H)), new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this), new InstantCommand( () -> UserPolicy.getInstance().clearTargetLocations())));
+    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Right", new SequentialCommandGroup(new InstantCommand( () -> UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_K, TargetLocation.RED_K)), new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this), new InstantCommand( () -> UserPolicy.getInstance().clearTargetLocations())));
     var alliance = DriverStation.getAlliance();
       NamedCommands.registerCommand("AlignToReefFar", 
         new ConditionalCommand(

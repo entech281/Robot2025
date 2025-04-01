@@ -322,6 +322,7 @@ public final class RobotConstants {
       public static final int ALGAE_GROUND = 9;
       public static final int BARGE = 4;
       public static final int FIRE = 1;      
+      public static final int AUTO_DEALGIFY = 12;
     }
 
     public static interface SWITCHES {
