@@ -35,13 +35,13 @@ public class AutoDealgifyCommand extends EntechCommand {
         this.coralMechanismSubsystem = coralMechanismSubsystem;
 
         List<TargetLocation> pos = UserPolicy.getInstance().getSelectedTargetLocations().stream().toList();
-
-        currentLoc = pos.get(0);
-
         
+                
         if (pos.isEmpty()) {
             return;
         }
+
+        currentLoc = pos.get(0);
 
         Optional<Alliance> alliance = DriverStation.getAlliance();
 
