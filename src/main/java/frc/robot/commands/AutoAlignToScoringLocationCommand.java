@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import java.util.Optional;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
@@ -54,7 +56,8 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
                     if (t.getTagID() == tagID && SwerveUtils.angleDifference(RobotIO.getInstance().getOdometryPose().getRotation().getRadians(), Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) < LATERAL_START_ANGLE) {
                         UserPolicy.getInstance().setLaterallyAligning(true);
                         double ratio = MathUtil.clamp(-moveController.calculate(t.getDistance(), LiveTuningHandler.getInstance().getValue("AutoAlign/Stop")), -1.0, 1.0);
-                        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
+                        Optional<Alliance> alliance = DriverStation.getAlliance();
+                        if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
                             input.setXSpeed((ratio * Math.cos(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/AutoSpeed")) + input.getXSpeed());
                             input.setYSpeed((Math.sin(Units.degreesToRadians(UserPolicy.getInstance().getTargetAngle())) * LiveTuningHandler.getInstance().getValue("AutoAlign/AutoSpeed") * ratio) + input.getYSpeed());
                         } else {
@@ -99,11 +102,7 @@ public class AutoAlignToScoringLocationCommand extends EntechCommand {
 
     private double findTargetAngle(int tagID) {
         if (RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.containsKey(tagID)) {
-            if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-                return RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.get(tagID) - 180;
-            } else {
-                return RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.get(tagID) - 180;
-            }
+            return RobotConstants.APRIL_TAG_DATA.TAG_ANGLES.get(tagID) - 180;
         } else {
             return 0;
         }

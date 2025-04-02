@@ -18,7 +18,7 @@ public class TestSpeedConstraintFilter {
 
 
     @Test
-    public void shouldBeFullSpeedWithNoCoral_ElevatorDown(){
+    void shouldBeFullSpeedWithNoCoral_ElevatorDown(){
         assertEquals(
             SpeedConstraintFilter.FULL_SPEED,
             SpeedConstraintFilter.computeMaxSpeed(0,false,false),
@@ -27,7 +27,7 @@ public class TestSpeedConstraintFilter {
     }
 
     @Test
-    public void shouldBeFullSpeedWithCoralAndIntakeRunning_ElevatorDown(){
+    void shouldBeFullSpeedWithCoralAndIntakeRunning_ElevatorDown(){
         assertEquals(
             SpeedConstraintFilter.FULL_SPEED,
             SpeedConstraintFilter.computeMaxSpeed(0,true,true),
