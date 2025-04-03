@@ -126,6 +126,6 @@ public class AutoDealgifyCommand extends EntechCommand {
 
     @Override
     public boolean isFinished() {
-        return runningCommand.isFinished() || runningCommand == null;
+        return runningCommand == null || runningCommand.isFinished();
     }
 }

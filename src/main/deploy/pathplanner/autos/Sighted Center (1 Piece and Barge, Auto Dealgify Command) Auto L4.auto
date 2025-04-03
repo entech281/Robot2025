@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Copy of Start - Far Reef Face"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Copy of Start - Far Reef Face"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SwitchToRightCamera"
+                }
+              }
+            ]
           }
         },
         {
