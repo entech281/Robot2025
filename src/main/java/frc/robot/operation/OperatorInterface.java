@@ -305,7 +305,7 @@ public class OperatorInterface
               new ConditionalCommand(
                 new InstantCommand( () -> new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), commandFactory)),
                 new InstantCommand(() -> commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME).schedule()), 
-                () -> scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.AUTO_DEALGIFY).getAsBoolean()
+                () -> scoreOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.AUTO_DEALGIFY).getAsBoolean()
               )
             )
           ),
