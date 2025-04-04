@@ -61,7 +61,11 @@ public class AutoDealgifyCommand extends EntechCommand {
 
         Optional<Alliance> alliance = DriverStation.getAlliance();
 
-        if (currentLoc.tagID > 10 && alliance.isPresent() && alliance.get().equals(Alliance.Red)) {
+        if (currentLoc.tagID > 15 && alliance.isPresent() && alliance.get().equals(Alliance.Red)) {
+            currentLoc = pos.get(1);
+        }
+
+        if (currentLoc.tagID < 15 && alliance.isPresent() && alliance.get().equals(Alliance.Blue)) {
             currentLoc = pos.get(1);
         }
 
