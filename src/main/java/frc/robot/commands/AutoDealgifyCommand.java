@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -21,6 +23,8 @@ import frc.robot.Position;
 import frc.robot.operation.UserPolicy;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.pivot.PivotSubsystem;
 import frc.robot.subsystems.vision.TargetLocation;
 import frc.robot.subsystems.vision.VisionInput;
 
@@ -32,11 +36,15 @@ public class AutoDealgifyCommand extends EntechCommand {
     private Command runningCommand;
     // private Position targetPos;
     private TargetLocation currentLoc;
+    ElevatorSubsystem elevatorSubsystem;
+    PivotSubsystem pivotSubsystem;
 
-    public AutoDealgifyCommand(DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory) {
+    public AutoDealgifyCommand(DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, CommandFactory commandFactory) {
         this.driveSubsystem = driveSubsystem;
         this.commandFactory = commandFactory;
         this.coralMechanismSubsystem = coralMechanismSubsystem;
+        this.elevatorSubsystem = elevatorSubsystem;
+        this.pivotSubsystem = pivotSubsystem;
     }
 
     @Override
@@ -79,7 +87,16 @@ public class AutoDealgifyCommand extends EntechCommand {
                 UserPolicy.getInstance().setAlgaeMode(true);
             }),
 
-            commandFactory.getSafeElevatorPivotMoveCommand(targetPos),
+            // new ParallelDeadlineGroup(
+            //     new WaitCommand(0.0),
+            //     commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME)
+            // ),
+
+            new SequentialCommandGroup(
+                new PivotMoveCommand(pivotSubsystem, Position.SAFE_EXTEND),
+                new ElevatorMoveCommand(elevatorSubsystem, targetPos),
+                new PivotMoveCommand(pivotSubsystem, targetPos)
+            ),
 
             // Drive laterally based on the current side
             new RunCommand(() -> {
@@ -90,12 +107,15 @@ public class AutoDealgifyCommand extends EntechCommand {
                 }
             }).withTimeout(0.5),
 
-            new IntakeAlgaeCommand(coralMechanismSubsystem),
+            new ParallelCommandGroup(
+
+                new IntakeAlgaeCommand(coralMechanismSubsystem),
 
             // Drive forward continuously for 0.5 seconds and start algae intake
                 new RunCommand(() -> {
                     driveSubsystem.pathFollowDrive(new ChassisSpeeds(1.0, 0.0, 0.0));
-                }).withTimeout(1.0),
+                }).withTimeout(1.0)
+            ),
                 
             // new RunCommand(() -> new AutoIntakeAlgaeCommand(coralMechanismSubsystem).schedule()).withTimeout(1.0),
             
