@@ -166,7 +166,7 @@ public class OperatorInterface
       )
     );
 
-    xboxController.a().whileTrue(new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), commandFactory));
+    xboxController.a().whileTrue(new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), subsystemManager.getElevatorSubsystem(), subsystemManager.getPivotSubsystem(), commandFactory));
 
     rumbleCommand = new RunCommand(
       () -> {
@@ -310,7 +310,7 @@ public class OperatorInterface
             new SequentialCommandGroup(
               new WaitUntilCommand(() -> !RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()),
               new ConditionalCommand(
-                new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), commandFactory),
+                new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), subsystemManager.getElevatorSubsystem(), subsystemManager.getPivotSubsystem(), commandFactory),
                 commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME), 
                 () -> {
                   boolean button = alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.AUTO_DEALGIFY).getAsBoolean();
