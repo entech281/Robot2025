@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.025888796129102,
-        "y": 1.7897573073865551
+        "x": 1.967965126623838,
+        "y": 1.861415589002579
       },
       "isLocked": false,
       "linkedName": "RightFeedZone"
@@ -20,8 +20,8 @@
         "y": 1.9442613636363637
       },
       "prevControl": {
-        "x": 1.3391213991175714,
-        "y": 0.8934570683528733
+        "x": 1.3671065053044682,
+        "y": 0.9815145085034163
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,7 +41,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
+    "velocity": 1.125,
     "rotation": 59.49
   },
   "reversed": false,

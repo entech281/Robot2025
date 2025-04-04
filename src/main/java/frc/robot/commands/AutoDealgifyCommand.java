@@ -7,6 +7,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
@@ -77,9 +79,7 @@ public class AutoDealgifyCommand extends EntechCommand {
                 UserPolicy.getInstance().setAlgaeMode(true);
             }),
 
-            commandFactory.formSafeMovementCommand(targetPos),
-
-            new WaitCommand(1.0),
+            commandFactory.getSafeElevatorPivotMoveCommand(targetPos),
 
             // Drive laterally based on the current side
             new RunCommand(() -> {
@@ -96,6 +96,7 @@ public class AutoDealgifyCommand extends EntechCommand {
                 new RunCommand(() -> {
                     driveSubsystem.pathFollowDrive(new ChassisSpeeds(1.0, 0.0, 0.0));
                 }).withTimeout(1.0),
+                
             // new RunCommand(() -> new AutoIntakeAlgaeCommand(coralMechanismSubsystem).schedule()).withTimeout(1.0),
             
             // Stop the drivetrain and continue algae intake
