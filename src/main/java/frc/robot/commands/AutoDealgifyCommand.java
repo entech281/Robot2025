@@ -75,8 +75,9 @@ public class AutoDealgifyCommand extends EntechCommand {
             new InstantCommand(() -> {
                 driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0));
                 UserPolicy.getInstance().setAlgaeMode(true);
-                commandFactory.getSafeElevatorPivotMoveCommand(targetPos).schedule();
             }),
+
+            commandFactory.formSafeMovementCommand(targetPos),
 
             new WaitCommand(1.0),
 
@@ -88,8 +89,6 @@ public class AutoDealgifyCommand extends EntechCommand {
                     driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.5, 0.0));
                 }
             }).withTimeout(0.5),
-
-            new InstantCommand(() -> {}, driveSubsystem),
 
             new IntakeAlgaeCommand(coralMechanismSubsystem),
 
