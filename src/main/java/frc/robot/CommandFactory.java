@@ -50,6 +50,8 @@ import frc.robot.subsystems.pivot.PivotSubsystem;
 import frc.robot.subsystems.vision.TargetLocation;
 import frc.robot.subsystems.vision.VisionInput;
 import frc.robot.subsystems.vision.VisionSubsystem;
+import java.util.Optional;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 @SuppressWarnings("unused")
 public class CommandFactory {
@@ -115,7 +117,7 @@ public class CommandFactory {
             new PIDConstants(RobotConstants.AUTONOMOUS.ROTATION_CONTROLLER_P, 0.0, 0.0)
         ), config, () -> {
 
-          var alliance = DriverStation.getAlliance();
+          Optional<Alliance> alliance = DriverStation.getAlliance();
           if (alliance.isPresent()) {
             return alliance.get() == DriverStation.Alliance.Red;
           }
@@ -143,28 +145,34 @@ public class CommandFactory {
       UserPolicy.getInstance().clearTargetLocations();
     }, driveSubsystem, coralMechanismSubsystem)));
     NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Right", new SequentialCommandGroup(new InstantCommand( () -> UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_K, TargetLocation.RED_K)), new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), subsystemManager.getElevatorSubsystem(), subsystemManager.getPivotSubsystem(), this), new InstantCommand( () -> UserPolicy.getInstance().clearTargetLocations())));
-    var alliance = DriverStation.getAlliance();
       NamedCommands.registerCommand("AlignToReefFar", 
         new ConditionalCommand(
             new AutoAlignToScoringLocationCommand(driveSubsystem, 21),
             new AutoAlignToScoringLocationCommand(driveSubsystem, 10),
-            () -> alliance.isPresent() && (alliance.get().equals(DriverStation.Alliance.Blue))
-        )
-      );
+            () -> {
+              Optional<Alliance> alliance = DriverStation.getAlliance();
+              return alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue);
+            })
+        );
 
       NamedCommands.registerCommand("AlignToReefCloseRight", 
         new ConditionalCommand(
             new AutoAlignToScoringLocationCommand(driveSubsystem, 17),
             new AutoAlignToScoringLocationCommand(driveSubsystem, 8),
-            () -> alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue)
-        )
+            () -> {
+              Optional<Alliance> alliance = DriverStation.getAlliance();
+              return alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue);
+            })
       );
 
       NamedCommands.registerCommand("AlignToReefFarRight", 
         new ConditionalCommand(
             new AutoAlignToScoringLocationCommand(driveSubsystem, 22),
             new AutoAlignToScoringLocationCommand(driveSubsystem, 9),
-            () -> alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue)
+            () -> {
+              Optional<Alliance> alliance = DriverStation.getAlliance();
+              return alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue);
+            }
         )
       );
 
@@ -172,7 +180,10 @@ public class CommandFactory {
         new ConditionalCommand(
             new AutoAlignToScoringLocationCommand(driveSubsystem, 19),
             new AutoAlignToScoringLocationCommand(driveSubsystem, 6),
-            () -> alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue)
+            () -> {
+              Optional<Alliance> alliance = DriverStation.getAlliance();
+              return alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue);
+            }
         )
       );
 
@@ -180,7 +191,10 @@ public class CommandFactory {
         new ConditionalCommand(
             new AutoAlignToScoringLocationCommand(driveSubsystem, 20),
             new AutoAlignToScoringLocationCommand(driveSubsystem, 11),
-            () -> alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue)
+            () -> {
+              Optional<Alliance> alliance = DriverStation.getAlliance();
+              return alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue);
+            }
         )
       );
     NamedCommands.registerCommand("IntakeCoral", new IntakeCoralCommand(coralMechanismSubsystem, pivotSubsystem));
