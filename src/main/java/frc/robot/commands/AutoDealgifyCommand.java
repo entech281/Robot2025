@@ -103,7 +103,7 @@ public class AutoDealgifyCommand extends EntechCommand {
             // Drive backward to return to the starting position and reset elevator pivot
             new RunCommand(() -> {
                 driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0));
-                new AlgaeHoldCommand(coralMechanismSubsystem).schedule();
+                new AlgaeHoldCommand(coralMechanismSubsystem).withTimeout(1.0).schedule();
             }).withTimeout(1.0),
             new InstantCommand(() -> {
                 driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0));
