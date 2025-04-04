@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,7 +8,12 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -17,6 +23,8 @@ import frc.robot.Position;
 import frc.robot.operation.UserPolicy;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.pivot.PivotSubsystem;
 import frc.robot.subsystems.vision.TargetLocation;
 import frc.robot.subsystems.vision.VisionInput;
 
@@ -26,16 +34,24 @@ public class AutoDealgifyCommand extends EntechCommand {
     private final CommandFactory commandFactory;
     private final CoralMechanismSubsystem coralMechanismSubsystem;
     private Command runningCommand;
-    private Position targetPos;
+    // private Position targetPos;
     private TargetLocation currentLoc;
+    ElevatorSubsystem elevatorSubsystem;
+    PivotSubsystem pivotSubsystem;
 
-    public AutoDealgifyCommand(DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory) {
+    public AutoDealgifyCommand(DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, CommandFactory commandFactory) {
         this.driveSubsystem = driveSubsystem;
         this.commandFactory = commandFactory;
         this.coralMechanismSubsystem = coralMechanismSubsystem;
+        this.elevatorSubsystem = elevatorSubsystem;
+        this.pivotSubsystem = pivotSubsystem;
+    }
+
+    @Override
+    public void initialize() {
+        Position targetPos;
 
         List<TargetLocation> pos = UserPolicy.getInstance().getSelectedTargetLocations().stream().toList();
-        
                 
         if (pos.isEmpty()) {
             return;
@@ -54,18 +70,13 @@ public class AutoDealgifyCommand extends EntechCommand {
         } else {
             targetPos = currentLoc.tagID % 2 == 0 ? Position.ALGAE_L2 : Position.ALGAE_L3;
         }
-
-    }
-
-    @Override
-    public void initialize() {
         if (targetPos == null) {
             return;
         }
 
         runningCommand = new SequentialCommandGroup(
 
-            commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME),
+            commandFactory.formSafeMovementCommand(Position.HOME),
 
             // Drive backward continuously for 0.5 seconds
             new RunCommand(() -> driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0)), driveSubsystem).withTimeout(1.0),
@@ -74,48 +85,62 @@ public class AutoDealgifyCommand extends EntechCommand {
             new InstantCommand(() -> {
                 driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0));
                 UserPolicy.getInstance().setAlgaeMode(true);
-                commandFactory.getSafeElevatorPivotMoveCommand(targetPos).schedule();
             }),
 
-            new WaitCommand(1.0),
+            // new ParallelDeadlineGroup(
+            //     new WaitCommand(0.0),
+            //     commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME)
+            // ),
+
+            new SequentialCommandGroup(
+                new PivotMoveCommand(pivotSubsystem, Position.SAFE_EXTEND),
+                new ElevatorMoveCommand(elevatorSubsystem, targetPos),
+                new PivotMoveCommand(pivotSubsystem, targetPos)
+            ),
 
             // Drive laterally based on the current side
             new RunCommand(() -> {
-                if (currentLoc.camera.equals(VisionInput.Camera.SIDE)) {
+                if (currentLoc.camera.equals(VisionInput.Camera.TOP)) {
                     driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, -0.5, 0.0));
                 } else {
                     driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.5, 0.0));
                 }
-            }, driveSubsystem).withTimeout(0.5),
+            }).withTimeout(0.5),
+
+            new ParallelCommandGroup(
+
+                new IntakeAlgaeCommand(coralMechanismSubsystem),
 
             // Drive forward continuously for 0.5 seconds and start algae intake
-            new RunCommand(() -> {
-                driveSubsystem.pathFollowDrive(new ChassisSpeeds(1.0, 0.0, 0.0));
-                new IntakeAlgaeCommand(coralMechanismSubsystem).schedule();
-        }).withTimeout(1.0),
+                new RunCommand(() -> {
+                    driveSubsystem.pathFollowDrive(new ChassisSpeeds(1.0, 0.0, 0.0));
+                }).withTimeout(1.0)
+            ),
+                
             // new RunCommand(() -> new AutoIntakeAlgaeCommand(coralMechanismSubsystem).schedule()).withTimeout(1.0),
-
+            
             // Stop the drivetrain and continue algae intake
             new InstantCommand(() -> {
                 driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0));
-                new AutoIntakeAlgaeCommand(coralMechanismSubsystem).schedule();
-            }),
-
-            // Wait for 3 seconds to complete algae intake
-            new WaitCommand(2),
+                // new AutoIntakeAlgaeCommand(coralMechanismSubsystem).schedule();
+            }, driveSubsystem),
 
             // Drive backward to return to the starting position and reset elevator pivot
-            new RunCommand(() -> {
-                driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0));
-                new AlgaeHoldCommand(coralMechanismSubsystem).schedule();
-            }).withTimeout(1.0),
-            new InstantCommand(() -> {
-                driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0));
-                commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME).schedule();
-            }),
+            new ParallelDeadlineGroup(
+                new RunCommand(() -> {
+                    driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0));
+                }, driveSubsystem).withTimeout(1.0),
+                new AlgaeHoldCommand(coralMechanismSubsystem)
+            ),
 
-            // Stop the drivetrain
-            new InstantCommand(() -> driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0)))
+            new ParallelDeadlineGroup(
+                new InstantCommand(() -> {
+                    driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0));
+                    commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME).schedule();
+                }, driveSubsystem),
+                new AlgaeHoldCommand(coralMechanismSubsystem)
+            ),
+            new WaitCommand(1.0).andThen(new InstantCommand(() -> {}, coralMechanismSubsystem))
         );
 
         runningCommand.schedule();
