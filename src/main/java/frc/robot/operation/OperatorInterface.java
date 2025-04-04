@@ -256,7 +256,12 @@ public class OperatorInterface
         );
 
     scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.ALGAE_GROUND)
-        .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_GROUND))
+        .onTrue(
+          new SequentialCommandGroup(
+            new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(true)),
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_GROUND)
+          )
+        )
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(true)))
         .onFalse(
           new ConditionalCommand(
