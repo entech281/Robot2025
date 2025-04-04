@@ -27,7 +27,6 @@ import frc.robot.commands.AutoAlignToScoringLocationCommand;
 import frc.robot.commands.AutoDealgifyCommand;
 import frc.robot.commands.AutoFireAlgaeCommand;
 import frc.robot.commands.AutoIntakeAlgaeCommand;
-import frc.robot.commands.AutoIntakeCoralCommand;
 import frc.robot.commands.ElevatorMoveCommand;
 import frc.robot.commands.FireCoralCommand;
 import frc.robot.commands.FireCoralCommandAuto;
@@ -216,7 +215,7 @@ public class CommandFactory {
   }
 
   public static final double ELEVATOR_PIVOT_LIMBO = 1.6;
-  private Command formSafeMovementCommand(Position pos) {
+  public Command formSafeMovementCommand(Position pos) {
     double goalHeight = LiveTuningHandler.getInstance().getValue(pos.getElevatorKey());
     double goalAngle = LiveTuningHandler.getInstance().getValue(pos.getPivotKey());
     double currentHeight = RobotIO.getInstance().getElevatorOutput().getCurrentPosition();

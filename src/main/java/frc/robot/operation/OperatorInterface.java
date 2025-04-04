@@ -166,14 +166,14 @@ public class OperatorInterface
     xboxController.leftBumper().whileTrue(
       new ConditionalCommand(
         new TeleFullAutoAlign(),
-        new RotateToAngleCommand(() -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue ? -53 : -53),
+        new RotateToAngleCommand(() -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue ? -53 : (53 + 180)),
         () -> UserPolicy.getInstance().isAlgaeMode() || RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
       )
     );
     xboxController.rightBumper().whileTrue(
       new ConditionalCommand(
         new TeleFullAutoAlign(),
-        new RotateToAngleCommand(() -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue ? 53 : 53),
+        new RotateToAngleCommand(() -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue ? 53 : (-53 + 180)),
         () -> UserPolicy.getInstance().isAlgaeMode() || RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
       )
     );
@@ -213,7 +213,13 @@ public class OperatorInterface
           )
         )
         .onTrue(new InstantCommand(() ->  UserPolicy.getInstance().setAlgaeMode(false)))
-        .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
+        .onFalse(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME),
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME),
+            () -> UserPolicy.getInstance().isAlgaeMode()
+          )
+        );
     
     scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.L2)
         .onTrue(
@@ -224,7 +230,13 @@ public class OperatorInterface
           )
         )
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
-        .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
+        .onFalse(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME),
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME),
+            () -> UserPolicy.getInstance().isAlgaeMode()
+          )
+        );
 
     scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.L3)
         .onTrue(
@@ -235,7 +247,13 @@ public class OperatorInterface
           )
         )
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
-        .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
+        .onFalse(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME),
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME),
+            () -> UserPolicy.getInstance().isAlgaeMode()
+          )
+        );
 
     scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.L4)
         .onTrue(
@@ -246,7 +264,13 @@ public class OperatorInterface
           )
         )
         .onTrue(new InstantCommand(() -> UserPolicy.getInstance().setAlgaeMode(false)))
-        .onFalse(commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME));
+        .onFalse(
+          new ConditionalCommand(
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME),
+            commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME),
+            () -> UserPolicy.getInstance().isAlgaeMode()
+          )
+        );
 
     scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.ALGAE_GROUND)
         .onTrue(commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_GROUND))
@@ -305,7 +329,11 @@ public class OperatorInterface
               new ConditionalCommand(
                 new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), commandFactory),
                 commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME), 
-                () -> alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.AUTO_DEALGIFY).getAsBoolean()
+                () -> {
+                  boolean button = alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.AUTO_DEALGIFY).getAsBoolean();
+                  DriverStation.reportWarning("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH Button:" + button, false);
+                  return button;
+                }
               )
             )
           ),

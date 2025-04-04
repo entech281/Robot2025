@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2231818181818181,
-        "y": 7.421988636363636
+        "x": 1.2123355263157893,
+        "y": 7.440707236842105
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7797948716551755,
-        "y": 6.643107580014882
+        "x": 1.7126219955886062,
+        "y": 6.757322557891898
       },
       "isLocked": false,
       "linkedName": "LeftFeedZone"
@@ -20,8 +20,8 @@
         "y": 6.330911654135337
       },
       "prevControl": {
-        "x": 1.8267713991128225,
-        "y": 6.565058377626383
+        "x": 1.7842243689173212,
+        "y": 6.6294334913959245
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,7 +41,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
+    "velocity": 1.125,
     "rotation": -59.48976259388439
   },
   "reversed": false,

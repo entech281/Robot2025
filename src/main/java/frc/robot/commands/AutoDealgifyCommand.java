@@ -66,7 +66,7 @@ public class AutoDealgifyCommand extends EntechCommand {
 
         runningCommand = new SequentialCommandGroup(
 
-            commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME),
+            new RunCommand( () -> commandFactory.formSafeMovementCommand(Position.HOME)),
 
             // Drive backward continuously for 0.5 seconds
             new RunCommand(() -> driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0)), driveSubsystem).withTimeout(1.0),

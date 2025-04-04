@@ -24,8 +24,8 @@ public final class RobotConstants {
   public static final double TIME_PER_PERIODICAL_LOOP_SECONDS = 0.00;
 
   public static interface AccelerationFilter {
-    public static final double DIRECTION_SLEW_RATE = 0.35; // radians per second
-    public static final double MAGNITUDE_SLEW_RATE = 0.35;
+    public static final double DIRECTION_SLEW_RATE = 0.5; // radians per second
+    public static final double MAGNITUDE_SLEW_RATE = 0.5;
     // 2.0; //1.8; // percent per second (1 = 100%)
     public static final double ROTATIONAL_SLEW_RATE = 3.5;
   }
