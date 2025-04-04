@@ -100,9 +100,6 @@ public class AutoDealgifyCommand extends EntechCommand {
                 new AutoIntakeAlgaeCommand(coralMechanismSubsystem).schedule();
             }),
 
-            // Wait for 3 seconds to complete algae intake
-            new WaitCommand(2),
-
             // Drive backward to return to the starting position and reset elevator pivot
             new RunCommand(() -> {
                 driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0));
