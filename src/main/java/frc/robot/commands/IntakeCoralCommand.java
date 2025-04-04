@@ -13,7 +13,7 @@ public class IntakeCoralCommand extends EntechCommand {
     private final CoralMechanismInput corInput = new CoralMechanismInput();
     private final CoralMechanismSubsystem intake;
 	private final PivotSubsystem pivot;
-    private final StoppingCounter counter = new StoppingCounter(0.0);
+    private final StoppingCounter counter = new StoppingCounter(0.04);
 
     public IntakeCoralCommand(CoralMechanismSubsystem coral, PivotSubsystem pivot) {
         super(coral);
