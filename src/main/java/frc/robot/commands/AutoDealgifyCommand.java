@@ -26,16 +26,20 @@ public class AutoDealgifyCommand extends EntechCommand {
     private final CommandFactory commandFactory;
     private final CoralMechanismSubsystem coralMechanismSubsystem;
     private Command runningCommand;
-    private Position targetPos;
+    // private Position targetPos;
     private TargetLocation currentLoc;
 
     public AutoDealgifyCommand(DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory) {
         this.driveSubsystem = driveSubsystem;
         this.commandFactory = commandFactory;
         this.coralMechanismSubsystem = coralMechanismSubsystem;
+    }
+
+    @Override
+    public void initialize() {
+        Position targetPos;
 
         List<TargetLocation> pos = UserPolicy.getInstance().getSelectedTargetLocations().stream().toList();
-        
                 
         if (pos.isEmpty()) {
             return;
@@ -54,11 +58,6 @@ public class AutoDealgifyCommand extends EntechCommand {
         } else {
             targetPos = currentLoc.tagID % 2 == 0 ? Position.ALGAE_L2 : Position.ALGAE_L3;
         }
-
-    }
-
-    @Override
-    public void initialize() {
         if (targetPos == null) {
             return;
         }
@@ -81,7 +80,7 @@ public class AutoDealgifyCommand extends EntechCommand {
 
             // Drive laterally based on the current side
             new RunCommand(() -> {
-                if (currentLoc.camera.equals(VisionInput.Camera.SIDE)) {
+                if (currentLoc.camera.equals(VisionInput.Camera.TOP)) {
                     driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, -0.5, 0.0));
                 } else {
                     driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.5, 0.0));
@@ -112,10 +111,7 @@ public class AutoDealgifyCommand extends EntechCommand {
             new InstantCommand(() -> {
                 driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0));
                 commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME).schedule();
-            }),
-
-            // Stop the drivetrain
-            new InstantCommand(() -> driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0)))
+            })
         );
 
         runningCommand.schedule();

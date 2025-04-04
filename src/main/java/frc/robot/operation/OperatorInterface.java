@@ -166,14 +166,14 @@ public class OperatorInterface
     xboxController.leftBumper().whileTrue(
       new ConditionalCommand(
         new TeleFullAutoAlign(),
-        new RotateToAngleCommand(() -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue ? -53 : 53),
+        new RotateToAngleCommand(() -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue ? -53 : -53),
         () -> UserPolicy.getInstance().isAlgaeMode() || RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
       )
     );
     xboxController.rightBumper().whileTrue(
       new ConditionalCommand(
         new TeleFullAutoAlign(),
-        new RotateToAngleCommand(() -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue ? 53 : -53),
+        new RotateToAngleCommand(() -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue ? 53 : 53),
         () -> UserPolicy.getInstance().isAlgaeMode() || RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
       )
     );
@@ -303,9 +303,9 @@ public class OperatorInterface
             new SequentialCommandGroup(
               new WaitUntilCommand(() -> !RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()),
               new ConditionalCommand(
-                new InstantCommand( () -> new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), commandFactory)),
+                new InstantCommand( () -> new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), commandFactory).schedule()),
                 new InstantCommand(() -> commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME).schedule()), 
-                () -> scoreOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.AUTO_DEALGIFY).getAsBoolean()
+                () -> alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.AUTO_DEALGIFY).getAsBoolean()
               )
             )
           ),
