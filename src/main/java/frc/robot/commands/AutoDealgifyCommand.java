@@ -66,7 +66,7 @@ public class AutoDealgifyCommand extends EntechCommand {
 
         runningCommand = new SequentialCommandGroup(
 
-            new RunCommand( () -> commandFactory.formSafeMovementCommand(Position.HOME)),
+            commandFactory.formSafeMovementCommand(Position.HOME),
 
             // Drive backward continuously for 0.5 seconds
             new RunCommand(() -> driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0)), driveSubsystem).withTimeout(1.0),
@@ -87,15 +87,16 @@ public class AutoDealgifyCommand extends EntechCommand {
                 } else {
                     driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.5, 0.0));
                 }
-            }, driveSubsystem).withTimeout(0.5),
+            }).withTimeout(0.5),
+
+            new InstantCommand(() -> {}, driveSubsystem),
+
+            new IntakeAlgaeCommand(coralMechanismSubsystem),
 
             // Drive forward continuously for 0.5 seconds and start algae intake
-            new ParallelCommandGroup(
-                new IntakeAlgaeCommand(coralMechanismSubsystem),
                 new RunCommand(() -> {
                     driveSubsystem.pathFollowDrive(new ChassisSpeeds(1.0, 0.0, 0.0));
-                }).withTimeout(1.0)
-            ),
+                }).withTimeout(1.0),
             // new RunCommand(() -> new AutoIntakeAlgaeCommand(coralMechanismSubsystem).schedule()).withTimeout(1.0),
             
             // Stop the drivetrain and continue algae intake

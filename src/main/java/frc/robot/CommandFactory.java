@@ -3,6 +3,7 @@ package frc.robot;
 import java.io.IOException;
 
 import org.json.simple.parser.ParseException;
+import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -23,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.AutonomousException;
 import frc.entech.commands.InstantAnytimeCommand;
+import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.commands.AutoAlignToScoringLocationCommand;
 import frc.robot.commands.AutoDealgifyCommand;
 import frc.robot.commands.AutoFireAlgaeCommand;
@@ -34,6 +36,7 @@ import frc.robot.commands.GyroResetByAngleCommand;
 import frc.robot.commands.IntakeCoralCommand;
 import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
+import frc.robot.commands.RunTestCommand;
 import frc.robot.io.RobotIO;
 import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.operation.UserPolicy;
@@ -60,6 +63,7 @@ public class CommandFactory {
   private final CoralMechanismSubsystem coralMechanismSubsystem;
   private final VisionSubsystem visionSubsystem;
   private final SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> testChooser;
 
 
   public CommandFactory(SubsystemManager subsystemManager, OdometryProcessor odometry) {
@@ -96,6 +100,11 @@ public class CommandFactory {
     tab.add("ALGAE_L3", getSafeElevatorPivotMoveCommand(Position.ALGAE_L3));
     tab.add("ALGAE_GROUND", getSafeElevatorPivotMoveCommand(Position.ALGAE_GROUND));
     tab.add("AUTO_ALIGN_TO_17", new AutoAlignToScoringLocationCommand(driveSubsystem, 18));
+    this.testChooser = getTestCommandChooser();
+    testChooser.addOption("All tests", getTestCommand());
+    Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST, "No Current Test");
+    SmartDashboard.putData("Test Chooser", testChooser);
+    Shuffleboard.getTab("stuffs").add("Run Test", new RunTestCommand(testChooser));
 
     AutoBuilder.configure(odometry::getEstimatedPose,
         odometry::resetOdometry,
@@ -238,5 +247,36 @@ public class CommandFactory {
       }
     }
     return commands;
+  }
+
+  public Command getTestCommand() {
+    SequentialCommandGroup allTests = new SequentialCommandGroup();
+    for (EntechSubsystem<?, ?> subsystem : subsystemManager.getSubsystemList()) {
+      if (subsystem.isEnabled()) {
+        addSubsystemTest(allTests, subsystem);
+      }
+    }
+    allTests.addCommands(Commands.runOnce(() -> Logger
+        .recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST, "No Current Tests.")));
+    return allTests;
+  }
+
+  private static void addSubsystemTest(SequentialCommandGroup group,
+      EntechSubsystem<?, ?> subsystem) {
+
+    group.addCommands(
+        Commands.runOnce(() -> Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST,
+            String.format("%s: Start", subsystem.getName()))),
+        subsystem.getTestCommand(),
+        Commands.runOnce(() -> Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST,
+            String.format("%s: Finished", subsystem.getName()))));
+  }
+
+  private SendableChooser<Command> getTestCommandChooser() {
+    SendableChooser<Command> testCommandChooser = new SendableChooser<>();
+    for (EntechSubsystem<?, ?> subsystem : subsystemManager.getSubsystemList()) {
+      testCommandChooser.addOption(subsystem.getName(), subsystem.getTestCommand());
+    }
+    return testCommandChooser;
   }
 }

@@ -8,9 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -69,8 +67,6 @@ public class OperatorInterface
   private final SubsystemManager subsystemManager;
   private final OdometryProcessor odometry;
 
-  private final SendableChooser<Command> testChooser;
-
   private IntakeCoralCommand intakeCommand;
   private FireCoralCommand fireCommand;
   private FireCoralCommand fireCommandL1;
@@ -83,7 +79,6 @@ public class OperatorInterface
     this.commandFactory = commandFactory;
     this.subsystemManager = subsystemManager;
     this.odometry = odometry;
-    this.testChooser = getTestCommandChooser();
   }
 
   public void create() {
@@ -130,9 +125,6 @@ public class OperatorInterface
     joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.GYRO_RESET)
         .onTrue(new GyroReset(subsystemManager.getNavXSubsystem(), odometry));
 
-    joystickController.button(RobotConstants.PORTS.CONTROLLER.BUTTONS_JOYSTICK.RUN_TESTS)
-        .onTrue(new RunTestCommand(testChooser));
-
     subsystemManager.getDriveSubsystem()
         .setDefaultCommand(new DriveCommand(subsystemManager.getDriveSubsystem(), this));
 
@@ -150,10 +142,6 @@ public class OperatorInterface
     subsystemManager.getDriveSubsystem()
         .setDefaultCommand(new DriveCommand(subsystemManager.getDriveSubsystem(), this));
 
-    xboxController.button(9)
-        .onTrue(new RunTestCommand(testChooser));
-
-
     xboxController.button(10)
         .whileTrue(commandFactory.getAlignmentCommand());
 
@@ -166,14 +154,14 @@ public class OperatorInterface
     xboxController.leftBumper().whileTrue(
       new ConditionalCommand(
         new TeleFullAutoAlign(),
-        new RotateToAngleCommand(() -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue ? -53 : (53 + 180)),
+        new RotateToAngleCommand(() -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue ? -53 : (-53 + 180)),
         () -> UserPolicy.getInstance().isAlgaeMode() || RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
       )
     );
     xboxController.rightBumper().whileTrue(
       new ConditionalCommand(
         new TeleFullAutoAlign(),
-        new RotateToAngleCommand(() -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue ? 53 : (-53 + 180)),
+        new RotateToAngleCommand(() -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue ? 53 : (53 + 180)),
         () -> UserPolicy.getInstance().isAlgaeMode() || RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()
       )
     );
@@ -199,11 +187,6 @@ public class OperatorInterface
   }
 
   public void scoreOperatorBindings() {
-    testChooser.addOption("All tests", getTestCommand());
-    Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST, "No Current Test");
-    SmartDashboard.putData("Test Chooser", testChooser);
-    Shuffleboard.getTab("stuffs").add("Run Test", new RunTestCommand(testChooser));
-    
     scoreOperatorPanel.button(RobotConstants.SCORE_OPERATOR_PANEL.BUTTONS.L1)
         .onTrue(
           new ConditionalCommand(
@@ -443,14 +426,6 @@ public class OperatorInterface
     ));
   }
 
-  private SendableChooser<Command> getTestCommandChooser() {
-    SendableChooser<Command> testCommandChooser = new SendableChooser<>();
-    for (EntechSubsystem<?, ?> subsystem : subsystemManager.getSubsystemList()) {
-      testCommandChooser.addOption(subsystem.getName(), subsystem.getTestCommand());
-    }
-    return testCommandChooser;
-  }
-
   /*
    * These force commands to accept inputs, not raw joysticks and stuff also here we log any inputs
    * handed to consumers, so they dont have to
@@ -493,28 +468,5 @@ public class OperatorInterface
     OperatorInput oi = new OperatorInput();
     RobotIO.processInput(oi);
     return oi;
-  }
-
-  public Command getTestCommand() {
-    SequentialCommandGroup allTests = new SequentialCommandGroup();
-    for (EntechSubsystem<?, ?> subsystem : subsystemManager.getSubsystemList()) {
-      if (subsystem.isEnabled()) {
-        addSubsystemTest(allTests, subsystem);
-      }
-    }
-    allTests.addCommands(Commands.runOnce(() -> Logger
-        .recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST, "No Current Tests.")));
-    return allTests;
-  }
-
-  private static void addSubsystemTest(SequentialCommandGroup group,
-      EntechSubsystem<?, ?> subsystem) {
-
-    group.addCommands(
-        Commands.runOnce(() -> Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST,
-            String.format("%s: Start", subsystem.getName()))),
-        subsystem.getTestCommand(),
-        Commands.runOnce(() -> Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST,
-            String.format("%s: Finished", subsystem.getName()))));
   }
 }
