@@ -131,7 +131,9 @@ public class CommandFactory {
     NamedCommands.registerCommand("SetAlgaeMode", new InstantCommand( () -> UserPolicy.getInstance().setAlgaeMode(true)));
 
 
-    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Left", new SequentialCommandGroup(new InstantCommand( () -> UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_H, TargetLocation.RED_H)), new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this), new InstantCommand( () -> UserPolicy.getInstance().clearTargetLocations())));
+    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Left", new SequentialCommandGroup(new InstantCommand( () -> UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_H, TargetLocation.RED_H)), new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this), new InstantCommand( () -> {
+      UserPolicy.getInstance().clearTargetLocations();
+    }, driveSubsystem, coralMechanismSubsystem)));
     NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Right", new SequentialCommandGroup(new InstantCommand( () -> UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_K, TargetLocation.RED_K)), new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this), new InstantCommand( () -> UserPolicy.getInstance().clearTargetLocations())));
     var alliance = DriverStation.getAlliance();
       NamedCommands.registerCommand("AlignToReefFar", 

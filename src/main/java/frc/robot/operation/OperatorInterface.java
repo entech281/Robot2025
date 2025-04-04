@@ -303,8 +303,8 @@ public class OperatorInterface
             new SequentialCommandGroup(
               new WaitUntilCommand(() -> !RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()),
               new ConditionalCommand(
-                new InstantCommand( () -> new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), commandFactory).schedule()),
-                new InstantCommand(() -> commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME).schedule()), 
+                new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), commandFactory),
+                commandFactory.getSafeElevatorPivotMoveCommand(Position.HOME), 
                 () -> alignOperatorPanel.button(RobotConstants.ALIGN_OPERATOR_PANEL.BUTTONS.AUTO_DEALGIFY).getAsBoolean()
               )
             )

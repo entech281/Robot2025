@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -88,27 +90,36 @@ public class AutoDealgifyCommand extends EntechCommand {
             }, driveSubsystem).withTimeout(0.5),
 
             // Drive forward continuously for 0.5 seconds and start algae intake
-            new RunCommand(() -> {
-                driveSubsystem.pathFollowDrive(new ChassisSpeeds(1.0, 0.0, 0.0));
-                new IntakeAlgaeCommand(coralMechanismSubsystem).schedule();
-        }).withTimeout(1.0),
+            new ParallelCommandGroup(
+                new IntakeAlgaeCommand(coralMechanismSubsystem),
+                new RunCommand(() -> {
+                    driveSubsystem.pathFollowDrive(new ChassisSpeeds(1.0, 0.0, 0.0));
+                }).withTimeout(1.0)
+            ),
             // new RunCommand(() -> new AutoIntakeAlgaeCommand(coralMechanismSubsystem).schedule()).withTimeout(1.0),
-
+            
             // Stop the drivetrain and continue algae intake
             new InstantCommand(() -> {
                 driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0));
-                new AutoIntakeAlgaeCommand(coralMechanismSubsystem).schedule();
-            }),
+                // new AutoIntakeAlgaeCommand(coralMechanismSubsystem).schedule();
+            }, driveSubsystem),
 
             // Drive backward to return to the starting position and reset elevator pivot
-            new RunCommand(() -> {
-                driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0));
-                new AlgaeHoldCommand(coralMechanismSubsystem).withTimeout(1.0).schedule();
-            }).withTimeout(1.0),
-            new InstantCommand(() -> {
-                driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0));
-                commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME).schedule();
-            })
+            new ParallelDeadlineGroup(
+                new RunCommand(() -> {
+                    driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0));
+                }, driveSubsystem).withTimeout(1.0),
+                new AlgaeHoldCommand(coralMechanismSubsystem)
+            ),
+
+            new ParallelDeadlineGroup(
+                new InstantCommand(() -> {
+                    driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0));
+                    commandFactory.getSafeElevatorPivotMoveCommand(Position.ALGAE_HOME).schedule();
+                }, driveSubsystem),
+                new AlgaeHoldCommand(coralMechanismSubsystem)
+            ),
+            new WaitCommand(1.0).andThen(new InstantCommand(() -> {}, coralMechanismSubsystem))
         );
 
         runningCommand.schedule();
