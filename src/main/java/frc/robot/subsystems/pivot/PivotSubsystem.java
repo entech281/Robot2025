@@ -12,6 +12,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.subsystems.SparkMaxOutput;
 import frc.entech.util.EntechUtils;
@@ -23,6 +24,9 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
     private static final boolean ENABLED = true;
     private static final boolean IS_INVERTED = true;
 
+    public final Trigger isAtRequestedPosition = new Trigger( ()-> isAtRequestedPosition() );
+    public final Trigger isMoving = new Trigger( ()-> isMoving() );
+    
     private PivotInput currentInput = new PivotInput();
     private SparkMax pivotMotor;
     private SparkClosedLoopController pidController;
@@ -72,11 +76,10 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
     public PivotOutput toOutputs() {
         PivotOutput output = new PivotOutput();
         if (ENABLED) {
-            output.setMoving(pivotMotor.getEncoder().getVelocity() != 0);
+            output.setMoving(isMoving());
             output.setBrakeModeEnabled(IdleMode.kBrake == mode);
-            output.setCurrentPosition(EntechUtils.normalizeAngle(((pivotMotor.getAbsoluteEncoder().getPosition() * 360) - (ENCODER_ZERO_OFFSET * 360)) - 180) + 180);
-            output.setAtRequestedPosition(Math.abs(output.getCurrentPosition()
-                    - currentInput.getRequestedPosition()) < ((currentInput.getRequestedPosition() > 90) ? RobotConstants.PIVOT.POSITION_TOLERANCE_BIG : RobotConstants.PIVOT.POSITION_TOLERANCE_DEG ));
+            output.setCurrentPosition(currentPosition());
+            output.setAtRequestedPosition(isAtRequestedPosition());
             output.setRequestedPosition(currentInput.getRequestedPosition());
             output.setSpeed(pivotMotor.get());
             output.setAbsoluteEncoder(pivotMotor.getAbsoluteEncoder().getPosition());
@@ -107,4 +110,22 @@ public class PivotSubsystem extends EntechSubsystem<PivotInput, PivotOutput> {
             }
         }
     }
+
+
+  public boolean isAtRequestedPosition() {
+    double active_tolerance = RobotConstants.PIVOT.POSITION_TOLERANCE_DEG;
+    if (currentInput.getRequestedPosition() > 90) {
+        active_tolerance = RobotConstants.PIVOT.POSITION_TOLERANCE_BIG;
+    }
+    return Math.abs(currentPosition() - currentInput.getRequestedPosition()) < active_tolerance;
+  }
+
+  public boolean isMoving() {
+    return (pivotMotor.getEncoder().getVelocity() != 0);
+  }
+
+  private double currentPosition() {
+    return EntechUtils.normalizeAngle(((pivotMotor.getAbsoluteEncoder().getPosition() * 360) - (ENCODER_ZERO_OFFSET * 360)) - 180) + 180;
+  }
+
 }
