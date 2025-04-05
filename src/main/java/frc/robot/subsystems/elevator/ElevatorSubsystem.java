@@ -14,6 +14,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.subsystems.SparkMaxOutput;
 import frc.entech.util.EntechUtils;
@@ -25,6 +26,10 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
 
   private static final boolean ENABLED = true;
   private static final boolean IS_INVERTED = false;
+  
+  public Trigger atRequestedHeight = new Trigger( () -> isAtRequestedPosition());
+  public Trigger atLowerLimit = new Trigger( () -> isAtLowerLimit());
+  public Trigger atUpperLimit = new Trigger( () -> isAtUpperLimit());
   
   private ElevatorInput currentInput = new ElevatorInput();
 
@@ -136,12 +141,9 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       elevatorOutput.setLeftBrakeModeEnabled(true);
       elevatorOutput.setRightBrakeModeEnabled(true);
       elevatorOutput.setCurrentPosition(calculateInchesFromMotorPosition(leftElevator.getEncoder().getPosition()));
-      elevatorOutput.setAtRequestedPosition(EntechUtils.isWithinTolerance(0.15,
-          elevatorOutput.getCurrentPosition(), currentInput.getRequestedPosition()));
-      elevatorOutput.setAtLowerLimit(
-          leftElevator.getReverseLimitSwitch().isPressed());
-      elevatorOutput.setAtUpperLimit(
-          leftElevator.getForwardLimitSwitch().isPressed());
+      elevatorOutput.setAtRequestedPosition(isAtRequestedPosition());
+      elevatorOutput.setAtLowerLimit(isAtLowerLimit());
+      elevatorOutput.setAtUpperLimit(isAtUpperLimit());
       elevatorOutput.setRequestedPosition(currentInput.getRequestedPosition());
 
       SparkMaxOutput sm = SparkMaxOutput.createOutput(leftElevator);
@@ -157,12 +159,17 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
     return Commands.none();
   }
 
-  public Trigger getAtHeightTrigger() {
-    return new Trigger(() -> )
+  public boolean isAtRequestedPosition() {
+    return EntechUtils.isWithinTolerance(0.15,
+      calculateInchesFromMotorPosition(leftElevator.getEncoder().getPosition()), currentInput.getRequestedPosition());
+  }
+  
+  public boolean isAtLowerLimit() {
+    return leftElevator.getReverseLimitSwitch().isPressed();
   }
 
-  public boolean isAtRequestedHeight() {
-
+  public boolean isAtUpperLimit() {
+    return leftElevator.getForwardLimitSwitch().isPressed();
   }
 
   @Override
