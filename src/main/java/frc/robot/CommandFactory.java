@@ -3,6 +3,7 @@ package frc.robot;
 import java.io.IOException;
 
 import org.json.simple.parser.ParseException;
+import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -23,11 +24,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.AutonomousException;
 import frc.entech.commands.InstantAnytimeCommand;
+import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.commands.AutoAlignToScoringLocationCommand;
 import frc.robot.commands.AutoDealgifyCommand;
 import frc.robot.commands.AutoFireAlgaeCommand;
 import frc.robot.commands.AutoIntakeAlgaeCommand;
-import frc.robot.commands.AutoIntakeCoralCommand;
 import frc.robot.commands.ElevatorMoveCommand;
 import frc.robot.commands.FireCoralCommand;
 import frc.robot.commands.FireCoralCommandAuto;
@@ -35,6 +36,7 @@ import frc.robot.commands.GyroResetByAngleCommand;
 import frc.robot.commands.IntakeCoralCommand;
 import frc.robot.commands.PivotMoveCommand;
 import frc.robot.commands.RelativeVisionAlignmentCommand;
+import frc.robot.commands.RunTestCommand;
 import frc.robot.io.RobotIO;
 import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.operation.UserPolicy;
@@ -48,6 +50,8 @@ import frc.robot.subsystems.pivot.PivotSubsystem;
 import frc.robot.subsystems.vision.TargetLocation;
 import frc.robot.subsystems.vision.VisionInput;
 import frc.robot.subsystems.vision.VisionSubsystem;
+import java.util.Optional;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 @SuppressWarnings("unused")
 public class CommandFactory {
@@ -61,6 +65,7 @@ public class CommandFactory {
   private final CoralMechanismSubsystem coralMechanismSubsystem;
   private final VisionSubsystem visionSubsystem;
   private final SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> testChooser;
 
 
   public CommandFactory(SubsystemManager subsystemManager, OdometryProcessor odometry) {
@@ -97,6 +102,11 @@ public class CommandFactory {
     tab.add("ALGAE_L3", getSafeElevatorPivotMoveCommand(Position.ALGAE_L3));
     tab.add("ALGAE_GROUND", getSafeElevatorPivotMoveCommand(Position.ALGAE_GROUND));
     tab.add("AUTO_ALIGN_TO_17", new AutoAlignToScoringLocationCommand(driveSubsystem, 18));
+    this.testChooser = getTestCommandChooser();
+    testChooser.addOption("All tests", getTestCommand());
+    Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST, "No Current Test");
+    SmartDashboard.putData("Test Chooser", testChooser);
+    Shuffleboard.getTab("stuffs").add("Run Test", new RunTestCommand(testChooser));
 
     AutoBuilder.configure(odometry::getEstimatedPose,
         odometry::resetOdometry,
@@ -107,7 +117,7 @@ public class CommandFactory {
             new PIDConstants(RobotConstants.AUTONOMOUS.ROTATION_CONTROLLER_P, 0.0, 0.0)
         ), config, () -> {
 
-          var alliance = DriverStation.getAlliance();
+          Optional<Alliance> alliance = DriverStation.getAlliance();
           if (alliance.isPresent()) {
             return alliance.get() == DriverStation.Alliance.Red;
           }
@@ -131,30 +141,38 @@ public class CommandFactory {
     NamedCommands.registerCommand("SetAlgaeMode", new InstantCommand( () -> UserPolicy.getInstance().setAlgaeMode(true)));
 
 
-    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Left", new SequentialCommandGroup(new InstantCommand( () -> UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_H, TargetLocation.RED_H)), new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this), new InstantCommand( () -> UserPolicy.getInstance().clearTargetLocations())));
-    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Right", new SequentialCommandGroup(new InstantCommand( () -> UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_K, TargetLocation.RED_K)), new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this), new InstantCommand( () -> UserPolicy.getInstance().clearTargetLocations())));
-    var alliance = DriverStation.getAlliance();
+    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Left", new SequentialCommandGroup(new InstantCommand( () -> UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_H, TargetLocation.RED_H)), new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), subsystemManager.getElevatorSubsystem(), subsystemManager.getPivotSubsystem(), this), new InstantCommand( () -> {
+      UserPolicy.getInstance().clearTargetLocations();
+    }, driveSubsystem, coralMechanismSubsystem)));
+    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Right", new SequentialCommandGroup(new InstantCommand( () -> UserPolicy.getInstance().setTargetLocations(TargetLocation.BLUE_K, TargetLocation.RED_K)), new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), subsystemManager.getElevatorSubsystem(), subsystemManager.getPivotSubsystem(), this), new InstantCommand( () -> UserPolicy.getInstance().clearTargetLocations())));
       NamedCommands.registerCommand("AlignToReefFar", 
         new ConditionalCommand(
             new AutoAlignToScoringLocationCommand(driveSubsystem, 21),
             new AutoAlignToScoringLocationCommand(driveSubsystem, 10),
-            () -> alliance.isPresent() && (alliance.get().equals(DriverStation.Alliance.Blue))
-        )
-      );
+            () -> {
+              Optional<Alliance> alliance = DriverStation.getAlliance();
+              return alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue);
+            })
+        );
 
       NamedCommands.registerCommand("AlignToReefCloseRight", 
         new ConditionalCommand(
             new AutoAlignToScoringLocationCommand(driveSubsystem, 17),
             new AutoAlignToScoringLocationCommand(driveSubsystem, 8),
-            () -> alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue)
-        )
+            () -> {
+              Optional<Alliance> alliance = DriverStation.getAlliance();
+              return alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue);
+            })
       );
 
       NamedCommands.registerCommand("AlignToReefFarRight", 
         new ConditionalCommand(
             new AutoAlignToScoringLocationCommand(driveSubsystem, 22),
             new AutoAlignToScoringLocationCommand(driveSubsystem, 9),
-            () -> alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue)
+            () -> {
+              Optional<Alliance> alliance = DriverStation.getAlliance();
+              return alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue);
+            }
         )
       );
 
@@ -162,7 +180,10 @@ public class CommandFactory {
         new ConditionalCommand(
             new AutoAlignToScoringLocationCommand(driveSubsystem, 19),
             new AutoAlignToScoringLocationCommand(driveSubsystem, 6),
-            () -> alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue)
+            () -> {
+              Optional<Alliance> alliance = DriverStation.getAlliance();
+              return alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue);
+            }
         )
       );
 
@@ -170,7 +191,10 @@ public class CommandFactory {
         new ConditionalCommand(
             new AutoAlignToScoringLocationCommand(driveSubsystem, 20),
             new AutoAlignToScoringLocationCommand(driveSubsystem, 11),
-            () -> alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue)
+            () -> {
+              Optional<Alliance> alliance = DriverStation.getAlliance();
+              return alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Blue);
+            }
         )
       );
     NamedCommands.registerCommand("IntakeCoral", new IntakeCoralCommand(coralMechanismSubsystem, pivotSubsystem));
@@ -214,7 +238,7 @@ public class CommandFactory {
   }
 
   public static final double ELEVATOR_PIVOT_LIMBO = 1.6;
-  private Command formSafeMovementCommand(Position pos) {
+  public Command formSafeMovementCommand(Position pos) {
     double goalHeight = LiveTuningHandler.getInstance().getValue(pos.getElevatorKey());
     double goalAngle = LiveTuningHandler.getInstance().getValue(pos.getPivotKey());
     double currentHeight = RobotIO.getInstance().getElevatorOutput().getCurrentPosition();
@@ -237,5 +261,36 @@ public class CommandFactory {
       }
     }
     return commands;
+  }
+
+  public Command getTestCommand() {
+    SequentialCommandGroup allTests = new SequentialCommandGroup();
+    for (EntechSubsystem<?, ?> subsystem : subsystemManager.getSubsystemList()) {
+      if (subsystem.isEnabled()) {
+        addSubsystemTest(allTests, subsystem);
+      }
+    }
+    allTests.addCommands(Commands.runOnce(() -> Logger
+        .recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST, "No Current Tests.")));
+    return allTests;
+  }
+
+  private static void addSubsystemTest(SequentialCommandGroup group,
+      EntechSubsystem<?, ?> subsystem) {
+
+    group.addCommands(
+        Commands.runOnce(() -> Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST,
+            String.format("%s: Start", subsystem.getName()))),
+        subsystem.getTestCommand(),
+        Commands.runOnce(() -> Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST,
+            String.format("%s: Finished", subsystem.getName()))));
+  }
+
+  private SendableChooser<Command> getTestCommandChooser() {
+    SendableChooser<Command> testCommandChooser = new SendableChooser<>();
+    for (EntechSubsystem<?, ?> subsystem : subsystemManager.getSubsystemList()) {
+      testCommandChooser.addOption(subsystem.getName(), subsystem.getTestCommand());
+    }
+    return testCommandChooser;
   }
 }
