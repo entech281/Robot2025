@@ -3,8 +3,8 @@ package frc.robot.commands;
 
 
 import frc.entech.commands.EntechCommand;
-import frc.robot.subsystems.coraldetector.InternalCoralDetectorOutput;
-import frc.robot.subsystems.coraldetector.InternalCoralDetectorSubsystem;
+import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerOutput;
+import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerSubsystem;
 import frc.robot.subsystems.led.LEDInput;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.led.SubdividedLedString;
@@ -13,19 +13,19 @@ import frc.robot.operation.UserPolicy;
 
 
 public class LEDDefaultCommand extends EntechCommand {
-  private final InternalCoralDetectorOutput coralDetectorOutput;
+  private final GamePieceHandlerOutput gamePieceHandlerOutput;
   private final LEDSubsystem ledSubsystem;
 
-  public LEDDefaultCommand(LEDSubsystem ledSubsystem, InternalCoralDetectorSubsystem coralDetectorSubsystem) {
+  public LEDDefaultCommand(LEDSubsystem ledSubsystem, GamePieceHandlerSubsystem gamePieceHandlerSubsystem) {
     this.ledSubsystem = ledSubsystem;
-    coralDetectorOutput = coralDetectorSubsystem.toOutputs();
+    gamePieceHandlerOutput = gamePieceHandlerSubsystem.toOutputs();
     addRequirements(ledSubsystem);
   }
 
   @Override
   public void execute() {
 
-    SubdividedLedString subdivided = new DefaultLEDStringCreator().createLEDString(coralDetectorOutput.hasCoral(), !UserPolicy.getInstance().isAligningToAngle(), hasError(), UserPolicy.getInstance().getTargetAngle());
+    SubdividedLedString subdivided = new DefaultLEDStringCreator().createLEDString(gamePieceHandlerOutput.getHasCoral(), !UserPolicy.getInstance().isAligningToAngle(), hasError(), UserPolicy.getInstance().getTargetAngle());
     
     LEDInput input = new LEDInput(subdivided);
     ledSubsystem.updateInputs(input);

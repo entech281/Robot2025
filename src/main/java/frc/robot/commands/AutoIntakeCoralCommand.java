@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import frc.entech.commands.EntechCommand;
 import frc.entech.util.StoppingCounter;
-import frc.robot.io.RobotIO;
 import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerInput;
 import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerSubsystem;
@@ -25,7 +24,7 @@ public class AutoIntakeCoralCommand extends EntechCommand {
 
 	@Override
 	public void execute() {
-		if (RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral()) {
+		if (intake.hasCoral()) {
 			corInput.setRequestedSpeed(LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/SlowDownSpeed"));
 			intake.updateInputs(corInput);
 		}
@@ -40,6 +39,6 @@ public class AutoIntakeCoralCommand extends EntechCommand {
 
 	@Override
 	public boolean isFinished() {
-		return counter.isFinished(RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral());
+		return counter.isFinished(intake.hasCoral());
 	}
 }

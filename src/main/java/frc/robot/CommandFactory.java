@@ -69,7 +69,7 @@ public class CommandFactory {
     this.ledSubsystem = subsystemManager.getLEDSubsystem();
     this.elevatorSubsystem = subsystemManager.getElevatorSubsystem();
     this.pivotSubsystem = subsystemManager.getPivotSubsystem();
-    this.coralMechanismSubsystem = subsystemManager.getCoralMechanismSubsystem();
+    this.coralMechanismSubsystem = subsystemManager.getGamePieceHandlerSubsystem();
     this.visionSubsystem = subsystemManager.getVisionSubsystem();
     this.odometry = odometry;
     this.subsystemManager = subsystemManager;
@@ -131,7 +131,7 @@ public class CommandFactory {
     NamedCommands.registerCommand("SetAlgaeMode", new InstantCommand( () -> UserPolicy.getInstance().setAlgaeMode(true)));
 
 
-    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Left", new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getCoralMechanismSubsystem(), this, Position.L2, "right"));
+    NamedCommands.registerCommand("MoveFromScoreAndDealgiyL2Left", new AutoDealgifyCommand(subsystemManager.getDriveSubsystem(), subsystemManager.getGamePieceHandlerSubsystem(), this, Position.L2, "right"));
     var alliance = DriverStation.getAlliance();
       NamedCommands.registerCommand("AlignToReefFar", 
         new ConditionalCommand(

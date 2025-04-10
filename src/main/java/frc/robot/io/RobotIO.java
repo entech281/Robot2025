@@ -7,8 +7,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.RobotConstants;
 import frc.robot.commandchecker.SafeMovementChecker;
-import frc.robot.subsystems.algaedetector.InternalAlgaeDetectorOutput;
-import frc.robot.subsystems.coraldetector.InternalCoralDetectorOutput;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveOutput;
 import frc.robot.subsystems.elevator.ElevatorOutput;
@@ -72,16 +70,8 @@ public class RobotIO implements DriveInputSupplier {
     return latestOdometryPose;
   }
 
-  public GamePieceHandlerOutput getCoralMechanismOutput() {
-    return latestCoralMechanismOutput;
-  }
-
-  public InternalCoralDetectorOutput getInternalCoralDetectorOutput() {
-    return latestInternalCoralDetectorOutput;
-  }
-
-  public InternalAlgaeDetectorOutput getInternalAlgaeDetectorOutput() {
-    return latestInternalAlgaeDetectorOutput;
+  public GamePieceHandlerOutput getGamePieceHandlerOutput() {
+    return latestGamePieceHandlerOutput;
   }
 
   public void updateNavx(NavXOutput no) {
@@ -119,19 +109,9 @@ public class RobotIO implements DriveInputSupplier {
     ledo.log();
   }
 
-  public void updateCoralMechanism(GamePieceHandlerOutput cmo) {
-    latestCoralMechanismOutput = cmo;
+  public void updateGamePieceHandler(GamePieceHandlerOutput cmo) {
+    latestGamePieceHandlerOutput = cmo;
     cmo.log();
-  }
-
-  public void updateInternalCoralDetector(InternalCoralDetectorOutput icdo) {
-    latestInternalCoralDetectorOutput = icdo;
-    icdo.log();
-  }  
-
-  public void updateInternalAlgaeDetector(InternalAlgaeDetectorOutput iado) {
-    latestInternalAlgaeDetectorOutput = iado;
-    iado.log();
   }
 
   public boolean isSafeElevatorMove(double elev) {
@@ -150,8 +130,6 @@ public class RobotIO implements DriveInputSupplier {
   private ElevatorOutput latestElevatorOutput;
   private PivotOutput latestPivotOutput;
   private LEDOutput latestLEDOutput;
-  private GamePieceHandlerOutput latestCoralMechanismOutput;
-  private InternalCoralDetectorOutput latestInternalCoralDetectorOutput;
-  private InternalAlgaeDetectorOutput latestInternalAlgaeDetectorOutput;
-  private Pose2d latestOdometryPose = RobotConstants.ODOMETRY.INITIAL_POSE;
+  private GamePieceHandlerOutput latestGamePieceHandlerOutput;
+   private Pose2d latestOdometryPose = RobotConstants.ODOMETRY.INITIAL_POSE;
 }

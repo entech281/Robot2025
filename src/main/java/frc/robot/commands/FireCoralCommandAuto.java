@@ -35,6 +35,6 @@ public class FireCoralCommandAuto extends EntechCommand {
 
 	@Override
 	public boolean isFinished() {
-		return counter.isFinished(!RobotIO.getInstance().getInternalCoralDetectorOutput().hasCoral());
+		return counter.isFinished(!intake.hasCoral());
 	}
 }

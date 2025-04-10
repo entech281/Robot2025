@@ -12,6 +12,7 @@ public class GamePieceHandlerOutput extends SubsystemOutput {
   private boolean isAtTargetPosition = false;
   private boolean brakeModeEnabled = false;
   private boolean hasAlgae = false;
+  private boolean hasCoral = false;
 
   private SparkMaxOutput motor;
 
@@ -22,6 +23,9 @@ public class GamePieceHandlerOutput extends SubsystemOutput {
     Logger.recordOutput("GamePieceHandlerOutput/encoderPosition", encoderPosition);
     Logger.recordOutput("GamePieceHandlerOutput/isAtTargetPosition", isAtTargetPosition);
     Logger.recordOutput("GamePieceHandlerOutput/brakeModeEnabled", brakeModeEnabled);
+
+    Logger.recordOutput("GamePieceHandlerOutput/HasCoral", hasCoral);
+    Logger.recordOutput("GamePieceHandlerOutput/HasAlgae", hasAlgae);
 
     motor.log("GamePieceHandlerOutput/motor");
   }
@@ -65,6 +69,14 @@ public class GamePieceHandlerOutput extends SubsystemOutput {
   public void setBrakeModeEnabled(boolean brakeModeEnabled) {
         this.brakeModeEnabled = brakeModeEnabled;
    }
+
+  public boolean getHasCoral() {
+    return this.hasCoral;
+  }
+
+  public void setHasCoral(boolean hasCoral) {
+    this.hasCoral = hasCoral;
+  }
 
   public boolean getHasAlgae() {
     return this.hasAlgae;
