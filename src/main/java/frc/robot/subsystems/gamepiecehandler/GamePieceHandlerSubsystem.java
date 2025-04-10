@@ -8,18 +8,33 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.entech.subsystems.SparkMaxOutput;
 import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
+import frc.robot.livetuning.LiveTuningHandler;
 
 public class GamePieceHandlerSubsystem extends EntechSubsystem<GamePieceHandlerInput, GamePieceHandlerOutput> {
     public Trigger hasCoral = new Trigger(() -> this.hasCoral());
     public Trigger hasAlgae = new Trigger(() -> this.hasAlgae());
+    public Trigger intakeDone = new Trigger(() -> this.intakeDone());
+    public Trigger shotDone = new Trigger(() -> this.shotDone());
+
     private static final boolean ENABLED = true;
     private static final boolean IS_INVERTED = true;
+    private static final double INTAKE_ALGAE_SPEED = -0.05;
+    private static final double HOLD_ALGAE_SPEED = -0.05;
+    private static final double ALGAE_SHOOT_TIME = 0.15;
+    private static final double ALGAE_SHOOT_SPEED = 1.0;
+    private static final double CORAL_SHOOT_TIME = 0.05;
+    private static final double CORAL_SHOOT_FAST_SPEED = 1.0;
+    private static final double CORAL_SHOOT_SLOW_SPEED = 0.02;
+
+
+    private Timer shootTimer = new Timer();
 
     private GamePieceHandlerInput currentInput = new GamePieceHandlerInput();
     private SparkMax coralIntakeMotor;
@@ -35,6 +50,7 @@ public class GamePieceHandlerSubsystem extends EntechSubsystem<GamePieceHandlerI
     }
 
     private HandlerState currentState;
+    private double shootSpeed;
 
     @Override
     public void initialize() {
@@ -77,40 +93,69 @@ public class GamePieceHandlerSubsystem extends EntechSubsystem<GamePieceHandlerI
         return algaeSensor.get();
     }
 
+    public boolean intakeDone() {
+        return ((currentState != HandlerState.INTAKING_CORAL) && (currentState != HandlerState.INTAKING_ALGAE));
+    }
+
+    public boolean shotDone() {
+        return (currentState == HandlerState.EMPTY);
+    }
+
     @Override
     public void updateInputs(GamePieceHandlerInput input) {
         RobotIO.processInput(input);
         this.currentInput = input;
     }
 
+    public void stop() {
+        currentState = HandlerState.EMPTY;
+        if (hasCoral()) {
+            currentState = HandlerState.HOLDING_CORAL;
+        } else if (hasAlgae()) {
+            currentState = HandlerState.HOLDING_ALGAE;
+        }
+    }
     public void intakeCoral() {
-        if (!hasCoral() && !hasAlgae()) {
+        if (hasAlgae()) return;
+        if (hasCoral()) {
+            currentState = HandlerState.HOLDING_CORAL;
+        } else {
             currentState = HandlerState.INTAKING_CORAL;
         }
     }
 
-    public void shootCoral() {
+    public void shootCoralFast() {
+        shootCoral(CORAL_SHOOT_FAST_SPEED);
+    }
+
+    public void shootCoralSlow() {
+        shootCoral(CORAL_SHOOT_SLOW_SPEED);
+    }
+
+    private void shootCoral(double speed) {
         if (hasCoral()) {
             currentState = HandlerState.SHOOTING_CORAL;
+            shootSpeed = speed;
+            shootTimer.stop();
+            shootTimer.reset();
         }
     }
 
     public void intakeAlgae() {
-        if (!hasCoral() && !hasAlgae()) {
+        if (hasCoral()) return;
+        if (hasAlgae()) {
+            currentState = HandlerState.HOLDING_ALGAE;
+        } else {
             currentState = HandlerState.INTAKING_ALGAE;
         }
-    }
-
-    public void holdAlgae() {
-      if (hasAlgae()) {
-      }
     }
 
     public void shootAlgae() {
       if (hasAlgae()) {
         currentState = HandlerState.SHOOTING_ALGAE;
-        currentInput.setActivate(true);
-        currentInput.setRequestedSpeed(-0.05);
+        shootSpeed = ALGAE_SHOOT_SPEED;
+        shootTimer.stop();
+        shootTimer.reset();
       }
     }
 
@@ -137,28 +182,48 @@ public class GamePieceHandlerSubsystem extends EntechSubsystem<GamePieceHandlerI
     }
 
     private void updateState() {
+        currentInput.setActivate(true);
         switch (currentState) {
         case EMPTY:
-            currentInput.setActivate(false);
             currentInput.setRequestedSpeed(0.0);
             break;
         case INTAKING_CORAL:
+            currentInput.setRequestedSpeed(LiveTuningHandler.getInstance().getValue("CoralMechanismSubsystem/StartSpeed"));
+            if (hasCoral()) {
+                currentState = HandlerState.HOLDING_CORAL;
+            }
             break;
         case HOLDING_CORAL:
-            currentInput.setActivate(false);
             currentInput.setRequestedSpeed(0.0);
             break;
         case SHOOTING_CORAL:
-            break;
+            currentInput.setRequestedSpeed(shootSpeed);
+            currentInput.setBrakeMode(false);
+            if (!hasCoral()) {
+                shootTimer.start();
+            }
+            if (shootTimer.get() > CORAL_SHOOT_TIME) {
+             currentState = HandlerState.EMPTY;
+            }
+        break;
         case INTAKING_ALGAE:
-            currentInput.setActivate(true);
-            currentInput.setRequestedSpeed(-0.05);
+            currentInput.setRequestedSpeed(INTAKE_ALGAE_SPEED);
+            if (hasAlgae()) {
+                currentState = HandlerState.HOLDING_ALGAE;
+            }
             break;
         case HOLDING_ALGAE:
-            currentInput.setActivate(true);
-            currentInput.setRequestedSpeed(-0.05);
+            currentInput.setRequestedSpeed(HOLD_ALGAE_SPEED);
             break;
         case SHOOTING_ALGAE:
+            currentInput.setRequestedSpeed(shootSpeed);
+            currentInput.setBrakeMode(false);
+            if (!hasAlgae()) {
+                shootTimer.start();
+            }
+            if (shootTimer.get() > ALGAE_SHOOT_TIME) {
+                currentState = HandlerState.EMPTY;
+            }
             break;
         }
     }

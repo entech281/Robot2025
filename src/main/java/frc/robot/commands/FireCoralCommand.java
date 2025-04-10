@@ -1,11 +1,9 @@
 package frc.robot.commands;
 
 import frc.entech.commands.EntechCommand;
-import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerInput;
 import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerSubsystem;
 
 public class FireCoralCommand extends EntechCommand {
-    private final GamePieceHandlerInput input = new GamePieceHandlerInput();
     private final GamePieceHandlerSubsystem intake;
     private final double speed;
 
@@ -13,18 +11,30 @@ public class FireCoralCommand extends EntechCommand {
         super(coral);
         this.intake = coral;
         this.speed = speed;
-        input.setBrakeMode(false);
     }
 
 	@Override
-	public void end(boolean interrupted) {
-		input.setRequestedSpeed(0.0);
-		intake.updateInputs(input);
+	public void initialize() {
+		if (Math.abs(speed) > 0.5) {
+			intake.shootCoralFast();
+		} else {
+			intake.shootCoralSlow();
+		}
 	}
 
 	@Override
-	public void initialize() {
-		input.setRequestedSpeed(speed);
-		intake.updateInputs(input);
+	public void execute() {
+	}
+
+	@Override
+	public void end(boolean interrupted) {
+		if (interrupted) {
+			intake.stop();
+		}
+	}
+
+	@Override
+	public boolean isFinished() {
+		return intake.shotDone();
 	}
 }
