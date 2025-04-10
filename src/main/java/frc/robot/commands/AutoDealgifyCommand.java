@@ -7,20 +7,20 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.entech.commands.EntechCommand;
 import frc.robot.CommandFactory;
 import frc.robot.Position;
-import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerSubsystem;
 
 public class AutoDealgifyCommand extends EntechCommand{
 
     private final DriveSubsystem driveSubsystem;
     private final Position targetPos;
     private final CommandFactory commandFactory;
-    private final CoralMechanismSubsystem coralMechanismSubsystem;
+    private final GamePieceHandlerSubsystem coralMechanismSubsystem;
     private Command runningCommand;
     private final String curSide;
     
-    public AutoDealgifyCommand(DriveSubsystem driveSubsystem, CoralMechanismSubsystem coralMechanismSubsystem, CommandFactory commandFactory, Position targetPos, String curSide) {
+    public AutoDealgifyCommand(DriveSubsystem driveSubsystem, GamePieceHandlerSubsystem coralMechanismSubsystem, CommandFactory commandFactory, Position targetPos, String curSide) {
         this.driveSubsystem = driveSubsystem;
         this.targetPos = targetPos;
         this.commandFactory = commandFactory;

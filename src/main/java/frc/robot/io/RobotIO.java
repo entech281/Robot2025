@@ -9,10 +9,10 @@ import frc.robot.RobotConstants;
 import frc.robot.commandchecker.SafeMovementChecker;
 import frc.robot.subsystems.algaedetector.InternalAlgaeDetectorOutput;
 import frc.robot.subsystems.coraldetector.InternalCoralDetectorOutput;
-import frc.robot.subsystems.coralmechanism.CoralMechanismOutput;
 import frc.robot.subsystems.drive.DriveInput;
 import frc.robot.subsystems.drive.DriveOutput;
 import frc.robot.subsystems.elevator.ElevatorOutput;
+import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerOutput;
 import frc.robot.subsystems.led.LEDOutput;
 import frc.robot.subsystems.navx.NavXOutput;
 import frc.robot.subsystems.pivot.PivotOutput;
@@ -72,7 +72,7 @@ public class RobotIO implements DriveInputSupplier {
     return latestOdometryPose;
   }
 
-  public CoralMechanismOutput getCoralMechanismOutput() {
+  public GamePieceHandlerOutput getCoralMechanismOutput() {
     return latestCoralMechanismOutput;
   }
 
@@ -119,7 +119,7 @@ public class RobotIO implements DriveInputSupplier {
     ledo.log();
   }
 
-  public void updateCoralMechanism(CoralMechanismOutput cmo) {
+  public void updateCoralMechanism(GamePieceHandlerOutput cmo) {
     latestCoralMechanismOutput = cmo;
     cmo.log();
   }
@@ -150,7 +150,7 @@ public class RobotIO implements DriveInputSupplier {
   private ElevatorOutput latestElevatorOutput;
   private PivotOutput latestPivotOutput;
   private LEDOutput latestLEDOutput;
-  private CoralMechanismOutput latestCoralMechanismOutput;
+  private GamePieceHandlerOutput latestCoralMechanismOutput;
   private InternalCoralDetectorOutput latestInternalCoralDetectorOutput;
   private InternalAlgaeDetectorOutput latestInternalAlgaeDetectorOutput;
   private Pose2d latestOdometryPose = RobotConstants.ODOMETRY.INITIAL_POSE;

@@ -13,9 +13,9 @@ import frc.entech.subsystems.SubsystemOutput;
 import frc.robot.io.RobotIO;
 import frc.robot.subsystems.algaedetector.InternalAlgaeDetectorSubsystem;
 import frc.robot.subsystems.coraldetector.InternalCoralDetectorSubsystem;
-import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerSubsystem;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
 import frc.robot.subsystems.pivot.PivotSubsystem;
@@ -31,7 +31,7 @@ public class SubsystemManager {
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
   private final LEDSubsystem ledSubsystem = new LEDSubsystem();
-  private final CoralMechanismSubsystem coralMechanismSubsystem = new CoralMechanismSubsystem();
+  private final GamePieceHandlerSubsystem coralMechanismSubsystem = new GamePieceHandlerSubsystem();
   private final InternalCoralDetectorSubsystem internalCoralDetectorSubsystem = new InternalCoralDetectorSubsystem();
   private final InternalAlgaeDetectorSubsystem internalAlgaeDetectorSubsystem = new InternalAlgaeDetectorSubsystem();
 
@@ -74,7 +74,7 @@ public class SubsystemManager {
     return ledSubsystem;
   }
 
-  public CoralMechanismSubsystem getCoralMechanismSubsystem() {
+  public GamePieceHandlerSubsystem getCoralMechanismSubsystem() {
     return coralMechanismSubsystem;
   }
 

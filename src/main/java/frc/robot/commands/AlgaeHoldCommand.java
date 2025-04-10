@@ -3,14 +3,14 @@ package frc.robot.commands;
 import frc.entech.commands.EntechCommand;
 import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.operation.UserPolicy;
-import frc.robot.subsystems.coralmechanism.CoralMechanismInput;
-import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
+import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerInput;
+import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerSubsystem;
 
 public class AlgaeHoldCommand extends EntechCommand {
-    private final CoralMechanismSubsystem coral;
-    private final CoralMechanismInput input = new CoralMechanismInput();
+    private final GamePieceHandlerSubsystem coral;
+    private final GamePieceHandlerInput input = new GamePieceHandlerInput();
 
-    public AlgaeHoldCommand(CoralMechanismSubsystem coral) {
+    public AlgaeHoldCommand(GamePieceHandlerSubsystem coral) {
         super(coral);
         this.coral = coral;
     }

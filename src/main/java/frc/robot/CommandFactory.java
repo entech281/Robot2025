@@ -39,9 +39,9 @@ import frc.robot.io.RobotIO;
 import frc.robot.livetuning.LiveTuningHandler;
 import frc.robot.operation.UserPolicy;
 import frc.robot.processors.OdometryProcessor;
-import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerSubsystem;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
 import frc.robot.subsystems.pivot.PivotSubsystem;
@@ -58,7 +58,7 @@ public class CommandFactory {
   private final OdometryProcessor odometry;
   private final SubsystemManager subsystemManager;
   private final LEDSubsystem ledSubsystem;
-  private final CoralMechanismSubsystem coralMechanismSubsystem;
+  private final GamePieceHandlerSubsystem coralMechanismSubsystem;
   private final VisionSubsystem visionSubsystem;
   private final SendableChooser<Command> autoChooser;
 

@@ -2,16 +2,16 @@ package frc.robot.commands;
 
 import frc.entech.commands.EntechCommand;
 import frc.entech.util.StoppingCounter;
-import frc.robot.subsystems.coralmechanism.CoralMechanismInput;
-import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
+import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerInput;
+import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerSubsystem;
 
 public class FireAlgaeCommand extends EntechCommand {
-    private final CoralMechanismInput input = new CoralMechanismInput();
-    private final CoralMechanismSubsystem intake;
+    private final GamePieceHandlerInput input = new GamePieceHandlerInput();
+    private final GamePieceHandlerSubsystem intake;
     private final StoppingCounter counter = new StoppingCounter(0.15);
     private final double speed;
 
-    public FireAlgaeCommand(CoralMechanismSubsystem algae, double speed) {
+    public FireAlgaeCommand(GamePieceHandlerSubsystem algae, double speed) {
         super(algae);
         this.intake = algae;
         this.speed = speed;

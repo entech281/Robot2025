@@ -1,15 +1,15 @@
 package frc.robot.commands;
 
 import frc.entech.commands.EntechCommand;
-import frc.robot.subsystems.coralmechanism.CoralMechanismInput;
-import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
+import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerInput;
+import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerSubsystem;
 
 public class FireCoralCommand extends EntechCommand {
-    private final CoralMechanismInput input = new CoralMechanismInput();
-    private final CoralMechanismSubsystem intake;
+    private final GamePieceHandlerInput input = new GamePieceHandlerInput();
+    private final GamePieceHandlerSubsystem intake;
     private final double speed;
 
-    public FireCoralCommand(CoralMechanismSubsystem coral, double speed) {
+    public FireCoralCommand(GamePieceHandlerSubsystem coral, double speed) {
         super(coral);
         this.intake = coral;
         this.speed = speed;

@@ -4,15 +4,15 @@ import frc.entech.commands.EntechCommand;
 import frc.entech.util.StoppingCounter;
 import frc.robot.io.RobotIO;
 import frc.robot.livetuning.LiveTuningHandler;
-import frc.robot.subsystems.coralmechanism.CoralMechanismInput;
-import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
+import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerInput;
+import frc.robot.subsystems.gamepiecehandler.GamePieceHandlerSubsystem;
 
 public class AutoIntakeCoralCommand extends EntechCommand {
-    private final CoralMechanismInput corInput = new CoralMechanismInput();
-    private final CoralMechanismSubsystem intake;
+    private final GamePieceHandlerInput corInput = new GamePieceHandlerInput();
+    private final GamePieceHandlerSubsystem intake;
     private final StoppingCounter counter = new StoppingCounter(0.0);
 
-    public AutoIntakeCoralCommand(CoralMechanismSubsystem coral) {
+    public AutoIntakeCoralCommand(GamePieceHandlerSubsystem coral) {
         super(coral);
         this.intake = coral;
     }
