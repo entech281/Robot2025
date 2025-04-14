@@ -85,33 +85,15 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Back Up and Score Barge"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Barge"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "FireAlgae"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Home"
+            "name": "AlgaeHome"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Get off the line"
+            "pathName": "Back up from Algae"
           }
         }
       ]

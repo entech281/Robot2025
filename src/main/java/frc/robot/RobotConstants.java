@@ -24,8 +24,8 @@ public final class RobotConstants {
   public static final double TIME_PER_PERIODICAL_LOOP_SECONDS = 0.00;
 
   public static interface AccelerationFilter {
-    public static final double DIRECTION_SLEW_RATE = 1.2; // radians per second
-    public static final double MAGNITUDE_SLEW_RATE = 4.75;
+    public static final double DIRECTION_SLEW_RATE = 0.95; // radians per second
+    public static final double MAGNITUDE_SLEW_RATE = 1.0;
     // 2.0; //1.8; // percent per second (1 = 100%)
     public static final double ROTATIONAL_SLEW_RATE = 3.5;
   }
@@ -322,7 +322,6 @@ public final class RobotConstants {
       public static final int ALGAE_GROUND = 9;
       public static final int BARGE = 4;
       public static final int FIRE = 1;      
-      public static final int AUTO_DEALGIFY = 12;
     }
 
     public static interface SWITCHES {
@@ -345,6 +344,7 @@ public final class RobotConstants {
       public  int J = 6;
       public  int K = 7;
       public  int L = 8;
+      public static final int AUTO_DEALGIFY = 13;
     }
 
     public static interface SWITCHES {
