@@ -65,9 +65,17 @@ public class AutoDealgifyCommand extends EntechCommand {
         }
 
         if (alliance.isPresent() && alliance.get().equals(Alliance.Blue)) {
-            targetPos = currentLoc.tagID % 2 == 0 ? Position.ALGAE_L3 : Position.ALGAE_L2;
+            if (currentLoc.tagID % 2 == 0) {
+                targetPos = Position.ALGAE_L3;
+            } else {
+                targetPos = Position.ALGAE_L2;
+            }
         } else {
-            targetPos = currentLoc.tagID % 2 == 0 ? Position.ALGAE_L2 : Position.ALGAE_L3;
+            if (currentLoc.tagID % 2 == 0) {
+                targetPos = Position.ALGAE_L2;
+            } else {
+                targetPos = Position.ALGAE_L3;
+            }
         }
         if (targetPos == null) {
             return;
@@ -106,21 +114,15 @@ public class AutoDealgifyCommand extends EntechCommand {
                 new IntakeAlgaeCommand(coralMechanismSubsystem),
 
             // Drive forward continuously for 0.5 seconds and start algae intake
-                new RunCommand(() -> {
-                    driveSubsystem.pathFollowDrive(new ChassisSpeeds(1.0, 0.0, 0.0));
-                }).withTimeout(1.0)
+                new RunCommand(() -> driveSubsystem.pathFollowDrive(new ChassisSpeeds(1.0, 0.0, 0.0))).withTimeout(1.0)
             ),
                        
             // Stop the drivetrain and continue algae intake
-            new InstantCommand(() -> {
-                driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0));
-            }, driveSubsystem),
+            new InstantCommand(() -> driveSubsystem.pathFollowDrive(new ChassisSpeeds(0.0, 0.0, 0.0)), driveSubsystem),
 
             // Drive backward to return to the starting position and reset elevator pivot
             new ParallelDeadlineGroup(
-                new RunCommand(() -> {
-                    driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0));
-                }, driveSubsystem).withTimeout(1.0),
+                new RunCommand(() -> driveSubsystem.pathFollowDrive(new ChassisSpeeds(-1.0, 0.0, 0.0)), driveSubsystem).withTimeout(1.0),
                 new AlgaeHoldCommand(coralMechanismSubsystem)
             ),
 
