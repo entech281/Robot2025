@@ -65,17 +65,9 @@ public class AutoDealgifyCommand extends EntechCommand {
         }
 
         if (alliance.isPresent() && alliance.get().equals(Alliance.Blue)) {
-            if (currentLoc.tagID % 2 == 0) {
-                targetPos = Position.ALGAE_L3;
-            } else {
-                targetPos = Position.ALGAE_L2;
-            }
+            targetPos = currentLoc.tagID % 2 == 0 ? Position.ALGAE_L3 : Position.ALGAE_L2;
         } else {
-            if (currentLoc.tagID % 2 == 0) {
-                targetPos = Position.ALGAE_L2;
-            } else {
-                targetPos = Position.ALGAE_L3;
-            }
+            targetPos = currentLoc.tagID % 2 == 0 ? Position.ALGAE_L2 : Position.ALGAE_L3;
         }
         if (targetPos == null) {
             return;

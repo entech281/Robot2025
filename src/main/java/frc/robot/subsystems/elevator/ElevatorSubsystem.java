@@ -114,7 +114,24 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
         }
       } 
       else {
-        leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, clampedPosition != 0 ? RobotIO.getInstance().getElevatorOutput().getCurrentPosition() < clampedPosition ? -RobotConstants.ELEVATOR.KG : RobotConstants.ELEVATOR.KG : 0.0);
+        double feedForward;
+
+        if (clampedPosition != 0) {
+            if (RobotIO.getInstance().getElevatorOutput().getCurrentPosition() < clampedPosition) {
+                feedForward = -RobotConstants.ELEVATOR.KG;
+            } else {
+                feedForward = RobotConstants.ELEVATOR.KG;
+            }
+        } else {
+            feedForward = 0.0;
+        }
+
+        leftElevator.getClosedLoopController().setReference(
+            calculateMotorPositionFromInches(clampedPosition),
+            ControlType.kMAXMotionPositionControl,
+            ClosedLoopSlot.kSlot0,
+            feedForward
+        );
       }
     }
     lastPosition = clampedPosition;
