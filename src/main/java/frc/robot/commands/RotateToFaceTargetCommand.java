@@ -1,12 +1,11 @@
 package frc.robot.commands;
 
 import frc.entech.commands.EntechCommand;
+import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
 import frc.robot.operation.UserPolicy;
 
 public class RotateToFaceTargetCommand extends EntechCommand {
-    private static final double KP = 7.0;
-    public static final double TOLERANCE = 2.5;
 
     @Override
     public void end(boolean interrupted) {
@@ -16,7 +15,7 @@ public class RotateToFaceTargetCommand extends EntechCommand {
     @Override
     public void execute() {
         if (RobotIO.getInstance().getVisionOutput().hasTarget() && RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagXW() >= -99) {
-            double change = KP * RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagXW();
+            double change = RobotConstants.DrivetrainConstants.ROTATE_TO_ANGLE_KP * RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagXW();
             UserPolicy.getInstance().setTargetAngle(RobotIO.getInstance().getOdometryPose().getRotation().getDegrees() - change);
         }
     }
@@ -29,6 +28,6 @@ public class RotateToFaceTargetCommand extends EntechCommand {
 
     @Override
     public boolean isFinished() {
-        return RobotIO.getInstance().getVisionOutput().hasTarget() && Math.abs(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagXW()) <= TOLERANCE;
+        return RobotIO.getInstance().getVisionOutput().hasTarget() && Math.abs(RobotIO.getInstance().getVisionOutput().getTargets().get(0).getTagXW()) <= RobotConstants.DrivetrainConstants.ROTATE_TO_ANGLE_TOLERANCE;
     }
 }

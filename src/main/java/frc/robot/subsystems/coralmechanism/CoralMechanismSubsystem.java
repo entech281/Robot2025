@@ -47,14 +47,6 @@ public class CoralMechanismSubsystem extends EntechSubsystem<CoralMechanismInput
         RobotIO.processInput(input);
         this.currentInput = input;
     }
-
-    private boolean hasAlgae() {
-        currentInput.setActivate(true);
-        currentInput.setRequestedSpeed(-0.05);
-        updateInputs(currentInput);
-        return coralIntakeMotor.get() < 0.0;
-      }
-
     @Override
     public CoralMechanismOutput toOutputs() {
         CoralMechanismOutput output = new CoralMechanismOutput();

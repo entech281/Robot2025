@@ -2,6 +2,7 @@ package frc.robot.subsystems.elevator;
 
 import frc.entech.commands.EntechCommand;
 import frc.robot.Position;
+import frc.robot.livetuning.LiveTuningHandler;
 
 public class TestElevatorCommand extends EntechCommand{
     private ElevatorSubsystem elevatorSubsystem;
@@ -15,7 +16,7 @@ public class TestElevatorCommand extends EntechCommand{
     @Override
     public void initialize() {
         elevatorInput.setActivate(true);
-        elevatorInput.setRequestedPosition(Position.valueOf(Position.HOME.getElevatorKey()));
+        elevatorInput.setRequestedPosition(LiveTuningHandler.getInstance().getValue(Position.HOME.getElevatorKey()));
         elevatorSubsystem.updateInputs(elevatorInput);
     }
 }

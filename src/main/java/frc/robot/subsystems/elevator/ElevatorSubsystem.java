@@ -100,22 +100,21 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
   @Override
   public void periodic() {
     double clampedPosition = clampRequestedPosition(currentInput.getRequestedPosition());
-    double kg = 0.15;
     if ((ENABLED) && (clampedPosition != lastPosition)) {
       if (currentInput.getActivate()) {
         if ((calculateInchesFromMotorPosition(leftElevator.getEncoder().getPosition())) - clampedPosition <= 0) {
           if (UserPolicy.getInstance().isAlgaeMode()) {
-            leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kPosition, ClosedLoopSlot.kSlot2, -kg);
+            leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kPosition, ClosedLoopSlot.kSlot2, -RobotConstants.ELEVATOR.KG);
           } else {
-            leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kPosition, ClosedLoopSlot.kSlot0, -kg);
+            leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kPosition, ClosedLoopSlot.kSlot0, -RobotConstants.ELEVATOR.KG);
           }
         } 
         else {
-          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1, kg);
+          leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1, RobotConstants.ELEVATOR.KG);
         }
       } 
       else {
-        leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, clampedPosition != 0 ? RobotIO.getInstance().getElevatorOutput().getCurrentPosition() < clampedPosition ? -kg : kg : 0.0);
+        leftElevator.getClosedLoopController().setReference(calculateMotorPositionFromInches(clampedPosition), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, clampedPosition != 0 ? RobotIO.getInstance().getElevatorOutput().getCurrentPosition() < clampedPosition ? -RobotConstants.ELEVATOR.KG : RobotConstants.ELEVATOR.KG : 0.0);
       }
     }
     lastPosition = clampedPosition;

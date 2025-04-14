@@ -63,6 +63,9 @@ public final class RobotConstants {
     public static final boolean RATE_LIMITING = true;
 
     public static final double SPEED_LIMIT = 0.2;
+
+    public static final double ROTATE_TO_ANGLE_KP = 7.0;
+    public static final double ROTATE_TO_ANGLE_TOLERANCE = 2.5;
   }
 
   public static interface SafeZones {
@@ -217,6 +220,7 @@ public final class RobotConstants {
     public static final double SLOT1_MAX_ACCELERATION = 3200;
     public static final double SLOT0_ALLOWED_ERROR = 0.15;
     public static final double SLOT1_ALLOWED_ERROR = 0.15;
+    public static final double KG = 0.15;
   }
 
   public static interface CORAL{
