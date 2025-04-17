@@ -87,6 +87,8 @@ public class OperatorInterface
     if (DriverControllerUtils.controllerIsPresent(RobotConstants.PORTS.CONTROLLER.TEST_JOYSTICK)) {
       joystickController = new CommandJoystick(RobotConstants.PORTS.CONTROLLER.TEST_JOYSTICK);
       enableJoystickBindings();
+    } else {
+      joystickController = new CommandJoystick(RobotConstants.PORTS.CONTROLLER.DRIVER_CONTROLLER);
     }
 
 
@@ -102,6 +104,7 @@ public class OperatorInterface
 
     alignOperatorPanel = new CommandJoystick(RobotConstants.PORTS.CONTROLLER.ALIGN_PANEL);
     alignOperatorBindings();
+
   }
 
   public void enableTuningControllerBindings() {
