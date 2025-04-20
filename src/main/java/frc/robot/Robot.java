@@ -77,11 +77,16 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void simulationPeriodic() {
-    // long elapsedMilliSecondsSinceStart = System.currentTimeMillis() - robotStartTime;
-    //  if (elapsedMilliSecondsSinceStart > SIMULATION_TIME_MILLIS ){
-    //    DriverStation.reportWarning("Simulation Success : Ending", false);
-    //    System.exit(0);
-    // }
+    // Log outputs for all subsystems during simulation
+    subsystemManager.getDriveSubsystem().toOutputs().toLog();
+    subsystemManager.getNavXSubsystem().toOutputs().toLog();
+    subsystemManager.getVisionSubsystem().toOutputs().toLog();
+    subsystemManager.getElevatorSubsystem().toOutputs().toLog();
+    subsystemManager.getPivotSubsystem().toOutputs().toLog();
+    subsystemManager.getLEDSubsystem().toOutputs().toLog();
+    subsystemManager.getCoralMechanismSubsystem().toOutputs().toLog();
+    subsystemManager.getInternalCoralDetectorSubsystem().toOutputs().toLog();
+    subsystemManager.getInternalAlgaeDetectorSubsystem().toOutputs().toLog();
   }
 
   @Override

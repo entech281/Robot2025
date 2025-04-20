@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.RobotConstants;
 import frc.robot.commandchecker.SafeMovementChecker;
 import frc.robot.subsystems.algaedetector.InternalAlgaeDetectorOutput;
@@ -34,7 +35,12 @@ public class RobotIO implements DriveInputSupplier {
   @Override
   public DriveInput getDriveInput() {
     DriveInput di = new DriveInput();
-    di.setGyroAngle(Rotation2d.fromDegrees(RobotIO.getInstance().getNavXOutput().getYaw()));
+    if (RobotBase.isSimulation()) {
+      // In simulation, there is no real NavX so provide a default value.
+      di.setGyroAngle(Rotation2d.fromDegrees(0.0));
+    } else {
+      di.setGyroAngle(Rotation2d.fromDegrees(getNavXOutput().getYaw()));
+    }
     di.setLatestOdometryPose(latestOdometryPose);
     di.setKey("initialRaw");
     di.setRotation(0.0);
