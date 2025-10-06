@@ -18,8 +18,8 @@ public class InternalAlgaeDetectorOutput extends SubsystemOutput {
 
   @Override
   public void toLog() {
-    Logger.recordOutput("InternalAlgaeDetectorOutput/CoralSensor", algaeSensor);
-    Logger.recordOutput("InternalAlgaeDetectorOutput/HasCoral", hasAlgae());
+    Logger.recordOutput("InternalAlgaeDetectorOutput/AlgaeSensor", algaeSensor);
+    Logger.recordOutput("InternalAlgaeDetectorOutput/HasAlgae", hasAlgae());
   }
 
 }

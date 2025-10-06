@@ -139,9 +139,9 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
       elevatorOutput.setAtRequestedPosition(EntechUtils.isWithinTolerance(0.15,
           elevatorOutput.getCurrentPosition(), currentInput.getRequestedPosition()));
       elevatorOutput.setAtLowerLimit(
-          leftElevator.getReverseLimitSwitch().isPressed());
-      elevatorOutput.setAtUpperLimit(
           leftElevator.getForwardLimitSwitch().isPressed());
+      elevatorOutput.setAtUpperLimit(
+          leftElevator.getReverseLimitSwitch().isPressed());
       elevatorOutput.setRequestedPosition(currentInput.getRequestedPosition());
 
       SparkMaxOutput sm = SparkMaxOutput.createOutput(leftElevator);
