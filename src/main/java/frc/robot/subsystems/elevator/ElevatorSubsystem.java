@@ -46,8 +46,8 @@ public class ElevatorSubsystem extends EntechSubsystem<ElevatorInput, ElevatorOu
     if (ENABLED) {
       SparkMaxConfig motorConfig = new SparkMaxConfig();
 
-      leftElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_A, MotorType.kBrushless);
-      rightElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_B, MotorType.kBrushless);
+      leftElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_B, MotorType.kBrushless);
+      rightElevator = new SparkMax(RobotConstants.PORTS.CAN.ELEVATOR_A, MotorType.kBrushless);
       leftElevator.getEncoder().setPosition(0.0);
       rightElevator.getEncoder().setPosition(0.0);
 
