@@ -29,7 +29,7 @@ public class TestVisionCommand extends EntechCommand {
         }
         Logger.recordOutput(RobotConstants.OperatorMessages.SUBSYSTEM_TEST, "Put tag 1 in front of camera:" + (stage == 0 ? "right" : "left"));
         List<VisionTarget> targets = RobotIO.getInstance().getVisionOutput().getTargets();
-        if (!targets.isEmpty() && counter.isFinished(targets.get(0).getTagID() == 1)) {
+        if (!targets.isEmpty() && counter.isFinished(targets.get(0).getTagID() == 2)) {
             stage++;
             counter.reset();
         }
