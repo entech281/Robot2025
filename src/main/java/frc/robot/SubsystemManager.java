@@ -15,6 +15,7 @@ import frc.robot.subsystems.algaedetector.InternalAlgaeDetectorSubsystem;
 import frc.robot.subsystems.coraldetector.InternalCoralDetectorSubsystem;
 import frc.robot.subsystems.coralmechanism.CoralMechanismSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.drive.GyroIONavX;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.navx.NavXSubsystem;
@@ -25,7 +26,7 @@ import frc.robot.subsystems.vision.VisionSubsystem;
  * Manages the subsystems and the interactions between them.
  */
 public class SubsystemManager {
-  private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  private final DriveSubsystem driveSubsystem = new DriveSubsystem(new GyroIONavX());
   private final NavXSubsystem navXSubsystem = new NavXSubsystem();
   private final VisionSubsystem visionSubsystem = new VisionSubsystem();
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();

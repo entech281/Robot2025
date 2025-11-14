@@ -63,6 +63,14 @@ public final class RobotConstants {
     public static final boolean RATE_LIMITING = true;
 
     public static final double SPEED_LIMIT = 0.2;
+
+    public static final Translation2d[] moduleTranslations =
+    new Translation2d[] {
+      new Translation2d(TRACK_WIDTH_METERS / 2.0, WHEEL_BASE_METERS / 2.0),
+      new Translation2d(TRACK_WIDTH_METERS / 2.0, -WHEEL_BASE_METERS / 2.0),
+      new Translation2d(-TRACK_WIDTH_METERS / 2.0, WHEEL_BASE_METERS / 2.0),
+      new Translation2d(-TRACK_WIDTH_METERS / 2.0, -WHEEL_BASE_METERS / 2.0)
+    };
   }
 
   public static interface SafeZones {
@@ -97,6 +105,7 @@ public final class RobotConstants {
     public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(3.8); // 4.125;
                                                                                   // distance 8.62
     public static final double WHEEL_CIRCUMFERENCE_METERS = WHEEL_DIAMETER_METERS * Math.PI;
+    public static final double WHEEL_RADIUS_METERS = WHEEL_DIAMETER_METERS / 2.0;
     public static final double DRIVING_MOTOR_REDUCTION =
         (45.0 * 17 * 50) / (DRIVING_MOTOR_PINION_TEETH * 15 * 27);
     public static final double DRIVE_WHEEL_FREE_SPEED_RPS =
@@ -412,6 +421,8 @@ public final class RobotConstants {
     public static final Rotation2d INITIAL_ROTATION = Rotation2d.fromDegrees(0);
 
     public static final Pose2d INITIAL_POSE = new Pose2d(INITIAL_TRANSLATION, INITIAL_ROTATION);
+
+    public static final double ODOMETRY_FREQUENCY = 100.0; // Hz
   }
 
 

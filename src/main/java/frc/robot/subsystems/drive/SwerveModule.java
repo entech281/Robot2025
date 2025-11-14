@@ -4,18 +4,20 @@
 
 package frc.robot.subsystems.drive;
 
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.config.SparkMaxConfig;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.entech.subsystems.SparkMaxOutput;
+import frc.robot.RobotConstants;
 import frc.robot.sensors.ThriftyEncoder;
 
 /**
@@ -34,6 +36,9 @@ public class SwerveModule {
   private final SparkClosedLoopController turningPIDController;
 
   private SwerveModuleState desiredState = new SwerveModuleState(0.0, new Rotation2d());
+
+  private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
+  private SwerveModulePosition[] odometryPositions = new SwerveModulePosition[] {};
 
   /**
    * Constructs a SwerveModule and configures the driving and turning motor, encoder, and PID
@@ -153,6 +158,35 @@ public class SwerveModule {
   public SparkMaxOutput getDriveOuput() {
     SparkMaxOutput smo = SparkMaxOutput.createOutput(drivingSparkMax);
     return smo;
+  }
+
+  /** Returns the module positions received this cycle. */
+  public SwerveModulePosition[] getOdometryPositions() {
+    return odometryPositions;
+  }
+
+  /** Returns the timestamps of the samples received this cycle. */
+  public double[] getOdometryTimestamps() {
+    return inputs.odometryTimestamps;
+  }
+
+
+  public void periodic() {
+    // io.updateInputs(inputs);
+    // Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
+
+    // Calculate positions for odometry
+    int sampleCount = inputs.odometryTimestamps.length; // All signals are sampled together
+    odometryPositions = new SwerveModulePosition[sampleCount];
+    for (int i = 0; i < sampleCount; i++) {
+      double positionMeters = inputs.odometryDrivePositionsRad[i] * RobotConstants.SwerveModuleConstants.WHEEL_RADIUS_METERS;
+      Rotation2d angle = inputs.odometryTurnPositions[i];
+      odometryPositions[i] = new SwerveModulePosition(positionMeters, angle);
+    }
+
+    // Update alerts
+    // driveDisconnectedAlert.set(!inputs.driveConnected);
+    // turnDisconnectedAlert.set(!inputs.turnConnected);
   }
 
 

@@ -4,17 +4,26 @@
 
 package frc.robot.subsystems.drive;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.RobotConstants;
@@ -45,6 +54,32 @@ public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
 
   private ChassisSpeeds lastChassisSpeeds =
       ChassisSpeeds.fromRobotRelativeSpeeds(0.0, 0.0, 0.0, Rotation2d.fromDegrees(0.0));
+
+  private static final Lock odometryLock = new ReentrantLock();
+
+  private final GyroIO gyroIO;
+  private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
+
+  private SwerveModulePosition[] lastModulePositions = // For delta tracking
+  new SwerveModulePosition[] {
+    new SwerveModulePosition(),
+    new SwerveModulePosition(),
+    new SwerveModulePosition(),
+    new SwerveModulePosition()
+  };
+
+  private Rotation2d rawGyroRotation = Rotation2d.kZero;
+
+  private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(RobotConstants.DrivetrainConstants.moduleTranslations);
+
+  private SwerveDrivePoseEstimator poseEstimator =
+      new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, Pose2d.kZero);
+
+
+  public DriveSubsystem (GyroIO gyroIO) {
+    this.gyroIO = gyroIO;
+    SparkOdometryThread.getInstance().start();
+  }
 
   @Override
   public void updateInputs(DriveInput input) {
@@ -298,7 +333,75 @@ public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
   }
 
   @Override
+  public void periodic() {
+    odometryLock.lock(); // Prevents odometry updates while reading data
+    gyroIO.updateInputs(gyroInputs);
+    Logger.processInputs("Drive/Gyro", gyroInputs);
+    // frontLeft.periodic();
+    // frontRight.periodic();
+    // rearLeft.periodic();
+    // rearRight.periodic();
+    odometryLock.unlock();
+
+    // Stop moving when disabled
+    // if (DriverStation.isDisabled()) {
+    //   for (var module : modules) {
+    //     module.stop();
+    //   }
+    // }
+
+    // Log empty setpoint states when disabled
+    if (DriverStation.isDisabled()) {
+      Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
+      Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
+    }
+
+    // Update odometry
+    double[] sampleTimestamps =
+        frontLeft.getOdometryTimestamps(); // All signals are sampled together
+    int sampleCount = sampleTimestamps.length;
+    for (int i = 0; i < sampleCount; i++) {
+      // Read wheel positions and deltas from each module
+      SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
+      SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
+
+      SwerveModule[] modules = { frontLeft, frontRight, rearLeft, rearRight }; //It seemed silly to expand that for loop below this
+
+
+      for (int moduleIndex = 0; moduleIndex < 4; moduleIndex++) {
+        modulePositions[moduleIndex] = modules[moduleIndex].getOdometryPositions()[i];
+        moduleDeltas[moduleIndex] =
+            new SwerveModulePosition(
+                modulePositions[moduleIndex].distanceMeters
+                    - lastModulePositions[moduleIndex].distanceMeters,
+                modulePositions[moduleIndex].angle);
+        lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
+      }
+
+      // Update gyro angle
+      if (gyroInputs.connected) {
+        // Use the real gyro angle
+        rawGyroRotation = gyroInputs.odometryYawPositions[i];
+      } else {
+        // Use the angle delta from the kinematics and module deltas
+        Twist2d twist = kinematics.toTwist2d(moduleDeltas);
+        rawGyroRotation = rawGyroRotation.plus(new Rotation2d(twist.dtheta));
+      }
+
+      // Apply update
+      poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+    }
+
+    // Update gyro alert
+    // gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
+  }
+
+  @Override
   public Command getTestCommand() {
     return new TestDriveCommand(this);
+  }
+
+  public static Lock getOdometryLock () {
+    return DriveSubsystem.odometryLock;
   }
 }
