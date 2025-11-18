@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotConstants;
 import frc.robot.io.RobotIO;
+import frc.robot.subsystems.drive.OdometryData;
+import frc.robot.subsystems.drive.SparkOdometryThread;
 
 public class OdometryProcessor {
   private SwerveDrivePoseEstimator estimator;
@@ -39,6 +41,10 @@ public class OdometryProcessor {
   public void addVisionEstimatedPose(Pose2d visionPose, double timeStamp, Rotation2d yaw) {
     Pose2d fixedVisionPose = new Pose2d(visionPose.getTranslation(), yaw);
     estimator.addVisionMeasurement(fixedVisionPose, timeStamp);
+  }
+
+  public void odometryUpdateWithTime(OdometryData odometryData) {
+    estimator.updateWithTime(odometryData.getTimestamp(), odometryData.getRawGyroRotation(), odometryData.getModulePositions());
   }
 
   public double calculateDistanceFromTarget(Pose2d target) {

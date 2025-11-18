@@ -33,6 +33,7 @@ public class SparkOdometryThread {
   private final List<Queue<Double>> sparkQueues = new ArrayList<>();
   private final List<Queue<Double>> genericQueues = new ArrayList<>();
   private final List<Queue<Double>> timestampQueues = new ArrayList<>();
+  private DriveSubsystem driveSubsystem;
 
   private static SparkOdometryThread instance = null;
   private Notifier notifier = new Notifier(this::run);

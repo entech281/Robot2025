@@ -14,6 +14,10 @@ public class DriveInput implements SubsystemInput {
   private Pose2d latestOdometryPose;
   private String key = "driveInput";
 
+  // public double[] odometryTimestamps = new double[] {};
+  // public double[] odometryDrivePositionsRad = new double[] {};
+  // public Rotation2d[] odometryTurnPositions = new Rotation2d[] {};
+
   public DriveInput() {}
 
   public DriveInput(DriveInput template) {

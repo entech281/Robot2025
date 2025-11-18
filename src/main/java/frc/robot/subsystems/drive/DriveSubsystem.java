@@ -29,6 +29,7 @@ import frc.entech.subsystems.EntechSubsystem;
 import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.DrivetrainConstants;
 import frc.robot.RobotConstants.SwerveModuleConstants;
+import frc.robot.processors.OdometryProcessor;
 
 /**
  * The {@code Drivetrain} class contains fields and methods pertaining to the function of the
@@ -75,9 +76,12 @@ public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
   private SwerveDrivePoseEstimator poseEstimator =
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, Pose2d.kZero);
 
+  private OdometryProcessor odometryProcessor;
 
-  public DriveSubsystem (GyroIO gyroIO) {
+
+  public DriveSubsystem (GyroIO gyroIO, OdometryProcessor odometryProcessor) {
     this.gyroIO = gyroIO;
+    this.odometryProcessor = odometryProcessor;
     SparkOdometryThread.getInstance().start();
   }
 
@@ -337,64 +341,11 @@ public class DriveSubsystem extends EntechSubsystem<DriveInput, DriveOutput> {
     odometryLock.lock(); // Prevents odometry updates while reading data
     gyroIO.updateInputs(gyroInputs);
     Logger.processInputs("Drive/Gyro", gyroInputs);
-    // frontLeft.periodic();
-    // frontRight.periodic();
-    // rearLeft.periodic();
-    // rearRight.periodic();
     odometryLock.unlock();
 
-    // Stop moving when disabled
-    // if (DriverStation.isDisabled()) {
-    //   for (var module : modules) {
-    //     module.stop();
-    //   }
-    // }
 
-    // Log empty setpoint states when disabled
-    if (DriverStation.isDisabled()) {
-      Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
-      Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
+
     }
-
-    // Update odometry
-    double[] sampleTimestamps =
-        frontLeft.getOdometryTimestamps(); // All signals are sampled together
-    int sampleCount = sampleTimestamps.length;
-    for (int i = 0; i < sampleCount; i++) {
-      // Read wheel positions and deltas from each module
-      SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
-      SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
-
-      SwerveModule[] modules = { frontLeft, frontRight, rearLeft, rearRight }; //It seemed silly to expand that for loop below this
-
-
-      for (int moduleIndex = 0; moduleIndex < 4; moduleIndex++) {
-        modulePositions[moduleIndex] = modules[moduleIndex].getOdometryPositions()[i];
-        moduleDeltas[moduleIndex] =
-            new SwerveModulePosition(
-                modulePositions[moduleIndex].distanceMeters
-                    - lastModulePositions[moduleIndex].distanceMeters,
-                modulePositions[moduleIndex].angle);
-        lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
-      }
-
-      // Update gyro angle
-      if (gyroInputs.connected) {
-        // Use the real gyro angle
-        rawGyroRotation = gyroInputs.odometryYawPositions[i];
-      } else {
-        // Use the angle delta from the kinematics and module deltas
-        Twist2d twist = kinematics.toTwist2d(moduleDeltas);
-        rawGyroRotation = rawGyroRotation.plus(new Rotation2d(twist.dtheta));
-      }
-
-      // Apply update
-      poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
-    }
-
-    // Update gyro alert
-    // gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
-  }
 
   @Override
   public Command getTestCommand() {
